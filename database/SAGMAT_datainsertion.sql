@@ -7,8 +7,8 @@ USE SAGMAT;
 -- ----------------------------------------------------------------------------------------
 
 -- LIMPIEZA
-DELETE FROM solicitudes;
-ALTER TABLE solicitudes AUTO_INCREMENT 1;
+DELETE FROM usuarios;
+ALTER TABLE usuarios AUTO_INCREMENT 1;
 
 -- 1° Tabla Marcas
 INSERT INTO marcas (marca) VALUES
@@ -92,6 +92,7 @@ INSERT INTO recursos (idtiporecurso, idmarca, modelo, serie, estado, descripcion
     
 -- 4° Tabla Roles
 INSERT INTO roles (rol) VALUES
+    ('ADMINISTRADOR')
     ('DAIP'),
     ('CIST'),
 	('PSICOLOGO'),
@@ -99,14 +100,15 @@ INSERT INTO roles (rol) VALUES
     
 -- 5° Tabla Personas
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
+    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com');      -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),           -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com'), 			-- CITS
     ('Llanos Fernandez', 'Maribel', 'DNI', '89098723', '912310091', 'maribelllanos@gmail.com'),	-- PS
     ('Robles Olivares', 'Gabriela', 'DNI', '21801928', '901091999', 'gabi@gmail.com'); 			-- DOC
     
 -- 6° Tabla Usuarios
-INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
-    (1, 1, 'NSC'), -- DAIP
+INSERT INTO usuarios (idpersona, idrol, usuario, claveacceso) VALUES
+    (1, 1,'AdrianaDurand', '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq'); -- DAIP
 	(2, 2, 'NSC'), -- CIST
     (3, 3, 'NSC'), -- PS
     (4, 4, 'NSC'); -- DOC

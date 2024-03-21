@@ -30,14 +30,13 @@ CREATE TABLE recursos
 	idrecurso		INT AUTO_INCREMENT PRIMARY KEY,
     idtiporecurso 	INT 			NOT NULL,
     idmarca			INT 			NOT NULL,
+	descripcion		VARCHAR(100) 	NOT NULL,  	-- descripción del equipo
     modelo			VARCHAR(50) 	NULL,
-    serie			VARCHAR(50) 	NULL UNIQUE,
-    estado 			VARCHAR(15) 	NOT NULL,
-    descripcion		VARCHAR(100) 	NOT NULL,  	-- descripción del equipo
-	observacion		VARCHAR(100) 	NULL,  		-- observaciones del equipo
+    estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
+	observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
     datasheets 		JSON 			NOT NULL,
     fotografia 		VARCHAR(200) 	NULL,
-    create_at		DATETIME 	NOT NULL DEFAULT (NOW()),
+    create_at		DATETIME 		NOT NULL DEFAULT (NOW()),
     update_at		DATE			NULL,
     inactive_at		DATE			NULL,
     CONSTRAINT fk_idtiporecurso FOREIGN KEY (idtiporecurso) REFERENCES tipo (idtiporecurso),
@@ -75,6 +74,7 @@ CREATE TABLE usuarios
 	idusuario	INT AUTO_INCREMENT PRIMARY KEY,
     idpersona	INT 		NOT NULL,
     idrol		INT 		NOT NULL,
+    usuario		VARCHAR(50) NOT NULL,
 	claveacceso	VARCHAR(60) NOT NULL,
 	CONSTRAINT fk_idpersona FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol FOREIGN KEY (idrol) REFERENCES roles (idrol)
@@ -101,7 +101,8 @@ CREATE TABLE recepcion
 (
 	idrecepcion		INT AUTO_INCREMENT PRIMARY KEY,
     idusuario		INT 		NOT NULL,
-    fecharecepcion	DATETIME 	NOT NULL DEFAULT (NOW()),
+    fecharecepcion	DATETIME 	NOT NULL,
+	fecharegistro 	DATETIME 	NOT NULL DEFAULT (NOW()),
     tipodocumento	VARCHAR(45) NOT NULL,
     nro_documento	VARCHAR(45) NOT NULL,
 	CONSTRAINT fk_idusuario_recep FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
@@ -114,6 +115,7 @@ CREATE TABLE det_recepcion
 	iddet_recepcion	INT AUTO_INCREMENT PRIMARY KEY,
     idrecepcion		INT NOT NULL,
     idrecurso		INT NOT NULL,
+    nro_serie		VARCHAR(50) NULL UNIQUE,
 	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepcion (idrecepcion),
 	CONSTRAINT fk_idrecurso_detrec FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
