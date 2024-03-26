@@ -8,7 +8,10 @@ if (isset($_POST['operacion'])) {
 
   if($_POST['operacion'] == 'login'){
 
-    $datosEnviar = ['email' => $_POST["email"]];
+    $datosEnviar = [
+      'usuario' => $_POST["usuario"], 
+      'claveacceso' => $_POST["clave_acceso"]];
+
     $registro = $usuario->login($datosEnviar);
 
 
@@ -19,7 +22,7 @@ if (isset($_POST['operacion'])) {
 
     if($registro == false){
       $_SESSION["status"] = false; 
-      $statusLogin["mensaje"] = "El correo no existe"; 
+      $statusLogin["mensaje"] = "El usuario no existe"; 
     }else{
 
       $claveencriptada = $registro["claveacceso"];

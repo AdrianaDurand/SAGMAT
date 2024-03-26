@@ -13,10 +13,11 @@ class Usuario extends Conexion {
 
    public function login($datos =  [] ){
     try{
-      $consulta = $this->pdo->prepare("CALL spu_usuarios_login(?)");
+      $consulta = $this->pdo->prepare("CALL spu_usuarios_login(?,?)");
       $consulta->execute(
         array(
-          $datos['email']
+          $datos['usuario'],
+          $datos['claveacceso']
         )
       );
       return $consulta->fetch(PDO::FETCH_ASSOC);

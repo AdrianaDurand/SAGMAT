@@ -1,57 +1,95 @@
+<?php
+
+if(isset($_SESSION["status"]) && $_SESSION["status"]){
+	header("Location:./view/homepage.php");
+  }
+
+?>
+
+
 <!doctype html>
 <html lang="es">
 
 <head>
-  <title>Bienvenidos</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
+	<title>Inicia Sesión</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="./estilosLogin/image/png" href="./estilosLogin/images/icons/iconlogin.png"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/css/util.css">
+	<link rel="stylesheet" type="text/css" href="./estilosLogin/css/main.css">
+<!--===============================================================================================-->
 </head>
 
 <body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+			<div class="login100-form-title" style="background-image: url(./estilosLogin/images/portada.cole.png); background-size: 100% 100%; padding: 100px 15px 84px 15px;">
+					<span class="login100-form-title-1">
+						SAGMAT
+					</span>
+				</div>
 
-<div class="container mt-3">
-    <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <h4>Iniciar sesión</h4>
-        <form action="" id="form-login">
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" autofocus required>
-          </div>
-          <div class="mb-3">
-            <label for="clave_acceso"  class="form-label">Clave acceso</label>
-            <input type="password" class="form-control" id="clave_acceso" required>
-          </div>
-          <div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-sm btn-warning" id="acceder">Acceder</button>
-            
-          </div>
+				<form id="form-login" class="login100-form validate-form">
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Ingrese su nombre de usuario">
+						<span class="label-input100">Usuario</span>
+						<input id="usuario" class="input100" type="text" name="username" placeholder="Ingrese su contraseña">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Contraseña</span>
+						<input id="clave_acceso" class="input100" type="password" name="pass" placeholder="Enter password">
+						<span class="focus-input100"></span>
+					</div>
 
 
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" >
+							Ingresar
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+<!--===============================================================================================-->
+<script src="./estilosLogin/vendor/jquery/jquery-3.2.1.min.js"></script>	
+<!--===============================================================================================-->
+	<script src="./estilosLogin/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="./estilosLogin/vendor/bootstrap/js/popper.js"></script>
+	<script src="./estilosLogin/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="./estilosLogin/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="./estilosLogin/vendor/daterangepicker/moment.min.js"></script>
+	<script src="./estilosLogin/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="./estilosLogin/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="./estilosLogin/js/main.js"></script>
 
-        </div>
-        </form>
-      </div>
-      <div class="col-md-4"></div>
-    </div>
-  </div>
-  
-  <!-- Bootstrap JavaScript Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-  </script>
 </body>
 
 <script>
@@ -64,7 +102,7 @@
 
     const parametros = new FormData();
     parametros.append("operacion", "login");
-    parametros.append("email", $("#email").value);
+    parametros.append("usuario", $("#usuario").value);
     parametros.append("clave_acceso", $("#clave_acceso").value);
 
     fetch(`./controllers/usuario.controller.php`, {
@@ -75,7 +113,7 @@
       .then(datos => {
         console.log(datos);
         if (datos.acceso == true){
-        window.location.href = "./view/examples/homepage.html";
+        window.location.href = "./view/homepage.php";
       } else{
           alert(datos.mensaje);
         }

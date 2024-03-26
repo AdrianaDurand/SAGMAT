@@ -92,10 +92,9 @@ INSERT INTO recursos (idtiporecurso, idmarca, modelo, serie, estado, descripcion
     
 -- 4° Tabla Roles
 INSERT INTO roles (rol) VALUES
-    ('ADMINISTRADOR')
+    ('ADMINISTRADOR'),
     ('DAIP'),
     ('CIST'),
-	('PSICOLOGO'),
     ('DOCENTE');
     
 -- 5° Tabla Personas
@@ -108,7 +107,7 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) V
     
 -- 6° Tabla Usuarios
 INSERT INTO usuarios (idpersona, idrol, usuario, claveacceso) VALUES
-    (1, 1,'AdrianaDurand', '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq'); -- DAIP
+    (1, 1,'AdrianaDurand', 'NSC'); -- DAIP
 	(2, 2, 'NSC'), -- CIST
     (3, 3, 'NSC'), -- PS
     (4, 4, 'NSC'); -- DOC

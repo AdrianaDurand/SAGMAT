@@ -7,7 +7,7 @@ USE SAGMAT;
 -- ------------------------------     USUARIOS       -------------------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(90))
+/*CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(90))
 BEGIN
 	SELECT
     u.idusuario,
@@ -22,6 +22,50 @@ BEGIN
     WHERE 	email = _email AND
 			inactive_at IS NULL;
 END $$
+DELIMITER $$*/
+
+/* DELIMITER $$
+CREATE PROCEDURE spu_usuarios_login(
+    IN _usuario VARCHAR(50),
+    IN _claveacceso VARCHAR(60)
+)
+BEGIN
+    SELECT
+        u.idusuario,
+        p.apellidos,
+        p.nombres,
+        p.email,
+        u.claveacceso,
+        r.rol
+    FROM
+        usuarios u
+    INNER JOIN personas p ON p.idpersona = u.idpersona
+    INNER JOIN roles r ON r.idrol = u.idrol;
+END $$
+DELIMITER ;*/
+
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_login(
+    IN _usuario VARCHAR(50),
+    IN _claveacceso VARCHAR(60)
+)
+BEGIN
+    SELECT
+        u.idusuario,
+        u.usuario,
+        p.apellidos,
+        p.nombres,
+        p.email,
+        u.claveacceso,
+        r.rol
+    FROM
+        usuarios u
+    INNER JOIN personas p ON p.idpersona = u.idpersona
+    INNER JOIN roles r ON r.idrol = u.idrol
+    WHERE
+        inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 
 -- ----------------------------------------------------------------------------------------

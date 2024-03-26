@@ -9,15 +9,16 @@ SELECT * FROM recepcion;
 SELECT * FROM recursos;
 SELECT * FROM det_recepcion;
 
+SELECT * FROM personas;
 SELECT * FROM usuarios;
 
 -- --------------------------------- USUARIOS --------------------------------------------
-    
+-- clave NSC
 UPDATE usuarios SET
 	claveacceso = '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq';
     
 -- CALL spu_usuarios_login Login de usuarios
-CALL spu_usuarios_login('adriana@gmail.com');
+CALL spu_usuarios_login('AdrianaDurand', 'NSC');
 
 
 -- --------------------------------- RECEPCIÓN --------------------------------------------
