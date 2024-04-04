@@ -1,14 +1,6 @@
 <?php
 
 require_once "../../views/sidebar/sidebar.php";
-
-
-session_start();
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
-    header("Location:../../login.php");
-
-}
-
 ?>  
 
 <!DOCTYPE html>
@@ -16,7 +8,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bajas</title>
+    <title>Recursos</title>
 
     	<link rel="icon" type="../../images/icons" href="../../images/icons/homepage.png"/>
 

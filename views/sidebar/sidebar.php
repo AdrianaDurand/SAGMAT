@@ -1,75 +1,127 @@
 <?php
-
 session_start();
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
-    header("Location:../../login.php");
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
+    header("Location: ../../login.php");
+}
 
+$iconos = [
+    "Recepción" => "fa-chart-pie",
+    "Recursos" => "fa-screwdriver-wrench",
+    "Solicitudes" => "fa-desktop",
+    "Mantenimientos" => "fa-users-gear",
+    "Bajas" => "fa-building"
+];
+
+$accesos = [
+    "ADMINISTRADOR" => [
+        "Recepción" => ["Ingresar", "Histórico"],
+        "Recursos" => ["Almacén", "Ajustes"],
+        "Solicitudes" => ["Soli"],
+        "Mantenimientos" => ["Manteni"],
+        "Bajas" => ["Bajas"]
+    ],
+    "AIP" => [
+        "Recepción" => ["Ingresar", "Histórico"],
+        "Recursos" => ["Almacén", "Ajustes"],
+        "Solicitudes" => ["InicioSoli"],
+        "Bajas" => ["InicioBaj"]
+    ],
+    "CIST" => [
+        "Recursos" => ["Almacén", "Ajustes"],
+        "Mantenimientos" => ["InicioMan"],
+        "Bajas" => ["InicioBaj"]
+    ]
+];
+
+function reemplazarCadena($string)
+{
+    $tildes = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'G'];
+    $reemplazos = ['a', 'e', 'i', 'o', 'u', 'a', 'e', 'i', 'o', 'u', 'n', 'g'];
+    return str_replace($tildes, $reemplazos, $string);
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="../images/icons" href="../images/icons/homepage.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../estilosSidebar/css/style.css">
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- Font Awesome icons (free version)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- BOOTSTRAP - ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" type="text/css" href="../estilosextras/sidebar.css">
+
+    <style>
+        /* Estilo para marcar la página actual en el menú */
+        .active {
+            background-color: blue;
+        }
+    </style>
 </head>
+
 <body>
 
-		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				<div class="custom-menu">
-					<button type="button" id="sidebarCollapse" class="btn btn-primary">
-	        </button>
-        </div>
-            <a href="./homepage.php" class="brand-link">	
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                </button>
+            </div>
+            <a href="./homepage.php" class="brand-link" style="text-decoration: none;">
                 <div class="img bg-wrap text-center py-4" style="background-image: url(../estilosSidebar/images/aula.fondo.png);">
-                    <div class="user-logo">
+                    <div class="user-logo nav_link">
                         <div class="img" style="background-image: url(../estilosSidebar/images/S.png);"></div>
                         <h3 style="font-weight: bold; color: black;">SAGMAT</h3>
                     </div>
+                </div>
             </a>
-	  	</div>
- 
-        <ul class="list-unstyled components mb-5">
-          <li class="active">
-            <a href="#"><span class="fa fa-home mr-3"></span> Home</a>
-          </li>
-          <li>
-              <a href="#"><span class="fa fa-download mr-3 notif"><small class="d-flex align-items-center justify-content-center">5</small></span> Download</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-gift mr-3"></span> Gift Code</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-trophy mr-3"></span> Top Review</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-cog mr-3"></span> Settings</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-support mr-3"></span> Support</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
-          </li>
-        </ul>
 
-    	</nav>
+            <ul class="list-unstyled components mb-5">
+                <?php
+                $categorias = $accesos[$_SESSION["rol"]];
+                foreach ($categorias as $categoria => $subcategoria) {
+                    $icono = $iconos[$categoria];
+                    $cadena = reemplazarCadena(strtolower($categoria));
+                    echo "<li>";
+                    echo "<a href='#' class='nav_link'>";
+                    echo "<i class='fas {$icono}'></i> $categoria";
+                    if ($subcategoria) {
+                        echo "<i class='fa fa-caret-down'></i>";
+                    }
+                    echo "</a>";
+                    if ($subcategoria) {
+                        echo "<div class='dropdown-container'>";
+                        foreach ($subcategoria as $item) {
+                            $cadenaSub = reemplazarCadena(strtolower($item));
+                            echo "<a href='../views/{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>$item</span></a>";
+                          }
+                        echo "</div>";
+                    }
+                    echo "</li>";
+                }
+                ?>
+            </ul>
 
-        <!-- Page Content  -->
-      <div id="content" class="p-4 p-md-5 pt-5">
-        <h2 class="mb-4">Sidebar #09</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
+        </nav>
     </div>
 
     <script src="../estilosSidebar/js/jquery.min.js"></script>
     <script src="../estilosSidebar/js/popper.js"></script>
     <script src="../estilosSidebar/js/bootstrap.min.js"></script>
     <script src="../estilosSidebar/js/main.js"></script>
-  </body>
+</body>
+
 </html>

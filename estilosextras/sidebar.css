@@ -1,0 +1,13 @@
+/* Estilo para los enlaces del menú */
+
+.nav_link {
+    text-decoration: none; /* Eliminar subrayado */
+}
+
+.active {
+    background-color: rgb(73, 73, 248);
+}
+
+#content {
+    padding: 1.5rem;  /* Ajusta este valor al ancho de tu barra lateral */
+}
