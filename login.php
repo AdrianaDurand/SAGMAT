@@ -1,7 +1,7 @@
 <?php
 
 if(isset($_SESSION["status"]) && $_SESSION["status"]){
-	header("Location:./views/homepage.php");
+	header("Location:./views/recepcion/ingresar.php");
   }
 
 ?>
@@ -113,7 +113,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
       .then(datos => {
         console.log(datos);
         if (datos.acceso == true){
-        window.location.href = "./views/homepage.php";
+        window.location.href = "./views/recepcion/ingresar.php";
       } else{
           alert(datos.mensaje);
         }

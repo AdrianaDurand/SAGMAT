@@ -46,11 +46,10 @@ function reemplazarCadena($string)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="../images/icons" href="../images/icons/homepage.png" />
+    <link rel="icon" type="../../images/icons" href="../../images/icons/homepage.png" />
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../estilosSidebar/css/style.css">
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -62,28 +61,25 @@ function reemplazarCadena($string)
     <!-- BOOTSTRAP - ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <link rel="stylesheet" type="text/css" href="../estilosextras/sidebar.css">
+    <link rel="stylesheet" href="../../estilosextras/sidebar.css">
+    <link rel="stylesheet" href="../../estilosSidebar/css/style.css">
+    <link rel="stylesheet" href="../../estilosDpagina/dist/css/adminlte.css">
 
-    <style>
-        /* Estilo para marcar la página actual en el menú */
-        .active {
-            background-color: blue;
-        }
-    </style>
+
 </head>
 
 <body>
 
-    <div class="wrapper d-flex align-items-stretch">
+    <div>
         <nav id="sidebar">
             <div class="custom-menu">
                 <button type="button" id="sidebarCollapse" class="btn btn-primary">
                 </button>
             </div>
-            <a href="./homepage.php" class="brand-link" style="text-decoration: none;">
-                <div class="img bg-wrap text-center py-4" style="background-image: url(../estilosSidebar/images/aula.fondo.png);">
+            <a href="../recepcion/ingresar.php" class="brand-link  nav_link">
+                <div class="img bg-wrap text-center py-4" style="background-image: url(../../estilosSidebar/images/aula.fondo.png);">
                     <div class="user-logo nav_link">
-                        <div class="img" style="background-image: url(../estilosSidebar/images/S.png);"></div>
+                        <div class="img" style="background-image: url(../../estilosSidebar/images/S.png);"></div>
                         <h3 style="font-weight: bold; color: black;">SAGMAT</h3>
                     </div>
                 </div>
@@ -106,7 +102,7 @@ function reemplazarCadena($string)
                         echo "<div class='dropdown-container'>";
                         foreach ($subcategoria as $item) {
                             $cadenaSub = reemplazarCadena(strtolower($item));
-                            echo "<a href='../views/{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>$item</span></a>";
+                            echo "<a href='../../views/{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>$item</span></a>";
                           }
                         echo "</div>";
                     }
@@ -116,12 +112,14 @@ function reemplazarCadena($string)
             </ul>
 
         </nav>
+
+        <div class="p-4 p-md-5 pt-10 col">
+            <!-- Contenido de otras carpetas-->
+        </div>
+
     </div>
 
-    <script src="../estilosSidebar/js/jquery.min.js"></script>
-    <script src="../estilosSidebar/js/popper.js"></script>
-    <script src="../estilosSidebar/js/bootstrap.min.js"></script>
-    <script src="../estilosSidebar/js/main.js"></script>
+
 </body>
 
 </html>

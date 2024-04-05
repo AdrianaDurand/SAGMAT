@@ -96,14 +96,15 @@ DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
     IN _idusuario		INT ,
+    IN _fecharecepcion	DATETIME,
     IN _tipodocumento	VARCHAR(45),
     IN _nro_documento	VARCHAR(45)
 )
 BEGIN 
 	INSERT INTO recepcion
-    (idusuario, tipodocumento, nro_documento)
+    (idusuario, fecharecepcion, tipodocumento, nro_documento)
     VALUES
-	(_idusuario, _tipodocumento, nro_documento);
+	(_idusuario, _fecharecepcion, _tipodocumento, nro_documento);
 END $$
 DELIMITER  ;
 
@@ -141,6 +142,7 @@ DELIMITER ;*/
 DELIMITER $$
 CREATE PROCEDURE spu_addrecurso
 (
+    IN _idtiporecurso	 INT,
     IN _idmarca          INT,
     IN _modelo           VARCHAR(50),
     IN _estado           VARCHAR(15),
@@ -151,9 +153,9 @@ CREATE PROCEDURE spu_addrecurso
 )
 BEGIN 
 	INSERT INTO recepcion
-    (idmarca, modelo, serie, estado, descripcion, observacion, datasheets, fotografia)
+    (idtiporecurso, idmarca, modelo, serie, estado, descripcion, observacion, datasheets, fotografia)
     VALUES
-    (_idmarca, _modelo, _serie, _estado, _descripcion, _observacion,  _datasheets, NULLIF(_fotografía, ''));
+    (_idtiporecurso, _idmarca, _modelo, _serie, _estado, _descripcion, _observacion,  _datasheets, NULLIF(_fotografía, ''));
 END $$
 DELIMITER  ;
 
