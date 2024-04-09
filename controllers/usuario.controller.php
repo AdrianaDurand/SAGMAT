@@ -10,10 +10,10 @@ if (isset($_POST['operacion'])) {
 
     $datosEnviar = [
       'usuario' => $_POST["usuario"], 
-      'claveacceso' => $_POST["clave_acceso"]];
+      'claveacceso' => $_POST["clave_acceso"] 
+    ];
 
     $registro = $usuario->login($datosEnviar);
-
 
     $statusLogin = [
       "acceso" => false,
@@ -27,11 +27,12 @@ if (isset($_POST['operacion'])) {
 
       $claveencriptada = $registro["claveacceso"];
       $_SESSION["idusuario"] = $registro["idusuario"];
-      $_SESSION["nombres"] = $registro["nombres"];
+      $_SESSION["usuario"] = $registro["usuario"];
       $_SESSION["apellidos"] = $registro["apellidos"];
+      $_SESSION["nombres"] = $registro["nombres"];
       $_SESSION["rol"] = $registro["rol"];
 
-      if(password_verify($_POST['clave_acceso'], $claveencriptada)){
+      if(password_verify($_POST['_claveacceso'], $claveencriptada)){
         $_SESSION["status"] = true;
         $statusLogin["acceso"] = true;
         $statusLogin["mensaje"] = "Acceso correcto";

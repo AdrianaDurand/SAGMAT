@@ -56,14 +56,14 @@ BEGIN
         p.apellidos,
         p.nombres,
         p.email,
-        u.claveacceso,
         r.rol
     FROM
         usuarios u
     INNER JOIN personas p ON p.idpersona = u.idpersona
     INNER JOIN roles r ON r.idrol = u.idrol
     WHERE
-        inactive_at IS NULL;
+        u.usuario = _usuario AND
+        u.claveacceso = _claveacceso;
 END $$
 DELIMITER ;
 
@@ -200,4 +200,11 @@ END $$
 -- ----------------------------------------------------------------------------------------
 
 -- -------------------------------------------------------------------------------------------------------Almacén
+DELIMITER $$
+CREATE PROCEDURE spu_listar_marcas()
+BEGIN
+	SELECT idmarca, marca
+    FROM marcas;
+END $$
+DELIMITER ;
 

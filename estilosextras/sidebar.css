@@ -1,46 +1,13 @@
-/* Estilo para los enlaces del menú */
-
-.nav_link {
-    text-decoration: none; /* Eliminar subrayado */
-}
 
 .active {
     background-color: rgb(94, 94, 238);
 }
 
 
-@media (min-width: 768px) {
-    #content {
-        padding: 3rem;
-    }
+
+@media (max-width: 991.98px) {
+    #sidebarCollapse span {
+      display: none; 
+    } 
 }
 
-/* Fixed sidenav, full height */
-.sidenav {
-    position: fixed;
-    height: 100%;
-    width: var(--nav-width);
-    z-index: 100;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    padding-top: 20px;
-    font-family: var(--body-font);
-  }
-  
-  /* Style the sidenav links and the dropdown button */
-  .sidenav a, .dropdown-btn {
-    padding: 6px 8px 6px 16px;
-    margin: 6px;
-    text-decoration: none;
-    font-size: 20px;
-    color: #818181;
-    display: block;
-    border: none;
-    background: none;
-    width:100%;
-    text-align: left;
-    cursor: pointer;
-    outline: none;
-  }

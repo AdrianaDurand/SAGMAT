@@ -7,14 +7,15 @@ USE SAGMAT;
 -- ----------------------------------------------------------------------------------------
 
 -- LIMPIEZA
-DELETE FROM usuarios;
-ALTER TABLE usuarios AUTO_INCREMENT 1;
+DELETE FROM roles;
+ALTER TABLE roles AUTO_INCREMENT 1;
 
+SELECT * FROM roles; 
 SELECT * FROM usuarios; 
 
 UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
-WHERE idusuario = 2;
+WHERE idusuario = 3;
 
 
 -- 1° Tabla Marcas
@@ -88,7 +89,7 @@ INSERT INTO tipo (tiporecurso) VALUES
 	('CARRO DE METAL TRANSPORTADOR'),
     ('CABLE HDMI');
 
-select * from recursos;
+select * from tipo;
 
 -- 3° Tabla Recursos
 INSERT INTO recursos (idtiporecurso, idmarca, modelo, serie, estado, descripcion, observacion, datasheets) VALUES
@@ -101,23 +102,21 @@ INSERT INTO recursos (idtiporecurso, idmarca, modelo, serie, estado, descripcion
 INSERT INTO roles (rol) VALUES
     ('ADMINISTRADOR'),
     ('DAIP'),
-    ('CIST'),
-    ('DOCENTE');
+    ('CIST');
     
 -- 5° Tabla Personas
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com');      -- ADMINISTRADOR
+    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com'),      -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),           -- DAIP
-	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com'), 			-- CITS
-    ('Llanos Fernandez', 'Maribel', 'DNI', '89098723', '912310091', 'maribelllanos@gmail.com'),	-- PS
-    ('Robles Olivares', 'Gabriela', 'DNI', '21801928', '901091999', 'gabi@gmail.com'); 			-- DOC
-    
+	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
+
 -- 6° Tabla Usuarios
 INSERT INTO usuarios (idpersona, idrol, usuario, claveacceso) VALUES
-    (1, 1,'AdrianaDurand', 'NSC'); -- DAIP
-	(2, 2, 'NSC'), -- CIST
-    (3, 3, 'NSC'), -- PS
-    (4, 4, 'NSC'); -- DOC
+	(1,1, 'Adriana', 'NSC'),
+	(2, 3, 'Leticia', 'NSC'), 
+    (3, 3, 'Carlos', 'NSC');
+
+select * from personas;
     
 -- 7° Tabla Ubicaciones
 INSERT INTO ubicaciones (idusuario, nombre, num_aula, num_piso) VALUES

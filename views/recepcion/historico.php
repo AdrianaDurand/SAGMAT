@@ -15,6 +15,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../estilosextras/sidebar.css">
     <link rel="stylesheet" href="../../estilosSidebar/css/style.css">
+    <link rel="icon" type="../../images/icons" href="../../images/icons/historico.png" />
 
 </head>
 <body>
