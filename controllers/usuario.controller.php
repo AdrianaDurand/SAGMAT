@@ -32,7 +32,7 @@ if (isset($_POST['operacion'])) {
         $_SESSION["nombres"] = $registro["nombres"];
         $_SESSION["rol"] = $registro["rol"];
   
-        if(password_verify($_POST['_claveacceso'], $claveencriptada)){
+        if(password_verify($_POST['claveacceso'], $claveencriptada)){
           $_SESSION["status"] = true;
           $statusLogin["acceso"] = true;
           $statusLogin["mensaje"] = "Acceso correcto";
@@ -44,6 +44,17 @@ if (isset($_POST['operacion'])) {
       echo json_encode($statusLogin);
 
     break;
+  }
+
 }
 
+if (isset($_GET["operacion"])){
+
+  if($_GET["operacion"] == "destroy"){
+
+    session_destroy();
+    session_unset();
+
+    header("Location:../login.php");
+  }
 }

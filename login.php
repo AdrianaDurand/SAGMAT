@@ -104,7 +104,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
     const parametros = new FormData();
     parametros.append("operacion", "login_usuario");
     parametros.append("usuario", $("#usuario").value);
-    parametros.append("clave_acceso", $("#clave_acceso").value);
+    parametros.append("claveacceso", $("#clave_acceso").value);
 
     fetch(`./controllers/usuario.controller.php`, {
       method: "POST",

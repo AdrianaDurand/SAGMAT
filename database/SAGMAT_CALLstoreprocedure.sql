@@ -15,7 +15,7 @@ SELECT * FROM usuarios;
 -- --------------------------------- USUARIOS --------------------------------------------
 -- clave NSC
 UPDATE usuarios SET
-	claveacceso = '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq';
+	claveacceso = '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq' where idusuario=3;
     
 -- CALL spu_usuarios_login Login de usuarios
 CALL spu_usuarios_login('Carlos');

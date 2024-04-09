@@ -8,6 +8,7 @@ class Usuario extends Conexion {
 
    public function __CONSTRUCT(){
     $this->conexion = parent::getConexion();
+    $this->pdo = parent::getConexion();
    }
 
    public function login($datos =  [] ){
