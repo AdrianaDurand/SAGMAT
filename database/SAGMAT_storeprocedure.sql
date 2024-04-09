@@ -46,13 +46,13 @@ DELIMITER ;*/
 
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(
-    IN _usuario VARCHAR(50),
-    IN _claveacceso VARCHAR(60)
+    IN _usuario VARCHAR(50)
 )
 BEGIN
     SELECT
         u.idusuario,
         u.usuario,
+        u.claveacceso,
         p.apellidos,
         p.nombres,
         p.email,
@@ -62,9 +62,8 @@ BEGIN
     INNER JOIN personas p ON p.idpersona = u.idpersona
     INNER JOIN roles r ON r.idrol = u.idrol
     WHERE
-        u.usuario = _usuario AND
-        u.claveacceso = _claveacceso;
-END $$
+        u.usuario = _usuario;
+	END $$
 DELIMITER ;
 
 

@@ -18,7 +18,7 @@ UPDATE usuarios SET
 	claveacceso = '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq';
     
 -- CALL spu_usuarios_login Login de usuarios
-CALL spu_usuarios_login('Carlos', '$2y$10$6UHEn9l6LEbWLMco93GhpOrJEA2I4nLk7DjLjjv.JRDOIWdS6nxYq');
+CALL spu_usuarios_login('Carlos');
 
 
 -- --------------------------------- RECEPCIÓN --------------------------------------------
