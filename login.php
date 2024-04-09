@@ -102,7 +102,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
     event.preventDefault();
 
     const parametros = new FormData();
-    parametros.append("operacion", "login");
+    parametros.append("operacion", "login_usuario");
     parametros.append("usuario", $("#usuario").value);
     parametros.append("clave_acceso", $("#clave_acceso").value);
 
