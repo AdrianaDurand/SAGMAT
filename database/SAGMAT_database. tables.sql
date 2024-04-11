@@ -32,8 +32,8 @@ CREATE TABLE recursos
     idmarca			INT 			NOT NULL,
 	descripcion		VARCHAR(100) 	NOT NULL,  	-- descripción del equipo
     modelo			VARCHAR(50) 	NULL,
-    estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
-	observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
+    -- estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
+	-- observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
     datasheets 		JSON 			NOT NULL,
     fotografia 		VARCHAR(200) 	NULL,
     create_at		DATETIME 		NOT NULL DEFAULT (NOW()),
@@ -113,9 +113,12 @@ CREATE TABLE recepcion
 CREATE TABLE det_recepcion
 (
 	iddet_recepcion	INT AUTO_INCREMENT PRIMARY KEY,
-    idrecepcion		INT NOT NULL,
-    idrecurso		INT NOT NULL,
-    nro_serie		VARCHAR(50) NULL UNIQUE,
+    idrecepcion		INT 			NOT NULL,
+    idrecurso		INT 			NOT NULL,
+    nro_serie		VARCHAR(50) 	NULL UNIQUE,
+    estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
+    observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
+    fotoestado 		VARCHAR(200) 	NULL,	
 	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepcion (idrecepcion),
 	CONSTRAINT fk_idrecurso_detrec FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;

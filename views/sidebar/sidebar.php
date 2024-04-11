@@ -6,11 +6,11 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 }
 
 $iconos = [
-    "Recepción" => "fa-chart-pie",
-    "Recursos" => "fa-screwdriver-wrench",
-    "Solicitudes" => "fa-desktop",
-    "Mantenimientos" => "fa-users-gear",
-    "Bajas" => "fa-building"
+    "Recepción" => "fa-hand-holding",
+    "Recursos" => "fa-computer",
+    "Solicitudes" => "fa-file-invoice",
+    "Mantenimientos" => "fa-screwdriver-wrench",
+    "Bajas" => "fa-minus-circle"
 ];
 
 $accesos = [
@@ -24,13 +24,13 @@ $accesos = [
     "AIP" => [
         "Recepción" => ["Ingresar", "Histórico"],
         "Recursos" => ["Almacén", "Ajustes"],
-        "Solicitudes" => ["InicioSoli"],
-        "Bajas" => ["InicioBaj"]
+        "Solicitudes" => ["Manteni"],
+        "Bajas" => ["Bajas"]
     ],
     "CIST" => [
         "Recursos" => ["Almacén", "Ajustes"],
-        "Mantenimientos" => ["InicioMan"],
-        "Bajas" => ["InicioBaj"]
+        "Mantenimientos" => ["Manteni"],
+        "Bajas" => ["Bajas"]
     ]
 ];
 
@@ -73,6 +73,10 @@ function reemplazarCadena($string)
             background-color: rgba(200, 214, 229, 0.4);
         }
 
+        #sidebar {
+            height: 100vh;
+            width: 100px;
+        }
     </style>
 </head>
 
@@ -104,7 +108,7 @@ function reemplazarCadena($string)
                 echo "<li>";
                 if ($subcategoria && count($subcategoria) > 1) {
                     echo "<a href='#' class='nav_link'>";
-                    echo "<i class='fas {$icono}'></i> $categoria";
+                    echo "<i class='fas {$icono}'></i> $categoria ";
                     echo "<i class='fa fa-caret-down'></i>";
                     echo "</a>";
                     echo "<div class='dropdown-container'>";
