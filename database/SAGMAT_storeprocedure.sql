@@ -2,11 +2,21 @@
 -- ------------------------------------- Base de datos  -----------------------------------
 -- ----------------------------------------------------------------------------------------
 USE SAGMAT; 
+SELECT * FROM personas;
+SELECT * FROM usuarios;
+SELECT * FROM ubicaciones;
+SELECT * FROM recursos;
+SELECT * FROM det_recursos;
+SELECT * FROM recepciones;
+SELECT * FROM solicitudes;
+SELECT * FROM det_solicitud;
+SELECT * FROM mantenimientos;
+SELECT * FROM bajas;
 
 -- ----------------------------------------------------------------------------------------
--- ------------------------------     USUARIOS       -------------------------------------
+-- -------------------------------      LOGIN        --------------------------------------
 -- ----------------------------------------------------------------------------------------
-
+/*
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(
     IN _usuario VARCHAR(50)
@@ -28,78 +38,31 @@ BEGIN
         u.usuario = _usuario;
 	END $$
 DELIMITER ;
-
-
--- ----------------------------------------------------------------------------------------
--- ------------------------------     RECEPCION       -------------------------------------
--- ----------------------------------------------------------------------------------------
-
--- -------------------------------------------------------------------------------------------------------Ingreso
--- SP NUEVA RECEPCIÓN:
-/*DELIMITER $$
-CREATE PROCEDURE spu_addreception
-(
-    IN _idusuario			INT,
-    IN _tipodocumento		VARCHAR(45),
-    IN _nro_documento 		VARCHAR(45),
-    OUT _idrecepcion     	INT		-- devolvemos el parametro de salida  
-)
-BEGIN
-	INSERT INTO recepcion 
-    (idusuario, fecharecepcion, tipodocumento, nro_documento)
-    VALUES
-    (_idusuario, NOW(), _tipodocumento, _nro_documento);
-    
-    SET _idrecepcion = LAST_INSERT_ID(); -- parametro de salida
-END $$
-DELIMITER ;*/
+*/
 
 DELIMITER $$
-CREATE PROCEDURE spu_addrecepcion
-(
-    IN _idusuario		INT ,
-    IN _fecharecepcion	DATETIME,
-    IN _tipodocumento	VARCHAR(45),
-    IN _nro_documento	VARCHAR(45)
-)
-BEGIN 
-	INSERT INTO recepcion
-    (idusuario, fecharecepcion, tipodocumento, nro_documento)
-    VALUES
-	(_idusuario, _fecharecepcion, _tipodocumento, nro_documento);
-END $$
-DELIMITER  ;
-
--- SP NUEVO RECURSO:
-/*DELIMITER $$
-CREATE PROCEDURE spu_addresource
-(
-    IN _idtiporecurso    INT,
-    IN _idmarca          INT,
-    IN _modelo           VARCHAR(50),
-    IN _serie            VARCHAR(50),
-    IN _estado           VARCHAR(15),
-    IN _descripcion      VARCHAR(100),
-	IN _observacion      VARCHAR(100),
-    IN _datasheets       JSON,
-    IN _fotografia		 VARCHAR(200),
-    IN _idrecepcion      INT  -- ingresa el parametro recepcion
+CREATE PROCEDURE spu_usuarios_login(
+    IN _nombrecompleto VARCHAR(200)
 )
 BEGIN
-    INSERT INTO recursos
-    (idtiporecurso, idmarca, modelo, serie, estado, descripcion, observacion, datasheets, fotografia)
-    VALUES
-    (_idtiporecurso, _idmarca, _modelo, _serie, _estado, _descripcion, _observacion,  _datasheets, NULLIF(_fotografía, ''));
-
-    SET @idrecurso = LAST_INSERT_ID(); 
-
-    -- Relacion idrecepcion(parametro que ingreso) + idrecurso
-    INSERT INTO det_recepcion
-    (idrecepcion, idrecurso)
-    VALUES
-    (_idrecepcion, @idrecurso);
+    SELECT
+        u.idusuario,
+        p.apellidos,
+        p.nombres,
+        u.claveacceso,
+        r.rol
+    FROM
+        usuarios u
+    INNER JOIN personas p ON p.idpersona = u.idpersona
+    INNER JOIN roles r ON r.idrol = u.idrol
+    WHERE
+        CONCAT(p.nombres, ' ', p.apellidos) = _nombrecompleto;
 END $$
-DELIMITER ;*/
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------
+-- ------------------------------     RECURSOS       -------------------------------------
+-- ----------------------------------------------------------------------------------------
 
 DELIMITER $$
 CREATE PROCEDURE spu_addrecurso
@@ -107,37 +70,88 @@ CREATE PROCEDURE spu_addrecurso
     IN _idtiporecurso	 INT,
     IN _idmarca          INT,
     IN _modelo           VARCHAR(50),
-    IN _estado           VARCHAR(15),
-    IN _descripcion      VARCHAR(100),
-	IN _observacion      VARCHAR(100),
     IN _datasheets       JSON,
     IN _fotografia		 VARCHAR(200)
 )
 BEGIN 
-	INSERT INTO recepcion
-    (idtiporecurso, idmarca, modelo, serie, estado, descripcion, observacion, datasheets, fotografia)
+	INSERT INTO recursos
+    (idtiporecurso, idmarca, modelo, datasheets, fotografia)
     VALUES
-    (_idtiporecurso, _idmarca, _modelo, _serie, _estado, _descripcion, _observacion,  _datasheets, NULLIF(_fotografía, ''));
+    (_idtiporecurso, _idmarca, _modelo, _datasheets, NULLIF(_fotografía, ''));
 END $$
 DELIMITER  ;
 
--- SP INSERTAR DETALLES DE REPECION  -------------------------------------------
+-- ----------------------------------------------------------------------------------------
+-- ------------------------------     RECEPCION       -------------------------------------
+-- ----------------------------------------------------------------------------------------
+
 DELIMITER $$
-CREATE PROCEDURE spu_addDETrecurso
+CREATE PROCEDURE spu_addrecepcion
 (
-    IN _idrecepcion   INT,
-    IN _idrecurso     VARCHAR(50),
-    IN _serie         VARCHAR(15)
+    IN _idusuario		INT ,
+    IN _fechaingreso	DATETIME,
+    IN _tipodocumento	VARCHAR(45),
+    IN _nro_documento	VARCHAR(45)
 )
 BEGIN 
-	INSERT INTO recepcion
-    (idrecepcion, idrecurso, serie)
+	INSERT INTO recepciones
+    (idusuario, fechaingreso, tipodocumento, nro_documento)
     VALUES
-    (_idrecepcion, _idrecurso, _serie);
+	(_idusuario, _fechaingreso, _tipodocumento, nro_documento);
+END $$
+DELIMITER  ;
+   
+   
+-- ----------------------------------------------------------------------------------------
+-- --------------------------     DETALLE RECEPCION       ---------------------------------
+-- ----------------------------------------------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE spu_addDetrecepcion
+(
+    IN _idrecepcion		INT ,
+	IN _idrecurso		INT ,
+    IN _nro_serie	VARCHAR(50)
+)
+BEGIN 
+	INSERT INTO det_recepciones
+    (idrecepcion, idrecurso, nro_serie)
+    VALUES
+    (_idrecepcion, _idrecurso, _nro_serie);
 END $$
 DELIMITER  ;
 
--- -------------------------------------------------------------------------------------------------------Histórico
+-- ----------------------------------------------------------------------------------------
+-- -----------------------    DETALLE RECURSOS       -------------------------------------
+-- ---------------------------------------------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE spu_addDetrecurso
+(
+    IN _idrecurso		 INT,
+    IN _idubicacion      INT,
+    IN _fecha_fin        DATETIME,
+	IN _estado		     CHAR(1),
+    IN _n_item		     CHAR(2),
+    IN _observaciones    VARCHAR(100),
+    IN _fotoestado		 VARCHAR(200)
+)
+BEGIN 
+	INSERT INTO det_recursos
+    (idrecurso, idubicacion, fecha_fin, estado, n_item, observaciones, fotoestado)
+    VALUES
+    (_idrecurso, _idubicacion, _fecha_inicio, _fecha_fin, _estado, _n_item, _observaciones,  NULLIF(_fotoestado, ''));
+END $$
+DELIMITER  ;
+
+
+-- ----------------------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------------
+
+
+
+
 DELIMITER $$
 CREATE PROCEDURE spu_RecepcionesRecursos()
 BEGIN
@@ -161,7 +175,6 @@ END $$
 -- ------------------------------     RECURSOS       -------------------------------------
 -- ----------------------------------------------------------------------------------------
 
--- -------------------------------------------------------------------------------------------------------Almacén
 DELIMITER $$
 CREATE PROCEDURE spu_listar_marcas()
 BEGIN

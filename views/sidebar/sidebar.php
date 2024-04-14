@@ -62,7 +62,7 @@ function reemplazarCadena($string)
     <!-- BOOTSTRAP - ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <link rel="stylesheet" href="../../estilosSidebar/css/style.css">
+    <link rel="stylesheet" href="../../css/sidebar/css/style.css">
 
     <style>
         .dropdown-container {
@@ -90,10 +90,10 @@ function reemplazarCadena($string)
         </div>
         <a href="../recepcion/ingresar.php" class="brand-link  nav_link">
             <div class="img bg-wrap text-center py-4"
-                style="background-image: url(../../estilosSidebar/images/aula.fondo.png);">
+                style="background-image: url(../../css/sidebar/images/aula.fondo.png);">
                 <div class="user-logo nav_link">
                     <div class="img"
-                        style="background-image: url(../../estilosSidebar/images/S.png);"></div>
+                        style="background-image: url(../../css/sidebar/images/S.png);"></div>
                     <h3 style="font-weight: bold; color: black;">SAGMAT</h3>
                 </div>
             </div>
@@ -140,7 +140,6 @@ function reemplazarCadena($string)
                     </span>
                 </a>
             </li>
-
         </ul>
     </nav>
 </div>
@@ -149,6 +148,8 @@ function reemplazarCadena($string)
 
 
     <script>
+
+        
         // JavaScript para controlar la apertura y cierre de las subcategorías
         const navLinks = document.querySelectorAll('.nav_link');
         navLinks.forEach(link => {

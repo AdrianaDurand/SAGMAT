@@ -10,7 +10,7 @@ if (isset($_POST['operacion'])) {
 
     case 'login_usuario':
       $datosEnviar = [
-        'usuario' => $_POST["usuario"]
+        '_nombrecompleto' => $_POST["_nombrecompleto"]
       ];
   
       $registro = $usuario->login($datosEnviar);
@@ -27,7 +27,6 @@ if (isset($_POST['operacion'])) {
   
         $claveencriptada = $registro["claveacceso"];
         $_SESSION["idusuario"] = $registro["idusuario"];
-        $_SESSION["usuario"] = $registro["usuario"];
         $_SESSION["apellidos"] = $registro["apellidos"];
         $_SESSION["nombres"] = $registro["nombres"];
         $_SESSION["rol"] = $registro["rol"];

@@ -50,11 +50,11 @@
                             <label for="FechaIngreso" class="form-label">Tipo de documento</label>
                             <div class="control">
                                 <label class="radio">
-                                    <input type="radio" name="foobar" />
+                                    <input type="radio" name="foobar" checked/>
                                     Boleta
                                 </label>
                                 <label class="radio">
-                                    <input type="radio" name="foobar" checked/>
+                                    <input type="radio" name="foobar" />
                                     Factura
                                 </label>
                                 <label class="radio">
@@ -172,8 +172,8 @@
 
     </div>
 
-    <script src="../../estilosSidebar/js/jquery.min.js"></script>
-    <script src="../../estilosSidebar/js/main.js"></script>
+    <script src="../../css/sidebar/js/jquery.min.js"></script>
+    <script src="../../css/sidebar/js/main.js"></script>
 
     <script>
 

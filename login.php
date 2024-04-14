@@ -16,26 +16,26 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="./estilosLogin/image/png" href="./estilosLogin/images/icons/iconlogin.png"/>
+	<link rel="icon" type="./css/login/image/png" href="./css/login/images/icons/iconlogin.png"/>
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/animate/animate.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/css-hamburgers/hamburgers.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/animsition/css/animsition.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/select2/select2.min.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/css/util.css">
-	<link rel="stylesheet" type="text/css" href="./estilosLogin/css/main.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="./css/login/css/main.css">
 <!--===============================================================================================-->
 </head>
 
@@ -44,7 +44,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-			<div class="login100-form-title" style="background-image: url(./estilosLogin/images/portada.cole.png); background-size: 100% 100%; padding: 100px 15px 84px 15px;">
+			<div class="login100-form-title" style="background-image: url(./css/login/images/portada.cole.png); background-size: 100% 100%; padding: 100px 15px 84px 15px;">
 					<span class="login100-form-title-1">
 						SAGMAT
 					</span>
@@ -75,21 +75,21 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 	</div>
 	
 <!--===============================================================================================-->
-<script src="./estilosLogin/vendor/jquery/jquery-3.2.1.min.js"></script>	
+	<script src="./css/login/vendor/jquery/jquery-3.2.1.min.js"></script>	
 <!--===============================================================================================-->
-	<script src="./estilosLogin/vendor/animsition/js/animsition.min.js"></script>
+	<script src="./css/login/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="./estilosLogin/vendor/bootstrap/js/popper.js"></script>
-	<script src="./estilosLogin/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="./css/login/vendor/bootstrap/js/popper.js"></script>
+	<script src="./css/login/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="./estilosLogin/vendor/select2/select2.min.js"></script>
+	<script src="./css/login/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
-	<script src="./estilosLogin/vendor/daterangepicker/moment.min.js"></script>
-	<script src="./estilosLogin/vendor/daterangepicker/daterangepicker.js"></script>
+	<script src="./css/login/vendor/daterangepicker/moment.min.js"></script>
+	<script src="./css/login/vendor/daterangepicker/daterangepicker.js"></script>
 <!--===============================================================================================-->
-	<script src="./estilosLogin/vendor/countdowntime/countdowntime.js"></script>
+	<script src="./css/login/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-	<script src="./estilosLogin/js/main.js"></script>
+	<script src="./css/login/js/main.js"></script>
 
 </body>
 
@@ -103,7 +103,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
     const parametros = new FormData();
     parametros.append("operacion", "login_usuario");
-    parametros.append("usuario", $("#usuario").value);
+    parametros.append("_nombrecompleto", $("#usuario").value);
     parametros.append("claveacceso", $("#clave_acceso").value);
 
     fetch(`./controllers/usuario.controller.php`, {

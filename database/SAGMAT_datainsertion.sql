@@ -2,13 +2,14 @@
 -- ------------------------------------- Base de datos  -----------------------------------
 -- ----------------------------------------------------------------------------------------
 USE SAGMAT;
+-- SELECT TIME(NOW())
 -- ----------------------------------------------------------------------------------------
 -- --------------------------------- Inserción de Datos -----------------------------------
 -- ----------------------------------------------------------------------------------------
 
 -- LIMPIEZA
-DELETE FROM roles;
-ALTER TABLE roles AUTO_INCREMENT 1;
+DROP TABLE det_recursos;
+ALTER TABLE det_recursos AUTO_INCREMENT 1;
 
 SELECT * FROM roles; 
 SELECT * FROM usuarios; 
@@ -18,7 +19,9 @@ SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
 WHERE idusuario = 3;
 
 
--- 1° Tabla Marcas
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------      MARCAS       --------------------------------------
+-- ----------------------------------------------------------------------------------------
 INSERT INTO marcas (marca) VALUES
     ('SONY'),
     ('LENOVO'),
@@ -55,8 +58,10 @@ INSERT INTO marcas (marca) VALUES
     ('TECNIASES'),
     ('DELL');
     
--- 2° Tabla Tipo
-INSERT INTO tipo (tiporecurso) VALUES
+-- ----------------------------------------------------------------------------------------
+-- ------------------------------   TIPO RECURSOS    --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO tipos (tiporecurso) VALUES
     ('AUDIFONOS'),
     ('LAPTOP'),
 	('CPU'),
@@ -88,79 +93,83 @@ INSERT INTO tipo (tiporecurso) VALUES
     ('REPROD. DVD'),
 	('CARRO DE METAL TRANSPORTADOR'),
     ('CABLE HDMI');
-
-select * from tipo;
-
--- 3° Tabla Recursos
-INSERT INTO recursos (idtiporecurso, idmarca, modelo, serie, estado, descripcion, observacion, datasheets) VALUES
-    (9, 22, 'VS13869', 'SEV111902225', 'REGULAR', 'descripcion', 'NO CUENTA CON CABLE DE ALIMENTACIÓN ELÉCTRICA', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}' ), -- proyector
-	(2, 2, 'B 50-70', 'CB33720396', 'BUENO', 'descripcion', 'ROTO PUERTO SD', '{"COLOR": "NEGRO", "SISTEMA OPERATIVO": "WINDOWS 10"}' ), -- laptop
-    (7, 8, NULL, 'S1601820977', 'REGULAR', 'descripcion', 'CABLES DESGASTADOS', '{"COLOR": "NEGRO Y ROJO", "CONEXIÓN": "FUNCIONA CON CABLE"}' ), -- parlantes
-    (5, 28, 'PS/2', '3C07', 'BUENO', 'descripcion', NULL, '{"COLOR": "PLOMO", "DIMENSIONES": "450mm x 160mm x 30mm"}' ); -- teclado
     
--- 4° Tabla Roles
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------      ROLES        --------------------------------------
+-- ----------------------------------------------------------------------------------------
 INSERT INTO roles (rol) VALUES
     ('ADMINISTRADOR'),
     ('DAIP'),
     ('CIST');
-    
--- 5° Tabla Personas
+
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------     PERSONAS      --------------------------------------
+-- ----------------------------------------------------------------------------------------
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com'),      -- ADMINISTRADOR
-    ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),           -- DAIP
+    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com'),  -- ADMINISTRADOR
+    ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
 
--- 6° Tabla Usuarios
-INSERT INTO usuarios (idpersona, idrol, usuario, claveacceso) VALUES
-	(1,1, 'Adriana', 'NSC'),
-	(2, 3, 'Leticia', 'NSC'), 
-    (3, 3, 'Carlos', 'NSC');
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------    USUARIOS       --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
+	(1,1,'NSC'),
+	(2, 3,'NSC'), 
+    (3, 3,'NSC');
 
-select * from personas;
-    
--- 7° Tabla Ubicaciones
-INSERT INTO ubicaciones (idusuario, nombre, num_aula, num_piso) VALUES
-    (1, 'AULA DE COMPUTACIÓN', '17', '2'),	-- DAIP
-    (2, 'AULA DE COMPUTACIÓN', '17', '2'), 	-- CIST
-    (3, 'AREA DE PSICOLOGÍA', NULL, '1'), 	-- PS
-    (NULL, '5°A', '03', 1);     			-- DOC
-    
--- 8° Tabla Recepcion
-INSERT INTO recepcion (idusuario, tipodocumento, nro_documento) VALUES
-    (1, 'OFICIO', 'UGEL-2024-019'),
-    (1, 'BOLETA', 'BC-2024-0283');
-    
--- 9° Tabla Det_recepcion
-INSERT INTO det_recepcion (idrecepcion, idrecurso) VALUES
-    (1, 1), -- proyector
-	(1, 2), -- laptops
-	(2, 3), -- parlantes
-	(1, 4); -- teclado
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------    UBICACIONES    --------------------------------------
+-- ----------------------------------------------------------------------------------------
+ INSERT INTO ubicaciones (idusuario, nombre_aula, num_aula, num_piso) VALUES
+    (1, 'Aula de Innovación Pedagógica', NULL, 2);
 
--- 10° Tabla Det_recursos
-INSERT INTO det_recursos (idubicacion, idrecurso, fecha_fin) VALUES
-	(1, 1, NULL), 
-	(1, 3, NULL),
-	(1, 4, NULL), -- Los materiales se encuentran en AIP
-    (3, 2, NULL); -- PS tiene laptop
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------     RECURSOS      --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO recursos (idtiporecurso, idmarca, modelo, datasheets, fotografia) VALUES
+    (9, 22, 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL);
+
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------     RECEPCION     --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO recepciones (idusuario, fechaingreso, tipodocumento, nro_documento) VALUES
+    (1, '2024-04-12', 'Boleta', '0004129');
     
--- 11° Tabla Solicitudes
+-- ----------------------------------------------------------------------------------------
+-- ------------------------------- DETALLE RECEPCION --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO det_recepciones (idrecepcion, idrecurso, nro_serie) VALUES
+    (1, 1, 'NS7J0098JH');
+    
+-- ----------------------------------------------------------------------------------------
+-- --------------------------------- DETALLE RECURSO --------------------------------------
+-- ----El detalle del recurso se debe añadir luego de la recepción-------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO det_recursos (idrecurso, idubicacion, fecha_fin, estado, n_item, observaciones, fotoestado) VALUES
+    (1, 1, NULL, 'B', '01', NULL, NULL);
+
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------    SOLICITUDES    --------------------------------------
+-- ----------------------------------------------------------------------------------------
 INSERT INTO solicitudes (idusuario_solicita, idusuario_atiende, idubicacion, fecha_inicioatencion, fecha_finatencion) VALUES
-    (4, 1, 4,'2024-03-18 10:30:00', '2024-03-18 11:30:00'),
-    (3, 1, 3,'2024-03-18 02:30:00', '2024-03-18 03:30:00');
+    (1, 2, 1, '2024-04-16 18:18:50', '2024-04-20 18:18:50');
+
+-- ----------------------------------------------------------------------------------------
+-- ----------------------------- DETALLE SOLICITUDES --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO det_solicitud (idsolicitud, idrecurso, estado_entrega, estado_devolucion, estado_equipo, observaciones, fotoestado) VALUES
+    (1, 1, 'P', 'P', 'B', NULL, NULL);
+
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------   MANTENIMIENTOS  --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO mantenimientos (idrecurso, idusuario, fecha_iniciomant, fecha_finmant, comentarios, ficha_mantenimiento) VALUES
+    (1, 1, '2024-04-20 18:18:26', '2024-04-30 18:18:26', 'El mantenimiento fue un éxito', NULL);
     
--- 12° Tabla Det_solicitud
-INSERT INTO det_solicitud (idsolicitud, idrecurso, estado_entrega, estado_devolucion, observaciones) VALUES
-    (1, 3, 'PENDIENTE', NULL, NULL),
-    (2, 2, 'COMPLETADO', 'ATRASADO', 'EL DOCENTE OLVIDÓ ENTREGAR LOS EQUIPOS SOLICITADOS');
-    
--- 13° Tabla Mantenimientos
-INSERT INTO mantenimientos (idrecurso, idusuario, fecha_iniciomant, fecha_finmat, comentarios) VALUES
-    (4, 2, '2024-03-29 02:00:00', NULL, 'Limpieza de residuos de comida en el teclado'),
-    (2, 2, '2024-03-29 03:00:00', NULL, 'Limpieza de rejillas');
-    
--- 14° Tabla Bajas
-INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios) VALUES
-    (''),
-    ('');
+-- ----------------------------------------------------------------------------------------
+-- -------------------------------       BAJAS       --------------------------------------
+-- ----------------------------------------------------------------------------------------
+INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_baja) VALUES
+    (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
