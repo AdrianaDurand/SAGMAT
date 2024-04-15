@@ -74,9 +74,10 @@ function reemplazarCadena($string)
         }
 
         #sidebar {
-            height: 100vh;
+            height: 100%;
             width: 100px;
         }
+  
     </style>
 </head>
 

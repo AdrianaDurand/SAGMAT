@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recepción</title>
 
+    <link rel="stylesheet" type="text/css" href="../../css/pagecontent/pagecontent.css">
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bulma CSS -->
@@ -14,6 +15,7 @@
 
     <!-- Custom CSS -->
     <link rel="icon" type="../../images/icons" href="../../images/icons/ingresar.png" />
+    
 </head>
 <body>
 
@@ -23,10 +25,15 @@
         <?php require_once "../../views/sidebar/sidebar.php"; ?>
 
         <!-- Page Content  -->
-        <div class="flex-grow-1 p-4 p-md-5 pt-5">
-            <h2 class="mb-4">INGRESAR NUEVO</h2>
-
+        <div class="flex-grow-1 p-3 p-md-4 pt-4">
             <div class="container">
+                <div class="col-md-12 text-center">
+                    <div class="m-4">
+                        <h2 class="fw-bolder d-inline-block">
+                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> RECEPCIÓN
+                        </h2>
+                    </div>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-auto">
                         <button id="btnNuevoMaterial" type="button" class="btn btn-outline-primary me-2">Agregar material tecnológico</button>
@@ -197,6 +204,7 @@
             formRecepcion.style.display = 'none';
         });
 
+        // Nombre de las imágenes cargadas
         function updateFileName(input) {
             const fileNameSpan = input.parentElement.querySelector('.file-name');
         if (input.files.length > 0) {

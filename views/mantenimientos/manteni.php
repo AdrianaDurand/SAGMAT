@@ -26,11 +26,17 @@
         <?php require_once "../../views/sidebar/sidebar.php"; ?>
 
         <!-- Page Content  -->
-        <div class="p-4 p-md-5 pt-5">
-        <h2 class="mb-4">Mantenimientos</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
+        <div class="flex-grow-1 p-3 p-md-4 pt-4">
+            <div class="container">
+                <div class="col-md-12 text-center">
+                    <div class="m-4">
+                        <h2 class="fw-bolder d-inline-block">
+                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> MANTENIMIENTO DE EQUIPOS TECNOLÓGICOS
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     <script src="../../estilosSidebar/js/jquery.min.js"></script>
