@@ -23,26 +23,6 @@ CREATE TABLE tipo
     tiporecurso 		VARCHAR(60) NOT NULL UNIQUE
 )ENGINE = INNODB;
 
--- 3°
-
-CREATE TABLE recursos
-(
-	idrecurso		INT AUTO_INCREMENT PRIMARY KEY,
-    idtiporecurso 	INT 			NOT NULL,
-    idmarca			INT 			NOT NULL,
-	descripcion		VARCHAR(100) 	NOT NULL,  	-- descripción del equipo
-    modelo			VARCHAR(50) 	NULL,
-    -- estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
-	-- observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
-    datasheets 		JSON 			NOT NULL,
-    fotografia 		VARCHAR(200) 	NULL,
-    create_at		DATETIME 		NOT NULL DEFAULT (NOW()),
-    update_at		DATE			NULL,
-    inactive_at		DATE			NULL,
-    CONSTRAINT fk_idtiporecurso FOREIGN KEY (idtiporecurso) REFERENCES tipo (idtiporecurso),
-	CONSTRAINT fk_idmarca FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
-)ENGINE = INNODB;
-
 -- 4°
 
 CREATE TABLE roles
@@ -95,6 +75,21 @@ CREATE TABLE ubicaciones
 	CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
+-- 3°
+
+CREATE TABLE recursos
+(
+	idrecurso		INT AUTO_INCREMENT PRIMARY KEY,
+    idtiporecurso 	INT 			NOT NULL,
+    idmarca			INT 			NOT NULL,
+	descripcion		VARCHAR(100) 	NOT NULL,  	-- descripción del equipo
+    modelo			VARCHAR(50) 	NULL,
+    datasheets 		JSON 			NOT NULL, -- características técnicas, MUY TÉCNICAS
+    fotografia 		VARCHAR(200) 	NULL,
+    CONSTRAINT fk_idtiporecurso FOREIGN KEY (idtiporecurso) REFERENCES tipo (idtiporecurso),
+	CONSTRAINT fk_idmarca FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
+)ENGINE = INNODB;
+
 -- 8°
 
 CREATE TABLE recepcion
@@ -105,6 +100,7 @@ CREATE TABLE recepcion
 	fecharegistro 	DATETIME 	NOT NULL DEFAULT (NOW()),
     tipodocumento	VARCHAR(45) NOT NULL,
     nro_documento	VARCHAR(45) NOT NULL,
+    serie_doc 		VARCHAR(50) NOT NULL,
 	CONSTRAINT fk_idusuario_recep FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
@@ -116,9 +112,8 @@ CREATE TABLE det_recepcion
     idrecepcion		INT 			NOT NULL,
     idrecurso		INT 			NOT NULL,
     nro_serie		VARCHAR(50) 	NULL UNIQUE,
-    estado 			VARCHAR(15) 	NOT NULL,   -- BUENO - INTERMEDIO - MALO
+    estado 			CHAR(1) 		NOT NULL,   -- BUENO - INTERMEDIO - MALO
     observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
-    fotoestado 		VARCHAR(200) 	NULL,	
 	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepcion (idrecepcion),
 	CONSTRAINT fk_idrecurso_detrec FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;

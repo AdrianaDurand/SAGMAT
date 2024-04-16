@@ -19,8 +19,6 @@ $idusuario = $_SESSION["idusuario"];
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- Flatpickr CSS -->
-<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -45,7 +43,139 @@ $idusuario = $_SESSION["idusuario"];
             <!------------------------------------------------------------------------------------------------------------------>
             <!--Formulario de RECEPCIÓN-->
             <!------------------------------------------------------------------------------------------------------------------>            
-            <div id="formRecepcion" class="mt-4 border p-3 rounded">
+            
+            <div class="card">
+            <h5 class="card-header">Recepción</h5>
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col-md-3">
+                                <label for="datetimepicker"><strong>Fecha recepción:</strong></label>
+                                <input type='date' class="form-control border" id='fecha_recepcion' required/>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="datetimepicker"><strong>Tipo documento:</strong></label>
+                                <select class="form-select">
+                                    <option value="1">Boleta</option>
+                                    <option value="2">Factura</option>
+                                    <option value="3">Guía</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
+                                <input type="text" class="form-control border" id="serie_doc" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="nro_documento" class="form-label"><strong>N° documento</strong></label>
+                                <input type="text" class="form-control border" id="nro_documento" required>
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+
+
+            <!------------------------------------------------------------------------------------------------------------------>
+            <!--Formulario de RECEPCIÓN > BODY -->
+            <!------------------------------------------------------------------------------------------------------------------>     
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for=""><strong>Tipo Recurso:</strong></label>
+                                <select name="tipobuscado" id="tipobuscado" class="form-select">
+                                    <option value="-1">Mostrar todas</option>
+                                </select>
+                        </div>                   
+                    </div>
+                        <div class="col-md-3">
+                            <label for="datetimepicker"><strong>Detalle:</strong></label>
+                                <select class="form-select">
+                                    <option value="1">Det. 1</option>
+                                    <option value="2">Det. 2</option>
+                                    <option value="3">Det. 3</option>
+                                </select>
+                        </div>
+                        <div class="col-md-3">
+                                <label for="datetimepicker"><strong>Cantidad:</strong></label>
+                                <input type='number' class="form-control border" id='fecha_recepcion' required/>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Agregar</button>
+                            <button type="button" id="btnNuevo" class="btn btn-outline-warning" data-bs-target="#modalAgregar" data-bs-toggle="modal" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Nuevo recurso</button>
+                        </div>
+                </div>
+            </div>
+
+            <!------------------------------------------------------------------------------------------------------------------>
+            <!--Formulario de RECEPCIÓN > BODY > MODAL AGREGAR-->
+            <!------------------------------------------------------------------------------------------------------------------>     
+
+            
+            <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Recurso</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for=""><strong>Tipo Recurso:</strong></label>
+                                        <select name="tipo" id="tipo" class="form-select">
+                                            <option value="-1">Mostrar todas</option>
+                                        </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for=""><strong>Marca:</strong></label>
+                                        <select class="form-select" id="marca" class="form-select">
+                                            <option value="-1">Mostrar todas</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label"><strong>Descripcion</strong></label>
+                                <input type="text" class="form-control border" id="descripcion" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modulo" class="form-label"><strong>Modelo</strong></label>
+                                <input type="text" class="form-control border" id="modulo" required>
+                            </div>
+                            <div class="mb-3">
+                                <table id="caracteristicasTabla" class="table border">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="col align-self-start">Características</th>
+                                            <th scope="col" class="col-auto text-end">
+                                                <button type="button" id="btnCaracteristicas" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-plus-lg"></i></button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border"><input contenteditable="true" id="clave" placeholder="Elemento" style="border: none;"></td>
+                                            <td class="border"><input contenteditable="true" id="valor" placeholder="detalle" style="border: none;"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label"><strong>Fotografía:</strong></label>
+                                <input class="border form-control" type="file" id="formFile">
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success">Enviar</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div id="formRecepcion" class="mt-4 border p-3 rounded">
                 <div id="innerFormRecepcion" class="rounded p-3"> 
                     
                     <input type="hidden" id="idusuario" name="idusuario" value="<?php echo $_SESSION['idusuario']; ?>">
@@ -74,12 +204,12 @@ $idusuario = $_SESSION["idusuario"];
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!------------------------------------------------------------------------------------------------------------------>
             <!--Formulario de RECURSO TECNOLÓGICO-->
             <!------------------------------------------------------------------------------------------------------------------>
-            <div class="d-flex justify-content-end mt-2">
+            <!--<div class="d-flex justify-content-end mt-2">
                 <button id="btnNuevoMaterial" class="button is-info is-rounded is-small" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><strong><i class="bi bi-plus-lg"></i> </strong> Nuevo material tecnológico</button>
             </div>
 
@@ -137,7 +267,7 @@ $idusuario = $_SESSION["idusuario"];
             <div style="margin-bottom: 20px;"></div>
             <div class="text-center">
                 <button type="button" id="btnGuardarRecepcion" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Guardar nueva recepción</button>
-            </div>
+            </div>-->
 
 
 
@@ -220,6 +350,9 @@ $idusuario = $_SESSION["idusuario"];
 
     <script>
 
+
+
+
         // Nombre de las imágenes cargadas
         function updateFileName(input) {
             const fileNameSpan = input.parentElement.querySelector('.file-name');
@@ -242,74 +375,6 @@ $idusuario = $_SESSION["idusuario"];
             tbody.appendChild(newRow);
         }
         document.getElementById('btnCaracteristicas').addEventListener('click', addCaracteristicas);
-
-        // Mas formulario de recursos
-        function addNewMaterial() {
-            const nuevoFormRecursos = document.createElement('div');
-            nuevoFormRecursos.classList.add('mt-4', 'border', 'p-3', 'rounded');
-
-            nuevoFormRecursos.innerHTML = `
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="TipoMaterial" class="form-label"><strong>Tipo de material</strong></label>
-                        <input type="text" class="form-control border" id="TipoMaterial">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Marca" class="form-label"><strong>Marca</strong></label> 
-                        <input type="text" class="form-control border" id="Marca">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Modelo" class="form-label"><strong>Modelo</strong></label>
-                        <input type="text" class="form-control border" id="Modelo">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table id="caracteristicasTabla" class="table border">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="col align-self-start">Características</th>
-                                    <th scope="col" class="col-auto text-end">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" onclick="addCaracteristicas(this)"><i class="bi bi-plus-lg"></i></button>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="border"><input contenteditable="true" placeholder="Elemento" style="border: none;"></td>
-                                    <td class="border"><input contenteditable="true" placeholder="detalle" style="border: none;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="file is-centered is-normal is-boxed has-name">
-                            <label class="file-label">
-                                <input class="file-input" type="file" name="resume" accept="image/*" onchange="updateFileName(this)" />
-                                <span class="file-cta">
-                                    <span class="file-icon">
-                                        <i class="fas fa-upload"></i>
-                                    </span>
-                                    <span class="file-label">Cargar imagen</span>
-                                </span>
-                                <span class="file-name text-center">Nombre de la imagen</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-            `;
-            const contenedorBotonGuardar = document.getElementById('btnGuardarRecepcion').parentNode;
-            contenedorBotonGuardar.parentNode.insertBefore(nuevoFormRecursos, contenedorBotonGuardar);
-        }
-        document.getElementById('btnNuevoMaterial').addEventListener('click', addNewMaterial);
-
-        // Fecha y hora de recepcion
-        flatpickr('#datetimepicker', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
 
         //------------------------------------------------------------------------------------------------------------------>
         // --Formulario de RECEPCIÓN-->
@@ -341,9 +406,60 @@ $idusuario = $_SESSION["idusuario"];
                 });
         }
 
-        $('#btnGuardarRecepcion').addEventListener('click', recepcionRegister);
+        
 
-        });
+        function getTipos(){
+            const parametros = new FormData();
+            parametros.append("operacion", "listar");
+
+            fetch(`../../controllers/tipo.controller.php`, {
+            method: "POST",
+            body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                datos.forEach(element => {
+                const tagOption = document.createElement("option");
+                tagOption.innerText = element.tiporecurso;
+                tagOption.value = element.idtipo;
+                $("#tipo").appendChild(tagOption)
+                });
+            })
+            .catch(e => {
+                console.error(e);
+            });
+        }
+        getTipos();
+
+    
+
+        function getMarca(){
+            const parametros = new FormData();
+            parametros.append("operacion", "listar");
+
+            fetch(`../../controllers/marca.controller.php`, {
+            method: "POST",
+            body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                datos.forEach(element => {
+                const tagOption = document.createElement("option");
+                tagOption.innerText = element.marca;
+                tagOption.value = element.idmarca;
+                $("#marca").appendChild(tagOption)
+                });
+            })
+            .catch(e => {
+                console.error(e);
+            });
+        }
+        getMarca();
+
+
+
+
+    });
 
 
     </script>

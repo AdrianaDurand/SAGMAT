@@ -56,4 +56,4 @@ CALL spu_addDetrecurso(2, 1, NULL, 'B', '01', NULL, NULL);
 
 
 
-CALL searchTipos('mo');
+CALL searchTipos('m');

@@ -13,7 +13,7 @@ class Marca extends Conexion{
 // FUNCION PARA LISTAR
     public function listar(){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_listar_marcas()");
+            $consulta = $this->conexion->prepare("CALL spu_listarmarcas()");
             $consulta->execute();
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
