@@ -150,6 +150,16 @@ DELIMITER  ;
 -- ---------------------------------------------------------------------------------------
 
 
+DELIMITER //
+CREATE PROCEDURE searchTipos(
+	IN _tipobuscado VARCHAR(255)
+)
+BEGIN
+    SELECT * FROM tipos
+    WHERE tiporecurso LIKE CONCAT('%', _tipobuscado, '%');
+END //
+DELIMITER ;
+
 
 
 DELIMITER $$

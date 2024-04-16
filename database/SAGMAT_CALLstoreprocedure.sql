@@ -52,3 +52,8 @@ CALL spu_addDetrecepcion(2, 2,'0029384909333');
 -- ----------------------------------------------------------------------------------------
 -- ADD (idrecurso, idubicacion, fecha_fin, estado, n_item, observaciones, fotoestado)
 CALL spu_addDetrecurso(2, 1, NULL, 'B', '01', NULL, NULL);
+
+
+
+
+CALL searchTipos('mo');
