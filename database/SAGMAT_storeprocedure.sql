@@ -152,13 +152,14 @@ DELIMITER  ;
 
 DELIMITER //
 CREATE PROCEDURE searchTipos(
-	IN _tipobuscado VARCHAR(255)
+    IN _tipobuscado VARCHAR(255)
 )
 BEGIN
     SELECT * FROM tipos
-    WHERE tiporecurso LIKE CONCAT('%', _tipobuscado, '%');
+    WHERE tiporecurso LIKE CONCAT(_tipobuscado, '%');
 END //
 DELIMITER ;
+
 
 
 
@@ -187,7 +188,7 @@ END $$
 
 
 -- ----------------------------------------------------------------------------------------
--- ------------------------------     TIPO RECURSO    -------------------------------------
+-- --------------------------  Lista de TIPO RECURSO  / MARCA  ----------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE PROCEDURE spu_listartipos()
@@ -197,9 +198,6 @@ BEGIN
 END $$
 DELIMITER ;
 
--- ----------------------------------------------------------------------------------------
--- ------------------------------    MARCA RECURSO    -------------------------------------
--- ----------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE PROCEDURE spu_listarmarcas()
 BEGIN
@@ -207,6 +205,26 @@ BEGIN
     FROM marcas;
 END $$
 DELIMITER ;
+-- ----------------------------------------------------------------------------------------
+-- ------------------------------ LISTA DE RECURSOS  -------------------------------------
+-- ----------------------------------------------------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE spu_listadetalles(
+    IN _tiporecurso VARCHAR(50)
+)
+BEGIN
+    SELECT 
+		R.idrecurso,
+        M.marca,
+        R.descripcion,
+        R.modelo
+    FROM recursos R
+    INNER JOIN marcas M ON M.idmarca = R.idmarca
+    INNER JOIN tipos T ON T.idtiporecurso = R.idtiporecurso
+    WHERE T.tiporecurso = _tiporecurso;
+END $$
+DELIMITER ;
+
 
 
 

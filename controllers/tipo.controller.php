@@ -8,7 +8,7 @@ if (isset($_POST['operacion'])){
 
     switch ($_POST['operacion']){
         case 'listar':
-            echo json_encode($tipo->listar());
+            echo json_encode($tipo->get_tipos());
         break;
 
         case 'buscar':
@@ -16,9 +16,14 @@ if (isset($_POST['operacion'])){
                 "tipobuscado" => $_POST['tipobuscado'] 
             ];
             echo json_encode($tipo->buscar($datosEnviar));
-            
         break;
-        
+
+        case 'buscardetalle':
+            $datosEnviar = [
+                "tiporecurso" => $_POST['tiporecurso'] 
+            ];
+            echo json_encode($tipo->buscardetalle($datosEnviar));
+        break;
 
     }
 }

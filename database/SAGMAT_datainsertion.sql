@@ -2,13 +2,12 @@
 -- ------------------------------------- Base de datos  -----------------------------------
 -- ----------------------------------------------------------------------------------------
 USE SAGMAT;
--- SELECT TIME(NOW())
 -- ----------------------------------------------------------------------------------------
 -- --------------------------------- Inserción de Datos -----------------------------------
 -- ----------------------------------------------------------------------------------------
 
 -- LIMPIEZA
-DROP TABLE det_recursos;
+DROP TABLE recursos;
 ALTER TABLE det_recursos AUTO_INCREMENT 1;
 
 SELECT * FROM roles; 
@@ -16,7 +15,7 @@ SELECT * FROM usuarios;
 
 UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
-WHERE idusuario =1;
+WHERE idusuario =3;
 
 
 -- ----------------------------------------------------------------------------------------
@@ -127,8 +126,14 @@ INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------     RECURSOS      --------------------------------------
 -- ----------------------------------------------------------------------------------------
-INSERT INTO recursos (idtiporecurso, idmarca, modelo, datasheets, fotografia) VALUES
-    (9, 22, 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL);
+INSERT INTO recursos (idtiporecurso, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (9, 22, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL);
+
+INSERT INTO recursos (idtiporecurso, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (4, 22, 'Es un buen equipo', '00928', '{"COLOR": "AZUL", "CONECTIVIDAD": "OK"}', NULL);
+
+INSERT INTO recursos (idtiporecurso, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (4, 18, 'Monitor nuevo', 'RU28389', '{"COLOR": "NEUTRO", "CONECTIVIDAD": "SIMPLE"}', NULL);
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------     RECEPCION     --------------------------------------

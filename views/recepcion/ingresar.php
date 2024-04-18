@@ -1,10 +1,4 @@
-<?php
-session_start();
-global $apellidos, $nombres, $idusuario;
-$idusuario = $_SESSION["idusuario"];
 
-
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,8 +9,8 @@ $idusuario = $_SESSION["idusuario"];
     <link rel="stylesheet" type="text/css" href="../../css/pagecontent/pagecontent.css">
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -48,13 +42,13 @@ $idusuario = $_SESSION["idusuario"];
             <h5 class="card-header">Recepción</h5>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-md-3">
+                            <label><strong>Fecha recepción:</strong></label>
+                            <input type="date" class="form-control border" id="fecha_recepcion" required max="<?php echo date('Y-m-d'); ?>">
+                        </div>
                             <div class="col-md-3">
-                                <label for="datetimepicker"><strong>Fecha recepción:</strong></label>
-                                <input type='date' class="form-control border" id='fecha_recepcion' required/>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="datetimepicker"><strong>Tipo documento:</strong></label>
-                                <select class="form-select">
+                                <label><strong>Tipo documento:</strong></label>
+                                <select id="tipo_documento" class="form-select">
                                     <option value="1">Boleta</option>
                                     <option value="2">Factura</option>
                                     <option value="3">Guía</option>
@@ -71,6 +65,7 @@ $idusuario = $_SESSION["idusuario"];
                         </div>                
                     </div>
                 </div>
+                <br>
 
 
             <!------------------------------------------------------------------------------------------------------------------>
@@ -79,29 +74,37 @@ $idusuario = $_SESSION["idusuario"];
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
-                            <label for=""><strong>Tipo Recurso:</strong></label>
-                                <select name="tipobuscado" id="tipobuscado" class="form-select">
-                                    <option value="-1">Mostrar todas</option>
-                                </select>
-                        </div>                   
+                    <div class="col-md-4">
+                        <label for="buscar"><strong>Buscar tipo de recurso:</strong></label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="buscar" class="form-control border" placeholder="¿Qué quieres buscar?" aria-label="Buscar tipo de recurso" aria-describedby="basic-addon2">
+                            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
+                        </div>
+                        <ul class="container-suggestions" id="resultados">
+                            <!-- Sugerencias de búsqueda -->
+                        </ul>
                     </div>
-                        <div class="col-md-3">
-                            <label for="datetimepicker"><strong>Detalle:</strong></label>
-                                <select class="form-select">
-                                    <option value="1">Det. 1</option>
-                                    <option value="2">Det. 2</option>
-                                    <option value="3">Det. 3</option>
-                                </select>
+                    <div class="col-md-5">
+                        <label for="detalles"><strong>Seleccionar detalles:</strong></label>
+                        <select id="detalles" class="form-select" disabled>
+                            <option>Primero busque el tipo de recurso</option>
+                            
+                            <!-- Los etalles se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                        <div class="col-md-1">
+                            <label for=""><strong>Cantidad:</strong></label>
+                            <input type="number" class="form-control border" id="cantidad" required min="1">
                         </div>
-                        <div class="col-md-3">
-                                <label for="datetimepicker"><strong>Cantidad:</strong></label>
-                                <input type='number' class="form-control border" id='fecha_recepcion' required/>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Agregar</button>
-                            <button type="button" id="btnNuevo" class="btn btn-outline-warning" data-bs-target="#modalAgregar" data-bs-toggle="modal" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Nuevo recurso</button>
-                        </div>
+                        <div class="col-md-2 text-center">
+                            <div style="margin-bottom: 10px;"> 
+                                <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Agregar</button>
+                            </div>
+                            <div>
+                                <button type="button" id="btnNuevo" class="btn btn-outline-warning" data-bs-target="#modalAgregar" data-bs-toggle="modal" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Nuevo recurso</button>
+                            </div>
+                        </div>          
+                    </div>
                 </div>
             </div>
 
@@ -154,7 +157,7 @@ $idusuario = $_SESSION["idusuario"];
                                     <tbody>
                                         <tr>
                                             <td class="border"><input contenteditable="true" id="clave" placeholder="Elemento" style="border: none;"></td>
-                                            <td class="border"><input contenteditable="true" id="valor" placeholder="detalle" style="border: none;"></td>
+                                            <td class="border"><input contenteditable="true" id="valor" placeholder="descripción" style="border: none;"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -175,196 +178,53 @@ $idusuario = $_SESSION["idusuario"];
                 </div>
             </div>
 
-            <!--<div id="formRecepcion" class="mt-4 border p-3 rounded">
-                <div id="innerFormRecepcion" class="rounded p-3"> 
-                    
-                    <input type="hidden" id="idusuario" name="idusuario" value="<?php echo $_SESSION['idusuario']; ?>">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label for="datetimepicker"><strong>Fecha y hora de ingreso:</strong></label>
-                            <input type='datetime-local' class="form-control border" id='datetimepicker' required/>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="TipoDocumento" class="form-label"><strong>Tipo de documento</strong></label>
-                            <div class="control border">
-                                <label class="radio">
-                                <input type="radio" name="tipodocumento" value="Boleta" checked>Boleta
-                                </label>
-                                <label class="radio">
-                                <input type="radio" name="tipodocumento" value="Factura">Factura
-                                </label>
-                                <label class="radio">
-                                <input type="radio" name="tipodocumento" value="Guía">Guía
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="nro_documento" class="form-label"><strong>N° documento</strong></label>
-                            <input type="text" class="form-control border" id="nro_documento" required>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
-
+           <!------------------------------------------------------------------------------------------------------------------>
+            <!--Formulario de DETALLE RECURSO > TABLA AGREGAR-->
             <!------------------------------------------------------------------------------------------------------------------>
-            <!--Formulario de RECURSO TECNOLÓGICO-->
-            <!------------------------------------------------------------------------------------------------------------------>
-            <!--<div class="d-flex justify-content-end mt-2">
-                <button id="btnNuevoMaterial" class="button is-info is-rounded is-small" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><strong><i class="bi bi-plus-lg"></i> </strong> Nuevo material tecnológico</button>
+            
+        <br>
+        
+        <div class="tabla-container text-center">
+            <table id="tablaRecursos" class="table table-bordered" style="display: none; width: 100%; width: 100%; border-collapse: collapse;">
+                <colgroup>
+                    <col width="10%"> <!-- # -->
+                    <col width="20%"> <!-- Tipo -->
+                    <col width="35%"> <!-- Descripción -->
+                    <col width="20%"> <!-- Estado -->
+                    <col width="25%"> <!-- N° Serie -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>N° Serie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se agregarán las filas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+       <!-- Botones de guardar y finalizar -->
+       <div class="text-end mt-3" id="botonesGuardarFinalizar" style="display: none;">
+            <div class="d-flex">
+                <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1"><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
+                <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
             </div>
-
-            <div id="formRecursos" class="mt-4 border p-3 rounded">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="TipoMaterial" class="form-label"><strong>Tipo de material</strong></label>
-                        <input type="text" class="form-control border" id="TipoMaterial">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Marca" class="form-label"><strong>Marca</strong></label> 
-                        <input type="text" class="form-control border" id="Marca">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Modelo" class="form-label"><strong>Modelo</strong></label>
-                        <input type="text" class="form-control border" id="Modelo">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
-                    <table id="caracteristicasTabla" class="table border">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="col align-self-start">Características</th>
-                                    <th scope="col" class="col-auto text-end">
-                                        <button type="button" id="btnCaracteristicas" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-plus-lg"></i></button>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="border"><input contenteditable="true" id="clave" placeholder="Elemento" style="border: none;"></td>
-                                    <td class="border"><input contenteditable="true" id="valor" placeholder="detalle" style="border: none;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="file is-centered is-normal is-boxed has-name">
-                            <label class="file-label">
-                                <input class="file-input" type="file" name="resume" accept="image/*" onchange="updateFileName(this)" />
-                                <span class="file-cta">
-                                    <span class="file-icon">
-                                        <i class="fas fa-upload"></i>
-                                    </span>
-                                    <span class="file-label">Cargar imagen</span>
-                                </span>
-                                <span class="file-name text-center">Nombre de la imagen</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px;"></div>
-            <div class="text-center">
-                <button type="button" id="btnGuardarRecepcion" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Guardar nueva recepción</button>
-            </div>-->
-
-
-
-
-            <!------------------------------------------------------------------------------------------------------------------>
-            <!--Formulario de DETALLE RECURSO-->
-            <!------------------------------------------------------------------------------------------------------------------>
-            <div id="formMaterial" class="mt-4 border p-3 rounded" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="Serie" class="form-label">Buscar material tecnológico:</label>
-                        <div class="input-group">
-                            <button class="btn btn-outline-secondary" type="button" id="btnBuscarRecepcion">Buscar</button>
-                            <input type="text" class="form-control border" aria-label="Example text with button addon">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="Serie" class="form-label">Material tecnológico:</label>
-                        <div class="input-group">
-                            <input class="form-control" type="text" disabled>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="Serie" class="form-label">N° serie:</label> 
-                        <input type="text" class="form-control border" id="Serie">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="Item" class="form-label">N° item:</label>
-                        <input type="number" class="form-control border" id="Item">
-                    </div>
-                    <div class="col-md-4 border">
-                        <label for="Estado" class="form-label">Estado</label>
-                        <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="estado" value="bueno" checked onchange="toggleDescriptionAndImage(this)">
-                                Bueno
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="estado" value="regular" onchange="toggleDescriptionAndImage(this)">
-                                Regular
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="estado" value="malo" onchange="toggleDescriptionAndImage(this)">
-                                Malo
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="mb-3" id="observacionContenedor" style="display: none;">
-                    <label for="exampleFormControlTextarea1" class="form-label">Observación</label>
-                    <textarea class="form-control border" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <div class="file is-centered is-boxed is-danger col-md-4 mx-auto" id="cargarImagen" style="display: none;">
-                    <label class="file-label">
-                        <input class="file-input" type="file" name="resume" accept="image/*" onchange="updateFileName(this)" />
-                        <span class="file-cta">
-                            <span class="file-icon">
-                                <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label">Cargar imagen</span>
-                        </span>
-                        <span class="file-name text-center col-md-12">Nombre de la imagen</span>
-                    </label>
-                </div>
-            </div>
+        </div>
 
     </div>
 
     <script src="../../css/sidebar/js/jquery.min.js"></script>
     <script src="../../css/sidebar/js/main.js"></script>
-    <script src="../../css/sidebar/js/main.js"></script>
-    <!-- Bootstrap Bundle JS (including Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log('DOMContentLoaded evento activado');
+        const tipoRecursoSelect = document.querySelector('#tipo');
 
-
-
-
-        // Nombre de las imágenes cargadas
-        function updateFileName(input) {
-            const fileNameSpan = input.parentElement.querySelector('.file-name');
-            if (input.files.length > 0) {
-                fileNameSpan.textContent = input.files[0].name;
-            } else {
-                fileNameSpan.textContent
-            }
-        }
-
-     
-        // Mas categorias
         function addCaracteristicas() {
             var tbody = document.querySelector('#caracteristicasTabla tbody');
             var newRow = document.createElement('tr');
@@ -374,94 +234,215 @@ $idusuario = $_SESSION["idusuario"];
             `;
             tbody.appendChild(newRow);
         }
-        document.getElementById('btnCaracteristicas').addEventListener('click', addCaracteristicas);
 
-        //------------------------------------------------------------------------------------------------------------------>
-        // --Formulario de RECEPCIÓN-->
-        //------------------------------------------------------------------------------------------------------------------>
-        document.addEventListener("DOMContentLoaded", () => {
-
-        function $(id) {
-            return document.querySelector(id);
-        }
-
-        function recepcionRegister() {
-            const parametros = new FormData();
-            parametros.append("idusuario", $("#idusuario").value); 
-            parametros.append("fechaingreso", $("#datetimepicker").value); 
-            parametros.append("tipodocumento", $("input[name='tipodocumento']:checked").value);
-            parametros.append("nro_documento", $("#nro_documento").value);
-
-            fetch(`../../controllers/recepcion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    console.log(datos);
-                    document.getElementById("formRecepcion").reset();
-                })
-                .catch(e => {
-                    console.error(e);
-                });
-        }
-
-        
-
-        function getTipos(){
+        function getTipos() {
             const parametros = new FormData();
             parametros.append("operacion", "listar");
 
             fetch(`../../controllers/tipo.controller.php`, {
-            method: "POST",
-            body: parametros
+                method: "POST",
+                body: parametros
             })
             .then(respuesta => respuesta.json())
             .then(datos => {
                 datos.forEach(element => {
-                const tagOption = document.createElement("option");
-                tagOption.innerText = element.tiporecurso;
-                tagOption.value = element.idtipo;
-                $("#tipo").appendChild(tagOption)
+                    const tagOption = document.createElement("option");
+                    tagOption.innerText = element.tiporecurso;
+                    tagOption.value = element.idtipo;
+                    document.querySelector("#tipo").appendChild(tagOption)
                 });
             })
             .catch(e => {
                 console.error(e);
             });
         }
-        getTipos();
 
-    
-
-        function getMarca(){
+        function getMarca() {
             const parametros = new FormData();
             parametros.append("operacion", "listar");
 
             fetch(`../../controllers/marca.controller.php`, {
-            method: "POST",
-            body: parametros
+                method: "POST",
+                body: parametros
             })
             .then(respuesta => respuesta.json())
             .then(datos => {
                 datos.forEach(element => {
-                const tagOption = document.createElement("option");
-                tagOption.innerText = element.marca;
-                tagOption.value = element.idmarca;
-                $("#marca").appendChild(tagOption)
+                    const tagOption = document.createElement("option");
+                    tagOption.innerText = element.marca;
+                    tagOption.value = element.idmarca;
+                    document.querySelector("#marca").appendChild(tagOption)
                 });
             })
             .catch(e => {
                 console.error(e);
             });
         }
+
+        function debounce() {
+            const parametros = new FormData();
+            parametros.append("operacion", "buscar");
+            parametros.append("tipobuscado", buscarInput.value);
+
+            fetch("../../controllers/tipo.controller.php", {
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                if (datos.hasOwnProperty('mensaje')) {
+                    mostrarMensajeNoEncontrado(datos.mensaje);
+                } else {
+                    mostrarResultados(datos);
+                }
+            })
+            .catch(error => {
+                console.error("Error en la búsqueda:", error);
+            });
+        }
+
+        function mostrarResultados(datos) {
+            resultadosDiv.innerHTML = '';
+
+            datos.forEach(function (resultado) {
+                const enlaceResultado = document.createElement('a');
+                enlaceResultado.href = `../../views/recepcion/ingresar.php?id=${resultado.idtipo}`;
+                enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
+
+                const nombreNegocio = document.createElement('span');
+                nombreNegocio.textContent = resultado.tiporecurso;
+
+                enlaceResultado.appendChild(nombreNegocio);
+                resultadosDiv.appendChild(enlaceResultado);
+
+                // Agregar evento de clic para seleccionar el resultado
+                enlaceResultado.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    buscarInput.value = resultado.tiporecurso; 
+                    resultadosDiv.innerHTML = ''; // Limpiar los resultados
+                });
+            });
+        }
+
+
+        function mostrarDetallesRecursos(datos) {
+            const detallesSelect = document.getElementById('detalles');
+            detallesSelect.innerHTML = '';
+
+            if (datos.length === 0) {
+                // Mensaje indicando que no hay datos y deshabilitando select
+                agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
+                detallesSelect.disabled = true;
+            } else {
+                detallesSelect.disabled = false;
+                agregarOpcion(detallesSelect, '', 'Seleccione:');
+
+                datos.forEach(recurso => {
+                    const detalles = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`;
+                    agregarOpcion(detallesSelect, `${recurso.idrecurso}-${detalles}`, detalles);
+                });
+            }
+        }
+
+        function agregarOpcion(selectElement, value, text) {
+            const opcion = document.createElement('option');
+            opcion.value = value;
+            opcion.textContent = text;
+            selectElement.appendChild(opcion);
+        }
+
+
+        // Función para buscar recursos asociados al tipo de recurso seleccionado
+        function buscarRecursosAsociados(tipoRecurso) {
+            console.log('Tipo de recurso a buscar:', tipoRecurso);
+            const parametros = new FormData();
+            parametros.append("operacion", "buscardetalle");
+            parametros.append("tiporecurso", tipoRecurso);
+
+            fetch("../../controllers/tipo.controller.php", {
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+            console.log('Datos recibidos del controlador:', datos);
+            if (datos.hasOwnProperty('mensaje')) {
+                mostrarMensajeNoEncontrado(datos.mensaje);
+            } else {
+                mostrarDetallesRecursos(datos);
+            }
+        })
+
+            .catch(error => {
+                console.error('Error al buscar recursos asociados:', error);
+            });
+        };
+
+        addCaracteristicas();
+        getTipos();
         getMarca();
+        //buscarRecursosAsociados("monitor"); Así si funciona :D
+
+        // Evento de cambio en el campo de búsqueda
+        const buscarInput = document.querySelector('#buscar');
+        const resultadosDiv = document.getElementById('resultados');
+        let timeoutId;
+
+        buscarInput.addEventListener('input', function () {
+            clearTimeout(timeoutId);
+
+            if (buscarInput.value.trim() === '') {
+                resultadosDiv.innerHTML = '';
+                return;
+            }
+
+            timeoutId = setTimeout(function () {
+                debounce();
+            }, 500);
+        });
+
+        // Evento de clic en la lista de sugerencias (resultados de búsqueda)
+        const listaSugerencias = document.getElementById('resultados');
+
+        listaSugerencias.addEventListener('click', function (event) {
+            const selectedTipoRecurso = event.target.textContent;
+            buscarInput.value = selectedTipoRecurso;
+            resultadosDiv.innerHTML = '';
+            buscarRecursosAsociados(selectedTipoRecurso); // Pasamos el tipo de recurso a la función buscarRecursosAsociados
+        });
+
+       
+
+        document.getElementById("btnAgregar").addEventListener("click", function() {
+            var cantidad = parseInt(document.getElementById("cantidad").value);
+            var tipoRecurso = document.getElementById("buscar").value;
+            var descripcion = document.getElementById("detalles").value;
+
+            if (!isNaN(cantidad) && cantidad >= 1) {
+                var tabla = document.getElementById("tablaRecursos");
+                var tbody = tabla.querySelector("tbody");
+                tbody.innerHTML = ""; // Limpiar filas existentes antes de agregar nuevas
+                for (var i = 1; i <= cantidad; i++) {
+                    var newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td>${i}</td>
+                        <td>${tipoRecurso}</td>
+                        <td>${descripcion}</td>
+                        <td><input type='text' class='form-control text-center' value='Bueno'></td>
+                        <td><input type='text' class='form-control'></td>
+                        
+                    `;
+                    tbody.appendChild(newRow);
+                }
+                tabla.style.display = "block";
+            }
+        });
 
 
-
-
+        
     });
+</script>
 
 
-    </script>
 </body>
 </html>

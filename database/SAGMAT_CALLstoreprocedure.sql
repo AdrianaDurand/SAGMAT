@@ -55,5 +55,5 @@ CALL spu_addDetrecurso(2, 1, NULL, 'B', '01', NULL, NULL);
 
 
 
-
-CALL searchTipos('m');
+CALL spu_listadetalles('MONITOR');
+CALL searchTipos('mo');

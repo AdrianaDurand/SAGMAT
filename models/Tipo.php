@@ -11,7 +11,7 @@ class Tipo extends Conexion{
     }
 
     // FUNCION PARA LISTAR
-    public function listar(){
+    public function get_tipos(){
         try{
             $consulta = $this->conexion->prepare("CALL spu_listartipos()");
             $consulta->execute();
@@ -28,6 +28,21 @@ class Tipo extends Conexion{
             $consulta->execute(
                 array(
                     $datos['tipobuscado']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function buscardetalle($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_listadetalles(?)");
+            $consulta->execute(
+                array(
+                    $datos['tiporecurso']
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
