@@ -24,7 +24,7 @@ class Tipo extends Conexion{
 
     public function buscar($datos = []){
         try{
-            $consulta = $this->conexion->prepare(" CALL searchTipos(?)");
+            $consulta = $this->conexion->prepare("CALL searchTipos(?)");
             $consulta->execute(
                 array(
                     $datos['tipobuscado']

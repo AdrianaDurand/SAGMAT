@@ -61,8 +61,9 @@ END $$
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------
--- ------------------------------     RECURSOS       -------------------------------------
+-- ------------------------------   AÑADIR RECURSOS   -------------------------------------
 -- ----------------------------------------------------------------------------------------
+-- Nuevos recursos en el modal
 
 DELIMITER $$
 CREATE PROCEDURE spu_addrecurso
@@ -82,8 +83,9 @@ END $$
 DELIMITER  ;
 
 -- ----------------------------------------------------------------------------------------
--- ------------------------------     RECEPCION       -------------------------------------
+-- ------------------------------  AÑADIR RECEPCION   -------------------------------------
 -- ----------------------------------------------------------------------------------------
+-- Esto es para la parte en donde solo le envío los detalles de la recepción
 
 DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
@@ -91,37 +93,38 @@ CREATE PROCEDURE spu_addrecepcion
     IN _idusuario		INT ,
     IN _fechaingreso	DATETIME,
     IN _tipodocumento	VARCHAR(45),
-    IN _nro_documento	VARCHAR(45)
+    IN _nro_documento	VARCHAR(45),
+    IN _serie_doc 		VARCHAR(50)
 )
 BEGIN 
 	INSERT INTO recepciones
-    (idusuario, fechaingreso, tipodocumento, nro_documento)
+    (idusuario, fechaingreso, tipodocumento, nro_documento, serie_doc)
     VALUES
-	(_idusuario, _fechaingreso, _tipodocumento, nro_documento);
+	(_idusuario, _fechaingreso, _tipodocumento, nro_documento, _serie_doc);
 END $$
 DELIMITER  ;
    
-   
 -- ----------------------------------------------------------------------------------------
--- --------------------------     DETALLE RECEPCION       ---------------------------------
+-- --------------------------     AÑADIR EJEMPLARES       ---------------------------------
 -- ----------------------------------------------------------------------------------------
+-- Esto es para la parte en donde le envío la serie en la tabla.
 
 DELIMITER $$
-CREATE PROCEDURE spu_addDetrecepcion
+CREATE PROCEDURE spu_addejemplar
 (
     IN _idrecepcion		INT ,
 	IN _idrecurso		INT ,
     IN _nro_serie	VARCHAR(50)
 )
 BEGIN 
-	INSERT INTO det_recepciones
+	INSERT INTO ejemplares
     (idrecepcion, idrecurso, nro_serie)
     VALUES
     (_idrecepcion, _idrecurso, _nro_serie);
 END $$
 DELIMITER  ;
 
--- ----------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------------
 -- -----------------------    DETALLE RECURSOS       -------------------------------------
 -- ---------------------------------------------------------------------------------------
 
@@ -143,25 +146,6 @@ BEGIN
     (_idrecurso, _idubicacion, _fecha_inicio, _fecha_fin, _estado, _n_item, _observaciones,  NULLIF(_fotoestado, ''));
 END $$
 DELIMITER  ;
-
-
--- ----------------------------------------------------------------------------------------
--- ----------------------------------------------------------------------------------------
--- ---------------------------------------------------------------------------------------
-
-
-DELIMITER //
-CREATE PROCEDURE searchTipos(
-    IN _tipobuscado VARCHAR(255)
-)
-BEGIN
-    SELECT * FROM tipos
-    WHERE tiporecurso LIKE CONCAT(_tipobuscado, '%');
-END //
-DELIMITER ;
-
-
-
 
 DELIMITER $$
 CREATE PROCEDURE spu_RecepcionesRecursos()
@@ -205,8 +189,22 @@ BEGIN
     FROM marcas;
 END $$
 DELIMITER ;
+
 -- ----------------------------------------------------------------------------------------
--- ------------------------------ LISTA DE RECURSOS  -------------------------------------
+-- ----------------------------BUSCAR TIPO DE RECURSO-------------------------------------
+-- ---------------------------------------------------------------------------------------
+DELIMITER //
+CREATE PROCEDURE searchTipos(
+    IN _tipobuscado VARCHAR(255)
+)
+BEGIN
+    SELECT * FROM tipos
+    WHERE tiporecurso LIKE CONCAT(_tipobuscado, '%');
+END //
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------
+-- --------------- LISTA DE RECURSOS QUE COINCIDEN CON EL TIPO  --------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE PROCEDURE spu_listadetalles(

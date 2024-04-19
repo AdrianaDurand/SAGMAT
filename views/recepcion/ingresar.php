@@ -49,9 +49,9 @@
                             <div class="col-md-3">
                                 <label><strong>Tipo documento:</strong></label>
                                 <select id="tipo_documento" class="form-select">
-                                    <option value="1">Boleta</option>
-                                    <option value="2">Factura</option>
-                                    <option value="3">Guía</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Guía R.">Guía R.</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -203,7 +203,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Aquí se agregarán las filas dinámicamente -->
+                    <!-- Aquí se agregarán las filas dinámicamente cuando haga click en el botón -->
                 </tbody>
             </table>
         </div>
@@ -222,7 +222,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        console.log('DOMContentLoaded evento activado');
         const tipoRecursoSelect = document.querySelector('#tipo');
 
         function addCaracteristicas() {
@@ -315,11 +314,11 @@
                 enlaceResultado.appendChild(nombreNegocio);
                 resultadosDiv.appendChild(enlaceResultado);
 
-                // Agregar evento de clic para seleccionar el resultado
+                // agregar evento de clic para seleccionar el resultado
                 enlaceResultado.addEventListener('click', function (event) {
                     event.preventDefault();
                     buscarInput.value = resultado.tiporecurso; 
-                    resultadosDiv.innerHTML = ''; // Limpiar los resultados
+                    resultadosDiv.innerHTML = ''; // limpiar los resultados
                 });
             });
         }
@@ -330,7 +329,7 @@
             detallesSelect.innerHTML = '';
 
             if (datos.length === 0) {
-                // Mensaje indicando que no hay datos y deshabilitando select
+                // mensaje indicando que no hay datos y deshabilitando select
                 agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
                 detallesSelect.disabled = true;
             } else {
@@ -339,7 +338,7 @@
 
                 datos.forEach(recurso => {
                     const detalles = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`;
-                    agregarOpcion(detallesSelect, `${recurso.idrecurso}-${detalles}`, detalles);
+                    agregarOpcion(detallesSelect, `${detalles}`, detalles);
                 });
             }
         }
@@ -352,7 +351,7 @@
         }
 
 
-        // Función para buscar recursos asociados al tipo de recurso seleccionado
+        // función para buscar recursos asociados al tipo de recurso seleccionado
         function buscarRecursosAsociados(tipoRecurso) {
             console.log('Tipo de recurso a buscar:', tipoRecurso);
             const parametros = new FormData();
@@ -383,7 +382,7 @@
         getMarca();
         //buscarRecursosAsociados("monitor"); Así si funciona :D
 
-        // Evento de cambio en el campo de búsqueda
+        // evento de cambio en el campo de búsqueda
         const buscarInput = document.querySelector('#buscar');
         const resultadosDiv = document.getElementById('resultados');
         let timeoutId;
@@ -401,14 +400,14 @@
             }, 500);
         });
 
-        // Evento de clic en la lista de sugerencias (resultados de búsqueda)
+        // evento de clic en la lista de sugerencias (resultados de búsqueda)
         const listaSugerencias = document.getElementById('resultados');
 
         listaSugerencias.addEventListener('click', function (event) {
             const selectedTipoRecurso = event.target.textContent;
             buscarInput.value = selectedTipoRecurso;
             resultadosDiv.innerHTML = '';
-            buscarRecursosAsociados(selectedTipoRecurso); // Pasamos el tipo de recurso a la función buscarRecursosAsociados
+            buscarRecursosAsociados(selectedTipoRecurso); // pasamos el tipo de recurso a la función buscarRecursosAsociados
         });
 
        
@@ -428,15 +427,20 @@
                         <td>${i}</td>
                         <td>${tipoRecurso}</td>
                         <td>${descripcion}</td>
-                        <td><input type='text' class='form-control text-center' value='Bueno'></td>
+                        <td>Bueno</td>
                         <td><input type='text' class='form-control'></td>
                         
                     `;
                     tbody.appendChild(newRow);
                 }
                 tabla.style.display = "block";
+                document.getElementById("botonesGuardarFinalizar").style.display="block";
             }
         });
+
+        
+
+        
 
 
         

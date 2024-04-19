@@ -17,7 +17,7 @@ CREATE TABLE marcas
 )ENGINE = INNODB;
 
 -- 2°
-CREATE TABLE tipo
+CREATE TABLE tipos
 (
 	idtiporecurso		INT AUTO_INCREMENT PRIMARY KEY,
     tiporecurso 		VARCHAR(60) NOT NULL UNIQUE
@@ -41,10 +41,7 @@ CREATE TABLE personas
     tipodoc		VARCHAR(20) NOT NULL,
     numerodoc	CHAR(8) 	NOT NULL,
     telefono 	CHAR(9) 	NOT NULL,
-    email 		VARCHAR(60) NULL,
-    create_at	DATETIME 	NOT NULL DEFAULT (NOW()),
-    update_at	DATE		NULL,
-    inactive_at	DATE		NULL
+    email 		VARCHAR(60) NULL
 )ENGINE = INNODB;
 
 -- 6°
@@ -69,9 +66,6 @@ CREATE TABLE ubicaciones
     nombre			VARCHAR(50) NOT NULL,
     num_aula		CHAR(2) 	NULL,
 	num_piso		CHAR(1) 	NOT NULL,
-    create_at		DATETIME 	NOT NULL DEFAULT (NOW()),
-	update_at		DATE		NULL,
-	inactive_at		DATE		NULL,
 	CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
@@ -86,13 +80,13 @@ CREATE TABLE recursos
     modelo			VARCHAR(50) 	NULL,
     datasheets 		JSON 			NOT NULL, -- características técnicas, MUY TÉCNICAS
     fotografia 		VARCHAR(200) 	NULL,
-    CONSTRAINT fk_idtiporecurso FOREIGN KEY (idtiporecurso) REFERENCES tipo (idtiporecurso),
+    CONSTRAINT fk_idtiporecurso FOREIGN KEY (idtiporecurso) REFERENCES tipos (idtiporecurso),
 	CONSTRAINT fk_idmarca FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
 )ENGINE = INNODB;
 
 -- 8°
 
-CREATE TABLE recepcion
+CREATE TABLE recepciones
 (
 	idrecepcion		INT AUTO_INCREMENT PRIMARY KEY,
     idusuario		INT 		NOT NULL,
@@ -114,7 +108,7 @@ CREATE TABLE det_recepcion
     nro_serie		VARCHAR(50) 	NULL UNIQUE,
     estado 			CHAR(1) 		NOT NULL,   -- BUENO - INTERMEDIO - MALO
     observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
-	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepcion (idrecepcion),
+	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepciones (idrecepcion),
 	CONSTRAINT fk_idrecurso_detrec FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
