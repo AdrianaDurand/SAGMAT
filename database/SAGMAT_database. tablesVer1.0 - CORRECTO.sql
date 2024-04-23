@@ -1,5 +1,5 @@
 -- ----------------------------------------------------------------------------------------
--- ------------------------ Base de datos  1.3 Ver.FINAL-----------------------------------
+-- ------------------------------------- Base de datos -----------------------------------
 -- ----------------------------------------------------------------------------------------
 
 CREATE DATABASE SAGMAT;
@@ -23,7 +23,7 @@ CREATE TABLE tipos
     tiporecurso 		VARCHAR(60) NOT NULL UNIQUE
 )ENGINE = INNODB;
 
--- 3°
+-- 4°
 
 CREATE TABLE roles
 (
@@ -31,7 +31,7 @@ CREATE TABLE roles
     rol 	VARCHAR(35) NOT NULL UNIQUE
 )ENGINE = INNODB;
 
--- 4°
+-- 5°
 
 CREATE TABLE personas
 (
@@ -41,22 +41,26 @@ CREATE TABLE personas
     tipodoc		VARCHAR(20) NOT NULL,
     numerodoc	CHAR(8) 	NOT NULL,
     telefono 	CHAR(9) 	NOT NULL,
-    email 		VARCHAR(60) NULL
+    email 		VARCHAR(60) NULL,
+    create_at	DATETIME 	NOT NULL DEFAULT (NOW()),
+    update_at	DATE		NULL,
+    inactive_at	DATE		NULL
 )ENGINE = INNODB;
 
--- 5°
+-- 6°
 
 CREATE TABLE usuarios
 (
 	idusuario	INT AUTO_INCREMENT PRIMARY KEY,
     idpersona	INT 		NOT NULL,
     idrol		INT 		NOT NULL,
+    usuario		VARCHAR(50) NOT NULL,
 	claveacceso	VARCHAR(100) NOT NULL,
 	CONSTRAINT fk_idpersona FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol FOREIGN KEY (idrol) REFERENCES roles (idrol)
 )ENGINE = INNODB;
 
--- 6°
+-- 7° -------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE ubicaciones
 (
@@ -65,10 +69,13 @@ CREATE TABLE ubicaciones
     nombre			VARCHAR(50) NOT NULL,
     num_aula		CHAR(2) 	NULL,
 	num_piso		CHAR(1) 	NOT NULL,
+    create_at		DATETIME 	NOT NULL DEFAULT (NOW()),
+	update_at		DATE		NULL,
+	inactive_at		DATE		NULL,
 	CONSTRAINT fk_idusuario FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
--- 7°
+-- 3°
 
 CREATE TABLE recursos
 (
@@ -85,11 +92,11 @@ CREATE TABLE recursos
 
 -- 8°
 
-CREATE TABLE recepciones
+CREATE TABLE recepcion
 (
 	idrecepcion		INT AUTO_INCREMENT PRIMARY KEY,
     idusuario		INT 		NOT NULL,
-    fecharecepcion	DATETIME 	NOT NULL,
+    fecharecepcion	TIME 	NOT NULL,
 	fecharegistro 	DATETIME 	NOT NULL DEFAULT (NOW()),
     tipodocumento	VARCHAR(45) NOT NULL,
     nro_documento	VARCHAR(45) NOT NULL,
@@ -98,16 +105,16 @@ CREATE TABLE recepciones
 )ENGINE = INNODB;
 
 -- 9°
--- ANTES LLAMADA det_recepción
-CREATE TABLE ejemplares
+
+CREATE TABLE det_recepcion
 (
-	idejemplar		INT AUTO_INCREMENT PRIMARY KEY,
+	iddet_recepcion	INT AUTO_INCREMENT PRIMARY KEY,
     idrecepcion		INT 			NOT NULL,
     idrecurso		INT 			NOT NULL,
     nro_serie		VARCHAR(50) 	NULL UNIQUE,
     estado 			CHAR(1) 		NOT NULL,   -- BUENO - INTERMEDIO - MALO
     observaciones	VARCHAR(100) 	NULL,  		-- observaciones del equipo
-	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepciones (idrecepcion),
+	CONSTRAINT fk_idrecepcion_detrec FOREIGN KEY (idrecepcion) REFERENCES recepcion (idrecepcion),
 	CONSTRAINT fk_idrecurso_detrec FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
@@ -141,28 +148,21 @@ CREATE TABLE solicitudes
 )ENGINE = INNODB;
 
 -- 12°
-CREATE TABLE observaciones
+
+CREATE TABLE det_solicitud
 (
-	idobservacion	INT AUTO_INCREMENT PRIMARY KEY,
-    observacion 	VARCHAR(100)	NOT NULL
+	iddetsolicitud		INT AUTO_INCREMENT PRIMARY KEY,
+    idsolicitud			INT 			NOT NULL,
+    idrecurso			INT 			NOT NULL,
+    estado_entrega		VARCHAR(15) 	NOT NULL,  -- PENDIENTE / COMPLETADO 
+    estado_devolucion	VARCHAR(15) 	NULL, 	   -- PENDIENTE / ATRASADO / RECIBIDO
+    observaciones 		VARCHAR(60) 	NULL,
+	CONSTRAINT fk_idsolicitud_det FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
+	CONSTRAINT fk_idrecurso_det FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
 -- 13°
 
-CREATE TABLE det_solicitudes
-(
-	iddetsolicitud		INT AUTO_INCREMENT PRIMARY KEY,
-    idsolicitud			INT 			NOT NULL,
-    idejemplar			INT 			NOT NULL,
-    estado_entrega		VARCHAR(15) 	NOT NULL,  -- PENDIENTE / COMPLETADO 
-    estado_devolucion	VARCHAR(15) 	NULL, 	   -- PENDIENTE / ATRASADO / RECIBIDO
-    idobservacion 		VARCHAR(60) 	NULL,
-	CONSTRAINT fk_idsolicitud_soli FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
-	CONSTRAINT fk_idejemplar_soli FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar),
-	CONSTRAINT fk_idobservacion_soli FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
-)ENGINE = INNODB;
-
--- 14°
 CREATE TABLE mantenimientos
 (
 	idmantenimiento 	INT AUTO_INCREMENT PRIMARY KEY,
@@ -177,7 +177,7 @@ CREATE TABLE mantenimientos
 	CONSTRAINT fk_idusuario_mnt FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
--- 15°
+-- 14°
 
 CREATE TABLE bajas
 (

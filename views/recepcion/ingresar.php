@@ -116,8 +116,9 @@
             <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Recurso</h1>
+                    <div class="modal-header" style="background-color: #CCD1D1; color: #000;">
+                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 3em; width: 3em; margin-right: 0.5em;">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Nuevo Recurso</strong></h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     <div class="modal-body">
@@ -136,36 +137,32 @@
                                         </select>
                                 </div>
                             </div>
+                            <br>
                             <div class="mb-3">
-                                <label for="descripcion" class="form-label"><strong>Descripcion</strong></label>
+                                <label for="descripcion" class="form-label"><strong>Descripcion básica:</strong></label>
                                 <input type="text" class="form-control border" id="descripcion" required>
                             </div>
                             <div class="mb-3">
-                                <label for="modulo" class="form-label"><strong>Modelo</strong></label>
+                                <label for="modulo" class="form-label"><strong>Modelo:</strong></label>
                                 <input type="text" class="form-control border" id="modulo" required>
                             </div>
                             <div class="mb-3">
-                                <table id="caracteristicasTabla" class="table border">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="col align-self-start">Características</th>
-                                            <th scope="col" class="col-auto text-end">
-                                                <button type="button" id="btnCaracteristicas" class="btn btn-outline-secondary btn-sm rounded-circle"><i class="bi bi-plus-lg"></i></button>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="border"><input contenteditable="true" id="clave" placeholder="Elemento" style="border: none;"></td>
-                                            <td class="border"><input contenteditable="true" id="valor" placeholder="descripción" style="border: none;"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <label for="modulo" class="form-label"><strong>Características específicas del equipo:</strong></label>
+                                <div class="row" id="caracteristicasContainer">
+                                    <div class="col-md-5 mb-3">
+                                        <input type="text" class="form-control border" placeholder="Característica" required>
+                                    </div>
+                                    <div class="col-md-5 mb-3">
+                                        <input type="text" class="form-control border" placeholder="Detalle" required>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end mb-3">
+                                        <button type="button" class="btn btn-white border" id="btnAgregarCaracteristica"><i class="bi bi-plus-lg"></i></button>
+                                    </div>
+                                </div>
                             </div>
-
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label"><strong>Fotografía:</strong></label>
-                                <input class="border form-control" type="file" id="formFile">
+                                <input class="form-control" type="file" id="formFile">
                             </div>
                         </form>
                     </div>
@@ -224,17 +221,45 @@
     document.addEventListener("DOMContentLoaded", function () {
         const tipoRecursoSelect = document.querySelector('#tipo');
 
-        function addCaracteristicas() {
-            var tbody = document.querySelector('#caracteristicasTabla tbody');
-            var newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td class="border"><input contenteditable="true" placeholder="Elemento" style="border: none;"></td>
-                <td class="border"><input contenteditable="true" placeholder="detalle" style="border: none;"></td>
+        // Añadiendo características al modal
+        function addrow() {
+            var caracteristicasContainer = document.getElementById("caracteristicasContainer");
+
+            var nuevaFila = document.createElement("div");
+            nuevaFila.classList.add("row");
+
+            nuevaFila.innerHTML = `
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control border" placeholder="Característica" required>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control border" placeholder="Detalle" required>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-white border btnEliminarFila"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                </div>
+            </div>
             `;
-            tbody.appendChild(newRow);
+
+            caracteristicasContainer.appendChild(nuevaFila);
         }
 
-        function getTipos() {
+        document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
+            addrow();
+        });
+
+        // evento del botón de eliminar fila
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("btnEliminarFila")) {
+                event.target.closest(".row").remove(); // Con esto estoy eliminando la fila más cercana al botón
+            }
+        });
+
+
+        function gettypes() {
             const parametros = new FormData();
             parametros.append("operacion", "listar");
 
@@ -256,7 +281,7 @@
             });
         }
 
-        function getMarca() {
+        function getbrands() {
             const parametros = new FormData();
             parametros.append("operacion", "listar");
 
@@ -278,7 +303,8 @@
             });
         }
 
-        function debounce() {
+        // función que busca tipos de recursos con nombre
+        function resourcefinder() {
             const parametros = new FormData();
             parametros.append("operacion", "buscar");
             parametros.append("tipobuscado", buscarInput.value);
@@ -292,7 +318,7 @@
                 if (datos.hasOwnProperty('mensaje')) {
                     mostrarMensajeNoEncontrado(datos.mensaje);
                 } else {
-                    mostrarResultados(datos);
+                    searchresult(datos);
                 }
             })
             .catch(error => {
@@ -300,7 +326,8 @@
             });
         }
 
-        function mostrarResultados(datos) {
+        // resultado de la busqueda de un tipo de recurso
+        function searchresult(datos) {
             resultadosDiv.innerHTML = '';
 
             datos.forEach(function (resultado) {
@@ -323,8 +350,8 @@
             });
         }
 
-
-        function mostrarDetallesRecursos(datos) {
+        // lista de detalles
+        function showdetailsfound(datos) {
             const detallesSelect = document.getElementById('detalles');
             detallesSelect.innerHTML = '';
 
@@ -352,7 +379,7 @@
 
 
         // función para buscar recursos asociados al tipo de recurso seleccionado
-        function buscarRecursosAsociados(tipoRecurso) {
+        function searchdetails(tipoRecurso) {
             console.log('Tipo de recurso a buscar:', tipoRecurso);
             const parametros = new FormData();
             parametros.append("operacion", "buscardetalle");
@@ -368,7 +395,7 @@
             if (datos.hasOwnProperty('mensaje')) {
                 mostrarMensajeNoEncontrado(datos.mensaje);
             } else {
-                mostrarDetallesRecursos(datos);
+                showdetailsfound(datos);
             }
         })
 
@@ -377,9 +404,9 @@
             });
         };
 
-        addCaracteristicas();
-        getTipos();
-        getMarca();
+        //addCaracteristicas();
+        gettypes();
+        getbrands();
         //buscarRecursosAsociados("monitor"); Así si funciona :D
 
         // evento de cambio en el campo de búsqueda
@@ -387,16 +414,15 @@
         const resultadosDiv = document.getElementById('resultados');
         let timeoutId;
 
+        // Espera en la busqueda
         buscarInput.addEventListener('input', function () {
             clearTimeout(timeoutId);
-
             if (buscarInput.value.trim() === '') {
                 resultadosDiv.innerHTML = '';
                 return;
             }
-
             timeoutId = setTimeout(function () {
-                debounce();
+                resourcefinder();
             }, 500);
         });
 
@@ -407,11 +433,10 @@
             const selectedTipoRecurso = event.target.textContent;
             buscarInput.value = selectedTipoRecurso;
             resultadosDiv.innerHTML = '';
-            buscarRecursosAsociados(selectedTipoRecurso); // pasamos el tipo de recurso a la función buscarRecursosAsociados
+            searchdetails(selectedTipoRecurso); // pasamos el tipo de recurso a la función searchdetails
         });
 
-       
-
+        // agregando la tabla donde añadimos las series
         document.getElementById("btnAgregar").addEventListener("click", function() {
             var cantidad = parseInt(document.getElementById("cantidad").value);
             var tipoRecurso = document.getElementById("buscar").value;
