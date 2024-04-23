@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -66,7 +65,7 @@
                     </div>
                 </div>
                 <br>
-
+                <input type="hidden" id="id_recepcion" value="">
 
             <!------------------------------------------------------------------------------------------------------------------>
             <!--Formulario de RECEPCIÓN > BODY -->
@@ -194,7 +193,7 @@
                     <tr>
                         <th>#</th>
                         <th>Tipo</th>
-                        <th>Descripción</th>
+                        <th>Detalles</th>
                         <th>Estado</th>
                         <th>N° Serie</th>
                     </tr>
@@ -254,7 +253,7 @@
         // evento del botón de eliminar fila
         document.addEventListener("click", function(event) {
             if (event.target.classList.contains("btnEliminarFila")) {
-                event.target.closest(".row").remove(); // Con esto estoy eliminando la fila más cercana al botón
+                event.target.closest(".row").remove(); // Con esto se elimina la fila más cercana al botón
             }
         });
 
@@ -350,13 +349,14 @@
             });
         }
 
-        // lista de detalles
+
+        let idRecursoSeleccionado;
+        // listamos los detalles luego de buscar por el tipo
         function showdetailsfound(datos) {
             const detallesSelect = document.getElementById('detalles');
             detallesSelect.innerHTML = '';
 
             if (datos.length === 0) {
-                // mensaje indicando que no hay datos y deshabilitando select
                 agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
                 detallesSelect.disabled = true;
             } else {
@@ -364,11 +364,21 @@
                 agregarOpcion(detallesSelect, '', 'Seleccione:');
 
                 datos.forEach(recurso => {
-                    const detalles = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`;
-                    agregarOpcion(detallesSelect, `${detalles}`, detalles);
+                    const opcion = document.createElement('option');
+                    opcion.value = recurso.idrecurso; 
+                    opcion.dataset.detalle = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`; //detalles que se van a mostrar en la listarlos
+
+                    opcion.textContent = opcion.dataset.detalle; // solo veremos la lista de detalles
+                    detallesSelect.appendChild(opcion);
+                });
+
+                // capturamos el ID del recurso seleccionado al cambiar la opción en el select
+                detallesSelect.addEventListener('change', function() {
+                    idRecursoSeleccionado = detallesSelect.value;
                 });
             }
         }
+
 
         function agregarOpcion(selectElement, value, text) {
             const opcion = document.createElement('option');
@@ -442,7 +452,7 @@
             var tipoRecurso = document.getElementById("buscar").value;
             var descripcion = document.getElementById("detalles").value;
 
-            if (!isNaN(cantidad) && cantidad >= 1) {
+            if (!isNaN(cantidad) && cantidad >= 1) { //cantidad x numero de filas mayor a 1
                 var tabla = document.getElementById("tablaRecursos");
                 var tbody = tabla.querySelector("tbody");
                 tbody.innerHTML = ""; // Limpiar filas existentes antes de agregar nuevas
@@ -453,7 +463,7 @@
                         <td>${tipoRecurso}</td>
                         <td>${descripcion}</td>
                         <td>Bueno</td>
-                        <td><input type='text' class='form-control'></td>
+                        <td><input type='text' id="nro_serie" class='form-control'></td>
                         
                     `;
                     tbody.appendChild(newRow);
@@ -461,9 +471,75 @@
                 tabla.style.display = "block";
                 document.getElementById("botonesGuardarFinalizar").style.display="block";
             }
+            
         });
 
+        document.getElementById("btnGuardar").addEventListener("click", function() {
+            añadirrecepcion();
+        });
         
+
+    let idRecepcion;
+    // nueva recepción > datos de la cabecera
+    function añadirrecepcion() {
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("fecharecepcion", $("#fecha_recepcion").val());
+        parametros.append("tipodocumento", $("#tipo_documento").val());
+        parametros.append("nro_documento", $("#nro_documento").val());
+        parametros.append("serie_doc", $("#serie_doc").val());
+
+        fetch(`../../controllers/recepcion.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.idrecepcion > 0) {
+                console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
+                idRecepcion = datos.idrecepcion;
+                
+                añadirejemplar(idRecepcion); // pasamos idRecepcion como parámetro
+            }
+        })
+        .catch(error => {
+            console.error("Error al enviar la solicitud:", error);
+        });
+    }
+
+    function añadirejemplar() {
+        const nroSerie = document.getElementById("nro_serie").value;
+
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("idrecepcion", idRecepcion);
+        parametros.append("idrecurso", idRecursoSeleccionado);
+        parametros.append("nro_serie", nroSerie); 
+        parametros.append("estado", "B"); 
+
+        return fetch(`../../controllers/ejemplar.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.idejemplar > 0) {
+                console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+            }
+        })
+        .catch(error => {
+            console.error("Error al enviar la solicitud:", error);
+        });
+    }
+
+
+
+
+
+
+
+
+       
 
         
 

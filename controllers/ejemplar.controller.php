@@ -12,8 +12,9 @@ if(isset($_POST['operacion'])){
             $datosEnviar = [
                 "idrecepcion" => $_POST['idrecepcion'],
                 "idrecurso" => $_POST['idrecurso'],
-                "nro_serie" = $_POST['nro_serie']
-            ]
+                "nro_serie" => $_POST['nro_serie'],
+                "estado" => $_POST['estado']
+            ];
             echo json_encode($ejemplar->registrar($datosEnviar));
         break;
     }

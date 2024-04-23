@@ -1,7 +1,7 @@
 <?php
 require_once "Conexion.php";
 
-class Ejemplares extends Conexion{
+class Ejemplar extends Conexion{
 
     private $conexion;
 
@@ -9,17 +9,20 @@ class Ejemplares extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-    public function registrarEjem($datos = []){
+    public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_addejemplar(?, ?, ?)");
+            $consulta = $this->conexion->prepare("CALL spu_addejemplar(?, ?, ?, ?)");
             $consulta->execute(
                 array(
                     $datos['idrecepcion'],
                     $datos['idrecurso'],
-                    $datos['nro_serie']
+                    $datos['nro_serie'],
+                    $datos['estado'],
+
                 )
             );
-            return $consulta->fetch(PDO::FETCH_ASSOC);
+            $result = $consulta->fetch(PDO::FETCH_ASSOC);
+            return $result;
         }
         catch(Exception $e){
             die($e->getMessage());

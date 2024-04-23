@@ -13,7 +13,7 @@ if(isset($_POST['operacion'])){
         case 'registrar':
             $datosEnviar = [
                 "idusuario"     => $_SESSION['idusuario'],
-                "fechaingreso"  => $_POST['fechaingreso'], 
+                "fecharecepcion"  => $_POST['fecharecepcion'], 
                 "tipodocumento" => $_POST['tipodocumento'],
                 "nro_documento" => $_POST['nro_documento'],
                 "serie_doc"     => $_POST['serie_doc']

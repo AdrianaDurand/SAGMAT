@@ -2,7 +2,18 @@
 session_start();
 if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     header("Location:../../login.php");
+}
 
+// Mostrando las credenciales de inicio de sesión
+if(isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESSION["idusuario"])) {
+    $apellidos = $_SESSION["apellidos"];
+    $nombres = $_SESSION["nombres"];
+    $idusuario = $_SESSION["idusuario"];
+    echo "<script>console.log('Apellidos:', " . json_encode($apellidos) . ");</script>";
+    echo "<script>console.log('Nombres:', " . json_encode($nombres) . ");</script>";
+    echo "<script>console.log('ID Usuario:', " . json_encode($idusuario) . ");</script>";
+} else {
+    echo "Las variables de sesión no están definidas.";
 }
 
 $iconos = [
@@ -144,13 +155,8 @@ function reemplazarCadena($string)
         </ul>
     </nav>
 </div>
-
-    
-
-
     <script>
 
-        
         // JavaScript para controlar la apertura y cierre de las subcategorías
         const navLinks = document.querySelectorAll('.nav_link');
         navLinks.forEach(link => {

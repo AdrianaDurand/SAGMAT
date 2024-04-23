@@ -16,13 +16,14 @@ class Recepcion extends Conexion{
             $consulta->execute(
                 array(
                     $datos['idusuario'],
-                    $datos['fechaingreso'],
+                    $datos['fecharecepcion'],
                     $datos['tipodocumento'],
                     $datos['nro_documento'],
                     $datos['serie_doc']
                 )
             );
-            return $consulta->fetch(PDO::FETCH_ASSOC);
+            $result = $consulta->fetch(PDO::FETCH_ASSOC);
+            return $result;
         }
         catch(Exception $e){
             die($e->getMessage());
