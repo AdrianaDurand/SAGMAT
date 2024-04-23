@@ -206,7 +206,7 @@
        <!-- Botones de guardar y finalizar -->
        <div class="text-end mt-3" id="botonesGuardarFinalizar" style="display: none;">
             <div class="d-flex">
-                <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1"><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
+                <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1" ><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
                 <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
             </div>
         </div>
@@ -474,63 +474,89 @@
             
         });
 
+        document.getElementById("btnFinalizar").addEventListener("click", function() {
+            endingReception();
+        });
+
+
+        function endingReception() {
+            añadirrecepcion(); 
+            // borramos lo ingresado
+            document.getElementById("fecha_recepcion").value = "";
+            document.getElementById("tipo_documento").selectedIndex = 0;
+            document.getElementById("serie_doc").value = "";
+            document.getElementById("nro_documento").value = "";
+            document.getElementById("buscar").value = "";
+            document.getElementById("cantidad").value = "";
+            document.getElementById("detalles").selectedIndex = 0;
+            document.getElementById("tablaRecursos").style.display = "none";
+            document.getElementById("botonesGuardarFinalizar").style.display = "none";
+            console.log("Recepción FINALIZADA");
+        }
+
+
+
         document.getElementById("btnGuardar").addEventListener("click", function() {
             añadirrecepcion();
         });
         
 
-    let idRecepcion;
-    // nueva recepción > datos de la cabecera
-    function añadirrecepcion() {
-        const parametros = new FormData();
-        parametros.append("operacion", "registrar");
-        parametros.append("fecharecepcion", $("#fecha_recepcion").val());
-        parametros.append("tipodocumento", $("#tipo_documento").val());
-        parametros.append("nro_documento", $("#nro_documento").val());
-        parametros.append("serie_doc", $("#serie_doc").val());
+        let idRecepcion;
+        // nueva recepción > datos de la cabecera
+        function añadirrecepcion() {
+            const parametros = new FormData();
+            parametros.append("operacion", "registrar");
+            parametros.append("fecharecepcion", $("#fecha_recepcion").val());
+            parametros.append("tipodocumento", $("#tipo_documento").val());
+            parametros.append("nro_documento", $("#nro_documento").val());
+            parametros.append("serie_doc", $("#serie_doc").val());
 
-        fetch(`../../controllers/recepcion.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            if (datos.idrecepcion > 0) {
-                console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
-                idRecepcion = datos.idrecepcion;
-                
-                añadirejemplar(idRecepcion); // pasamos idRecepcion como parámetro
-            }
-        })
-        .catch(error => {
-            console.error("Error al enviar la solicitud:", error);
-        });
-    }
+            fetch(`../../controllers/recepcion.controller.php`, {
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                if (datos.idrecepcion > 0) {
+                    console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
+                    idRecepcion = datos.idrecepcion;
+                    
+                    añadirejemplar(idRecepcion); // pasamos idRecepcion como parámetro
+                }
+            })
+            .catch(error => {
+                console.error("Error al enviar la solicitud:", error);
+            });
+        }
 
-    function añadirejemplar() {
-        const nroSerie = document.getElementById("nro_serie").value;
+        function añadirejemplar() {
+            const nroSerie = document.getElementById("nro_serie").value;
 
-        const parametros = new FormData();
-        parametros.append("operacion", "registrar");
-        parametros.append("idrecepcion", idRecepcion);
-        parametros.append("idrecurso", idRecursoSeleccionado);
-        parametros.append("nro_serie", nroSerie); 
-        parametros.append("estado", "B"); 
+            const parametros = new FormData();
+            parametros.append("operacion", "registrar");
+            parametros.append("idrecepcion", idRecepcion);
+            parametros.append("idrecurso", idRecursoSeleccionado);
+            parametros.append("nro_serie", nroSerie); 
+            parametros.append("estado", "B"); 
 
-        return fetch(`../../controllers/ejemplar.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            if (datos.idejemplar > 0) {
-                console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
-            }
-        })
-        .catch(error => {
-            console.error("Error al enviar la solicitud:", error);
-        });
-    }
+            return fetch(`../../controllers/ejemplar.controller.php`, {
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                if (datos.idejemplar > 0) {
+                    console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                }
+            })
+            .catch(error => {
+                console.error("Error al enviar la solicitud:", error);
+            });
+        }
+
+
+
+        
 
 
 
