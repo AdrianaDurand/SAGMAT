@@ -371,13 +371,11 @@
                 datos.forEach(recurso => {
                     const opcion = document.createElement('option');
                     opcion.value = recurso.idrecurso; 
-                    opcion.dataset.detalle = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`; //detalles que se van a mostrar en la listarlos
-
-                    opcion.textContent = opcion.dataset.detalle; // solo veremos la lista de detalles
+                    opcion.dataset.detalle = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`; // Detalles a mostrar en la lista
+                    opcion.textContent = opcion.dataset.detalle; // mostrar solo los detalles en la lista
                     detallesSelect.appendChild(opcion);
                 });
-
-                // capturamos el ID del recurso seleccionado al cambiar la opción en el select
+                // captura el id del recurso seleccionado al cambiar la opción en el select
                 detallesSelect.addEventListener('change', function() {
                     idRecursoSeleccionado = detallesSelect.value;
                 });
@@ -455,7 +453,8 @@
         document.getElementById("btnAgregar").addEventListener("click", function() {
             var cantidad = parseInt(document.getElementById("cantidad").value);
             var tipoRecurso = document.getElementById("buscar").value;
-            var descripcion = document.getElementById("detalles").value;
+            var detallesSelect = document.getElementById("detalles");
+            var descripcion = detallesSelect.options[detallesSelect.selectedIndex].textContent;
 
             if (!isNaN(cantidad) && cantidad >= 1) { //cantidad x numero de filas mayor a 1
                 var tabla = document.getElementById("tablaRecursos");
@@ -496,7 +495,6 @@
                         console.log("Recepción GUARDADA, continuemos ...");
                         moreresources().then((result) => {
                             if (result.isConfirmed) {
-                                añadirejemplar(); 
                                 console.log("Esperando un recurso más por añadir ...");
                             } else {
                                 clearall();
@@ -509,31 +507,50 @@
                 });
         }
 
+
         function endingReception() {
-            showSaveChangesConfirmationFinally()
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        añadirrecepcion(); 
-                        clearall();
-                        console.log("Recepción FINALIZADA");
-                    } else {
-                        clearall();
-                        console.log("Recepción NO FINALIZADA");
-                    }
-                });
-        }
+    showSaveChangesConfirmationFinally()
+        .then((result) => {
+            if (result.isConfirmed) {
+                // Limpiar campos primero
+                clearall();
+                // Luego añadir la recepción
+                añadirrecepcion(); 
+                console.log("Recepción FINALIZADA");
+            } else {
+                clearall();
+                console.log("Recepción NO FINALIZADA");
+            }
+        });
+}
+
 
         function clearall() {
+            document.getElementById("fecha_recepcion").disabled = false;
             document.getElementById("fecha_recepcion").value = "";
+
+            document.getElementById("tipo_documento").disabled = false;
             document.getElementById("tipo_documento").selectedIndex = 0;
+
+            document.getElementById("serie_doc").disabled = false;
             document.getElementById("serie_doc").value = "";
+
+            document.getElementById("nro_documento").disabled = false;
             document.getElementById("nro_documento").value = "";
+
             document.getElementById("buscar").value = "";
             document.getElementById("cantidad").value = "";
-            document.getElementById("detalles").selectedIndex = 0;
+
+            var detallesSelect = document.getElementById("detalles");
+            detallesSelect.disabled = true; 
+            detallesSelect.innerHTML = '<option>Primero busque el tipo de recurso</option>';
+            detallesSelect.selectedIndex = 0;           
+
             document.getElementById("tablaRecursos").style.display = "none";
             document.getElementById("botonesGuardarFinalizar").style.display = "none";
         }
+
+
 
         function cleanresource() {
             document.getElementById("fecha_recepcion").disabled = true;
@@ -542,7 +559,12 @@
             document.getElementById("nro_documento").disabled = true;
             document.getElementById("buscar").value = "";
             document.getElementById("cantidad").value = "";
-            document.getElementById("detalles").selectedIndex = 0;
+
+            var detallesSelect = document.getElementById("detalles");
+            detallesSelect.disabled = true; 
+            detallesSelect.innerHTML = '<option>Primero busque el tipo de recurso</option>';
+            detallesSelect.selectedIndex = 0;           
+
             document.getElementById("tablaRecursos").style.display = "none";
             document.getElementById("botonesGuardarFinalizar").style.display = "none";
         }
@@ -566,8 +588,9 @@
                 if (datos.idrecepcion > 0) {
                     console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
                     idRecepcion = datos.idrecepcion;
-                    
-                    añadirejemplar(idRecepcion); // pasamos idRecepcion como parámetro
+                    document.getElementById("id_recepcion").value = idRecepcion; // Guardar el ID de la recepción en el campo oculto
+                    console.log('ID de la recepción actual:', idRecepcion); 
+                    añadirejemplar(idRecepcion); // idRecepcion como parámetro
                 }
             })
             .catch(error => {
@@ -575,17 +598,17 @@
             });
         }
 
-        function añadirejemplar() {
-            // Obtener todos los campos de entrada de número de serie
+
+       function añadirejemplar(idRecepcion) {
             const nroSerieInputs = document.querySelectorAll(".nro_serie");
             
-            // Iterar sobre cada campo de entrada de número de serie
+            // itera sobre cada campo de entrada de número de serie
             nroSerieInputs.forEach(input => {
                 const nroSerie = input.value;
 
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
-                parametros.append("idrecepcion", idRecepcion);
+                parametros.append("idrecepcion", idRecepcion); 
                 parametros.append("idrecurso", idRecursoSeleccionado);
                 parametros.append("nro_serie", nroSerie); 
                 parametros.append("estado", "B"); 
