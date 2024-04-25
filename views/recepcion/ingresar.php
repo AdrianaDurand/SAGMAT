@@ -13,6 +13,10 @@
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
 </head>
 <body>
 
@@ -215,6 +219,7 @@
 
     <script src="../../css/sidebar/js/jquery.min.js"></script>
     <script src="../../css/sidebar/js/main.js"></script>
+    <script src="../../javascript/sweetalert.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -463,25 +468,62 @@
                         <td>${tipoRecurso}</td>
                         <td>${descripcion}</td>
                         <td>Bueno</td>
-                        <td><input type='text' id="nro_serie" class='form-control'></td>
-                        
+                        <td><input type='text' class='form-control nro_serie' required></td> <!-- Campo de entrada de número de serie -->
                     `;
                     tbody.appendChild(newRow);
                 }
                 tabla.style.display = "block";
                 document.getElementById("botonesGuardarFinalizar").style.display="block";
             }
-            
         });
+
 
         document.getElementById("btnFinalizar").addEventListener("click", function() {
             endingReception();
         });
 
+        document.getElementById("btnGuardar").addEventListener("click", function() {
+            continuereception();
+        });
+        
+
+        function continuereception() {
+            showSaveChangesConfirmationContinue()
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        añadirrecepcion(); 
+                        cleanresource();
+                        console.log("Recepción GUARDADA, continuemos ...");
+                        moreresources().then((result) => {
+                            if (result.isConfirmed) {
+                                añadirejemplar(); 
+                                console.log("Esperando un recurso más por añadir ...");
+                            } else {
+                                clearall();
+                                console.log("No se agregarán más recursos.");
+                            }
+                        });
+                    } else {
+                        console.log("Esperando para guardar");
+                    }
+                });
+        }
 
         function endingReception() {
-            añadirrecepcion(); 
-            // borramos lo ingresado
+            showSaveChangesConfirmationFinally()
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        añadirrecepcion(); 
+                        clearall();
+                        console.log("Recepción FINALIZADA");
+                    } else {
+                        clearall();
+                        console.log("Recepción NO FINALIZADA");
+                    }
+                });
+        }
+
+        function clearall() {
             document.getElementById("fecha_recepcion").value = "";
             document.getElementById("tipo_documento").selectedIndex = 0;
             document.getElementById("serie_doc").value = "";
@@ -491,15 +533,19 @@
             document.getElementById("detalles").selectedIndex = 0;
             document.getElementById("tablaRecursos").style.display = "none";
             document.getElementById("botonesGuardarFinalizar").style.display = "none";
-            console.log("Recepción FINALIZADA");
         }
 
-
-
-        document.getElementById("btnGuardar").addEventListener("click", function() {
-            añadirrecepcion();
-        });
-        
+        function cleanresource() {
+            document.getElementById("fecha_recepcion").disabled = true;
+            document.getElementById("tipo_documento").disabled = true;
+            document.getElementById("serie_doc").disabled = true;
+            document.getElementById("nro_documento").disabled = true;
+            document.getElementById("buscar").value = "";
+            document.getElementById("cantidad").value = "";
+            document.getElementById("detalles").selectedIndex = 0;
+            document.getElementById("tablaRecursos").style.display = "none";
+            document.getElementById("botonesGuardarFinalizar").style.display = "none";
+        }
 
         let idRecepcion;
         // nueva recepción > datos de la cabecera
@@ -530,41 +576,38 @@
         }
 
         function añadirejemplar() {
-            const nroSerie = document.getElementById("nro_serie").value;
+            // Obtener todos los campos de entrada de número de serie
+            const nroSerieInputs = document.querySelectorAll(".nro_serie");
+            
+            // Iterar sobre cada campo de entrada de número de serie
+            nroSerieInputs.forEach(input => {
+                const nroSerie = input.value;
 
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idrecepcion", idRecepcion);
-            parametros.append("idrecurso", idRecursoSeleccionado);
-            parametros.append("nro_serie", nroSerie); 
-            parametros.append("estado", "B"); 
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idrecepcion", idRecepcion);
+                parametros.append("idrecurso", idRecursoSeleccionado);
+                parametros.append("nro_serie", nroSerie); 
+                parametros.append("estado", "B"); 
 
-            return fetch(`../../controllers/ejemplar.controller.php`, {
-                method: "POST",
-                body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                if (datos.idejemplar > 0) {
-                    console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
-                }
-            })
-            .catch(error => {
-                console.error("Error al enviar la solicitud:", error);
+                fetch(`../../controllers/ejemplar.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    if (datos.idejemplar > 0) {
+                        console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al enviar la solicitud:", error);
+                });
             });
         }
 
 
-
-        
-
-
-
-
-
-
-
-
+    
        
 
         
