@@ -16,7 +16,7 @@ class Usuario extends Conexion {
       $consulta = $this->pdo->prepare("CALL spu_usuarios_login(?)");
       $consulta->execute(
         array(
-          $datos['_nombrecompleto']
+          $datos['numerodoc']
         )
       );
       return $consulta->fetch(PDO::FETCH_ASSOC);
