@@ -29,11 +29,11 @@ BEGIN
 	INSERT INTO recepciones
     (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, _idpersonal, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+	(_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END $$
-CALL spu_addrecepcion(1, 4, '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
 
 SELECT * FROM recepciones;
+CALL spu_addrecepcion(1, 4, '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
 
 
 

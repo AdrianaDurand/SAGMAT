@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2024 a las 06:39:09
+-- Tiempo de generación: 27-04-2024 a las 06:47:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addrecepcion` (IN `_idusuario` 
 	INSERT INTO recepciones
     (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, _idpersonal, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+	(_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_registrar_detallerecepcion` (IN `_idrecepcion` INT, IN `_idrecurso` INT, IN `_cantidadrecibida` SMALLINT, IN `_cantidadenviada` SMALLINT)   BEGIN
@@ -327,7 +327,9 @@ CREATE TABLE `recepciones` (
 INSERT INTO `recepciones` (`idrecepcion`, `idusuario`, `idpersonal`, `fechayhoraregistro`, `fechayhorarecepcion`, `tipodocumento`, `nrodocumento`, `serie_doc`, `observaciones`) VALUES
 (1, 1, NULL, '2024-04-12 00:00:00', '2024-04-16 00:00:00', 'Boleta', '0004129', 'T0-150', 'Completo'),
 (2, 1, 4, '2024-04-15 08:00:00', '0000-00-00 00:00:00', 'BOLETA', '12345', 'TBC04', 'Concluido'),
-(3, 1, 4, '2024-04-26 23:31:26', '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
+(3, 1, 4, '2024-04-26 23:31:26', '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido'),
+(4, 1, 4, '2024-04-26 23:43:39', '2024-04-27 23:30:45', 'FACTURA', '10721597364', 'TBC-05', 'Ninguna'),
+(5, 1, NULL, '2024-04-26 23:44:44', '2024-04-28 23:30:45', 'FACTURA', '1071597364', 'TBC-05', 'Ninguna');
 
 -- --------------------------------------------------------
 
@@ -700,7 +702,7 @@ ALTER TABLE `prestamos`
 -- AUTO_INCREMENT de la tabla `recepciones`
 --
 ALTER TABLE `recepciones`
-  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `recursos`
