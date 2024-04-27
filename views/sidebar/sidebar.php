@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
-    header("Location:../../login.php");
+    header("Location:../../index.php");
 }
 
 // Mostrando las credenciales de inicio de sesión

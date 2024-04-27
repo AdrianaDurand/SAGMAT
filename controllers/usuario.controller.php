@@ -55,6 +55,6 @@ if (isset($_GET["operacion"])){
     session_destroy();
     session_unset();
 
-    header("Location:../login.php");
+    header("Location:../index.php");
   }
 }
