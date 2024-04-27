@@ -91,7 +91,6 @@ CREATE TABLE recursos
     modelo							VARCHAR(50) 		NULL,
     datasheets 						JSON 				NOT NULL, -- características técnicas, MUY TÉCNICAS
     fotografia 						VARCHAR(200) 		NULL,
-    nro_equipo						VARCHAR(20) 		NULL,
     CONSTRAINT fk_idtipo_re  FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
 	CONSTRAINT fk_idmarca_re 		FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
 )ENGINE = INNODB;
@@ -192,6 +191,7 @@ CREATE TABLE ejemplares
 	idejemplar 						INT 					AUTO_INCREMENT PRIMARY KEY,
     iddetallerecepcion	 			INT 					NOT NULL, -- FK
     nro_serie						VARCHAR(30) 			NOT NULL,
+    nro_equipo						VARCHAR(20) 		NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA
