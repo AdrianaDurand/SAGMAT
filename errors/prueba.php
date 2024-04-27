@@ -9,6 +9,9 @@
 
   <!-- Bootstrap CSS v5.2.1 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+   <!-- Font Awesome icons (free version) -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 
 <body>
@@ -18,7 +21,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <label for="buscar"><strong>Buscar personal:</strong></label>
+            <label for="idpersonal"><strong>Buscar personal:</strong></label>
             <div class="input-group mb-3">
               <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
               <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
@@ -62,119 +65,157 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const buscarInput = document.querySelector('#buscar');
-      let timeoutId;
+    document.addEventListener("DOMContentLoaded", function() {
+      // evento de cambio en el campo de búsqueda
+      const buscarInput = document.querySelector('#idpersonal');
+       // función que busca tipos de recursos con nombre
+       function resourcefinder() {
+          const parametros = new FormData();
+          parametros.append("operacion", "search");
+          parametros.append("nombrecompleto", buscarInput.value);
 
-  function debounce() {
-    const parametros = new FormData();
-    parametros.append("operacion", "debounce"); // Cambiar "operacion" a la operación específica que deseas realizar
-    parametros.append("nombre", buscarInput.value); // Cambiar "codigo" a "nombre_negocio"
-
-    fetch("./controllers/negocio.controller.php", {
-      method: "POST",
-      body: parametros
-    })
-      .then(respuesta => respuesta.json())
-      .then(datos => {
-        console.log("Respuesta de búsqueda:", datos);
-        // Aquí puedes mostrar los resultados en el DOM
-        if (datos.hasOwnProperty('mensaje')) {
-          mostrarMensajeNoEncontrado(datos.mensaje);
-        } else {
-          // Mostrar los resultados en el DOM
-          mostrarResultados(datos);
+          fetch("../controllers/persona.controller.php", {
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            if (datos.hasOwnProperty('mensaje')) {
+              mostrarMensajeNoEncontrado(datos.mensaje);
+            } else {
+              searchresult(datos);
+            }
+          })
+          .catch(error => {
+            console.error("Error en la búsqueda:", error);
+          });
         }
-      })
-      .catch(error => {
-        console.error("Error en la búsqueda:", error);
-      });
-  }
 
-  function mostrarResultados(datos) {
-    // Seleccionar el contenedor de resultados
-    const resultadosDiv = document.getElementById('resultados');
+        // resultado de la busqueda de un personal
+        function searchresult(datos) {
+          resultadosDiv.innerHTML = '';
 
-    // Limpiar los resultados anteriores
-    resultadosDiv.innerHTML = '';
+          datos.forEach(function(resultado) {
+              const enlaceResultado = document.createElement('a');
+              enlaceResultado.href = `../views/recepcion/ingresar.php?id=${resultado.nombrecompleto}`;
+              enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
 
-    // Iterar sobre los datos y mostrarlos en la página
-    datos.forEach(function (resultado) {
-        // Crear un enlace para el resultado
-        const enlaceResultado = document.createElement('a');
-        enlaceResultado.href = `./views/menu.php?id=${resultado.idnegocio}`;
-        
-        // Crear un elemento div para cada resultado
-        const resultadoDiv = document.createElement('div');
-        resultadoDiv.classList.add('resultado');
-        
-        // Agregar el logo del negocio
-        const logoNegocio = document.createElement('img');
-        logoNegocio.src = `imgLogos/${resultado.logo}`;
-        logoNegocio.alt = 'Logo del negocio';
-        logoNegocio.classList.add('logo-negocio');
-        logoNegocio.style.width = '50px'; // Establecer el ancho
-        logoNegocio.style.height = '50px'; // Altura automática para mantener la proporción
-        
-        // Agregar el logo del negocio al div del resultado
-        resultadoDiv.appendChild(logoNegocio);
+              const nombreNegocio = document.createElement('span');
+              nombreNegocio.textContent = resultado.nombrecompleto;
 
-        // Agregar el nombre del negocio
-        const nombreNegocio = document.createElement('span');
-        nombreNegocio.textContent = resultado.nombre;
+              enlaceResultado.appendChild(nombreNegocio);
+              resultadosDiv.appendChild(enlaceResultado);
 
-        // Agregar el nombre del negocio al div del resultado
-        resultadoDiv.appendChild(nombreNegocio);
+              // agregar evento de clic para seleccionar el resultado
+              enlaceResultado.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  buscarInput.value = resultado.nombrecompleto;
+                  resultadosDiv.innerHTML = ''; // limpiar los resultados
+              });
+          });
+        }
+        let idRecursoSeleccionado;
+                // listamos los detalles luego de buscar por el tipo
+                function showdetailsfound(datos) {
+                    const detallesSelect = document.getElementById('detalles');
+                    detallesSelect.innerHTML = '';
 
-        // Agregar el div del resultado al enlace
-        enlaceResultado.appendChild(resultadoDiv);
+                    if (datos.length === 0) {
+                        agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
+                        detallesSelect.disabled = true;
+                    } else {
+                        detallesSelect.disabled = false;
+                        agregarOpcion(detallesSelect, '', 'Seleccione:');
 
-        // Agregar el enlace al contenedor de resultados
-        resultadosDiv.appendChild(enlaceResultado);
+                        datos.forEach(recurso => {
+                            const opcion = document.createElement('option');
+                            opcion.value = recurso.idrecurso;
+                            opcion.dataset.detalle = `${recurso.apellidos}, ${recurso.nombres}`; // Detalles a mostrar en la lista
+                            opcion.textContent = opcion.dataset.detalle; // mostrar solo los detalles en la lista
+                            detallesSelect.appendChild(opcion);
+                        });
+                        // captura el id del recurso seleccionado al cambiar la opción en el select
+                        detallesSelect.addEventListener('change', function() {
+                            idRecursoSeleccionado = detallesSelect.value;
+                        });
+                    }
+                }
+                function agregarOpcion(selectElement, value, text) {
+                    const opcion = document.createElement('option');
+                    opcion.value = value;
+                    opcion.textContent = text;
+                    selectElement.appendChild(opcion);
+                }
+
+
+                // función para buscar recursos asociados al tipo de recurso seleccionado
+                function searchdetails(tipoRecurso) {
+                    console.log('Tipo de recurso a buscar:', tipoRecurso);
+                    const parametros = new FormData();
+                    parametros.append("operacion", "listaPersonas");
+                    parametros.append("apellidos", tipoRecurso);
+
+                    fetch("../controllers/persona.controller.php", {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            console.log('Datos recibidos del controlador:', datos);
+                            if (datos.hasOwnProperty('mensaje')) {
+                                mostrarMensajeNoEncontrado(datos.mensaje);
+                            } else {
+                                showdetailsfound(datos);
+                            }
+                        })
+
+                        .catch(error => {
+                            console.error('Error al buscar recursos asociados:', error);
+                        });
+                };
+        const resultadosDiv = document.getElementById('resultados');
+                let timeoutId;
+
+                // Espera en la busqueda
+                buscarInput.addEventListener('input', function() {
+                    clearTimeout(timeoutId);
+                    if (buscarInput.value.trim() === '') {
+                        resultadosDiv.innerHTML = '';
+                        return;
+                    }
+                    timeoutId = setTimeout(function() {
+                        resourcefinder();
+                    }, 500);
+                });
+      // nueva recepción > datos de la cabecera
+      function añadirrecepcion() {
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("idpersonal", $("#idpersonal").val());
+        parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").val());
+        parametros.append("tipodocumento", $("#tipodocumento").val());
+        parametros.append("nrodocumento", $("#nrodocumento").val());
+        parametros.append("serie_doc", $("#serie_doc").val());
+
+        fetch(`../../controllers/recepcion.controller.php`, {
+          method: "POST",
+          body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          if (datos.idrecepcion > 0) {
+            console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
+            idRecepcion = datos.idrecepcion;
+            document.getElementById("id_recepcion").value = idRecepcion; // Guardar el ID de la recepción en el campo oculto
+            console.log('ID de la recepción actual:', idRecepcion);
+            añadirejemplar(idRecepcion); // idRecepcion como parámetro
+          }
+        })
+        .catch(error => {
+          console.error("Error al enviar la solicitud:", error);
+        });
+      }
     });
-}
-
-
-  function mostrarMensajeNoEncontrado(mensaje) {
-    // Limpiar los resultados anteriores
-    const resultadosDiv = document.getElementById('resultados');
-    resultadosDiv.innerHTML = '';
-
-    // Crear un elemento div para mostrar el mensaje de error
-    const mensajeDiv = document.createElement('div');
-    mensajeDiv.textContent = mensaje;
-    mensajeDiv.classList.add('mensaje-no-encontrado');
-
-    // Agregar estilos al mensaje de error
-    mensajeDiv.style.color = 'black'; // Color del texto
-    mensajeDiv.style.textAlign = 'center'; // Centrar el texto
-    mensajeDiv.style.fontFamily = 'Arial, sans-serif'; // Estilo de letra
-    mensajeDiv.style.fontStyle = 'italic'; // Texto en cursiva
-
-    // Agregar el mensaje al contenedor de resultados
-    resultadosDiv.appendChild(mensajeDiv);
-}
-
-
-
-
-  buscarInput.addEventListener('input', function () {
-    clearTimeout(timeoutId);
-
-    // Verificar si el campo de búsqueda está vacío
-    if (buscarInput.value.trim() === '') {
-      // Si está vacío, limpiar los resultados y no hacer la búsqueda
-      const resultadosDiv = document.getElementById('resultados');
-      resultadosDiv.innerHTML = '';
-      return;
-    }
-
-    timeoutId = setTimeout(function () {
-      debounce();
-    }, 500);
-  });
-
-});
   </script>
 </body>
 

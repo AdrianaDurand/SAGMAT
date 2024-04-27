@@ -47,7 +47,7 @@
                 <h5 class="card-header">Recepción</h5>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="idpersonal"><strong>Buscar personal:</strong></label>
                             <div class="input-group mb-3">
                                 <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
@@ -57,17 +57,11 @@
                                 <!-- Sugerencias de búsqueda -->
                             </ul>
                         </div>
-                        <div class="col-md-6">
-                            <label><strong>Observaciones</strong></label>
-                            <input type="text" class="form-control border" id="observaciones">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label><strong>Fecha y hora de recepción:</strong></label>
                             <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label><strong>Tipo documento:</strong></label>
                             <select id="tipodocumento" class="form-select">
                                 <option value="Boleta">Boleta</option>
@@ -75,13 +69,19 @@
                                 <option value="Guía R.">Guía R.</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <label for="nrodocumento" class="form-label"><strong>N° documento</strong></label>
                             <input type="text" class="form-control border" id="nrodocumento" required>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
                             <input type="text" class="form-control border" id="serie_doc" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><strong>Observaciones</strong></label>
+                            <input type="text" class="form-control border" id="observaciones">
                         </div>
                     </div>
                 </div>
@@ -342,10 +342,10 @@
                 // función que busca tipos de recursos con nombre
                 function resourcefinder() {
                     const parametros = new FormData();
-                    parametros.append("operacion", "buscar");
-                    parametros.append("tipobuscado", buscarInput.value);
+                    parametros.append("operacion", "search");
+                    parametros.append("nombrecompleto", buscarInput.value);
 
-                    fetch("../../controllers/tipo.controller.php", {
+                    fetch("../../controllers/persona.controller.php", {
                             method: "POST",
                             body: parametros
                         })
@@ -368,11 +368,11 @@
 
                     datos.forEach(function(resultado) {
                         const enlaceResultado = document.createElement('a');
-                        enlaceResultado.href = `../../views/recepcion/ingresar.php?id=${resultado.idtipo}`;
+                        enlaceResultado.href = `../../views/recepcion/ingresar.php?id=${resultado.nombrecompleto}`;
                         enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
 
                         const nombreNegocio = document.createElement('span');
-                        nombreNegocio.textContent = resultado.tiporecurso;
+                        nombreNegocio.textContent = resultado.nombres + ' ' + resultado.apellidos;
 
                         enlaceResultado.appendChild(nombreNegocio);
                         resultadosDiv.appendChild(enlaceResultado);
@@ -380,7 +380,7 @@
                         // agregar evento de clic para seleccionar el resultado
                         enlaceResultado.addEventListener('click', function(event) {
                             event.preventDefault();
-                            buscarInput.value = resultado.tiporecurso;
+                            buscarInput.value = resultado.nombrecompleto;
                             resultadosDiv.innerHTML = ''; // limpiar los resultados
                         });
                     });
@@ -455,7 +455,7 @@
                 //buscarRecursosAsociados("monitor"); Así si funciona :D
 
                 // evento de cambio en el campo de búsqueda
-                const buscarInput = document.querySelector('#buscar');
+                const buscarInput = document.querySelector('#idpersonal');
                 const resultadosDiv = document.getElementById('resultados');
                 let timeoutId;
 
