@@ -48,9 +48,9 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="buscarpersonal"><strong>Buscar personal:</strong></label>
+                            <label for="idpersonal"><strong>Buscar personal:</strong></label>
                             <div class="input-group mb-3">
-                                <input type="text" id="buscarpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
+                                <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
                                 <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
                             </div>
                             <ul class="container-suggestions" id="resultados">
@@ -64,24 +64,24 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label><strong>Fecha recepción:</strong></label>
-                            <input type="date" class="form-control border" id="fecha_recepcion" required max="<?php echo date('Y-m-d'); ?>">
+                            <label><strong>Fecha y hora de recepción:</strong></label>
+                            <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
                         </div>
                         <div class="col-md-3">
                             <label><strong>Tipo documento:</strong></label>
-                            <select id="tipo_documento" class="form-select">
+                            <select id="tipodocumento" class="form-select">
                                 <option value="Boleta">Boleta</option>
                                 <option value="Factura">Factura</option>
                                 <option value="Guía R.">Guía R.</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
-                            <input type="text" class="form-control border" id="serie_doc" required>
+                            <label for="nrodocumento" class="form-label"><strong>N° documento</strong></label>
+                            <input type="text" class="form-control border" id="nrodocumento" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="nro_documento" class="form-label"><strong>N° documento</strong></label>
-                            <input type="text" class="form-control border" id="nro_documento" required>
+                            <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
+                            <input type="text" class="form-control border" id="serie_doc" required>
                         </div>
                     </div>
                 </div>

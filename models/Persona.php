@@ -2,7 +2,7 @@
 
 require_once "Conexion.php";
 
-class Personas extends Conexion
+class Persona extends Conexion
 {
 
     private $conexion;
