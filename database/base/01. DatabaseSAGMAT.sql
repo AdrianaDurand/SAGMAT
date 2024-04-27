@@ -58,7 +58,6 @@ CREATE TABLE usuarios
 	idusuario					INT 				AUTO_INCREMENT PRIMARY KEY,
     idpersona					INT		 			NOT NULL,
     idrol						INT		 			NOT NULL,
-    usuario						VARCHAR(50)			NOT NULL,
 	claveacceso					VARCHAR(100) 		NOT NULL,
 	CONSTRAINT fk_idpersona 	FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
@@ -72,11 +71,12 @@ CREATE TABLE ubicaciones
 (
 	idubicacion 					INT 				AUTO_INCREMENT PRIMARY KEY,
     idusuario 						INT 				NOT NULL, -- FK
-    nombre							VARCHAR(30) 		NOT NULL,
-    nro_piso 						SMALLINT 			NULL,
-    numero 							VARCHAR(30) 		NULL,
+    nombre							VARCHAR(30) 		NOT NULL, -- SECRETARIA, LABORATORIO, ETC.
+    nro_piso 						SMALLINT 			NULL, --
+    numero 							VARCHAR(30) 		NULL, -- ENUMERADO POR AULA.
     CONSTRAINT fk_idusuario_ub 		FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
+
 
 -- 7°
 -- *********************************************************************
@@ -259,13 +259,11 @@ CREATE TABLE mantenimientos
 CREATE TABLE bajas
 (
 	idbaja 							INT 					AUTO_INCREMENT PRIMARY KEY,
-    idejemplar 						INT 					NOT NULL, -- FK
     idmantenimiento 				INT 					NOT NULL, -- FK
     fechabaja						DATE					NOT NULL,
     motivo							VARCHAR(100) 			NULL,
     comentarios						VARCHAR(100) 			NULL,
     ficha							VARCHAR(300) 			NULL,
     estado							VARCHAR(20) 			NULL,
-    CONSTRAINT fk_idejemplar_bj 	FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar),
     CONSTRAINT fk_idmantenimiento_bj FOREIGN KEY (idmantenimiento) REFERENCES mantenimientos (idmantenimiento)
 )ENGINE = INNODB;

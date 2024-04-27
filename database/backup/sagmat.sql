@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2024 a las 00:11:17
+-- Tiempo de generación: 27-04-2024 a las 04:12:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,6 +42,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_login` (IN `_numerodoc
 END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bajas`
+--
+
+CREATE TABLE `bajas` (
+  `idbaja` int(11) NOT NULL,
+  `idmantenimiento` int(11) NOT NULL,
+  `fechabaja` date NOT NULL,
+  `motivo` varchar(100) DEFAULT NULL,
+  `comentarios` varchar(100) DEFAULT NULL,
+  `ficha` varchar(300) DEFAULT NULL,
+  `estado` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -124,6 +140,25 @@ CREATE TABLE `ejemplares` (
   `idejemplar` int(11) NOT NULL,
   `iddetallerecepcion` int(11) NOT NULL,
   `nro_serie` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mantenimientos`
+--
+
+CREATE TABLE `mantenimientos` (
+  `idmantenimiento` int(11) NOT NULL,
+  `iddevolucion` int(11) NOT NULL,
+  `idusuario` int(11) NOT NULL,
+  `idejemplar` int(11) NOT NULL,
+  `fecharegistro` date NOT NULL,
+  `fechainicio` date NOT NULL,
+  `fechafin` date DEFAULT NULL,
+  `comentarios` varchar(200) DEFAULT NULL,
+  `ficha` varchar(300) DEFAULT NULL,
+  `estado` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -405,7 +440,6 @@ CREATE TABLE `usuarios` (
   `idusuario` int(11) NOT NULL,
   `idpersona` int(11) NOT NULL,
   `idrol` int(11) NOT NULL,
-  `usuario` varchar(50) NOT NULL,
   `claveacceso` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -413,14 +447,21 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idusuario`, `idpersona`, `idrol`, `usuario`, `claveacceso`) VALUES
-(1, 1, 1, '', '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'),
-(2, 2, 3, '', 'NSC'),
-(3, 3, 3, '', 'NSC');
+INSERT INTO `usuarios` (`idusuario`, `idpersona`, `idrol`, `claveacceso`) VALUES
+(1, 1, 1, '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'),
+(2, 2, 3, 'NSC'),
+(3, 3, 3, 'NSC');
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `bajas`
+--
+ALTER TABLE `bajas`
+  ADD PRIMARY KEY (`idbaja`),
+  ADD KEY `fk_idmantenimiento_bj` (`idmantenimiento`);
 
 --
 -- Indices de la tabla `detprestamos`
@@ -461,6 +502,15 @@ ALTER TABLE `devoluciones`
 ALTER TABLE `ejemplares`
   ADD PRIMARY KEY (`idejemplar`),
   ADD KEY `fk_iddetallerecepcion_ej` (`iddetallerecepcion`);
+
+--
+-- Indices de la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  ADD PRIMARY KEY (`idmantenimiento`),
+  ADD KEY `fk_iddevolucion_mtn` (`iddevolucion`),
+  ADD KEY `fk_idusuario_mtn` (`idusuario`),
+  ADD KEY `fk_idejemplar_mtn` (`idejemplar`);
 
 --
 -- Indices de la tabla `marcas`
@@ -547,6 +597,12 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `bajas`
+--
+ALTER TABLE `bajas`
+  MODIFY `idbaja` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `detprestamos`
 --
 ALTER TABLE `detprestamos`
@@ -575,6 +631,12 @@ ALTER TABLE `devoluciones`
 --
 ALTER TABLE `ejemplares`
   MODIFY `idejemplar` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  MODIFY `idmantenimiento` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
@@ -647,6 +709,12 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- Filtros para la tabla `bajas`
+--
+ALTER TABLE `bajas`
+  ADD CONSTRAINT `fk_idmantenimiento_bj` FOREIGN KEY (`idmantenimiento`) REFERENCES `mantenimientos` (`idmantenimiento`);
+
+--
 -- Filtros para la tabla `detprestamos`
 --
 ALTER TABLE `detprestamos`
@@ -680,6 +748,14 @@ ALTER TABLE `devoluciones`
 --
 ALTER TABLE `ejemplares`
   ADD CONSTRAINT `fk_iddetallerecepcion_ej` FOREIGN KEY (`iddetallerecepcion`) REFERENCES `detrecepciones` (`iddetallerecepcion`);
+
+--
+-- Filtros para la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  ADD CONSTRAINT `fk_iddevolucion_mtn` FOREIGN KEY (`iddevolucion`) REFERENCES `devoluciones` (`iddevolucion`),
+  ADD CONSTRAINT `fk_idejemplar_mtn` FOREIGN KEY (`idejemplar`) REFERENCES `ejemplares` (`idejemplar`),
+  ADD CONSTRAINT `fk_idusuario_mtn` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
 -- Filtros para la tabla `prestamos`
