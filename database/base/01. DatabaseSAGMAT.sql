@@ -191,7 +191,6 @@ CREATE TABLE ejemplares
 	idejemplar 						INT 					AUTO_INCREMENT PRIMARY KEY,
     iddetallerecepcion	 			INT 					NOT NULL, -- FK
     nro_serie						VARCHAR(30) 			NOT NULL,
-    nro_equipo						VARCHAR(20) 		NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA

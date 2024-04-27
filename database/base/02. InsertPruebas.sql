@@ -143,10 +143,10 @@ SELECT * FROM ubicaciones;
 -- -------------------------------     RECURSOS      --------------------------------------
 -- ----------------------------------------------------------------------------------------
 SELECT  * FROM recursos;
-INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia, nro_equipo) VALUES
-    (9, 22, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL, 123),
-    (4, 22, 'Es un buen equipo', '00928', '{"COLOR": "AZUL", "CONECTIVIDAD": "OK"}', NULL, 'XYZ'),
-    (4, 18, 'Monitor nuevo', 'RU28389', '{"COLOR": "NEUTRO", "CONECTIVIDAD": "SIMPLE"}', NULL, 'ABC');
+INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (9, 22, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL),
+    (4, 22, 'Es un buen equipo', '00928', '{"COLOR": "AZUL", "CONECTIVIDAD": "OK"}', NULL),
+    (4, 18, 'Monitor nuevo', 'RU28389', '{"COLOR": "NEUTRO", "CONECTIVIDAD": "SIMPLE"}', NULL);
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------     RECEPCION     --------------------------------------
@@ -207,4 +207,6 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
     (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
 
+DROP TABLE recursos;
+SET foreign_key_checks =1;
 

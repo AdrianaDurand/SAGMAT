@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2024 a las 04:12:37
+-- Tiempo de generación: 27-04-2024 a las 06:10:13
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -25,6 +25,36 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchPersons` (IN `_nombrecompleto` VARCHAR(255))   BEGIN
+    SELECT *
+    FROM personas
+    WHERE CONCAT(nombres, ' ', apellidos) LIKE CONCAT('%', _nombrecompleto, '%');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchTipos` (IN `_tipobuscado` VARCHAR(255))   BEGIN
+    SELECT * FROM tipos
+    WHERE tipo LIKE CONCAT(_tipobuscado, '%');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addrecepcion` (IN `_idusuario` INT, IN `_idpersonal` INT, IN `_fechayhoraregistro` DATETIME, IN `_fechayhorarecepcion` DATETIME, IN `_tipodocumento` VARCHAR(30), IN `_nrodocumento` CHAR(11), IN `_serie_doc` VARCHAR(30), IN `_observaciones` VARCHAR(200))   BEGIN 
+	INSERT INTO recepciones
+    (idusuario, idpersonal, fechayhoraregistro, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
+    VALUES
+	(_idusuario, _idpersonal, _fechayhoraregistro, fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_registrar_detallerecepcion` (IN `_idrecepcion` INT, IN `_idrecurso` INT, IN `_cantidadrecibida` SMALLINT, IN `_cantidadenviada` SMALLINT)   BEGIN
+	INSERT INTO detrecepciones
+    (idrecepcion, idrecurso, cantidadrecibida, cantidadenviada)
+    VALUES
+    (_idrecepcion, _idrecurso, _cantidadrecibida, _cantidadenviada);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_registrar_recursos` (IN `_idtipo` INT, IN `_idmarca` INT, IN `_descripcion` VARCHAR(100), IN `_modelo` VARCHAR(50), IN `_datasheets` JSON, IN `_fotografia` VARCHAR(200))   BEGIN
+	INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (_idtipo, _idmarca, _descripcion, _modelo, _datasheets, NULLIF(_fotografia, ''));
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_login` (IN `_numerodoc` CHAR(11))   BEGIN
     SELECT
         u.idusuario,
@@ -93,7 +123,8 @@ CREATE TABLE `detrecepciones` (
 --
 
 INSERT INTO `detrecepciones` (`iddetallerecepcion`, `idrecepcion`, `idrecurso`, `cantidadrecibida`, `cantidadenviada`) VALUES
-(1, 1, 1, 50, 25);
+(1, 1, 1, 50, 25),
+(2, 2, 4, 30, 45);
 
 -- --------------------------------------------------------
 
@@ -249,7 +280,8 @@ CREATE TABLE `personas` (
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`, `email`, `create_at`, `update_at`, `inactive_at`) VALUES
 (1, 'Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com', '2024-04-26 16:56:04', NULL, NULL),
 (2, 'Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com', '2024-04-26 16:56:04', NULL, NULL),
-(3, 'Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com', '2024-04-26 16:56:04', NULL, NULL);
+(3, 'Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com', '2024-04-26 16:56:04', NULL, NULL),
+(4, 'Hernandez Yeren', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyauri123@gmail.com', '2024-04-26 22:06:36', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -293,7 +325,8 @@ CREATE TABLE `recepciones` (
 --
 
 INSERT INTO `recepciones` (`idrecepcion`, `idusuario`, `idpersonal`, `fechayhoraregistro`, `fechayhorarecepcion`, `tipodocumento`, `nrodocumento`, `serie_doc`, `observaciones`) VALUES
-(1, 1, NULL, '2024-04-12 00:00:00', '2024-04-16 00:00:00', 'Boleta', '0004129', 'T0-150', 'Completo');
+(1, 1, NULL, '2024-04-12 00:00:00', '2024-04-16 00:00:00', 'Boleta', '0004129', 'T0-150', 'Completo'),
+(2, 1, 4, '2024-04-15 08:00:00', '0000-00-00 00:00:00', 'BOLETA', '12345', 'TBC04', 'Concluido');
 
 -- --------------------------------------------------------
 
@@ -308,18 +341,18 @@ CREATE TABLE `recursos` (
   `descripcion` varchar(100) NOT NULL,
   `modelo` varchar(50) DEFAULT NULL,
   `datasheets` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`datasheets`)),
-  `fotografia` varchar(200) DEFAULT NULL,
-  `nro_equipo` varchar(20) DEFAULT NULL
+  `fotografia` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `recursos`
 --
 
-INSERT INTO `recursos` (`idrecurso`, `idtipo`, `idmarca`, `descripcion`, `modelo`, `datasheets`, `fotografia`, `nro_equipo`) VALUES
-(1, 9, 22, 'Es una descripción inicial', 'VS13869', '{\"COLOR\": \"NEGRO\", \"CONECTIVIDAD\": \"HDMI, VGA, USB y entrada/salida de audio\"}', NULL, '123'),
-(2, 4, 22, 'Es un buen equipo', '00928', '{\"COLOR\": \"AZUL\", \"CONECTIVIDAD\": \"OK\"}', NULL, 'XYZ'),
-(3, 4, 18, 'Monitor nuevo', 'RU28389', '{\"COLOR\": \"NEUTRO\", \"CONECTIVIDAD\": \"SIMPLE\"}', NULL, 'ABC');
+INSERT INTO `recursos` (`idrecurso`, `idtipo`, `idmarca`, `descripcion`, `modelo`, `datasheets`, `fotografia`) VALUES
+(1, 9, 22, 'Es una descripción inicial', 'VS13869', '{\"COLOR\": \"NEGRO\", \"CONECTIVIDAD\": \"HDMI, VGA, USB y entrada/salida de audio\"}', NULL),
+(2, 4, 22, 'Es un buen equipo', '00928', '{\"COLOR\": \"AZUL\", \"CONECTIVIDAD\": \"OK\"}', NULL),
+(3, 4, 18, 'Monitor nuevo', 'RU28389', '{\"COLOR\": \"NEUTRO\", \"CONECTIVIDAD\": \"SIMPLE\"}', NULL),
+(4, 24, 5, 'Producto x', '2024', '{\"COLOR\":\"AZUL\", \"TAMAÑO\": \"25px\"}', NULL);
 
 -- --------------------------------------------------------
 
@@ -612,7 +645,7 @@ ALTER TABLE `detprestamos`
 -- AUTO_INCREMENT de la tabla `detrecepciones`
 --
 ALTER TABLE `detrecepciones`
-  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detrecursos`
@@ -654,7 +687,7 @@ ALTER TABLE `observaciones`
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `prestamos`
@@ -666,13 +699,13 @@ ALTER TABLE `prestamos`
 -- AUTO_INCREMENT de la tabla `recepciones`
 --
 ALTER TABLE `recepciones`
-  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `recursos`
 --
 ALTER TABLE `recursos`
-  MODIFY `idrecurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idrecurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
