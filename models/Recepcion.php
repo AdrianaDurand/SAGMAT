@@ -24,8 +24,7 @@ class Recepcion extends Conexion{
                     $datos['observaciones']
                 )
             );
-            $result = $consulta->fetch(PDO::FETCH_ASSOC);
-            return $result;
+            $result = $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

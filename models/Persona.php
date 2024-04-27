@@ -1,29 +1,30 @@
 <?php
 
-require_once 'Conexion.php';
+require_once "Conexion.php";
 
-class Persona extends Conexion{
-    
-  private $conexion;
+class Personas extends Conexion
+{
 
-  public function __CONSTRUCT(){
-    $this->conexion = parent::getConexion();
-  }
+    private $conexion;
 
-  public function buscar($datos = []){
-    try{
-      $consulta = $this->conexion->prepare("CALL searchPersons(?)");
-      $consulta->execute(
-        array(
-          $datos['nombrecompleto']
-        )
-      );
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    public function __CONSTRUCT()
+    {
+        //Accedemos al método getConexion de la clase padre(superclase)
+        $this->conexion = parent::getConexion();
     }
-    catch(Exception $e){
-      die($e->getMessage());
+
+    public function search($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL searchPersons(?)");
+            $consulta->execute(
+                array(
+                    $datos['nombrecompleto']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
     }
-  }
 }
-
-?>
