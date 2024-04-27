@@ -27,19 +27,4 @@ class Persona extends Conexion
             die($e->getMessage());
         }
     }
-
-    public function listaPersonas($datos = [])
-    {
-        try {
-            $consulta = $this->conexion->prepare("CALL spu_listaNombres(?)");
-            $consulta->execute(
-                array(
-                    $datos['apellidos']
-                )
-            );
-            return $consulta->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
-    }
 }

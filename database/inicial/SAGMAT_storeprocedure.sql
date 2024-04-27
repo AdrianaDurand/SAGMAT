@@ -228,7 +228,7 @@ DELIMITER ;
 -- --------------- LISTA DE RECURSOS QUE COINCIDEN CON EL TIPO  --------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE PROCEDURE spu_listadetalles(
+CREATE PROCEDURE spu_listaNombres(
     IN _tiporecurso VARCHAR(50)
 )
 BEGIN

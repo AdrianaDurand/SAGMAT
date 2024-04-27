@@ -16,13 +16,6 @@ if(isset($_POST['operacion'])){
             echo json_encode($personas->search($datosEnviar));
             
         break;
-        case 'listaPersonas':
-            $datosEnviar = [
-                "apellidos"      => $_POST['apellidos']
-            ];
-            echo json_encode($personas->listaPersonas($datosEnviar));
-            
-        break;
 
     }
 }
