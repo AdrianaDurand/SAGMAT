@@ -13,29 +13,26 @@ BEGIN
 END $$
 CALL spu_registrar_recursos(24, 5, 'Producto x', '2024', '{"COLOR":"AZUL", "TAMAÑO": "25px"}', NULL);
 
+select * from personas;
+select * from recepciones;
 
 DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
-    IN _idusuario				INT,
-    IN _idpersonal 				INT,
-    IN _fechayhorarecepcion 	DATETIME,
-    IN _tipodocumento 			VARCHAR(30),
-    IN _nrodocumento			CHAR(11),
-    IN _serie_doc				VARCHAR(30),
-    IN _observaciones 			VARCHAR(200)
+    IN _idusuario                INT,
+    IN _idpersonal                 INT,
+    IN _fechayhorarecepcion     DATETIME,
+    IN _tipodocumento             VARCHAR(30),
+    IN _nrodocumento            CHAR(11),
+    IN _serie_doc                VARCHAR(30),
+    IN _observaciones             VARCHAR(200)
 )
 BEGIN 
-	INSERT INTO recepciones
+    INSERT INTO recepciones
     (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, _idpersonal, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+    (_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END $$
-CALL spu_addrecepcion(1, 4, '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
-
-SELECT * FROM recepciones;
-
-
 
 DELIMITER $$
 CREATE PROCEDURE searchPersons(
