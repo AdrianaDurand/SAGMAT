@@ -157,7 +157,7 @@ CREATE TABLE recepciones
 	idrecepcion 					INT 					AUTO_INCREMENT PRIMARY KEY,
 	idusuario						INT 					NOT NULL, -- FK
 	idpersonal						INT 					NULL, -- FK (personas)
-	fechayhoraregistro				DATETIME				NOT NULL,
+	fechayhoraregistro				DATETIME				NOT NULL DEFAULT NOW(),
 	fechayhorarecepcion				DATETIME				NOT NULL,
 	tipodocumento 					VARCHAR(30) 			NOT NULL, -- BOLETA, FACTURA, GUIA REMISIÓN.
 	nrodocumento					VARCHAR(20) 			NOT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE recepciones
     CONSTRAINT fk_idusuario_rcp 	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona)
 )ENGINE = INNODB;
-
+ALTER TABLE recepciones MODIFY fechayhoraregistro DATETIME NOT NULL DEFAULT NOW();
 -- 13°
 -- *********************************************************************
 -- 						TABLA DETALLE RECEPCIONES

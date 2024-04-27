@@ -12,11 +12,13 @@ if(isset($_POST['operacion'])){
 
         case 'registrar':
             $datosEnviar = [
-                "idusuario"     => $_SESSION['idusuario'],
-                "fecharecepcion"  => $_POST['fecharecepcion'], 
-                "tipodocumento" => $_POST['tipodocumento'],
-                "nro_documento" => $_POST['nro_documento'],
-                "serie_doc"     => $_POST['serie_doc']
+                "idusuario"             => $_SESSION['idusuario'],
+                "idpersonal"            => $_POST['idpersonal'],
+                "fechayhorarecepcion"   => $_POST['fechayhorarecepcion'], 
+                "tipodocumento"         => $_POST['tipodocumento'],
+                "nrodocumento"          => $_POST['nrodocumento'],
+                "serie_doc"                 => $_POST['serie_doc'],
+                "observaciones"         => $_POST['observaciones']
             ];
             echo json_encode($recepcion->registrar($datosEnviar));
             

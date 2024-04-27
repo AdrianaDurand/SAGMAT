@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2024 a las 06:10:13
+-- Tiempo de generación: 27-04-2024 a las 06:39:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -36,11 +36,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `searchTipos` (IN `_tipobuscado` VAR
     WHERE tipo LIKE CONCAT(_tipobuscado, '%');
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addrecepcion` (IN `_idusuario` INT, IN `_idpersonal` INT, IN `_fechayhoraregistro` DATETIME, IN `_fechayhorarecepcion` DATETIME, IN `_tipodocumento` VARCHAR(30), IN `_nrodocumento` CHAR(11), IN `_serie_doc` VARCHAR(30), IN `_observaciones` VARCHAR(200))   BEGIN 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addrecepcion` (IN `_idusuario` INT, IN `_idpersonal` INT, IN `_fechayhorarecepcion` DATETIME, IN `_tipodocumento` VARCHAR(30), IN `_nrodocumento` CHAR(11), IN `_serie_doc` VARCHAR(30), IN `_observaciones` VARCHAR(200))   BEGIN 
 	INSERT INTO recepciones
-    (idusuario, idpersonal, fechayhoraregistro, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
+    (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, _idpersonal, _fechayhoraregistro, fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+	(_idusuario, _idpersonal, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_registrar_detallerecepcion` (IN `_idrecepcion` INT, IN `_idrecurso` INT, IN `_cantidadrecibida` SMALLINT, IN `_cantidadenviada` SMALLINT)   BEGIN
@@ -312,7 +312,7 @@ CREATE TABLE `recepciones` (
   `idrecepcion` int(11) NOT NULL,
   `idusuario` int(11) NOT NULL,
   `idpersonal` int(11) DEFAULT NULL,
-  `fechayhoraregistro` datetime NOT NULL,
+  `fechayhoraregistro` datetime NOT NULL DEFAULT current_timestamp(),
   `fechayhorarecepcion` datetime NOT NULL,
   `tipodocumento` varchar(30) NOT NULL,
   `nrodocumento` varchar(20) NOT NULL,
@@ -326,7 +326,8 @@ CREATE TABLE `recepciones` (
 
 INSERT INTO `recepciones` (`idrecepcion`, `idusuario`, `idpersonal`, `fechayhoraregistro`, `fechayhorarecepcion`, `tipodocumento`, `nrodocumento`, `serie_doc`, `observaciones`) VALUES
 (1, 1, NULL, '2024-04-12 00:00:00', '2024-04-16 00:00:00', 'Boleta', '0004129', 'T0-150', 'Completo'),
-(2, 1, 4, '2024-04-15 08:00:00', '0000-00-00 00:00:00', 'BOLETA', '12345', 'TBC04', 'Concluido');
+(2, 1, 4, '2024-04-15 08:00:00', '0000-00-00 00:00:00', 'BOLETA', '12345', 'TBC04', 'Concluido'),
+(3, 1, 4, '2024-04-26 23:31:26', '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
 
 -- --------------------------------------------------------
 
@@ -699,7 +700,7 @@ ALTER TABLE `prestamos`
 -- AUTO_INCREMENT de la tabla `recepciones`
 --
 ALTER TABLE `recepciones`
-  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `recursos`

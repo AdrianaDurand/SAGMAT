@@ -19,7 +19,6 @@ CREATE PROCEDURE spu_addrecepcion
 (
     IN _idusuario				INT,
     IN _idpersonal 				INT,
-    IN _fechayhoraregistro		DATETIME,
     IN _fechayhorarecepcion 	DATETIME,
     IN _tipodocumento 			VARCHAR(30),
     IN _nrodocumento			CHAR(11),
@@ -28,11 +27,13 @@ CREATE PROCEDURE spu_addrecepcion
 )
 BEGIN 
 	INSERT INTO recepciones
-    (idusuario, idpersonal, fechayhoraregistro, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
+    (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, _idpersonal, _fechayhoraregistro, fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+	(_idusuario, _idpersonal, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END $$
-CALL spu_addrecepcion(1, 4, '2024-04-15 08:00:00', '2024-04-18', 'BOLETA', '12345', 'TBC04', 'Concluido');
+CALL spu_addrecepcion(1, 4, '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
+
+SELECT * FROM recepciones;
 
 
 
