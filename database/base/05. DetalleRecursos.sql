@@ -27,7 +27,7 @@ BEGIN
 	SELECT 
     recep.idrecepcion,
     recepr.tipodocumento, 
-	recepr.nro_documento, 
+	recepr.nro_documento,
     t.tiporecurso,
     m.marca,
     recur.serie, 
@@ -39,5 +39,4 @@ BEGIN
     INNER JOIN tipo t ON t.idtiporecurso = recur.idtiporecurso
     INNER JOIN marcas m ON m.idmarca = recur.idmarca
     ORDER BY recep.idrecepcion ASC;
-END $$
 END $$

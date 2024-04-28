@@ -15,6 +15,10 @@ BEGIN
     (idrecepcion, idrecurso, cantidadenviada, cantidadrecibida)
     VALUES
     (_idrecepcion, _idrecurso, _cantidadenviada, _cantidadrecibida);
+    SELECT @@last_insert_id 'iddetallerecepcion';
 END $$
-DELIMITER  ;
 
+select * from recursos;
+select * from ejemplares;
+select * from detrecepciones;
+select * from recepciones;
