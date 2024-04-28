@@ -232,7 +232,7 @@
                         <col width="15%"> <!-- Descripción -->
                         <col width="20%"> <!-- N° Serie -->
                         <col width="20%"> <!-- N° Equipo -->
-                        <col width="20$"> <!-- Estado -->
+                        <col width="20%"> <!-- Estado -->
                     </colgroup>
                     <thead>
                         <tr>
@@ -638,7 +638,7 @@
                                 <td>${descripcion}</td>
                                 <td><input type="text" class="form-control nro_equipo" required></td>
                                 <td><input type="text" class="form-control nro_serie" required></td>
-                                <td><input type="text" class="form-control" value="Bueno"  onclick="this.select();"></td>
+                                <td><input type="text" class="form-control estado_equipo" value="Bueno"  onclick="this.select();"></td>
                             `;
                             document.querySelector("#tablaRecursos tbody").appendChild(newRow);
                         }
@@ -722,17 +722,20 @@
                 function añadirejemplar(idDetalleRecepcion) {
                     const nroSerieInputs = document.querySelectorAll(".nro_serie");
                     const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+                    const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
                     // Itera sobre cada campo de entrada de número de serie
                     nroSerieInputs.forEach((nroSerieInput, index) => {
                         const nroSerie = nroSerieInput.value;
                         const nroEquipo = nroEquipoInputs[index].value;
+                        const estadoEquipo = estadoEquipoInputs[index].value;
 
                         const parametros = new FormData();
                         parametros.append("operacion", "registrar");
                         parametros.append("iddetallerecepcion", idDetalleRecepcion);
                         parametros.append("nro_serie", nroSerie);
                         parametros.append("nro_equipo", nroEquipo);
+                        parametros.append("estado_equipo", estadoEquipo);
 
                         fetch(`../../controllers/ejemplar.controller.php`, {
                                 method: "POST",
@@ -750,23 +753,69 @@
                     });
                 }
 
+                function limpiarFormulario() {
+                    // Limpiar campos de la cabecera
+                    document.getElementById("idpersonal").value = "";
+                    document.getElementById("fechayhorarecepcion").value = "";
+                    document.getElementById("tipodocumento").selectedIndex = 0;
+                    document.getElementById("nrodocumento").value = "";
+                    document.getElementById("serie_doc").value = "";
+                    document.getElementById("observaciones").value = "";
+
+                    // Limpiar campos del detalle
+                    document.getElementById("buscar").value = "";
+                    document.getElementById("detalles").selectedIndex = 0;
+                    document.getElementById("cantidadEnviada").value = "";
+                    document.getElementById("cantidadRecibida").value = "";
+                    document.getElementById("seriedocumento").value = "";
+
+                    // Limpiar campos adicionales si fuera necesario
+
+                    // Ocultar tabla de recursos y botones de guardar
+                    document.getElementById("tablaRecursos").style.display = "none";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                }
+
                 document.getElementById("btnFinalizar").addEventListener("click", function() {
                     endingReception();
                 });
 
                 function endingReception() {
-                    showSaveChangesConfirmationFinally()
+                    showSaveChangesConfirmationFinally().then((result) => {
+                        if (result.isConfirmed) {
+                            añadirrecepcion();
+                            console.log("Recepción FINALIZADA");
+                            limpiarFormulario(); // Limpia el formulario después de confirmar el registro
+                        } else {
+                            console.log("Recepción NO FINALIZADA");
+                        }
+                    });
+                }
+
+                document.getElementById("btnGuardar").addEventListener("click", function() {
+                    continuereception();
+                });
+
+                function continuereception() {
+                    showSaveChangesConfirmationContinue()
                         .then((result) => {
                             if (result.isConfirmed) {
-                                añadirrecepcion();
-                                console.log("Recepción FINALIZADA");
+                                añadirejemplar();
+                                // cleanresource();
+                                console.log("Recepción GUARDADA, continuemos ...");
+                                moreresources().then((result) => {
+                                    if (result.isConfirmed) {
+                                        console.log("Esperando un recurso más por añadir ...");
+                                    } else {
+                                        // clearall();
+                                        console.log("No se agregarán más recursos.");
+                                    }
+                                });
                             } else {
-                                console.log("Recepción NO FINALIZADA");
+                                console.log("Esperando para guardar");
                             }
                         });
                 }
-
-
 
 
 

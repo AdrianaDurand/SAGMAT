@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2024 a las 18:05:27
+-- Tiempo de generación: 28-04-2024 a las 22:16:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -52,11 +52,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_adddetreception` (IN `_idrecepc
     SELECT @@last_insert_id 'iddetallerecepcion';
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addejemplar` (IN `_iddetallerecepcion` INT, IN `_nro_serie` VARCHAR(50), IN `_nro_equipo` VARCHAR(20))   BEGIN 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addejemplar` (IN `_iddetallerecepcion` INT, IN `_nro_serie` VARCHAR(50), IN `_nro_equipo` VARCHAR(20), IN `_estado_equipo` VARCHAR(20))   BEGIN 
 	INSERT INTO ejemplares
-    (iddetallerecepcion, nro_serie, nro_equipo)
+    (iddetallerecepcion, nro_serie, nro_equipo, estado_equipo)
     VALUES
-    (_iddetallerecepcion, _nro_serie, _nro_equipo);
+    (_iddetallerecepcion, _nro_serie, _nro_equipo, _estado_equipo);
 	SELECT @@last_insert_id 'idejemplar';
 END$$
 
@@ -186,7 +186,35 @@ INSERT INTO `detrecepciones` (`iddetallerecepcion`, `idrecepcion`, `idrecurso`, 
 (15, 52, 8, 1, 1),
 (16, 53, 4, 1, 1),
 (17, 54, 4, 1, 1),
-(18, 55, 4, 1, 1);
+(18, 55, 4, 1, 1),
+(19, 56, 8, 2, 1),
+(20, 57, 8, 2, 2),
+(21, 58, 8, 2, 2),
+(22, 59, 4, 2, 2),
+(23, 60, 4, 2, 2),
+(24, 61, 8, 2, 2),
+(25, 62, 6, 2, 2),
+(27, 64, 6, 2, 2),
+(28, 65, 4, 2, 2),
+(29, 66, 4, 2, 2),
+(30, 67, 8, 2, 2),
+(31, 68, 8, 2, 3),
+(32, 69, 4, 2, 2),
+(33, 70, 8, 1, 1),
+(34, 71, 8, 1, 1),
+(35, 72, 4, 2, 2),
+(36, 73, 4, 2, 2),
+(37, 74, 8, 2, 2),
+(38, 75, 4, 2, 2),
+(39, 76, 8, 2, 2),
+(40, 77, 8, 2, 2),
+(41, 78, 4, 0, 0),
+(42, 79, 8, 0, 0),
+(43, 80, 4, 2, 2),
+(44, 81, 6, 0, 0),
+(45, 82, 4, 0, 0),
+(46, 83, 8, 0, 0),
+(47, 84, 6, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -244,7 +272,54 @@ CREATE TABLE `ejemplares` (
 INSERT INTO `ejemplares` (`idejemplar`, `iddetallerecepcion`, `nro_serie`, `nro_equipo`, `estado_equipo`) VALUES
 (1, 1, 'NVMA11-12', 'LE1001', 'BUENO'),
 (2, 2, 'NVMA11-123', 'LE1002', 'BUENO'),
-(3, 18, 'dasdasd', 'asdasdas', 'BUENO');
+(3, 18, 'dasdasd', 'asdasdas', 'BUENO'),
+(4, 19, 'se2', 'sew2', 'BUENO'),
+(5, 19, 'cvff3', 'sde2w', 'BUENO'),
+(6, 20, 'dsdsds', 'dsds', 'BUENO'),
+(7, 20, 'dsds', 'dsds', 'BUENO'),
+(8, 21, 'fddf', 'ggd', 'BUENO'),
+(9, 21, 'dfdf', 'df', 'BUENO'),
+(10, 22, 'sdsd', 'dadss', 'BUENO'),
+(11, 22, 'dsds', 'dssd', 'BUENO'),
+(12, 23, 'dsds', 'sdds', 'BUENO'),
+(13, 23, 'dsds', 'sd', 'BUENO'),
+(14, 24, 'sddsds', 'dssdds', 'BUENO'),
+(15, 24, 'dss', 'dds', 'BUENO'),
+(16, 25, 'ddd', 'dd', 'BUENO'),
+(17, 25, 'd', 'd', 'BUENO'),
+(18, 27, 'asas', 'dw', 'BUENO'),
+(19, 27, 'asas', 'asas', 'BUENO'),
+(20, 28, 'ww', 'www', 'BUENO'),
+(21, 28, 'ww', 'ww', 'BUENO'),
+(22, 29, 'ddsds', 'dsdssd', 'BUENO'),
+(23, 29, 'dsds', 'ds', 'BUENO'),
+(24, 30, 'ss', 'ss', 'BUENO'),
+(25, 30, 'ss', 's', 'BUENO'),
+(26, 31, 'dsdsds', 'dsdsds', 'BUENO'),
+(27, 31, 'dsds', 'ddss', 'BUENO'),
+(28, 32, 'dssd', 'dssd', 'BUENO'),
+(29, 32, 'dsds', 'dsds', 'BUENO'),
+(30, 33, 'dsds', 'ddsds', 'BUENO'),
+(31, 34, 'dsds', 'ddsds', 'BUENO'),
+(32, 34, 'asas', 'ssas', 'BUENO'),
+(37, 35, 'dsd', 'dsds', 'undefined'),
+(38, 35, 'dsds', 'dsds', 'undefined'),
+(39, 36, 'dsds', 'ddsds', 'malo'),
+(40, 36, 'dsds', 'dsds', 'Bueno'),
+(46, 37, 'cxxc', 'cxcxc', 'undefined'),
+(47, 37, 'cxcx', 'xcxcx', 'undefined'),
+(48, 38, 'cxc', 'cxcx', 'undefined'),
+(49, 38, 'cxcx', 'xcxc', 'undefined'),
+(50, 39, '12', 'acv', 'Bueno'),
+(51, 39, 'dsd2', 'asc', 'Bueno'),
+(52, 40, '12', 'acv', 'malo'),
+(53, 40, 'dsd2', 'asc', 'Bueno'),
+(54, 43, 'qwwqwqwq', 'qwqw', 'mao'),
+(55, 43, 'qwqw', 'qw', 'mal'),
+(56, 46, '', '', ''),
+(57, 46, '', '', ''),
+(58, 47, 'dsds', 'dsddssd', 'Bueno'),
+(59, 47, 'sdds', 'dsdsds', 'dssd');
 
 -- --------------------------------------------------------
 
@@ -451,7 +526,36 @@ INSERT INTO `recepciones` (`idrecepcion`, `idusuario`, `idpersonal`, `fechayhora
 (52, 1, NULL, '2024-04-28 10:32:15', '2024-04-28 11:32:00', 'Factura', 'uii', 'yuiyui', 'yuiyui'),
 (53, 1, NULL, '2024-04-28 10:33:02', '2024-04-28 11:32:00', 'Factura', 'asdas', 'dasd', 'asd'),
 (54, 1, NULL, '2024-04-28 10:52:11', '2024-04-28 11:51:00', 'Factura', 'adsad', 'asd', 'asdasd'),
-(55, 1, NULL, '2024-04-28 10:53:13', '2024-04-28 12:53:00', 'Factura', 'adasd', 'aaaaa', 'asdasdas');
+(55, 1, NULL, '2024-04-28 10:53:13', '2024-04-28 12:53:00', 'Factura', 'adasd', 'aaaaa', 'asdasdas'),
+(56, 1, NULL, '2024-04-28 11:40:22', '2024-04-28 11:39:00', 'Boleta', '123', '12cd', ''),
+(57, 1, NULL, '2024-04-28 11:56:42', '2024-04-11 13:50:00', 'Boleta', '2d', '232', ''),
+(58, 1, NULL, '2024-04-28 12:05:28', '2024-04-27 12:05:00', 'Boleta', '12se', 'wd', ''),
+(59, 1, NULL, '2024-04-28 12:11:49', '2024-04-27 15:12:00', 'Boleta', 'fsss', '3e', ''),
+(60, 1, NULL, '2024-04-28 12:13:06', '2024-04-03 14:12:00', 'Boleta', '2332', 'e', ''),
+(61, 1, NULL, '2024-04-28 12:15:27', '2024-04-27 16:15:00', 'Boleta', '223dd', 'sd2', ''),
+(62, 1, 1, '2024-04-28 12:56:44', '2024-04-20 15:56:00', 'Boleta', 'w2', '2', '2'),
+(63, 1, 3, '2024-04-28 13:06:45', '2024-04-12 13:06:00', 'Boleta', 'dd', 'dssd', 'dsd'),
+(64, 1, NULL, '2024-04-28 13:07:45', '2024-04-17 14:07:00', 'Boleta', '1111', '111', ''),
+(65, 1, NULL, '2024-04-28 13:09:16', '2024-04-10 13:09:00', 'Boleta', '111', '12', ''),
+(66, 1, NULL, '2024-04-28 13:10:10', '2024-04-22 13:09:00', 'Boleta', '121221', 'saasa', ''),
+(67, 1, 3, '2024-04-28 13:11:44', '2024-04-12 13:11:00', 'Boleta', '111', '111', ''),
+(68, 1, 4, '2024-04-28 13:19:12', '2024-04-19 13:18:00', 'Boleta', '12212', '1212', ''),
+(69, 1, 1, '2024-04-28 13:22:53', '2024-04-18 14:22:00', 'Boleta', '243', '2s', ''),
+(70, 1, 1, '2024-04-28 13:23:37', '2024-04-11 15:23:00', 'Boleta', '112', 'sas', 'as'),
+(71, 1, 1, '2024-04-28 13:24:10', '2024-04-11 15:23:00', 'Boleta', '112', 'sas', 'as'),
+(72, 1, 2, '2024-04-28 13:41:07', '2024-04-26 13:40:00', 'Boleta', '1212', 'dssd', ''),
+(73, 1, 1, '2024-04-28 13:46:45', '2024-04-18 13:46:00', 'Boleta', '3', '2332', '23'),
+(74, 1, 3, '2024-04-28 14:09:30', '2024-04-26 14:09:00', 'Boleta', '12', 'addds', ''),
+(75, 1, 2, '2024-04-28 14:12:36', '2024-04-24 14:12:00', 'Boleta', '223', 'dssd', ''),
+(76, 1, 2, '2024-04-28 14:13:37', '2024-04-10 14:13:00', 'Boleta', '2233', 'dssd', ''),
+(77, 1, 2, '2024-04-28 14:13:54', '2024-04-10 14:13:00', 'Boleta', '2233', 'dssd', ''),
+(78, 1, 4, '2024-04-28 14:22:07', '0000-00-00 00:00:00', 'Boleta', '', '', ''),
+(79, 1, 1, '2024-04-28 14:24:23', '2024-04-03 14:23:00', 'Boleta', '65', '56', ''),
+(80, 1, 2, '2024-04-28 14:25:11', '2024-04-11 14:24:00', 'Boleta', '32332', '2332', ''),
+(81, 1, 3, '2024-04-28 14:27:33', '0000-00-00 00:00:00', 'Boleta', '', '', ''),
+(82, 1, 2, '2024-04-28 14:32:05', '2024-04-19 14:31:00', 'Boleta', '124', 'dd', ''),
+(83, 1, 3, '2024-04-28 14:34:56', '2024-04-20 14:34:00', 'Boleta', '133', 'dsdss', ''),
+(84, 1, 2, '2024-04-28 14:37:42', '2024-04-26 14:37:00', 'Boleta', '32', 'cxc', '');
 
 -- --------------------------------------------------------
 
@@ -774,7 +878,7 @@ ALTER TABLE `detprestamos`
 -- AUTO_INCREMENT de la tabla `detrecepciones`
 --
 ALTER TABLE `detrecepciones`
-  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `detrecursos`
@@ -792,7 +896,7 @@ ALTER TABLE `devoluciones`
 -- AUTO_INCREMENT de la tabla `ejemplares`
 --
 ALTER TABLE `ejemplares`
-  MODIFY `idejemplar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idejemplar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT de la tabla `mantenimientos`
@@ -828,7 +932,7 @@ ALTER TABLE `prestamos`
 -- AUTO_INCREMENT de la tabla `recepciones`
 --
 ALTER TABLE `recepciones`
-  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `idrecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT de la tabla `recursos`
