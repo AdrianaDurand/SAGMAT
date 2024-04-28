@@ -407,6 +407,57 @@
                 });
 
 
+                //-------------------------------------------------------------------------------------
+
+                function buscarDetallesTipo(tipoSeleccionado) {
+                    const parametros = new FormData();
+                    parametros.append("operacion", "buscardetalle");
+                    parametros.append("tipo", tipoSeleccionado); 
+
+                    fetch("../../controllers/tipo.controller.php", {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(detalles => {
+                        if (detalles && detalles.length > 0) {
+                            mostrarDetalles(detalles); 
+                        } else {
+                            mostrarMensajeNoEncontrado('No se encontraron detalles para este tipo de recurso.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al obtener detalles del tipo de recurso:", error);
+                    });
+                }
+
+                function mostrarDetalles(detalles) {
+                    const detallesSelect = document.getElementById('detalles');
+                    detallesSelect.innerHTML = ''; 
+
+                    detalles.forEach(detalle => {
+                        const opcionDetalle = document.createElement('option');
+                        opcionDetalle.textContent = `${detalle.marca}, ${detalle.descripcion}, ${detalle.modelo}`;
+                        opcionDetalle.value = detalle.idrecurso;
+
+                        detallesSelect.appendChild(opcionDetalle);
+                    });
+
+                    detallesSelect.disabled = false; 
+                }
+
+
+                tipoRecursoDiv.addEventListener('click', function(event) {
+                    const selectedTipoRecurso = event.target.textContent;
+                    buscarTipoInput.value = selectedTipoRecurso;
+                    tipoRecursoDiv.innerHTML = ''; 
+
+                    buscarDetallesTipo(selectedTipoRecurso);
+                });
+
+
+
+
             });
         </script>
 

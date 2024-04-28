@@ -20,7 +20,7 @@ if (isset($_POST['operacion'])){
 
         case 'buscardetalle':
             $datosEnviar = [
-                "tiporecurso" => $_POST['tiporecurso'] 
+                "tipo" => $_POST['tipo'] 
             ];
             echo json_encode($tipo->buscardetalle($datosEnviar));
         break;

@@ -42,7 +42,7 @@ class Tipo extends Conexion{
             $consulta = $this->conexion->prepare("CALL spu_listadetalles(?)");
             $consulta->execute(
                 array(
-                    $datos['tiporecurso']
+                    $datos['tipo']
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
