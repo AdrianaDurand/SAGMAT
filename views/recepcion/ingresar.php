@@ -407,7 +407,7 @@
                 });
 
 
-                //-------------------------------------------------------------------------------------
+                //_____________________________________ DETALLES SEGÚN TIPO RECURSO _________________________________________
 
                 function buscarDetallesTipo(tipoSeleccionado) {
                     const parametros = new FormData();
@@ -420,11 +420,7 @@
                     })
                     .then(respuesta => respuesta.json())
                     .then(detalles => {
-                        if (detalles && detalles.length > 0) {
-                            mostrarDetalles(detalles); 
-                        } else {
-                            mostrarMensajeNoEncontrado('No se encontraron detalles para este tipo de recurso.');
-                        }
+                        mostrarDetalles(detalles);
                     })
                     .catch(error => {
                         console.error("Error al obtener detalles del tipo de recurso:", error);
@@ -433,19 +429,32 @@
 
                 function mostrarDetalles(detalles) {
                     const detallesSelect = document.getElementById('detalles');
-                    detallesSelect.innerHTML = ''; 
+                    detallesSelect.innerHTML = '';
 
-                    detalles.forEach(detalle => {
-                        const opcionDetalle = document.createElement('option');
-                        opcionDetalle.textContent = `${detalle.marca}, ${detalle.descripcion}, ${detalle.modelo}`;
-                        opcionDetalle.value = detalle.idrecurso;
+                    if (detalles.length === 0) {
+                        agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
+                        detallesSelect.disabled = true;
+                    } else {
+                        agregarOpcion(detallesSelect, '', 'Seleccione:');
 
-                        detallesSelect.appendChild(opcionDetalle);
-                    });
+                        detalles.forEach(detalle => {
+                            const opcionDetalle = document.createElement('option');
+                            opcionDetalle.textContent = `${detalle.marca}, ${detalle.descripcion}, ${detalle.modelo}`;
+                            opcionDetalle.value = detalle.idrecurso;
+                            detallesSelect.appendChild(opcionDetalle);
+                        });
 
-                    detallesSelect.disabled = false; 
+                        detallesSelect.disabled = false;
+                    }
                 }
 
+
+                function agregarOpcion(selectElement, value, text) {
+                    const opcion = document.createElement('option');
+                    opcion.value = value;
+                    opcion.textContent = text;
+                    selectElement.appendChild(opcion);
+                }
 
                 tipoRecursoDiv.addEventListener('click', function(event) {
                     const selectedTipoRecurso = event.target.textContent;
@@ -454,8 +463,6 @@
 
                     buscarDetallesTipo(selectedTipoRecurso);
                 });
-
-
 
 
             });
