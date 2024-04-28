@@ -16,6 +16,26 @@ BEGIN
     (_idtiporecurso, _idmarca, _modelo, _datasheets, NULLIF(_fotografía, ''));
 END $$
 
+-- ----------------------------------------------------------------------------------------
+-- --------------- LISTA DE DETALLES QUE COINCIDEN CON EL TIPO  --------------------------
+-- ----------------------------------------------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE spu_listadetalles(
+    IN _tipo VARCHAR(50)
+)
+BEGIN
+    SELECT 
+		R.idrecurso,
+        M.marca,
+        R.descripcion,
+        R.modelo
+    FROM recursos R
+    INNER JOIN marcas M ON M.idmarca = R.idmarca
+    INNER JOIN tipos T ON T.idtipo= R.idtipo
+    WHERE T.tipo = _tipo;
+END $$
+DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------
 -- --------------- LISTA DE RECURSOS QUE COINCIDEN CON EL TIPO  --------------------------

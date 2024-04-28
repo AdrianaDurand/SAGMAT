@@ -220,7 +220,7 @@ CREATE PROCEDURE searchTipos(
 )
 BEGIN
     SELECT * FROM tipos
-    WHERE tiporecurso LIKE CONCAT(_tipobuscado, '%');
+    WHERE tipo LIKE CONCAT(_tipobuscado, '%');
 END //
 DELIMITER ;
 
@@ -228,8 +228,8 @@ DELIMITER ;
 -- --------------- LISTA DE RECURSOS QUE COINCIDEN CON EL TIPO  --------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE PROCEDURE spu_listaNombres(
-    IN _tiporecurso VARCHAR(50)
+CREATE PROCEDURE spu_listadetalles(
+    IN _tipo VARCHAR(50)
 )
 BEGIN
     SELECT 
@@ -239,8 +239,8 @@ BEGIN
         R.modelo
     FROM recursos R
     INNER JOIN marcas M ON M.idmarca = R.idmarca
-    INNER JOIN tipos T ON T.idtiporecurso = R.idtiporecurso
-    WHERE T.tiporecurso = _tiporecurso;
+    INNER JOIN tipos T ON T.idtipo= R.idtipo
+    WHERE T.tipo = _tipo;
 END $$
 DELIMITER ;
 
