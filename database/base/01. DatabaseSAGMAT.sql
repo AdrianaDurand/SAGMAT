@@ -1,6 +1,10 @@
 CREATE DATABASE SAGMAT;
 USE SAGMAT;
 
+SELECT * FROM detrecepciones;
+
+SELECT * FROM ejemplares;
+SELECT * FROM recepciones;
 -- 1°
 -- *********************************************************************
 -- 								TABLA MARCAS

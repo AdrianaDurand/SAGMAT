@@ -439,6 +439,9 @@
                 }
 
                 // resultado de la busqueda de un tipo de recurso
+                // Variable global para almacenar el idpersonal seleccionado
+                let idPersonalSeleccionado = null;
+
                 function searchresult(datos) {
                     resultadosDiv.innerHTML = '';
 
@@ -453,12 +456,13 @@
                         enlaceResultado.appendChild(nombreNegocio);
                         resultadosDiv.appendChild(enlaceResultado);
 
-                        // agregar evento de clic para seleccionar el resultado
                         enlaceResultado.addEventListener('click', function(event) {
                             event.preventDefault();
+                            idPersonalSeleccionado = resultado.idpersona; // Almacena el idpersonal seleccionado en la variable global
                             buscarInput.value = resultado.nombrecompleto;
-                            resultadosDiv.innerHTML = ''; // limpiar los resultados
+                            resultadosDiv.innerHTML = ''; // Limpiar los resultados
                         });
+
                     });
                 }
 
@@ -652,7 +656,8 @@
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
                     parametros.append("idusuario", <?php echo $idusuario ?>);
-                    parametros.append("idpersonal", document.getElementById("idpersonal").value);
+                    parametros.append("idpersonal", idPersonalSeleccionado);
+                    // parametros.append("idpersonal", document.getElementById("idpersonal").value);
                     parametros.append("fechayhorarecepcion", document.getElementById("fechayhorarecepcion").value);
                     parametros.append("tipodocumento", document.getElementById("tipodocumento").value);
                     parametros.append("nrodocumento", document.getElementById("nrodocumento").value);
@@ -760,6 +765,7 @@
                             }
                         });
                 }
+
 
 
 
