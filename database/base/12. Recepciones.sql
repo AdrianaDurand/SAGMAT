@@ -16,6 +16,7 @@ CALL spu_registrar_recursos(24, 5, 'Producto x', '2024', '{"COLOR":"AZUL", "TAMA
 select * from personas;
 select * from recepciones;
 
+CALL spu_addrecepcion(1, null, "2024-04-26 23:41:18", "Boleta", 7383, 6373, null)
 DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
@@ -32,6 +33,7 @@ BEGIN
     (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
     (_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+    SELECT @@last_insert_id 'idrecepcion';
 END $$
 
 DELIMITER $$
@@ -72,6 +74,7 @@ BEGIN
     (idrecepcion, idrecurso, cantidadrecibida, cantidadenviada)
     VALUES
     (_idrecepcion, _idrecurso, _cantidadrecibida, _cantidadenviada);
+	SELECT @@last_insert_id 'iddetallerecepcion';
 END $$
 CALL spu_registrar_detallerecepcion(2, 4, 30, 45 );
 
@@ -85,3 +88,18 @@ BEGIN
     WHERE tipo LIKE CONCAT(_tipobuscado, '%');
 END $$
 CALL searchTipos('a');
+
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_recursos(
+    IN _idtipo                 INT,
+    IN _idmarca             INT,
+    IN _descripcion            VARCHAR(100),
+    IN _modelo                VARCHAR(50),
+    IN _datasheets             JSON,
+    IN _fotografia             VARCHAR(200)
+)
+BEGIN
+    INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
+    (_idtipo, _idmarca, _descripcion, _modelo, _datasheets, NULLIF(_fotografia, ''));
+END $$
+

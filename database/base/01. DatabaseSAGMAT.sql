@@ -84,17 +84,17 @@ CREATE TABLE ubicaciones
 -- *********************************************************************
 CREATE TABLE recursos
 (
-	idrecurso 						INT 				AUTO_INCREMENT PRIMARY KEY,
-    idtipo							INT 				NOT NULL, -- FK
-    idmarca							INT 				NOT NULL, -- FK
-    descripcion						VARCHAR(100) 		NOT NULL,
-    modelo							VARCHAR(50) 		NULL,
-    datasheets 						JSON 				NOT NULL, -- características técnicas, MUY TÉCNICAS
-    fotografia 						VARCHAR(200) 		NULL,
+    idrecurso                         INT                 AUTO_INCREMENT PRIMARY KEY,
+    idtipo                            INT                 NOT NULL, -- FK
+    idmarca                            INT                 NOT NULL, -- FK
+    descripcion                        VARCHAR(100)         NOT NULL,
+    modelo                            VARCHAR(50)         NULL,
+    datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}', -- características técnicas, MUY TÉCNICAS
+    fotografia                         VARCHAR(200)         NULL,
     CONSTRAINT fk_idtipo_re  FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
-	CONSTRAINT fk_idmarca_re 		FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
+    CONSTRAINT fk_idmarca_re         FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
 )ENGINE = INNODB;
-
+ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}';
 -- 8°
 -- *********************************************************************
 -- 						TABLA DETALLE RECURSOS

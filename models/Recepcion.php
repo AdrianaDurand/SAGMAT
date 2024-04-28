@@ -25,6 +25,7 @@ class Recepcion extends Conexion{
                 )
             );
             $result = $consulta->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
         }
         catch(Exception $e){
             die($e->getMessage());

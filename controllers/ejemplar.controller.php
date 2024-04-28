@@ -10,10 +10,9 @@ if(isset($_POST['operacion'])){
     switch ($_POST['operacion']){
         case 'registrar':
             $datosEnviar = [
-                "idrecepcion" => $_POST['idrecepcion'],
-                "idrecurso" => $_POST['idrecurso'],
+                "iddetallerecepcion" => $_POST['iddetallerecepcion'],
                 "nro_serie" => $_POST['nro_serie'],
-                "estado" => $_POST['estado']
+                "nro_equipo" => $_POST['nro_equipo']
             ];
             echo json_encode($ejemplar->registrar($datosEnviar));
         break;
