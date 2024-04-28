@@ -264,7 +264,6 @@
         <script src="../../javascript/sweetalert.js"></script>
 
         <script>
-            
             document.addEventListener("DOMContentLoaded", function() {
                 const tipoRecursoSelect = document.querySelector('#tipo');
                 const listaSugerencias = document.getElementById('resultados');
@@ -273,6 +272,7 @@
                 const resultadosDiv = document.getElementById('resultados');
                 const buscarTipoInput = document.querySelector('#buscar');
                 const tipoRecursoDiv = document.getElementById('resultados2');
+
                 function $(id) {
                     return document.querySelector(id);
                 }
@@ -361,36 +361,36 @@
                         });
                 }
 
-                
-                function registrarRecurso(){
+
+                function registrarRecurso() {
                     console.log($("#idtipo").value)
                     const car = document.querySelectorAll(".form-control.border.car");
                     const det = document.querySelectorAll(".form-control.border.det");
-    
+
                     let dataJson = {
                         "clave": [],
-                        "valor":[]
+                        "valor": []
                     }
-    
-                    Array.from(car).forEach((keyInput, index)=>{
+
+                    Array.from(car).forEach((keyInput, index) => {
                         let key = keyInput.value.trim();
                         let indexValue = det[index];
                         let value = indexValue.value.trim();
-    
+
                         dataJson.clave[index] = key;
                         dataJson.valor[index] = value;
                     })
                     const retorno = JSON.stringify(dataJson);
                     console.log(retorno);
                     const parametros = new FormData();
-                    parametros.append("operacion", "registrar");                
-                    parametros.append("idtipo", $("#idtipo").value);                
-                    parametros.append("idmarca", $("#idmarca").value);                
-                    parametros.append("descripcion", $("#descripcion").value);                
-                    parametros.append("modelo", $("#modelo").value);                
-                    parametros.append("datasheets", retorno);            
-                    parametros.append("fotografia", $("#fotografia").files[0]);   
-                    
+                    parametros.append("operacion", "registrar");
+                    parametros.append("idtipo", $("#idtipo").value);
+                    parametros.append("idmarca", $("#idmarca").value);
+                    parametros.append("descripcion", $("#descripcion").value);
+                    parametros.append("modelo", $("#modelo").value);
+                    parametros.append("datasheets", retorno);
+                    parametros.append("fotografia", $("#fotografia").files[0]);
+
                     fetch(`../../controllers/recurso.controller.php`, {
                             method: "POST",
                             body: parametros
@@ -401,14 +401,14 @@
                         })
                         .catch(error => {
                             console.error("Error al enviar la solicitud:", error);
-                        });            
+                        });
                 }
 
-                $("#form-recurso").addEventListener("submit", (event) =>{
+                $("#form-recurso").addEventListener("submit", (event) => {
                     event.preventDefault(); // Stop al evento
-                    
-                    if(confirm("¿Está seguro de guardar?")){
-                    registrarRecurso();
+
+                    if (confirm("¿Está seguro de guardar?")) {
+                        registrarRecurso();
                     }
                 });
                 getbrands();
@@ -508,6 +508,8 @@
                         });
                 }
 
+                let idRecursoSeleccionado;
+
                 function resultadoTipo(datos) {
                     tipoRecursoDiv.innerHTML = '';
 
@@ -527,6 +529,7 @@
                             event.preventDefault();
                             buscarTipoInput.value = resultado.nombrecompleto;
                             tipoRecursoDiv.innerHTML = ''; // limpiar los resultados
+
                         });
                     });
                 }
@@ -587,11 +590,18 @@
                             opcionDetalle.textContent = `${detalle.marca}, ${detalle.descripcion}, ${detalle.modelo}`;
                             opcionDetalle.value = detalle.idrecurso;
                             detallesSelect.appendChild(opcionDetalle);
+
+
                         });
 
                         detallesSelect.disabled = false;
                     }
                 }
+
+                document.getElementById('detalles').addEventListener('change', function() {
+                    idRecursoSeleccionado = this.value; // this.value es el valor del elemento seleccionado
+                    console.log('ID del recurso seleccionado:', idRecursoSeleccionado);
+                });
 
 
                 function agregarOpcion(selectElement, value, text) {
@@ -634,15 +644,15 @@
                 });
 
 
+
                 let idRecepcion;
-                let idRecursoSeleccionado;
-                // nueva recepción > datos de la cabecera
+
+                // Nueva recepción > datos de la cabecera
                 function añadirrecepcion() {
-                    console.log( idRecepcion);
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
                     parametros.append("idusuario", <?php echo $idusuario ?>);
-                    parametros.append("idpersonal", document.getElementById("idpersonal").value); // Corregir la referencia al ID correcto
+                    parametros.append("idpersonal", document.getElementById("idpersonal").value);
                     parametros.append("fechayhorarecepcion", document.getElementById("fechayhorarecepcion").value);
                     parametros.append("tipodocumento", document.getElementById("tipodocumento").value);
                     parametros.append("nrodocumento", document.getElementById("nrodocumento").value);
@@ -650,69 +660,72 @@
                     parametros.append("observaciones", document.getElementById("observaciones").value);
 
                     fetch(`../../controllers/recepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        if (datos.idrecepcion > 0) {
-                            console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
-                            idRecepcion = datos.idrecepcion;
-                            document.getElementById("id_recepcion").value = idRecepcion;
-                            console.log('ID de la recepción actual:', idRecepcion);
-                            añadirdetrecepcion(idRecepcion);
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar la solicitud:", error);
-                    });
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (datos.length > 0 && datos[0].idrecepcion > 0) {
+                                console.log(`Recepción registrada con ID: ${datos[0].idrecepcion}`);
+                                idRecepcion = datos[0].idrecepcion;
+                                document.getElementById("id_recepcion").value = idRecepcion;
+                                console.log('ID de la recepción actual:', idRecepcion);
+                                añadirdetrecepcion(idRecepcion);
+                            } else {
+                                console.error("La respuesta JSON no tiene el formato esperado:", datos);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar la solicitud:", error);
+                        });
                 }
 
+
+                let idDetalleRecepcion;
+
                 function añadirdetrecepcion(idRecepcion) {
-                    console.log( idRecepcion);
+                    console.log(idRecepcion);
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
                     parametros.append("idrecepcion", idRecepcion);
                     parametros.append("idrecurso", idRecursoSeleccionado);
-                    parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
-                    parametros.append("cantidadenviada", $("#cantidadEnviada").value)
+                    parametros.append("cantidadrecibida", document.getElementById("cantidadRecibida").value);
+                    parametros.append("cantidadenviada", document.getElementById("cantidadEnviada").value);
 
                     fetch(`../../controllers/detrecepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        if (datos && datos.idrecepcion > 0) {
-                            console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
-                            iddetallerecepcion = datos.idrecepcion;
-                            document.getElementById("id_detrecepcion").value = iddetallerecepcion;
-                            console.log('ID de la recepción actual:', iddetallerecepcion);
-                            añadirejemplar(iddetallerecepcion);
-                        } else {
-                            console.error("La respuesta JSON no tiene el formato esperado:", datos);
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar la solicitud:", error);
-                    });
-
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (Array.isArray(datos) && datos.length > 0 && datos[0].iddetallerecepcion > 0) {
+                                console.log(`Detalle de recepción registrado con ID: ${datos[0].iddetallerecepcion}`);
+                                idDetalleRecepcion = datos[0].iddetallerecepcion;
+                                document.getElementById("id_detrecepcion").value = idDetalleRecepcion;
+                                console.log('ID del detalle de la recepción actual:', idDetalleRecepcion);
+                                añadirejemplar(idDetalleRecepcion);
+                            } else {
+                                console.error("La respuesta JSON no tiene el formato esperado:", datos);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar la solicitud:", error);
+                        });
                 }
 
 
-
-                function añadirejemplar(iddetallerecepcion) {
+                function añadirejemplar(idDetalleRecepcion) {
                     const nroSerieInputs = document.querySelectorAll(".nro_serie");
                     const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
 
                     // Itera sobre cada campo de entrada de número de serie
                     nroSerieInputs.forEach((nroSerieInput, index) => {
                         const nroSerie = nroSerieInput.value;
-                        const nroEquipo = nroEquipoInputs[index].value; // Obtiene el valor correspondiente al mismo índice
+                        const nroEquipo = nroEquipoInputs[index].value;
 
                         const parametros = new FormData();
                         parametros.append("operacion", "registrar");
-                        parametros.append("iddetallerecepcion", iddetallerecepcion);
+                        parametros.append("iddetallerecepcion", idDetalleRecepcion);
                         parametros.append("nro_serie", nroSerie);
                         parametros.append("nro_equipo", nroEquipo);
 
@@ -740,8 +753,6 @@
                     showSaveChangesConfirmationFinally()
                         .then((result) => {
                             if (result.isConfirmed) {
-                               
-                                // Luego añadir la recepción
                                 añadirrecepcion();
                                 console.log("Recepción FINALIZADA");
                             } else {
@@ -749,6 +760,8 @@
                             }
                         });
                 }
+
+
 
 
 
