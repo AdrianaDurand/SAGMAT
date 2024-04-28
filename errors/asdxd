@@ -1,4 +1,4 @@
-<script>
+
             document.addEventListener("DOMContentLoaded", function() {
                 const tipoRecursoSelect = document.querySelector('#tipo');
 
@@ -415,4 +415,4 @@
 
 
             });
-        </script>
+       

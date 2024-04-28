@@ -464,6 +464,32 @@
                     buscarDetallesTipo(selectedTipoRecurso);
                 });
 
+                document.getElementById("btnAgregar").addEventListener("click", function() {
+                    var cantidad = parseInt(document.getElementById("cantidadRecibida").value);
+                    var tipoRecurso = document.getElementById("buscar").value;
+                    var detallesSelect = document.getElementById("detalles");
+                    var descripcion = detallesSelect.options[detallesSelect.selectedIndex].textContent;
+
+                    if (!isNaN(cantidad) && cantidad >= 1) { //cantidad x numero de filas mayor a 1
+                        var tabla = document.getElementById("tablaRecursos");
+                        var tbody = tabla.querySelector("tbody");
+                        tbody.innerHTML = ""; // Limpiar filas existentes antes de agregar nuevas
+                        for (var i = 1; i <= cantidad; i++) {
+                            var newRow = document.createElement("tr");
+                            newRow.innerHTML = `
+                        <td>${i}</td>
+                        <td>${tipoRecurso}</td>
+                        <td>${descripcion}</td>
+                        <td>Bueno</td>
+                        <td><input type='text' class='form-control nro_serie' required></td> <!-- Campo de entrada de número de serie -->
+                    `;
+                            tbody.appendChild(newRow);
+                        }
+                        tabla.style.display = "block";
+                        document.getElementById("botonesGuardarFinalizar").style.display = "block";
+                    }
+                });
+
 
             });
         </script>
