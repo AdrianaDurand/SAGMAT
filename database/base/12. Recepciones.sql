@@ -13,29 +13,26 @@ BEGIN
 END $$
 CALL spu_registrar_recursos(24, 5, 'Producto x', '2024', '{"COLOR":"AZUL", "TAMAÑO": "25px"}', NULL);
 
+select * from personas;
+select * from recepciones;
 
 DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
-    IN _idusuario				INT,
-    IN _idpersonal 				INT,
-    IN _fechayhorarecepcion 	DATETIME,
-    IN _tipodocumento 			VARCHAR(30),
-    IN _nrodocumento			CHAR(11),
-    IN _serie_doc				VARCHAR(30),
-    IN _observaciones 			VARCHAR(200)
+    IN _idusuario                INT,
+    IN _idpersonal                 INT,
+    IN _fechayhorarecepcion     DATETIME,
+    IN _tipodocumento             VARCHAR(30),
+    IN _nrodocumento            CHAR(11),
+    IN _serie_doc                VARCHAR(30),
+    IN _observaciones             VARCHAR(200)
 )
 BEGIN 
-	INSERT INTO recepciones
+    INSERT INTO recepciones
     (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones)
     VALUES
-	(_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
+    (_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc, _observaciones);
 END $$
-
-SELECT * FROM recepciones;
-CALL spu_addrecepcion(1, 4, '2024-04-27 08:00:00', 'BOLETA', '123456', 'TBC046', 'Concluido');
-
-
 
 DELIMITER $$
 CREATE PROCEDURE searchPersons(
@@ -46,7 +43,22 @@ BEGIN
     FROM personas
     WHERE CONCAT(nombres, ' ', apellidos) LIKE CONCAT('%', _nombrecompleto, '%');
 END $$
-CALL searchPersons('a');
+
+DELIMITER $$
+CREATE PROCEDURE searchTipos(
+	IN _nombretipo VARCHAR(60)
+)
+BEGIN
+    SELECT r.modelo, m.marca, r.descripcion
+    FROM recursos AS r
+    INNER JOIN tipos AS t ON r.idtipo = t.idtipo
+    INNER JOIN marcas AS m ON r.idmarca = m.idmarca
+    WHERE t.tipo LIKE CONCAT('%', _nombretipo, '%');
+END $$
+
+select * from tipos;
+
+CALL searchTipos('ACCES POINT');
 
 DELIMITER $$
 CREATE PROCEDURE spu_registrar_detallerecepcion(
@@ -73,15 +85,3 @@ BEGIN
     WHERE tipo LIKE CONCAT(_tipobuscado, '%');
 END $$
 CALL searchTipos('a');
-
-
-DELIMITER $$
-CREATE PROCEDURE spu_listaNombres(
-    IN _apellidos VARCHAR(50)
-)
-BEGIN
-    SELECT 
-		*
-    FROM personas
-    WHERE apellidos = _apellidos;
-END $$

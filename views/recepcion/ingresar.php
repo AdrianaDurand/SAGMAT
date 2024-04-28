@@ -22,6 +22,8 @@
 
 <body>
 
+
+
     <div class="d-flex ">
 
         <!-- Sidebar -->
@@ -53,7 +55,7 @@
                                 <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
                                 <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
                             </div>
-                            <ul class="container-suggestions" id="resultados">
+                            <ul class="container" id="resultados">
                                 <!-- Sugerencias de búsqueda -->
                             </ul>
                         </div>
@@ -101,7 +103,7 @@
                                 <input type="text" id="buscar" class="form-control border" placeholder="¿Qué quieres buscar?" aria-label="Buscar tipo de recurso" aria-describedby="basic-addon2">
                                 <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
                             </div>
-                            <ul class="container-suggestions" id="resultados">
+                            <ul class="container" id="resultados2">
                                 <!-- Sugerencias de búsqueda -->
                             </ul>
                         </div>
@@ -256,90 +258,19 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const tipoRecursoSelect = document.querySelector('#tipo');
+                const listaSugerencias = document.getElementById('resultados');
+                const listaTipoRecurso = document.getElementById('resultados2');
+                const buscarInput = document.querySelector('#idpersonal');
+                const resultadosDiv = document.getElementById('resultados');
+                const buscarTipoInput = document.querySelector('#buscar');
+                const tipoRecursoDiv = document.getElementById('resultados2');
 
-                // Añadiendo características al modal
-                function addrow() {
-                    var caracteristicasContainer = document.getElementById("caracteristicasContainer");
-
-                    var nuevaFila = document.createElement("div");
-                    nuevaFila.classList.add("row");
-
-                    nuevaFila.innerHTML = `
-            <div class="mb-3">
-                <div class="row">
-                    <div class="col-md-5">
-                        <input type="text" class="form-control border" placeholder="Característica" required>
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" class="form-control border" placeholder="Detalle" required>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-white border btnEliminarFila"><i class="bi bi-x-lg"></i></button>
-                    </div>
-                </div>
-            </div>
-            `;
-
-                    caracteristicasContainer.appendChild(nuevaFila);
-                }
-
-                document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
-                    addrow();
-                });
-
-                // evento del botón de eliminar fila
-                document.addEventListener("click", function(event) {
-                    if (event.target.classList.contains("btnEliminarFila")) {
-                        event.target.closest(".row").remove(); // Con esto se elimina la fila más cercana al botón
-                    }
-                });
+                let timeoutId;
+                let timeoutId2;
 
 
-                function gettypes() {
-                    const parametros = new FormData();
-                    parametros.append("operacion", "listar");
+                //_____________________________________ BUSCAR PERSONAL _________________________________________
 
-                    fetch(`../../controllers/tipo.controller.php`, {
-                            method: "POST",
-                            body: parametros
-                        })
-                        .then(respuesta => respuesta.json())
-                        .then(datos => {
-                            datos.forEach(element => {
-                                const tagOption = document.createElement("option");
-                                tagOption.innerText = element.tiporecurso;
-                                tagOption.value = element.idtipo;
-                                document.querySelector("#tipo").appendChild(tagOption)
-                            });
-                        })
-                        .catch(e => {
-                            console.error(e);
-                        });
-                }
-
-                function getbrands() {
-                    const parametros = new FormData();
-                    parametros.append("operacion", "listar");
-
-                    fetch(`../../controllers/marca.controller.php`, {
-                            method: "POST",
-                            body: parametros
-                        })
-                        .then(respuesta => respuesta.json())
-                        .then(datos => {
-                            datos.forEach(element => {
-                                const tagOption = document.createElement("option");
-                                tagOption.innerText = element.marca;
-                                tagOption.value = element.idmarca;
-                                document.querySelector("#marca").appendChild(tagOption)
-                            });
-                        })
-                        .catch(e => {
-                            console.error(e);
-                        });
-                }
-
-                // función que busca tipos de recursos con nombre
                 function resourcefinder() {
                     const parametros = new FormData();
                     parametros.append("operacion", "search");
@@ -386,80 +317,6 @@
                     });
                 }
 
-
-                let idRecursoSeleccionado;
-                // listamos los detalles luego de buscar por el tipo
-                function showdetailsfound(datos) {
-                    const detallesSelect = document.getElementById('detalles');
-                    detallesSelect.innerHTML = '';
-
-                    if (datos.length === 0) {
-                        agregarOpcion(detallesSelect, '', 'No hay datos disponibles');
-                        detallesSelect.disabled = true;
-                    } else {
-                        detallesSelect.disabled = false;
-                        agregarOpcion(detallesSelect, '', 'Seleccione:');
-
-                        datos.forEach(recurso => {
-                            const opcion = document.createElement('option');
-                            opcion.value = recurso.idrecurso;
-                            opcion.dataset.detalle = `${recurso.marca}, ${recurso.descripcion}, ${recurso.modelo}`; // Detalles a mostrar en la lista
-                            opcion.textContent = opcion.dataset.detalle; // mostrar solo los detalles en la lista
-                            detallesSelect.appendChild(opcion);
-                        });
-                        // captura el id del recurso seleccionado al cambiar la opción en el select
-                        detallesSelect.addEventListener('change', function() {
-                            idRecursoSeleccionado = detallesSelect.value;
-                        });
-                    }
-                }
-
-
-                function agregarOpcion(selectElement, value, text) {
-                    const opcion = document.createElement('option');
-                    opcion.value = value;
-                    opcion.textContent = text;
-                    selectElement.appendChild(opcion);
-                }
-
-
-                // función para buscar recursos asociados al tipo de recurso seleccionado
-                function searchdetails(tipoRecurso) {
-                    console.log('Tipo de recurso a buscar:', tipoRecurso);
-                    const parametros = new FormData();
-                    parametros.append("operacion", "buscardetalle");
-                    parametros.append("tiporecurso", tipoRecurso);
-
-                    fetch("../../controllers/tipo.controller.php", {
-                            method: "POST",
-                            body: parametros
-                        })
-                        .then(respuesta => respuesta.json())
-                        .then(datos => {
-                            console.log('Datos recibidos del controlador:', datos);
-                            if (datos.hasOwnProperty('mensaje')) {
-                                mostrarMensajeNoEncontrado(datos.mensaje);
-                            } else {
-                                showdetailsfound(datos);
-                            }
-                        })
-
-                        .catch(error => {
-                            console.error('Error al buscar recursos asociados:', error);
-                        });
-                };
-
-                //addCaracteristicas();
-                gettypes();
-                getbrands();
-                //buscarRecursosAsociados("monitor"); Así si funciona :D
-
-                // evento de cambio en el campo de búsqueda
-                const buscarInput = document.querySelector('#idpersonal');
-                const resultadosDiv = document.getElementById('resultados');
-                let timeoutId;
-
-                // Espera en la busqueda
                 buscarInput.addEventListener('input', function() {
                     clearTimeout(timeoutId);
                     if (buscarInput.value.trim() === '') {
@@ -472,201 +329,82 @@
                 });
 
                 // evento de clic en la lista de sugerencias (resultados de búsqueda)
-                const listaSugerencias = document.getElementById('resultados');
 
                 listaSugerencias.addEventListener('click', function(event) {
-                    const selectedTipoRecurso = event.target.textContent;
-                    buscarInput.value = selectedTipoRecurso;
+                    const selectedPersonal = event.target.textContent;
+                    buscarInput.value = selectedPersonal;
                     resultadosDiv.innerHTML = '';
-                    searchdetails(selectedTipoRecurso); // pasamos el tipo de recurso a la función searchdetails
+                    //searchdetails(selectedTipoRecurso); // pasamos el tipo de recurso a la función searchdetails
                 });
 
-                // agregando la tabla donde añadimos las series
-                document.getElementById("btnAgregar").addEventListener("click", function() {
-                    var cantidad = parseInt(document.getElementById("cantidad").value);
-                    var tipoRecurso = document.getElementById("buscar").value;
-                    var detallesSelect = document.getElementById("detalles");
-                    var descripcion = detallesSelect.options[detallesSelect.selectedIndex].textContent;
+                //_____________________________________ BUSCAR TIPO RECURSO _________________________________________
 
-                    if (!isNaN(cantidad) && cantidad >= 1) { //cantidad x numero de filas mayor a 1
-                        var tabla = document.getElementById("tablaRecursos");
-                        var tbody = tabla.querySelector("tbody");
-                        tbody.innerHTML = ""; // Limpiar filas existentes antes de agregar nuevas
-                        for (var i = 1; i <= cantidad; i++) {
-                            var newRow = document.createElement("tr");
-                            newRow.innerHTML = `
-                        <td>${i}</td>
-                        <td>${tipoRecurso}</td>
-                        <td>${descripcion}</td>
-                        <td>Bueno</td>
-                        <td><input type='text' class='form-control nro_serie' required></td> <!-- Campo de entrada de número de serie -->
-                    `;
-                            tbody.appendChild(newRow);
-                        }
-                        tabla.style.display = "block";
-                        document.getElementById("botonesGuardarFinalizar").style.display = "block";
-                    }
-                });
+                // función para buscar recursos asociados al tipo de recurso seleccionado
 
-
-                document.getElementById("btnFinalizar").addEventListener("click", function() {
-                    endingReception();
-                });
-
-                document.getElementById("btnGuardar").addEventListener("click", function() {
-                    continuereception();
-                });
-
-
-                function continuereception() {
-                    showSaveChangesConfirmationContinue()
-                        .then((result) => {
-                            if (result.isConfirmed) {
-                                añadirrecepcion();
-                                cleanresource();
-                                console.log("Recepción GUARDADA, continuemos ...");
-                                moreresources().then((result) => {
-                                    if (result.isConfirmed) {
-                                        console.log("Esperando un recurso más por añadir ...");
-                                    } else {
-                                        clearall();
-                                        console.log("No se agregarán más recursos.");
-                                    }
-                                });
-                            } else {
-                                console.log("Esperando para guardar");
-                            }
-                        });
-                }
-
-
-                function endingReception() {
-                    showSaveChangesConfirmationFinally()
-                        .then((result) => {
-                            if (result.isConfirmed) {
-                                // Limpiar campos primero
-                                clearall();
-                                // Luego añadir la recepción
-                                añadirrecepcion();
-                                console.log("Recepción FINALIZADA");
-                            } else {
-                                clearall();
-                                console.log("Recepción NO FINALIZADA");
-                            }
-                        });
-                }
-
-
-                function clearall() {
-                    document.getElementById("fecha_recepcion").disabled = false;
-                    document.getElementById("fecha_recepcion").value = "";
-
-                    document.getElementById("tipo_documento").disabled = false;
-                    document.getElementById("tipo_documento").selectedIndex = 0;
-
-                    document.getElementById("serie_doc").disabled = false;
-                    document.getElementById("serie_doc").value = "";
-
-                    document.getElementById("nro_documento").disabled = false;
-                    document.getElementById("nro_documento").value = "";
-
-                    document.getElementById("buscar").value = "";
-                    document.getElementById("cantidad").value = "";
-
-                    var detallesSelect = document.getElementById("detalles");
-                    detallesSelect.disabled = true;
-                    detallesSelect.innerHTML = '<option>Primero busque el tipo de recurso</option>';
-                    detallesSelect.selectedIndex = 0;
-
-                    document.getElementById("tablaRecursos").style.display = "none";
-                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
-                }
-
-
-
-                function cleanresource() {
-                    document.getElementById("fecha_recepcion").disabled = true;
-                    document.getElementById("tipo_documento").disabled = true;
-                    document.getElementById("serie_doc").disabled = true;
-                    document.getElementById("nro_documento").disabled = true;
-                    document.getElementById("buscar").value = "";
-                    document.getElementById("cantidad").value = "";
-
-                    var detallesSelect = document.getElementById("detalles");
-                    detallesSelect.disabled = true;
-                    detallesSelect.innerHTML = '<option>Primero busque el tipo de recurso</option>';
-                    detallesSelect.selectedIndex = 0;
-
-                    document.getElementById("tablaRecursos").style.display = "none";
-                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
-                }
-
-                let idRecepcion;
-                // nueva recepción > datos de la cabecera
-                function añadirrecepcion() {
+                function buscarTipo() {
                     const parametros = new FormData();
-                    parametros.append("operacion", "registrar");
-                    parametros.append("fecharecepcion", $("#fecha_recepcion").val());
-                    parametros.append("tipodocumento", $("#tipo_documento").val());
-                    parametros.append("nro_documento", $("#nro_documento").val());
-                    parametros.append("serie_doc", $("#serie_doc").val());
+                    parametros.append("operacion", "buscar");
+                    parametros.append("tipobuscado", buscarTipoInput.value);
 
-                    fetch(`../../controllers/recepcion.controller.php`, {
+                    fetch("../../controllers/tipo.controller.php", {
                             method: "POST",
                             body: parametros
                         })
                         .then(respuesta => respuesta.json())
                         .then(datos => {
-                            if (datos.idrecepcion > 0) {
-                                console.log(`Recepción registrada con ID: ${datos.idrecepcion}`);
-                                idRecepcion = datos.idrecepcion;
-                                document.getElementById("id_recepcion").value = idRecepcion; // Guardar el ID de la recepción en el campo oculto
-                                console.log('ID de la recepción actual:', idRecepcion);
-                                añadirejemplar(idRecepcion); // idRecepcion como parámetro
+                            if (datos.hasOwnProperty('mensaje')) {
+                                mostrarMensajeNoEncontrado(datos.mensaje);
+                            } else {
+                                resultadoTipo(datos);
                             }
                         })
                         .catch(error => {
-                            console.error("Error al enviar la solicitud:", error);
+                            console.error("Error en la búsqueda:", error);
                         });
                 }
 
+                function resultadoTipo(datos) {
+                    tipoRecursoDiv.innerHTML = '';
 
-                function añadirejemplar(idRecepcion) {
-                    const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                    datos.forEach(function(resultado) {
+                        const enlaceResultado2 = document.createElement('a');
+                        enlaceResultado2.href = `../../views/recepcion/ingresar.php?id=${resultado.nombretipo}`;
+                        enlaceResultado2.classList.add('list-group-item', 'list-group-item-action');
 
-                    // itera sobre cada campo de entrada de número de serie
-                    nroSerieInputs.forEach(input => {
-                        const nroSerie = input.value;
+                        const nombreRecurso = document.createElement('span');
+                        nombreRecurso.textContent = resultado.tipo;
 
-                        const parametros = new FormData();
-                        parametros.append("operacion", "registrar");
-                        parametros.append("idrecepcion", idRecepcion);
-                        parametros.append("idrecurso", idRecursoSeleccionado);
-                        parametros.append("nro_serie", nroSerie);
-                        parametros.append("estado", "B");
+                        enlaceResultado2.appendChild(nombreRecurso);
+                        tipoRecursoDiv.appendChild(enlaceResultado2);
 
-                        fetch(`../../controllers/ejemplar.controller.php`, {
-                                method: "POST",
-                                body: parametros
-                            })
-                            .then(respuesta => respuesta.json())
-                            .then(datos => {
-                                if (datos.idejemplar > 0) {
-                                    console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Error al enviar la solicitud:", error);
-                            });
+                        // agregar evento de clic para seleccionar el resultado
+                        enlaceResultado2.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            buscarTipoInput.value = resultado.nombrecompleto;
+                            tipoRecursoDiv.innerHTML = ''; // limpiar los resultados
+                        });
                     });
                 }
 
+                buscarTipoInput.addEventListener('input', function() {
+                    clearTimeout(timeoutId2);
+                    if (buscarTipoInput.value.trim() === '') {
+                        tipoRecursoDiv.innerHTML = '';
+                        return;
+                    }
+                    timeoutId2 = setTimeout(function() {
+                        buscarTipo();
+                    }, 500);
+                });
 
+                // evento de clic en la lista de sugerencias (resultados de búsqueda)
 
-
-
-
-
+                listaTipoRecurso.addEventListener('click', function(event) {
+                    const selectedTipoRecurso = event.target.textContent;
+                    buscarTipoInput.value = selectedTipoRecurso;
+                    tipoRecursoDiv.innerHTML = '';
+                    //searchdetails(selectedTipoRecurso); // pasamos el tipo de recurso a la función searchdetails
+                });
 
 
             });

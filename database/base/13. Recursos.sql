@@ -35,3 +35,13 @@ BEGIN
     INNER JOIN tipos T ON T.idtiporecurso = R.idtiporecurso
     WHERE T.tiporecurso = _tiporecurso;
 END $$
+
+DELIMITER $$
+CREATE PROCEDURE searchTipos(
+    IN _tipobuscado VARCHAR(255)
+)
+BEGIN
+    SELECT * FROM tipos
+    WHERE tipo LIKE CONCAT('%', _tipobuscado, '%');
+END $$
+CALL searchTipos('SONIDO');
