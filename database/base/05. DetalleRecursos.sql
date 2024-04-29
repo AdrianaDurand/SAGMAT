@@ -19,7 +19,6 @@ BEGIN
     VALUES
     (_idrecurso, _idubicacion, _fecha_inicio, _fecha_fin, _estado, _n_item, _observaciones,  NULLIF(_fotoestado, ''));
 END $$
-DELIMITER  ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_RecepcionesRecursos()

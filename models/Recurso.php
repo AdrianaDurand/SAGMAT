@@ -32,4 +32,19 @@ class Recurso extends Conexion
       die($e->getMessage());
     }
   }
+
+  public function listar($datos = [])
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_listar_tipo(?)");
+      $consulta->execute(
+        array(
+          $datos['idtipo']
+        )
+      );
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

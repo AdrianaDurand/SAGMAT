@@ -28,5 +28,12 @@ if (isset($_POST['operacion'])) {
       }
       echo json_encode($recurso->registrar($datosEnviar));
       break;
+
+    case 'listar':
+      $datosEnviar = [
+        "idtipo" => $_POST['idtipo']
+      ];
+      echo json_encode($recurso->listar($datosEnviar));
+      break;
   }
 }

@@ -46,17 +46,7 @@ BEGIN
     WHERE CONCAT(nombres, ' ', apellidos) LIKE CONCAT('%', _nombrecompleto, '%');
 END $$
 
-DELIMITER $$
-CREATE PROCEDURE searchTipos(
-	IN _nombretipo VARCHAR(60)
-)
-BEGIN
-    SELECT r.modelo, m.marca, r.descripcion
-    FROM recursos AS r
-    INNER JOIN tipos AS t ON r.idtipo = t.idtipo
-    INNER JOIN marcas AS m ON r.idmarca = m.idmarca
-    WHERE t.tipo LIKE CONCAT('%', _nombretipo, '%');
-END $$
+
 
 select * from tipos;
 
