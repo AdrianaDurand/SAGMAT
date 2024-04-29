@@ -12,7 +12,8 @@ ALTER TABLE det_recursos AUTO_INCREMENT 1;
 
 SELECT * FROM roles; 
 SELECT * FROM usuarios; 
-
+SELECT * FROM recursos;
+SELECT * FROM tipos;
 -- NSC
 UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'

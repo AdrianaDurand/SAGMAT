@@ -1,6 +1,7 @@
 CREATE DATABASE SAGMAT;
 USE SAGMAT;
 
+
 SELECT * FROM detrecepciones;
 
 SELECT * FROM ejemplares;

@@ -4,7 +4,7 @@
 DELIMITER $$
 CREATE PROCEDURE spu_listartipos()
 BEGIN
-	SELECT tiporecurso
+	SELECT *
     FROM tipos;
 END $$
 

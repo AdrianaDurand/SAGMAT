@@ -148,8 +148,8 @@
                             $("#lista-recursos").innerHTML = ``;
                             dataObtenida.forEach(element => {
                                 // Convertir las claves y valores JSON en objetos JavaScript
-                                const clave = JSON.parse(element.clave);
-                                const valor = JSON.parse(element.valor);
+                                // const clave = JSON.parse(element.clave);
+                                // const valor = JSON.parse(element.valor);
 
                                 //Evaluar si tiene una fotografía
                                 const rutaImagen = (element.fotografia == null) ? "NOHAYFOTO.jpg" : element.fotografia;
@@ -163,8 +163,8 @@
                                                 <h4 class="card-title text-primary">${element.modelo}</h4>
                                                 <hr>
                                                 <p class="card-text">${element.descripcion}</p>
-                                                <p class="card-text">${clave}</p>
-                                                <p class="card-text">${valor}</p>
+                                                <p class="card-text">${element.clave}</p>
+                                                <p class="card-text">${element.valor}</p>
                                             </div>
                                         </div>
                                         <div class='mt-3'></div>
