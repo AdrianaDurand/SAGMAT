@@ -16,10 +16,10 @@ CREATE PROCEDURE spu_listar_tipo(
 )
 BEGIN
     SELECT idrecurso,
+			idtipo,
 		   descripcion,
            modelo,
-		   JSON_EXTRACT(datasheets, '$.clave') AS clave,
-           JSON_EXTRACT(datasheets, '$.valor') AS valor,
+			datasheets,
            fotografia
     FROM recursos
     WHERE idtipo = _idtipo;
@@ -28,5 +28,11 @@ CALL spu_listar_tipo(1);
 select  * from recursos;
 select  * from tipos;
 
+select * from marcas;
+
+-- ves que tiene el json pero no hay clave : [], valor  a que se debe? puede ser y creo yo, porque fuern datos de prueba, registrados dire dejame ver
+-- cual es esa consulta? Yorght no duermas xd, no eso n más el error es por lo que dijsite, ahora viste porque el not null yel objeto que se crea en tu registrar no
+
+-- Lucas que crack eres xd, ahora alonso quiere esto
 
 

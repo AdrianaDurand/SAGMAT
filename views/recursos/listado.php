@@ -141,12 +141,49 @@
                     })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
+                        console.log(datos)
+                        
+                        
                         dataObtenida = datos;
                         if (dataObtenida.length == 0) {
                             $("#lista-recursos").innerHTML = `<p>Pronto tendremos más novedades</p>`;
                         } else {
-                            $("#lista-recursos").innerHTML = ``;
+                            $("#lista-recursos").innerHTML =  '';
                             dataObtenida.forEach(element => {
+
+                                let jparse = JSON.parse(element.datasheets);
+                                console.log(jparse);
+
+                                
+                                let etiqueta = "";
+                                //segundo recorrido
+                                let arraykey = jparse.clave; // son tus claves del json
+                                let arrayvalue = jparse.valor;
+
+
+                                console.log(arraykey)
+                                console.log(arrayvalue)
+
+                                //segundo foreach
+                                arraykey.forEach((key, index )=>{
+
+                                    let value = arrayvalue[index];
+
+                                    //revisa que tus valores no estén vacíos
+
+                                    if(key != "" || value != ""){
+
+                                        //asignas los valores
+                                        
+
+                                        etiqueta += `
+                                        <p class="card-text"></strong>${key} :<strong>${value}</p>
+                                        `;
+                                    }
+                                })
+
+                                /* console.log(element.valor)
+                                console.log(element.clave) */
                                 // Convertir las claves y valores JSON en objetos JavaScript
                                 // const clave = JSON.parse(element.clave);
                                 // const valor = JSON.parse(element.valor);
@@ -163,8 +200,7 @@
                                                 <h4 class="card-title text-primary">${element.modelo}</h4>
                                                 <hr>
                                                 <p class="card-text">${element.descripcion}</p>
-                                                <p class="card-text">${element.clave}</p>
-                                                <p class="card-text">${element.valor}</p>
+                                                ${etiqueta}
                                             </div>
                                         </div>
                                         <div class='mt-3'></div>
