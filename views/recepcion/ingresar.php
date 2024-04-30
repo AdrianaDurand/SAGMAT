@@ -649,6 +649,7 @@
 
 
 
+                //_____________________________________ AÑADIR RECEPCIÓN _________________________________________
                 let idRecepcion;
 
                 // Nueva recepción > datos de la cabecera
@@ -685,7 +686,7 @@
                         });
                 }
 
-
+                //_____________________________________ AÑADIR DETALLES DE RECEPCIÓN _________________________________________
                 let idDetalleRecepcion;
 
                 function añadirdetrecepcion(idRecepcion) {
@@ -718,7 +719,7 @@
                         });
                 }
 
-
+                //_____________________________________ AÑADIR EJEMPLARES_________________________________________
                 function añadirejemplar(idDetalleRecepcion) {
                     const nroSerieInputs = document.querySelectorAll(".nro_serie");
                     const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
@@ -753,6 +754,7 @@
                     });
                 }
 
+                //_____________________________________ LIMPIEZAS _________________________________________                
                 function limpiarFormulario() {
                     // Limpiar campos de la cabecera
                     document.getElementById("idpersonal").value = "";
@@ -769,13 +771,38 @@
                     document.getElementById("cantidadRecibida").value = "";
                     document.getElementById("seriedocumento").value = "";
 
-                    // Limpiar campos adicionales si fuera necesario
+                    // Ocultar tabla de recursos y botones de guardar
+                    document.getElementById("tablaRecursos").style.display = "none";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                }
+
+                function deshabilitarylimpiarCampos() {
+                    const camposDeshabilitar = [
+                        document.getElementById("idpersonal"),
+                        document.getElementById("fechayhorarecepcion"),
+                        document.getElementById("tipodocumento"),
+                        document.getElementById("nrodocumento"),
+                        document.getElementById("serie_doc"),
+                        document.getElementById("observaciones")
+                    ];
+
+                    camposDeshabilitar.forEach((campo) => {
+                        campo.disabled = true;
+                    });
+
+                    // Limpiar campos del detalle
+                    document.getElementById("buscar").value = "";
+                    document.getElementById("detalles").selectedIndex = 0;
+                    document.getElementById("cantidadEnviada").value = "";
+                    document.getElementById("cantidadRecibida").value = "";
+                    document.getElementById("seriedocumento").value = "";
 
                     // Ocultar tabla de recursos y botones de guardar
                     document.getElementById("tablaRecursos").style.display = "none";
                     document.getElementById("botonesGuardarFinalizar").style.display = "none";
                 }
 
+                //_____________________________________ BTN FINALIZAR REGISTRO _________________________________________
                 document.getElementById("btnFinalizar").addEventListener("click", function() {
                     endingReception();
                 });
@@ -785,38 +812,47 @@
                         if (result.isConfirmed) {
                             añadirrecepcion();
                             console.log("Recepción FINALIZADA");
-                            limpiarFormulario(); // Limpia el formulario después de confirmar el registro
+                            setTimeout(limpiarFormulario, 100); // **
                         } else {
                             console.log("Recepción NO FINALIZADA");
                         }
                     });
                 }
 
+                //_____________________________________ BTN GUARDAR Y CONTINUAR _________________________________________
                 document.getElementById("btnGuardar").addEventListener("click", function() {
                     continuereception();
                 });
 
                 function continuereception() {
-                    showSaveChangesConfirmationContinue()
-                        .then((result) => {
-                            if (result.isConfirmed) {
-                                añadirejemplar();
-                                // cleanresource();
-                                console.log("Recepción GUARDADA, continuemos ...");
-                                moreresources().then((result) => {
-                                    if (result.isConfirmed) {
-                                        console.log("Esperando un recurso más por añadir ...");
-                                    } else {
-                                        // clearall();
-                                        console.log("No se agregarán más recursos.");
-                                    }
-                                });
-                            } else {
-                                console.log("Esperando para guardar");
-                            }
-                        });
-                }
+                    const tipoDocumento = document.getElementById("tipodocumento").value;
+                    const numeroDocumento = document.getElementById("nrodocumento").value;
+                    const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
 
+                    const mensaje = `A continuación, agregarás un material tecnológico más a la recepción ingresada el <strong>${fechaRecepcion}</strong>, con <strong>${tipoDocumento}</strong> N°<strong>${numeroDocumento}</strong>.`;
+
+                    return Swal.fire({
+                        title: "<span style='font-size: 24px;'>RECEPCIÓN REGISTRADA !</span>",
+                        html: `<span style='font-size: 15px;'>${mensaje}</span>`, 
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: "Agregar un material más a la recepción",
+                        cancelButtonText: "No tengo más materiales que agregar",
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            añadirrecepcion();
+                            deshabilitarylimpiarCampos();
+
+                            console.log("Agregar un material más...");
+                        } else {
+                            añadirrecepcion();
+                            console.log("No tengo mas materiales para agregar");
+                            setTimeout(limpiarFormulario, 100); // **
+                        }
+                    });
+                }
 
 
 

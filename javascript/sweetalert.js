@@ -33,19 +33,13 @@ function showSaveChangesConfirmationContinue() {
     });
 }
 
-function moreresources() {
+function datosregistrados() {
     return Swal.fire({
-        title: "Desea agregar otro recurso",
-        icon: "question",
-        showDenyButton: true,
-        confirmButtonText: "Si",
-        denyButtonText: `No`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            return { isConfirmed: true }; 
-        } else {
-            return { isDenied: true }; 
-        }
+        position: "top-end",
+        icon: "success",
+        title: "¡Recepción registrada con éxito!",
+        showConfirmButton: false,
+        timer: 4000
     });
 }
 
