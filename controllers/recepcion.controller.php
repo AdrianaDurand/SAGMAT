@@ -17,8 +17,7 @@ if(isset($_POST['operacion'])){
                 "fechayhorarecepcion"   => $_POST['fechayhorarecepcion'], 
                 "tipodocumento"         => $_POST['tipodocumento'],
                 "nrodocumento"          => $_POST['nrodocumento'],
-                "serie_doc"                 => $_POST['serie_doc'],
-                "observaciones"         => $_POST['observaciones']
+                "serie_doc"                 => $_POST['serie_doc']
             ];
             echo json_encode($recepcion->registrar($datosEnviar));
             

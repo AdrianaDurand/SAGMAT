@@ -10,10 +10,14 @@ USE SAGMAT;
 DROP TABLE recursos;
 ALTER TABLE det_recursos AUTO_INCREMENT 1;
 
-SELECT * FROM roles; 
-SELECT * FROM usuarios; 
-SELECT * FROM recursos;
+SELECT * FROM recepciones;
+SELECT * FROM detrecepciones;
+SELECT * FROM ejemplares;	
 SELECT * FROM tipos;
+
+SELECt * FROM recursos;
+SELECT * FROM marcas;
+
 -- NSC
 UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
@@ -208,6 +212,6 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
     (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
 
-DROP TABLE recursos;
+DROP TABLE detrecepciones;
 SET foreign_key_checks =1;
 

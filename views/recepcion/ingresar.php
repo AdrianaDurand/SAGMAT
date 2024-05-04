@@ -22,10 +22,13 @@
 
 <body>
 
-
-
     <div class="d-flex ">
+<style>
+    .input-error {
+    border: 1px solid red !important;
+}
 
+</style>
         <!-- Sidebar -->
         <?php require_once "../../views/sidebar/sidebar.php"; ?>
 
@@ -73,17 +76,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="nrodocumento" class="form-label"><strong>N° documento</strong></label>
-                            <input type="text" class="form-control border" id="nrodocumento" required>
+                            <input type="text" class="form-control border" id="nrodocumento" required oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
-                        <div class="col-md-4">
+
+                        <div class="col-md-6">
                             <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
                             <input type="text" class="form-control border" id="serie_doc" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label><strong>Observaciones</strong></label>
-                            <input type="text" class="form-control border" id="observaciones">
                         </div>
                     </div>
                 </div>
@@ -127,8 +127,8 @@
                             <input type="number" class="form-control border" id="cantidadRecibida" required min="1">
                         </div>
                         <div class="col-md-4">
-                            <label><strong>Serie documento:</strong></label>
-                            <input type="text" class="form-control border" id="seriedocumento">
+                            <label><strong>Observaciones</strong></label>
+                            <input type="text" class="form-control border" id="observaciones">
                         </div>
 
                         <div class="row">
@@ -363,33 +363,40 @@
 
 
                 function registrarRecurso() {
-                    console.log($("#idtipo").value)
-                    const car = document.querySelectorAll(".form-control.border.car");
-                    const det = document.querySelectorAll(".form-control.border.det");
+                    // Realizar el registro del recurso
+                    const idtipo = document.querySelector("#idtipo").value;
+                    const idmarca = document.querySelector("#idmarca").value;
+                    const descripcion = document.querySelector("#descripcion").value;
+                    const modelo = document.querySelector("#modelo").value;
 
-                    let dataJson = {
-                        "clave": [],
-                        "valor": []
+                    // Verificar si ya existe el recurso
+                    const recursosRegistrados = JSON.parse(localStorage.getItem('recursos') || '[]');
+                    const recursoExistente = recursosRegistrados.find(recurso => recurso.idmarca === idmarca && recurso.modelo === modelo);
+
+                    if (recursoExistente) {
+                        alert("No se puede registrar un recurso existente.");
+                        return;
                     }
 
-                    Array.from(car).forEach((keyInput, index) => {
-                        let key = keyInput.value.trim();
-                        let indexValue = det[index];
-                        let value = indexValue.value.trim();
+                    const carInputs = document.querySelectorAll(".form-control.border.car");
+                    const detInputs = document.querySelectorAll(".form-control.border.det");
 
-                        dataJson.clave[index] = key;
-                        dataJson.valor[index] = value;
-                    })
-                    const retorno = JSON.stringify(dataJson);
-                    console.log(retorno);
+                    const datasheets = [];
+                    carInputs.forEach((carInput, index) => {
+                        datasheets.push({
+                            clave: carInput.value.trim(),
+                            valor: detInputs[index].value.trim()
+                        });
+                    });
+
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
-                    parametros.append("idtipo", $("#idtipo").value);
-                    parametros.append("idmarca", $("#idmarca").value);
-                    parametros.append("descripcion", $("#descripcion").value);
-                    parametros.append("modelo", $("#modelo").value);
-                    parametros.append("datasheets", retorno);
-                    parametros.append("fotografia", $("#fotografia").files[0]);
+                    parametros.append("idtipo", idtipo);
+                    parametros.append("idmarca", idmarca);
+                    parametros.append("descripcion", descripcion);
+                    parametros.append("modelo", modelo);
+                    parametros.append("datasheets", JSON.stringify(datasheets));
+                    parametros.append("fotografia", document.querySelector("#fotografia").files[0]);
 
                     fetch(`../../controllers/recurso.controller.php`, {
                             method: "POST",
@@ -398,11 +405,62 @@
                         .then(respuesta => respuesta.json())
                         .then(datos => {
                             console.log("registro hecho");
+                            // Agregar el recurso registrado al localStorage para futuras validaciones
+                            recursosRegistrados.push({
+                                idmarca
+                            });
+                            localStorage.setItem('recursos', JSON.stringify(recursosRegistrados));
+
+                            // Resetear los campos del formulario
+                            const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
+                            const inputs = document.querySelectorAll("#form-recurso input, #form-recurso select");
+
+                            inputs.forEach(input => {
+                                if (!camposNoResetear.includes(input.id)) {
+                                    input.value = ""; // Resetear el valor del campo
+                                    if (input.tagName === "SELECT") {
+                                        input.selectedIndex = 0; // Resetear la selección de la opción
+                                    }
+                                }
+                            });
+
+                            // Resetear el campo de buscar tipo de recurso y seleccionar el detalle
+                            document.getElementById("buscar").value = "";
+                            document.getElementById("detalles").selectedIndex = 0;
+
+                            // Limpiar las características agregadas dinámicamente
+                            const caracteristicasContainer = document.getElementById("datasheets");
+                            caracteristicasContainer.innerHTML = `
+                            <div class="col-md-5 mb-3">
+                                <input type="text" class="form-control border car" placeholder="Característica" required>
+                                </div>
+                                <div class="col-md-5 mb-3">
+                                <input type="text" class="form-control border det" placeholder="Detalle" required>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end mb-3">
+                                <button type="button" class="btn btn-white border" id="btnAgregarCaracteristica"><i class="bi bi-plus-lg"></i></button>
+                                </div>
+                                `;
+
+                            // Resetear el estado de los campos deshabilitados
+                            const camposDeshabilitar = [document.getElementById("idpersonal"), document.getElementById("fechayhorarecepcion"), document.getElementById("tipodocumento"), document.getElementById("nrodocumento"), document.getElementById("serie_doc"), document.getElementById("observaciones")];
+
+                            camposDeshabilitar.forEach(campo => {
+                                // Resetear los campos del formulario
+                                const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
+                                const inputs = document.querySelectorAll("#form-recurso input, #form-recurso select");
+                                campo.disabled = false;
+                            });
                         })
                         .catch(error => {
-                            console.error("Error al enviar la solicitud:", error);
+
+                            alert("No se puede agregar un recurso existente.");
                         });
                 }
+
+                // Resetear los campos del formulario
+                const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
+                const inputs = document.querySelectorAll("#form-recurso input, #form-recurso select");
 
                 $("#form-recurso").addEventListener("submit", (event) => {
                     event.preventDefault(); // Stop al evento
@@ -622,30 +680,69 @@
 
                     buscarDetallesTipo(selectedTipoRecurso);
                 });
+function resaltarCamposIncompletos() {
+    // Campos a verificar
+    var campos = ["buscar", "detalles", "cantidadEnviada", "cantidadRecibida"];
 
+    // Iterar sobre los campos
+    campos.forEach(function(campo) {
+        var valorCampo = document.getElementById(campo).value.trim();
+        if (valorCampo === "") {
+            // Si el campo está vacío, resaltarlo en rojo cambiando el borde
+            document.getElementById(campo).style.borderColor = "red";
+        } else {
+            // Si el campo no está vacío, quitar el resaltado en rojo
+            document.getElementById(campo).style.borderColor = "";
+        }
+    });
+}
                 document.getElementById("btnAgregar").addEventListener("click", function() {
-                    var cantidad = parseInt(document.getElementById("cantidadRecibida").value);
-                    var tipoRecurso = document.getElementById("buscar").value;
-                    var detallesSelect = document.getElementById("detalles");
-                    var descripcion = detallesSelect.options[detallesSelect.selectedIndex].textContent;
+                    var buscar = document.getElementById("buscar").value.trim();
+                    var detalles = document.getElementById("detalles").value.trim();
+                    var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
+                    var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
 
-                    if (!isNaN(cantidad) && cantidad >= 1) {
-                        for (var i = 1; i <= cantidad; i++) {
-                            var newRow = document.createElement("tr");
-                            newRow.innerHTML = `
-                                <td>${i}</td>
-                                <td>${tipoRecurso}</td>
-                                <td>${descripcion}</td>
-                                <td><input type="text" class="form-control nro_equipo" required></td>
-                                <td><input type="text" class="form-control nro_serie" required></td>
-                                <td><input type="text" class="form-control estado_equipo" value="Bueno"  onclick="this.select();"></td>
-                            `;
-                            document.querySelector("#tablaRecursos tbody").appendChild(newRow);
-                        }
-                        document.getElementById("tablaRecursos").style.display = "block";
-                        document.getElementById("botonesGuardarFinalizar").style.display = "block";
+                    // Validar que todos los campos estén llenos y que la cantidad recibida no sea mayor que la cantidad enviada
+                    if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                        alert("Por favor complete todos los campos correctamente.");
+                        return; // Detener la ejecución si algún campo está vacío, tiene un valor no válido o si la cantidad recibida es mayor que la cantidad enviada
                     }
+
+                    // Verificar si ya se han agregado todos los elementos según la cantidad recibida
+                    var filasActuales = document.querySelectorAll("#tablaRecursos tbody tr").length;
+                    if (filasActuales >= cantidadRecibida) {
+                        alert("Ya se han agregado todos los elementos según la cantidad recibida.");
+                        return; // Detener la ejecución si ya se han agregado todos los elementos
+                    }
+
+                    // Generar la tabla si todos los campos están llenos y la cantidad recibida es menor o igual que la cantidad enviada
+                    var tipoRecurso = document.getElementById("buscar").value;
+                    var descripcion = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent;
+
+                    // Calcular cuántos elementos se pueden agregar más a la tabla
+                    var elementosRestantes = cantidadRecibida - filasActuales;
+                    var elementosAAgregar = Math.min(cantidadEnviada, elementosRestantes);
+
+                    // Agregar los elementos a la tabla
+                    for (var i = 1; i <= elementosAAgregar; i++) {
+                        var newRow = document.createElement("tr");
+                        newRow.innerHTML = `
+            <td>${filasActuales + i}</td>
+            <td>${tipoRecurso}</td>
+            <td>${descripcion}</td>
+            <td><input type="text" class="form-control nro_equipo" required></td>
+            <td><input type="text" class="form-control nro_serie" required></td>
+            <td><input type="text" class="form-control estado_equipo" value="Bueno" onclick="this.select();"></td>
+        `;
+                        document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+                    }
+
+                    document.getElementById("tablaRecursos").style.display = "block";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "block";
                 });
+
+
+
 
 
 
@@ -663,7 +760,7 @@
                     parametros.append("tipodocumento", document.getElementById("tipodocumento").value);
                     parametros.append("nrodocumento", document.getElementById("nrodocumento").value);
                     parametros.append("serie_doc", document.getElementById("serie_doc").value);
-                    parametros.append("observaciones", document.getElementById("observaciones").value);
+
 
                     fetch(`../../controllers/recepcion.controller.php`, {
                             method: "POST",
@@ -697,6 +794,7 @@
                     parametros.append("idrecurso", idRecursoSeleccionado);
                     parametros.append("cantidadrecibida", document.getElementById("cantidadRecibida").value);
                     parametros.append("cantidadenviada", document.getElementById("cantidadEnviada").value);
+                    parametros.append("observaciones", document.getElementById("observaciones").value);
 
                     fetch(`../../controllers/detrecepcion.controller.php`, {
                             method: "POST",
@@ -769,7 +867,6 @@
                     document.getElementById("detalles").selectedIndex = 0;
                     document.getElementById("cantidadEnviada").value = "";
                     document.getElementById("cantidadRecibida").value = "";
-                    document.getElementById("seriedocumento").value = "";
 
                     // Ocultar tabla de recursos y botones de guardar
                     document.getElementById("tablaRecursos").style.display = "none";
@@ -795,7 +892,7 @@
                     document.getElementById("detalles").selectedIndex = 0;
                     document.getElementById("cantidadEnviada").value = "";
                     document.getElementById("cantidadRecibida").value = "";
-                    document.getElementById("seriedocumento").value = "";
+
 
                     // Ocultar tabla de recursos y botones de guardar
                     document.getElementById("tablaRecursos").style.display = "none";
@@ -833,7 +930,7 @@
 
                     return Swal.fire({
                         title: "<span style='font-size: 24px;'>RECEPCIÓN REGISTRADA !</span>",
-                        html: `<span style='font-size: 15px;'>${mensaje}</span>`, 
+                        html: `<span style='font-size: 15px;'>${mensaje}</span>`,
                         icon: "success",
                         showCancelButton: true,
                         confirmButtonText: "Agregar un material más a la recepción",

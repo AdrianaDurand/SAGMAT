@@ -11,13 +11,14 @@ class DetailReception extends Conexion{
 
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_adddetreception(?, ?, ?, ?)");
+            $consulta = $this->conexion->prepare("CALL spu_addDetrecepcion(?, ?, ?, ?,?)");
             $consulta->execute(
                 array(
                     $datos['idrecepcion'],
                     $datos['idrecurso'],
                     $datos['cantidadrecibida'],
-                    $datos['cantidadenviada']
+                    $datos['cantidadenviada'],
+                    $datos['observaciones']
 
                 )
             );

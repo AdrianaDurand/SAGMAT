@@ -167,7 +167,7 @@ CREATE TABLE recepciones
 	tipodocumento 					VARCHAR(30) 			NOT NULL, -- BOLETA, FACTURA, GUIA REMISIÓN.
 	nrodocumento					VARCHAR(20) 			NOT NULL,
 	serie_doc 						VARCHAR(30) 			NOT NULL,
-	observaciones 					VARCHAR(200) 			NULL,
+	-- observaciones 					VARCHAR(200) 			NULL,
     CONSTRAINT fk_idusuario_rcp 	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona)
 )ENGINE = INNODB;
@@ -182,6 +182,7 @@ CREATE TABLE detrecepciones(
     idrecurso	 					INT 					NOT NULL, -- FK
     cantidadrecibida 				SMALLINT 				NOT NULL,
     cantidadenviada 				SMALLINT 				NOT NULL,
+    observaciones 					VARCHAR(200) 			NULL,
     CONSTRAINT fk_idrecepcion_dtr	FOREIGN KEY (idrecepcion) REFERENCES recepciones (idrecepcion),
     CONSTRAINT fk_idrecurso_dtr FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
@@ -195,10 +196,11 @@ CREATE TABLE ejemplares
 (
 	idejemplar 						INT 					AUTO_INCREMENT PRIMARY KEY,
     iddetallerecepcion	 			INT 					NOT NULL, -- FK
-    nro_serie						VARCHAR(30) 			NOT NULL,
+    nro_serie						VARCHAR(30) 			NULL,
     nro_equipo						VARCHAR(20) 			NOT NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
+ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL;
 -- FALTA INGRESAR DATOS A LA TABLA
 
 SELECT * FROM ejemplares;

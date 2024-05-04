@@ -12,7 +12,7 @@ class Recepcion extends Conexion{
 
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_addrecepcion(?,?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_addrecepcion(?,?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idusuario'],
@@ -20,8 +20,7 @@ class Recepcion extends Conexion{
                     $datos['fechayhorarecepcion'],
                     $datos['tipodocumento'],
                     $datos['nrodocumento'],
-                    $datos['serie_doc'],
-                    $datos['observaciones']
+                    $datos['serie_doc']
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
