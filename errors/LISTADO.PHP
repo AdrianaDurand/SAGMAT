@@ -39,10 +39,9 @@
                 <select name="marcas" id="marcas" class="form-select">
                     <option value="-1">Mostrar todas</option>
                 </select>
-
             </div>
         </div>
-        <div class="col-md-12 mb-5">
+        <div class="col-md-8">
             <div class="row" id="lista-recursos"></div>
         </div>
     </div> <!-- FIN CONTAINER -->
@@ -77,7 +76,7 @@
 
     let dataObtenida = null;
 
-
+    
 
     function getTipos() {
 
@@ -130,12 +129,10 @@
 
 
 
-
-    function actualizarCatalogo() {
+    function actualizarCatalogo(idmarca) {
         const parametros = new FormData();
-        parametros.append("operacion", "tipoymarca");
-        parametros.append("idtipo", $("#tipos").value);
-        parametros.append("idmarca", $("#marcas").value);
+        parametros.append("operacion", "listarrecurso");
+        parametros.append("idmarca", idmarca);
 
         fetch(`../../controllers/marca.controller.php`, {
                 method: "POST",
@@ -151,19 +148,74 @@
                 } else {
                     $("#lista-recursos").innerHTML = '';
                     dataObtenida.forEach(element => {
-
+                        //Evaluar si tiene una fotografía
                         const rutaImagen = (element.fotografia == null) ? "NOHAYFOTO.jpg" : element.fotografia;
 
                         //Renderizado
                         const nuevoItem = `
-                                <div class="col-md-3">
+                    <div class="col-md-4">
+                        <div class="card mt-5" style="background-color: #F7F9FD;">
+                            <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h4 class="card-title text-dark">${element.modelo}</h4>
+                                <hr>
+                                <p class="card-text">Stock: <strong>10</strong></p>
+                                <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
+                            </div>
+                            <!-- Botón movido y alineado a la derecha -->
+                            <div class="card-body d-flex justify-content-end">
+                            <button class="show-more-click" data-bs-target="#modalAgregar" data-bs-toggle="modal" data-idrecurso=${element.idrecurso} onclick="mostrarDatasheets(this)">Ver características</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                `;
+                        $("#lista-recursos").innerHTML += nuevoItem;
+                    });
+                }
+            })
+            .catch(e => {
+                console.error(e)
+            });
+    }
+
+    function listarportpo(idtipo) {
+        const parametros = new FormData();
+        parametros.append("operacion", "listar");
+        parametros.append("idtipo", idtipo);
+
+        fetch(`../../controllers/recurso.controller.php`, {
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                console.log(datos);
+
+                dataObtenida = datos;
+                if (dataObtenida.length == 0) {
+                    $("#lista-recursos").innerHTML = `<p>Pronto tendremos más novedades</p>`;
+                } else {
+                    $("#lista-recursos").innerHTML = '';
+                    dataObtenida.forEach(element => {
+                        // Convertir las claves y valores JSON en objetos JavaScript
+                        // const clave = JSON.parse(element.clave);
+                        // const valor = JSON.parse(element.valor);
+
+                        //Evaluar si tiene una fotografía
+                        const rutaImagen = (element.fotografia == null) ? "NOHAYFOTO.jpg" : element.fotografia;
+
+                        //Renderizado
+                        const nuevoItem = `
+                                <div class="col-md-4">
                                     <div class="card mt-5" style="background-color: #F7F9FD;">
                                     <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
                                         <div class="card-body">
                                             <h4 class="card-title text-dark">${element.modelo}</h4>
                                             <hr>
-                                            <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
                                             <p class="card-text">Stock: <strong>10</strong></p>
+                                            <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
                                         </div>
                                         <!-- Botón movido y alineado a la derecha -->
                                         <div class="card-body d-flex justify-content-end">
@@ -243,23 +295,71 @@
     }
 
 
+    /*function mostrarModal(datos) {
+        const modalMessage = document.getElementById('modalMessage');
+        let contenidoModal = '';
 
+        // Verificar si hay datos disponibles
+
+        // Construir el contenido del modal usando los datos recibidos
+        datos.forEach(element => {
+            let jparse = JSON.parse(element.datasheets);
+            let etiqueta = "";
+
+            // Verificar si 'datasheets' está presente y no es null
+            if (jparse) {
+                let arraykey = jparse.clave;
+                let arrayvalue = jparse.valor;
+
+                arraykey.forEach((key, index) => {
+                    let value = arrayvalue[index];
+
+                    // Revisar que los valores no estén vacíos
+                    if (key !== "" || value !== "") {
+                        // Asignar los valores al contenido del modal
+                        etiqueta += `<tr>
+                                        <td><strong>${key}</strong></td>
+                                        <td>${value}</td>
+                                    </tr>`;
+                    }
+                });
+            }
+            contenidoModal += `
+                <div class="modal-item">
+                    <div class="modal-table">
+                        <table class="table table-striped table-sm">
+                            ${etiqueta}
+                        </table>
+                    </div>
+                </div>
+            `;
+        });
+
+
+        // Insertar el contenido construido en el modal
+        modalMessage.innerHTML = contenidoModal;
+    }*/
+
+
+
+    $("#marcas").addEventListener("change", function() {
+        const marcaSeleccionada = this.value;
+        if (marcaSeleccionada != -1) {
+            actualizarCatalogo(marcaSeleccionada);
+        }
+    });
+
+
+    $("#tipos").addEventListener("change", function() {
+        const tipoSeleccionado = this.value;
+        if (tipoSeleccionado != -1) {
+            getMarcas(tipoSeleccionado);
+            listarportpo(tipoSeleccionado);
+        }
+    });
 
     getTipos();
     actualizarCatalogo();
-    $("#tipos").addEventListener("change", function() {
-        const tipoSeleccionado = this.value;
-        $("#marcas").value = "-1";
-        getMarcas(tipoSeleccionado);
-        actualizarCatalogo(tipoSeleccionado);
-
-    });
-    $("#marcas").addEventListener("change", function() {
-        const marcaSeleccionada = this.value;
-
-        actualizarCatalogo(marcaSeleccionada);
-
-    });
 </script>
 
 </html>

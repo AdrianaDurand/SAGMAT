@@ -35,5 +35,9 @@ if (isset($_POST['operacion'])) {
       ];
       echo json_encode($recurso->listar($datosEnviar));
       break;
+
+    case 'listartodo':
+      echo json_encode($recurso->listarTodo());
+      break;
   }
 }

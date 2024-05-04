@@ -22,6 +22,54 @@ class Marca extends Conexion{
         }
     }
 
+    public function listarrecurso($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_recurso_marca(?)");
+            $consulta->execute(
+                array(
+                    $datos['idmarca']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function listardatasheets($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_datasheets(?)");
+            $consulta->execute(
+                array(
+                    $datos['idrecurso']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    
+
+    public function marcaytipo($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_por_tipo_y_marca(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['idtipo'],
+                    $datos['idmarca']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
 }
 
 ?>

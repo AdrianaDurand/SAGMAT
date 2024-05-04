@@ -1,38 +1,86 @@
 DELIMITER $$
-CREATE PROCEDURE searchTipos(
-    IN _tipobuscado VARCHAR(255)
-)
-BEGIN
-    SELECT * FROM tipos
-    WHERE tipo LIKE CONCAT('%', _tipobuscado, '%');
-END $$
-
-CALL searchTipos('a');
-
-
-DELIMITER $$
-CREATE PROCEDURE spu_listar_tipo(
+CREATE PROCEDURE spu_listar_tipo_marca(
     IN _idtipo INT
 )
 BEGIN
-    SELECT idrecurso,
-			idtipo,
-		   descripcion,
-           modelo,
-			datasheets,
-           fotografia
-    FROM recursos
-    WHERE idtipo = _idtipo;
+   SELECT
+	m.idmarca,
+	m.marca
+    FROM marcas m
+    INNER JOIN recursos r ON m.idmarca = r.idmarca
+    WHERE r.idtipo = _idtipo;
 END $$
-CALL spu_listar_tipo(1);
-select  * from recursos;
-select  * from tipos;
 
-select * from marcas;
+CALL spu_listar_tipo_marca(17);
 
--- ves que tiene el json pero no hay clave : [], valor  a que se debe? puede ser y creo yo, porque fuern datos de prueba, registrados dire dejame ver
--- cual es esa consulta? Yorght no duermas xd, no eso n más el error es por lo que dijsite, ahora viste porque el not null yel objeto que se crea en tu registrar no
 
--- Lucas que crack eres xd, ahora alonso quiere esto
+DELIMITER $$
+CREATE PROCEDURE spu_listar_datasheets(
+	IN _idrecurso INT
+)
+BEGIN
+    SELECT idrecurso,
+    datasheets
+    FROM recursos
+     WHERE idrecurso = _idrecurso;
+END $$
+
+select * from recursos;
+
+DELETE FROM recursos WHERE idrecurso = 4;
+
+
+
+CREATE VIEW vs_tipos_marcas
+AS
+	SELECT 
+		r.idrecurso,
+		r.descripcion,
+		r.modelo,
+        r.fotografia,
+		t.tipo,
+		t.idtipo,
+		m.idmarca,
+		m.marca 
+	FROM 
+		recursos r
+	INNER JOIN 
+		tipos t ON r.idtipo = t.idtipo
+	INNER JOIN 
+		marcas m ON r.idmarca = m.idmarca
+        LIMIT 12;
+        
+/*DELIMITER $$
+CREATE PROCEDURE spu_listar_por_tipo(IN _idtipo 	INT)
+BEGIN
+	IF _idtipo = -1 THEN
+		SELECT * FROM vs_tipos_marcas;
+	ELSE
+		SELECT * FROM vs_tipos_marcas WHERE idtipo = _idtipo;
+    END IF;
+	
+END $$*/
+
+DELIMITER $$
+CREATE PROCEDURE spu_listar_por_tipo_y_marca(
+    IN _idtipo INT,
+    IN _idmarca INT
+)
+BEGIN
+    IF _idtipo = -1 AND _idmarca = -1 THEN
+        SELECT * FROM vs_tipos_marcas;
+    ELSEIF _idtipo != -1 AND _idmarca = -1 THEN
+        SELECT * FROM vs_tipos_marcas WHERE idtipo = _idtipo;
+    ELSEIF _idtipo = -1 AND _idmarca != -1 THEN
+        SELECT * FROM vs_tipos_marcas WHERE idmarca = _idmarca;
+    ELSE
+        SELECT * FROM vs_tipos_marcas WHERE idtipo = _idtipo AND idmarca = _idmarca;
+    END IF;
+END $$
+
+CALL spu_listar_por_tipo_y_marca(-1,8);
+
+call spu_listar_por_tipo(24);
+
 
 

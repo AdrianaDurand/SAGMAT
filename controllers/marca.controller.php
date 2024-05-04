@@ -10,6 +10,26 @@ if (isset($_POST['operacion'])){
         case 'listar':
             echo json_encode($marca->listar());
         break;
+        case 'listarrecurso':
+            $datosEnviar = [
+                "idmarca" => $_POST['idmarca'] 
+            ];
+            echo json_encode($marca->listarrecurso($datosEnviar));
+        break;
+        case 'listardatasheet':
+            $datosEnviar = [
+                "idrecurso" => $_POST['idrecurso'] 
+            ];
+            echo json_encode($marca->listardatasheets($datosEnviar));
+        break;
+        
+        case 'tipoymarca':
+            $datosEnviar = [
+                "idtipo" => $_POST['idtipo'],
+                "idmarca" => $_POST['idmarca'] 
+            ];
+            echo json_encode($marca->marcaytipo($datosEnviar));
+        break;
         
     }
 }

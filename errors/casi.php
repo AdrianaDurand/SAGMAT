@@ -39,10 +39,9 @@
                 <select name="marcas" id="marcas" class="form-select">
                     <option value="-1">Mostrar todas</option>
                 </select>
-
             </div>
         </div>
-        <div class="col-md-12 mb-5">
+        <div class="col-md-8">
             <div class="row" id="lista-recursos"></div>
         </div>
     </div> <!-- FIN CONTAINER -->
@@ -102,19 +101,17 @@
             });
     }
 
-    function getMarcas(idTipo) {
+    function getMarcas() {
 
         const parametros = new FormData();
-        parametros.append("operacion", "listarmarcas");
-        parametros.append("idtipo", idTipo);
+        parametros.append("operacion", "listarramdon");
 
-        fetch(`../../controllers/tipo.controller.php`, {
+        fetch(`../../controllers/marca.controller.php`, {
                 method: "POST",
                 body: parametros
             })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                $("#marcas").innerHTML = "<option value='-1'>Mostrar todas</option>";
                 datos.forEach(element => {
                     const tagOption = document.createElement("option");
                     tagOption.innerText = element.marca;
@@ -156,14 +153,14 @@
 
                         //Renderizado
                         const nuevoItem = `
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="card mt-5" style="background-color: #F7F9FD;">
                                     <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
                                         <div class="card-body">
                                             <h4 class="card-title text-dark">${element.modelo}</h4>
                                             <hr>
-                                            <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
                                             <p class="card-text">Stock: <strong>10</strong></p>
+                                            <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
                                         </div>
                                         <!-- Botón movido y alineado a la derecha -->
                                         <div class="card-body d-flex justify-content-end">
@@ -246,20 +243,10 @@
 
 
     getTipos();
+    getMarcas();
     actualizarCatalogo();
-    $("#tipos").addEventListener("change", function() {
-        const tipoSeleccionado = this.value;
-        $("#marcas").value = "-1";
-        getMarcas(tipoSeleccionado);
-        actualizarCatalogo(tipoSeleccionado);
-
-    });
-    $("#marcas").addEventListener("change", function() {
-        const marcaSeleccionada = this.value;
-
-        actualizarCatalogo(marcaSeleccionada);
-
-    });
+    $("#tipos").addEventListener("change", actualizarCatalogo);
+    $("#marcas").addEventListener("change", actualizarCatalogo);
 </script>
 
 </html>

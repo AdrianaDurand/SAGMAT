@@ -25,6 +25,21 @@ if (isset($_POST['operacion'])){
             echo json_encode($tipo->buscardetalle($datosEnviar));
         break;
 
+        
+
+        case 'listarmarcas':
+            $datosEnviar = [
+                "idtipo" => $_POST['idtipo'] 
+            ];
+            echo json_encode($tipo->listarpormarca($datosEnviar));
+        break;
+        case 'listartipo':
+            $datosEnviar = [
+                "idtipo" => $_POST['idtipo'] 
+            ];
+            echo json_encode($tipo->listarportipo($datosEnviar));
+        break;
+
     }
 }
 
