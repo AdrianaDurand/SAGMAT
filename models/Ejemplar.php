@@ -11,12 +11,11 @@ class Ejemplar extends Conexion{
 
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_addejemplar(?, ?, ?, ?)");
+            $consulta = $this->conexion->prepare("CALL spu_addejemplar(?, ?, ?)");
             $consulta->execute(
                 array(
                     $datos['iddetallerecepcion'],
-                    $datos['nro_serie'],
-                    $datos['nro_equipo'],                    
+                    $datos['nro_serie'],               
                     $datos['estado_equipo'],
 
 

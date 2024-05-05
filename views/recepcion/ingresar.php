@@ -865,7 +865,7 @@
                         parametros.append("operacion", "registrar");
                         parametros.append("iddetallerecepcion", idDetalleRecepcion);
                         parametros.append("nro_serie", nroSerie);
-                        parametros.append("nro_equipo", nroEquipo);
+                        // parametros.append("nro_equipo", nroEquipo);
                         parametros.append("estado_equipo", estadoEquipo);
 
                         fetch(`../../controllers/ejemplar.controller.php`, {
