@@ -966,54 +966,63 @@
                     return camposHabilitados.some(campo => campo.disabled);
                 }
 
-                //_________________ ALMACENANDO LOS DETALLES Y EJEMPLARES ANTES DE SER ENVIADOS _____________________
+               //_________________ ALMACENANDO LOS DETALLES Y EJEMPLARES ANTES DE SER ENVIADOS _____________________
 
-                // Estructura de datos para almacenar temporalmente los detalles de recepción y ejemplares
-                let detallesRecepcion = [];
-                let ejemplares = [];
+// Estructura de datos para almacenar temporalmente los detalles de recepción y ejemplares
+let detallesRecepcion = [];
+let ejemplares = [];
 
-                // Función para añadir detalles de recepción
-                function añadirDetallesRecepcionTemporal(idRecepcion) {
-                    const nuevoDetalle = {
-                        idDetalleRecepcion: idRecepcion,
-                        idRecurso: idRecursoSeleccionado,
-                        cantidadRecibida: document.getElementById("cantidadRecibida").value,
-                        cantidadEnviada: document.getElementById("cantidadEnviada").value,
-                        observaciones: document.getElementById("observaciones").value
-                    };
+// Función para añadir detalles de recepción
+function añadirDetallesRecepcionTemporal(idRecepcion) {
+    const cantidadRecibida = document.getElementById("cantidadRecibida").value;
+    const cantidadEnviada = document.getElementById("cantidadEnviada").value;
+    const observaciones = document.getElementById("observaciones").value;
 
-                    // Agregar el nuevo detalle a la lista temporal
-                    detallesRecepcion.push(nuevoDetalle);
+    const nuevoDetalle = {
+        idRecepcion: idRecepcion,
+        cantidadRecibida: cantidadRecibida,
+        cantidadEnviada: cantidadEnviada,
+        observaciones: observaciones,
+        ejemplares: [] // Crear una lista de ejemplares asociados a este detalle
+    };
 
-                    console.log("Detalles de recepción almacenados temporalmente:");
-                    console.log(detallesRecepcion);
-                }
+    detallesRecepcion.push(nuevoDetalle);
 
-                // Función para añadir ejemplares temporalmente
-                function añadirEjemplarTemporal(idDetalleRecepcion) {
-                    const nroSerieInputs = document.querySelectorAll(".nro_serie");
-                    const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
-                    const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+    console.log("Detalle de recepción almacenado temporalmente:");
+    console.log(nuevoDetalle); // Muestra el detalle creado
+}
 
-                    nroSerieInputs.forEach((nroSerieInput, index) => {
-                        const nroSerie = nroSerieInput.value;
-                        const nroEquipo = nroEquipoInputs[index].value;
-                        const estadoEquipo = estadoEquipoInputs[index].value;
+// Función para añadir ejemplares temporalmente asociados a un detalle de recepción
+function añadirEjemplarTemporal(idDetalleRecepcion) {
+    const nroSerieInputs = document.querySelectorAll(".nro_serie");
+    const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+    const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
-                        const nuevoEjemplar = {
-                            idDetalleRecepcion: idDetalleRecepcion,
-                            nroSerie: nroSerie,
-                            nroEquipo: nroEquipo,
-                            estadoEquipo: estadoEquipo
-                        };
+    const detalleRecepcion = detallesRecepcion.find(detalle => detalle.idRecepcion === idDetalleRecepcion);
 
-                        // Agregar el nuevo ejemplar a la lista temporal
-                        ejemplares.push(nuevoEjemplar);
-                    });
+    if (detalleRecepcion) {
+        nroSerieInputs.forEach((nroSerieInput, index) => {
+            const nroSerie = nroSerieInput.value;
+            const nroEquipo = nroEquipoInputs[index].value;
+            const estadoEquipo = estadoEquipoInputs[index].value;
 
-                    console.log("Ejemplares almacenados temporalmente:");
-                    console.log(ejemplares);
-                }
+            const nuevoEjemplar = {
+                nroSerie: nroSerie,
+                nroEquipo: nroEquipo,
+                estadoEquipo: estadoEquipo
+            };
+
+            // Agregar el nuevo ejemplar al detalle de recepción correspondiente
+            detalleRecepcion.ejemplares.push(nuevoEjemplar);
+        });
+
+        console.log("Ejemplares asociados al detalle de recepción:");
+        console.log(detalleRecepcion.ejemplares); // Muestra los ejemplares asociados al detalle
+    } else {
+        console.error("No se encontró el detalle de recepción con ID:", idDetalleRecepcion);
+    }
+}
+
 
                 //_____________________________________ BOTONES FINALIZAR _________________________________________
 
@@ -1099,72 +1108,105 @@
                     continuarRecepcion();
                 });
 
-                // Función para continuar la recepción
-                function continuarRecepcion() {
-                    Swal.fire({
-                        title: "<span style='font-size: 24px;'>¿Desea agregar un material tecnológico adicional?</span>",
-                        icon: "question",
-                        showCancelButton: true,
-                        confirmButtonText: "Si",
-                        cancelButtonText: "No",
-                        confirmButtonColor: "#27AE60",
-                        cancelButtonColor: "#E74C3C",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Guardar solo los campos de recepción
-                            const idPersonalSeleccionado = document.getElementById("idpersonal").value;
-                            const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
-                            const tipoDocumento = document.getElementById("tipodocumento").value;
-                            const numeroDocumento = document.getElementById("nrodocumento").value;
-                            const serieDocumento = document.getElementById("serie_doc").value;
+                    // Función para continuar la recepción
+                    function continuarRecepcion() {
+                        Swal.fire({
+                            title: "<span style='font-size: 24px;'>¿Desea agregar un material tecnológico adicional?</span>",
+                            icon: "question",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "No",
+                            confirmButtonColor: "#27AE60",
+                            cancelButtonColor: "#E74C3C",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Verificar si los campos de recepción están deshabilitados
+                                const camposDeshabilitados = Array.from(document.querySelectorAll('#idpersonal, #fechayhorarecepcion, #tipodocumento, #nrodocumento, #serie_doc'))
+                                    .some(campo => campo.disabled);
 
-                            const parametros = new FormData();
-                            parametros.append("operacion", "registrar");
-                            parametros.append("idusuario", <?php echo $idusuario ?>);
-                            parametros.append("idpersonal", idPersonalSeleccionado);
-                            parametros.append("fechayhorarecepcion", fechaRecepcion);
-                            parametros.append("tipodocumento", tipoDocumento);
-                            parametros.append("nrodocumento", numeroDocumento);
-                            parametros.append("serie_doc", serieDocumento);
+                                if (camposDeshabilitados) {
+                                    const idRecepcionAlmacenado = document.getElementById("id_recepcion").value;
 
-                            fetch(`../../controllers/recepcion.controller.php`, {
-                                method: "POST",
-                                body: parametros
-                            })
-                            .then(respuesta => respuesta.json())
-                            .then(datos => {
-                                if (datos.length > 0 && datos[0].idrecepcion > 0) {
-                                    console.log(`Recepción registrada con ID: ${datos[0].idrecepcion}`);
-                                    const idRecepcion = datos[0].idrecepcion;
-                                    document.getElementById("id_recepcion").value = idRecepcion;
+                                    if (idRecepcionAlmacenado) {
+                                        // Mostrar el ID de recepción almacenado en la consola
+                                        console.log(`ID de recepción almacenado: ${idRecepcionAlmacenado}`);
 
-                                    // Deshabilitar campos de recepción y limpiar formulario
-                                    const camposHabilitar = [
-                                        document.getElementById("idpersonal"),
-                                        document.getElementById("fechayhorarecepcion"),
-                                        document.getElementById("tipodocumento"),
-                                        document.getElementById("nrodocumento"),
-                                        document.getElementById("serie_doc")
-                                    ];
+                                        // Guardar detalles de recepción y ejemplares temporalmente
+                                        añadirDetallesRecepcionTemporal(idRecepcionAlmacenado);
+                                        añadirEjemplarTemporal(idRecepcionAlmacenado);
 
-                                    camposHabilitar.forEach((campo) => {
-                                        campo.disabled = true;
-                                    });
-                                            añadirDetallesRecepcionTemporal(idRecepcion);
-                                            añadirEjemplarTemporal(idRecepcion);
+                                        // Otras operaciones si es necesario
+                                    } else {
+                                        // No se puede continuar si los campos de recepción están deshabilitados y no hay ID almacenado
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Campos de recepción deshabilitados",
+                                            text: "Los campos de recepción están deshabilitados y no se ha registrado una recepción previamente.",
+                                        });
+                                    }
 
-                                            habilitarCampos();                } else {
-                                    console.error("La respuesta JSON no tiene el formato esperado:", datos);
+                                    return; // Salir de la función si los campos están deshabilitados
                                 }
-                            })
-                            .catch(error => {
-                                console.error("Error al enviar la solicitud:", error);
-                            });
-                        } else {
-                            Swal.close();
-                        }
-                    });
-                }
+
+                                // Guardar solo los campos de recepción
+                                const idPersonalSeleccionado = document.getElementById("idpersonal").value;
+                                const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
+                                const tipoDocumento = document.getElementById("tipodocumento").value;
+                                const numeroDocumento = document.getElementById("nrodocumento").value;
+                                const serieDocumento = document.getElementById("serie_doc").value;
+
+                                const parametros = new FormData();
+                                parametros.append("operacion", "registrar");
+                                parametros.append("idusuario", <?php echo $idusuario ?>);
+                                parametros.append("idpersonal", idPersonalSeleccionado);
+                                parametros.append("fechayhorarecepcion", fechaRecepcion);
+                                parametros.append("tipodocumento", tipoDocumento);
+                                parametros.append("nrodocumento", numeroDocumento);
+                                parametros.append("serie_doc", serieDocumento);
+
+                                fetch(`../../controllers/recepcion.controller.php`, {
+                                    method: "POST",
+                                    body: parametros
+                                })
+                                .then(respuesta => respuesta.json())
+                                .then(datos => {
+                                    if (datos.length > 0 && datos[0].idrecepcion > 0) {
+                                        console.log(`Recepción registrada con ID: ${datos[0].idrecepcion}`);
+                                        const idRecepcion = datos[0].idrecepcion;
+                                        document.getElementById("id_recepcion").value = idRecepcion;
+
+                                        // Deshabilitar campos de recepción y limpiar formulario
+                                        const camposHabilitar = [
+                                            document.getElementById("idpersonal"),
+                                            document.getElementById("fechayhorarecepcion"),
+                                            document.getElementById("tipodocumento"),
+                                            document.getElementById("nrodocumento"),
+                                            document.getElementById("serie_doc")
+                                        ];
+
+                                        camposHabilitar.forEach((campo) => {
+                                            campo.disabled = true;
+                                        });
+
+                                        // Guardar detalles de recepción y ejemplares temporalmente
+                                        añadirDetallesRecepcionTemporal(idRecepcion);
+                                        añadirEjemplarTemporal(idRecepcion);
+
+                                        // Otras operaciones si es necesario
+                                        habilitarCampos();
+                                    } else {
+                                        console.error("La respuesta JSON no tiene el formato esperado:", datos);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error al enviar la solicitud:", error);
+                                });
+                            } else {
+                                Swal.close();
+                            }
+                        });
+                    }
+
 
 
                 // Función para obtener un ID único para la recepción (simulado)
@@ -1176,14 +1218,6 @@
             });
         </script>
 
-
-</body>
-
-</html>
-
-
-        });
-    </script>
 
 </body>
 
