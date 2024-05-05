@@ -709,93 +709,92 @@
                 buscarDetallesTipo(selectedTipoRecurso);
             });
 
-            document.getElementById("btnAgregar").addEventListener("click", function() {
-                var buscar = document.getElementById("buscar").value.trim();
-                var detalles = document.getElementById("detalles").value.trim();
-                var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
-                var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
-                var camposFaltantes = [];
-
-                // Validar que todos los campos estén llenos y que la cantidad recibida no sea mayor que la cantidad enviada
-                if (buscar === "") {
-                    camposFaltantes.push("Tipo de recurso");
-                }
-                if (detalles === "") {
-                    camposFaltantes.push("Detalles");
-                }
-                if (isNaN(cantidadEnviada) || cantidadEnviada < 1) {
-                    camposFaltantes.push("Cantidad enviada");
-                }
-                if (isNaN(cantidadRecibida) || cantidadRecibida < 1) {
-                    camposFaltantes.push("Cantidad recibida");
-                }
-                if (cantidadRecibida > cantidadEnviada) {
-                    camposFaltantes.push("La cantidad recibida no puede ser mayor que la cantidad enviada");
-                }
-
-                if (camposFaltantes.length > 0) {
-                    // Mostrar SweetAlert con los campos faltantes
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Por favor complete todos los campos correctamente:',
-                        html: camposFaltantes.join('<br>')
-                    });
-                    return; // Detener la ejecución si algún campo está vacío, tiene un valor no válido o si la cantidad recibida es mayor que la cantidad enviada
-                }
-
-
-                // Verificar si ya se han agregado todos los elementos según la cantidad recibida
-                var filasActuales = document.querySelectorAll("#tablaRecursos tbody tr").length;
-                if (filasActuales >= cantidadRecibida) {
-                    alert("Ya se han agregado todos los elementos según la cantidad recibida.");
-                    return; // Detener la ejecución si ya se han agregado todos los elementos
-                }
-
-                // Generar la tabla si todos los campos están llenos y la cantidad recibida es menor o igual que la cantidad enviada
-                var tipoRecurso = document.getElementById("buscar").value;
-                var descripcion = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent;
-
-                // Calcular cuántos elementos se pueden agregar más a la tabla
-                var elementosRestantes = cantidadRecibida - filasActuales;
-                var elementosAAgregar = Math.min(cantidadEnviada, elementosRestantes);
-
-                // Agregar los elementos a la tabla
-                for (var i = 1; i <= elementosAAgregar; i++) {
-                    var newRow = document.createElement("tr");
-                    newRow.innerHTML = `
-            <td>${filasActuales + i}</td>
-            <td>${tipoRecurso}</td>
-            <td>${descripcion}</td>
-            <td><input type="text" class="form-control nro_equipo" required></td>
-            <td><input type="text" class="form-control nro_serie" required></td>
-            <td><input type="text" class="form-control estado_equipo" value="Bueno" onclick="this.select();"></td>
-        `;
-                    document.querySelector("#tablaRecursos tbody").appendChild(newRow);
-                }
-
-                document.getElementById("tablaRecursos").style.display = "block";
-                document.getElementById("botonesGuardarFinalizar").style.display = "block";
-            });
 
 
 
 
-            //_____________________________________ AÑADIR RECEPCIÓN _________________________________________
-            let idRecepcion;
-
-            // Nueva recepción > datos de la cabecera
-            function añadirrecepcion() {
-                const parametros = new FormData();
-                parametros.append("operacion", "registrar");
-                parametros.append("idpersonal", idPersonalSeleccionado);
-                // parametros.append("idpersonal", document.getElementById("idpersonal").value);
-                parametros.append("fechayhorarecepcion", document.getElementById("fechayhorarecepcion").value);
-                parametros.append("tipodocumento", document.getElementById("tipodocumento").value);
-                parametros.append("nrodocumento", document.getElementById("nrodocumento").value);
-                parametros.append("serie_doc", document.getElementById("serie_doc").value);
 
 
-                fetch(`../../controllers/recepcion.controller.php`, {
+            
+            
+                //_____________________________________ APARICIÓN DE LA TABLA EJEMPLARES _________________________________________
+
+                document.getElementById("btnAgregar").addEventListener("click", function() {
+                    var buscar = document.getElementById("buscar").value.trim();
+                    var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
+                    var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
+                    var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
+
+                    if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                        alert("Por favor complete todos los campos correctamente.");
+                        return; 
+                    }
+
+                    document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                    for (var i = 1; i <= cantidadRecibida; i++) {
+                        var newRow = document.createElement("tr");
+                        newRow.innerHTML = `
+                            <td>${i}</td>
+                            <td>${buscar}</td>
+                            <td>${detalles}</td>
+                            <td><input type="text" class="form-control nro_equipo" required></td>
+                            <td><input type="text" class="form-control nro_serie" required></td>
+                            <td><input type="text" class="form-control estado_equipo" value="Bueno" onclick="this.select();"></td>
+                        `;
+                        document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+                    }
+
+                    document.getElementById("tablaRecursos").style.display = "block";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "block";
+                });
+
+                document.getElementById("cantidadRecibida").addEventListener("change", function() {
+                    var cantidadRecibida = parseInt(this.value);
+                    if (isNaN(cantidadRecibida) || cantidadRecibida < 1) {
+                        document.getElementById("tablaRecursos").style.display = "none";
+                        document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                    } else {
+                        document.getElementById("btnAgregar").click();
+                    }
+                });
+
+
+                //_____________________________________ AÑADIR RECEPCIÓN _________________________________________
+                let idRecepcion; // Variable para almacenar el ID de la recepción
+
+                // Función para añadir una recepción
+                function añadirRecepcion(skipAñadirDetalle = false) {
+                    const idPersonalSeleccionado = document.getElementById("idpersonal").value;
+                    const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
+                    const tipoDocumento = document.getElementById("tipodocumento").value;
+                    const numeroDocumento = document.getElementById("nrodocumento").value;
+                    const serieDocumento = document.getElementById("serie_doc").value;
+
+                    // Verificar si los campos están deshabilitados
+                    const camposDeshabilitados = camposRecepcionDeshabilitados();
+                    if (camposDeshabilitados) {
+                        // Mostrar la recepción anterior en la consola
+                        console.log("Recepción actual:");
+                        console.log({
+                            idPersonalSeleccionado,
+                            fechaRecepcion,
+                            tipoDocumento,
+                            numeroDocumento,
+                            serieDocumento
+                        });
+                        return;
+                    }
+
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("idusuario", <?php echo $idusuario ?>);
+                    parametros.append("idpersonal", idPersonalSeleccionado);
+                    parametros.append("fechayhorarecepcion", fechaRecepcion);
+                    parametros.append("tipodocumento", tipoDocumento);
+                    parametros.append("nrodocumento", numeroDocumento);
+                    parametros.append("serie_doc", serieDocumento);
+
+                    fetch(`../../controllers/recepcion.controller.php`, {
                         method: "POST",
                         body: parametros
                     })
@@ -803,10 +802,12 @@
                     .then(datos => {
                         if (datos.length > 0 && datos[0].idrecepcion > 0) {
                             console.log(`Recepción registrada con ID: ${datos[0].idrecepcion}`);
-                            idRecepcion = datos[0].idrecepcion;
+                            const idRecepcion = datos[0].idrecepcion;
                             document.getElementById("id_recepcion").value = idRecepcion;
-                            console.log('ID de la recepción actual:', idRecepcion);
-                            añadirdetrecepcion(idRecepcion);
+
+                            if (!skipAñadirDetalle) {
+                                añadirDetallesRecepcion(idRecepcion);
+                            }
                         } else {
                             console.error("La respuesta JSON no tiene el formato esperado:", datos);
                         }
@@ -814,22 +815,21 @@
                     .catch(error => {
                         console.error("Error al enviar la solicitud:", error);
                     });
-            }
+                }
 
-            //_____________________________________ AÑADIR DETALLES DE RECEPCIÓN _________________________________________
-            let idDetalleRecepcion;
+                //_____________________________________ AÑADIR DETALLES DE RECEPCIÓN _________________________________________
 
-            function añadirdetrecepcion(idRecepcion) {
-                console.log(idRecepcion);
-                const parametros = new FormData();
-                parametros.append("operacion", "registrar");
-                parametros.append("idrecepcion", idRecepcion);
-                parametros.append("idrecurso", idRecursoSeleccionado);
-                parametros.append("cantidadrecibida", document.getElementById("cantidadRecibida").value);
-                parametros.append("cantidadenviada", document.getElementById("cantidadEnviada").value);
-                parametros.append("observaciones", document.getElementById("observaciones").value);
+                // Función para añadir detalles de recepción
+                function añadirDetallesRecepcion(idRecepcion) {
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("idrecepcion", idRecepcion);
+                    parametros.append("idrecurso", idRecursoSeleccionado);
+                    parametros.append("cantidadrecibida", document.getElementById("cantidadRecibida").value);
+                    parametros.append("cantidadenviada", document.getElementById("cantidadEnviada").value);
+                    parametros.append("observaciones", document.getElementById("observaciones").value);
 
-                fetch(`../../controllers/detrecepcion.controller.php`, {
+                    fetch(`../../controllers/detrecepcion.controller.php`, {
                         method: "POST",
                         body: parametros
                     })
@@ -837,10 +837,7 @@
                     .then(datos => {
                         if (Array.isArray(datos) && datos.length > 0 && datos[0].iddetallerecepcion > 0) {
                             console.log(`Detalle de recepción registrado con ID: ${datos[0].iddetallerecepcion}`);
-                            idDetalleRecepcion = datos[0].iddetallerecepcion;
-                            document.getElementById("id_detrecepcion").value = idDetalleRecepcion;
-                            console.log('ID del detalle de la recepción actual:', idDetalleRecepcion);
-                            añadirejemplar(idDetalleRecepcion);
+                            añadirEjemplar(datos[0].iddetallerecepcion);
                         } else {
                             console.error("La respuesta JSON no tiene el formato esperado:", datos);
                         }
@@ -848,27 +845,28 @@
                     .catch(error => {
                         console.error("Error al enviar la solicitud:", error);
                     });
-            }
+                }
 
-            //_____________________________________ AÑADIR EJEMPLARES_________________________________________
-            function añadirejemplar(idDetalleRecepcion) {
-                const nroSerieInputs = document.querySelectorAll(".nro_serie");
-                const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
-                const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+                //_____________________________________ AÑADIR EJEMPLARES _________________________________________
+                // Función para añadir ejemplares
+                function añadirEjemplar(idDetalleRecepcion) {
+                    const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                    const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+                    const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
-                // Itera sobre cada campo de entrada de número de serie
-                nroSerieInputs.forEach((nroSerieInput, index) => {
-                    const nroSerie = nroSerieInput.value;
-                    const nroEquipo = nroEquipoInputs[index].value;
-                    const estadoEquipo = estadoEquipoInputs[index].value;
+                    nroSerieInputs.forEach((nroSerieInput, index) => {
+                        const nroSerie = nroSerieInput.value;
+                        const nroEquipo = nroEquipoInputs[index].value;
+                        const estadoEquipo = estadoEquipoInputs[index].value;
 
-                    const parametros = new FormData();
-                    parametros.append("operacion", "registrar");
-                    parametros.append("iddetallerecepcion", idDetalleRecepcion);
-                    parametros.append("nro_serie", nroSerie);
-                    parametros.append("estado_equipo", estadoEquipo);
+                        const parametros = new FormData();
+                        parametros.append("operacion", "registrar");
+                        parametros.append("iddetallerecepcion", idDetalleRecepcion);
+                        parametros.append("nro_serie", nroSerie);
+                        parametros.append("nro_equipo", nroEquipo);
+                        parametros.append("estado_equipo", estadoEquipo);
 
-                    fetch(`../../controllers/ejemplar.controller.php`, {
+                        fetch(`../../controllers/ejemplar.controller.php`, {
                             method: "POST",
                             body: parametros
                         })
@@ -881,155 +879,307 @@
                         .catch(error => {
                             console.error("Error al enviar la solicitud:", error);
                         });
-                });
-            }
-
-            //_____________________________________ LIMPIEZAS _________________________________________                
-            function limpiarFormulario() {
-                // Limpiar campos de la cabecera
-                document.getElementById("idpersonal").value = "";
-                document.getElementById("fechayhorarecepcion").value = "";
-                document.getElementById("tipodocumento").selectedIndex = 0;
-                document.getElementById("nrodocumento").value = "";
-                document.getElementById("serie_doc").value = "";
-                document.getElementById("observaciones").value = "";
-
-                // Limpiar campos del detalle
-                document.getElementById("buscar").value = "";
-                document.getElementById("detalles").selectedIndex = 0;
-                document.getElementById("cantidadEnviada").value = "";
-                document.getElementById("cantidadRecibida").value = "";
-
-                // Limpiar tabla de recursos
-                var tablaRecursosBody = document.querySelector("#tablaRecursos tbody");
-                while (tablaRecursosBody.firstChild) {
-                    tablaRecursosBody.removeChild(tablaRecursosBody.firstChild);
+                    });
                 }
 
-                // Ocultar tabla de recursos y botones de guardar
-                document.getElementById("tablaRecursos").style.display = "none";
-                document.getElementById("botonesGuardarFinalizar").style.display = "none";
-            }
+                 //_____________________________________ LIMPIEZAS _________________________________________
+
+                function limpiarFormulario() {
+                    // Limpiar campos de la cabecera
+                    document.getElementById("idpersonal").value = "";
+                    document.getElementById("fechayhorarecepcion").value = "";
+                    document.getElementById("tipodocumento").selectedIndex = 0;
+                    document.getElementById("nrodocumento").value = "";
+                    document.getElementById("serie_doc").value = "";
+                    document.getElementById("observaciones").value = "";
+
+                    // Limpiar campos del detalle
+                    document.getElementById("buscar").value = "";
+                    document.getElementById("detalles").selectedIndex = 0;
+                    document.getElementById("cantidadEnviada").value = "";
+                    document.getElementById("cantidadRecibida").value = "";
+
+                    // Ocultar tabla de recursos y botones de guardar
+                    document.getElementById("tablaRecursos").style.display = "none";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                }
+
+                function habilitarCampos() {
+                    const camposHabilitar = [
+                        document.getElementById("idpersonal"),
+                        document.getElementById("fechayhorarecepcion"),
+                        document.getElementById("tipodocumento"),
+                        document.getElementById("nrodocumento"),
+                        document.getElementById("serie_doc"),
+                    ];
+
+                    camposHabilitar.forEach((campo) => {
+                        campo.disabled = true; // Habilitar cada campo
+                    });
+
+                    // Limpiar campos del detalle
+                    document.getElementById("buscar").value = "";
+                    document.getElementById("detalles").selectedIndex = 0;
+                    document.getElementById("cantidadEnviada").value = "";
+                    document.getElementById("cantidadRecibida").value = "";
+
+                    // Ocultar tabla de recursos y botones de guardar
+                    document.getElementById("tablaRecursos").style.display = "none";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                }
 
 
-            function deshabilitarylimpiarCampos() {
-                const camposDeshabilitar = [
-                    document.getElementById("idpersonal"),
-                    document.getElementById("fechayhorarecepcion"),
-                    document.getElementById("tipodocumento"),
-                    document.getElementById("nrodocumento"),
-                    document.getElementById("serie_doc"),
-                    document.getElementById("observaciones")
-                ];
+                function DEShabilitarCampos() {
+                    const camposHabilitar = [
+                        document.getElementById("idpersonal"),
+                        document.getElementById("fechayhorarecepcion"),
+                        document.getElementById("tipodocumento"),
+                        document.getElementById("nrodocumento"),
+                        document.getElementById("serie_doc"),
+                    ];
 
-                camposDeshabilitar.forEach((campo) => {
-                    campo.disabled = true;
+                    camposHabilitar.forEach((campo) => {
+                        campo.disabled = false; // Habilitar cada campo
+                    });
+
+                    // Limpiar campos del detalle
+                    document.getElementById("buscar").value = "";
+                    document.getElementById("detalles").selectedIndex = 0;
+                    document.getElementById("cantidadEnviada").value = "";
+                    document.getElementById("cantidadRecibida").value = "";
+
+                    // Ocultar tabla de recursos y botones de guardar
+                    document.getElementById("tablaRecursos").style.display = "none";
+                    document.getElementById("botonesGuardarFinalizar").style.display = "none";
+                }
+
+
+                function camposRecepcionDeshabilitados() {
+                    const camposHabilitados = [
+                        document.getElementById("idpersonal"),
+                        document.getElementById("fechayhorarecepcion"),
+                        document.getElementById("tipodocumento"),
+                        document.getElementById("nrodocumento"),
+                        document.getElementById("serie_doc")
+                    ];
+
+                    return camposHabilitados.some(campo => campo.disabled);
+                }
+
+                //_________________ ALMACENANDO LOS DETALLES Y EJEMPLARES ANTES DE SER ENVIADOS _____________________
+
+                // Estructura de datos para almacenar temporalmente los detalles de recepción y ejemplares
+                let detallesRecepcion = [];
+                let ejemplares = [];
+
+                // Función para añadir detalles de recepción
+                function añadirDetallesRecepcionTemporal(idRecepcion) {
+                    const nuevoDetalle = {
+                        idDetalleRecepcion: idRecepcion,
+                        idRecurso: idRecursoSeleccionado,
+                        cantidadRecibida: document.getElementById("cantidadRecibida").value,
+                        cantidadEnviada: document.getElementById("cantidadEnviada").value,
+                        observaciones: document.getElementById("observaciones").value
+                    };
+
+                    // Agregar el nuevo detalle a la lista temporal
+                    detallesRecepcion.push(nuevoDetalle);
+
+                    console.log("Detalles de recepción almacenados temporalmente:");
+                    console.log(detallesRecepcion);
+                }
+
+                // Función para añadir ejemplares temporalmente
+                function añadirEjemplarTemporal(idDetalleRecepcion) {
+                    const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                    const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+                    const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+
+                    nroSerieInputs.forEach((nroSerieInput, index) => {
+                        const nroSerie = nroSerieInput.value;
+                        const nroEquipo = nroEquipoInputs[index].value;
+                        const estadoEquipo = estadoEquipoInputs[index].value;
+
+                        const nuevoEjemplar = {
+                            idDetalleRecepcion: idDetalleRecepcion,
+                            nroSerie: nroSerie,
+                            nroEquipo: nroEquipo,
+                            estadoEquipo: estadoEquipo
+                        };
+
+                        // Agregar el nuevo ejemplar a la lista temporal
+                        ejemplares.push(nuevoEjemplar);
+                    });
+
+                    console.log("Ejemplares almacenados temporalmente:");
+                    console.log(ejemplares);
+                }
+
+                //_____________________________________ BOTONES FINALIZAR _________________________________________
+
+                // Evento para el botón "Finalizar"
+                document.getElementById("btnFinalizar").addEventListener("click", function() {
+                    endingReception();
                 });
 
-                // Limpiar campos del detalle
-                document.getElementById("buscar").value = "";
-                document.getElementById("detalles").selectedIndex = 0;
-                document.getElementById("cantidadEnviada").value = "";
-                document.getElementById("cantidadRecibida").value = "";
+                // Función para finalizar la recepción
+                function endingReception() {
+                    const tipoDocumento = document.getElementById("tipodocumento").value;
+                    const numeroDocumento = document.getElementById("nrodocumento").value;
+                    const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
+
+                    const mensaje = `Recepción ingresada el <strong>${fechaRecepcion}</strong>, con <strong>${tipoDocumento}</strong> N°<strong>${numeroDocumento}</strong>.`;
+
+                    Swal.fire({
+                        title: "<span style='font-size: 24px;'>¿Está seguro de guardar esta recepción?</span>",
+                        html: `<span style='font-size: 15px;'>${mensaje}</span>`,
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Guardar",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: "#27AE60",
+                        cancelButtonColor: "#E74C3C",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Verificar si hay datos en el contenedor de detalles y ejemplares
+                            if (detallesRecepcion.length > 0 || ejemplares.length > 0) {
+                                // Recopilar datos del formulario de detalles y ejemplares si no se han agregado al contenedor
+                                const idRecepcion = obtenerNuevoIdRecepcion(); //ID de la recepción
+
+                                // Verificar y agregar detalles de recepción al contenedor
+                                const cantidadRecibida = document.getElementById("cantidadRecibida").value;
+                                const cantidadEnviada = document.getElementById("cantidadEnviada").value;
+                                const observaciones = document.getElementById("observaciones").value;
+
+                                if (cantidadRecibida || cantidadEnviada || observaciones) {
+                                    añadirDetallesRecepcionTemporal(idRecepcion);
+                                }
+
+                                // Verificar y agregar ejemplares al contenedor
+                                const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                                const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+                                const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+
+                                nroSerieInputs.forEach((nroSerieInput, index) => {
+                                    const nroSerie = nroSerieInput.value;
+                                    const nroEquipo = nroEquipoInputs[index].value;
+                                    const estadoEquipo = estadoEquipoInputs[index].value;
+
+                                    if (nroSerie || nroEquipo || estadoEquipo) {
+                                        añadirEjemplarTemporal(idRecepcion);
+                                    }
+                                });
+
+                                // Guardar todos los detalles y ejemplares
+                                detallesRecepcion.forEach((detalle) => {
+                                    detalle.idRecepcion = idRecepcion; // ID de recepción
+                                    añadirDetallesRecepcion(detalle.idRecepcion); // Guardar detalle de recepción
+                                });
+
+                                ejemplares.forEach((ejemplar) => {
+                                    ejemplar.idDetalleRecepcion = idRecepcion; // Asignar el ID de recepción al ejemplar
+                                    añadirEjemplar(ejemplar.idDetalleRecepcion); // Guardar ejemplar
+                                });
+                            }
+
+                            // Procesar la recepción principal
+                            añadirRecepcion();
+                            DEShabilitarCampos();
+                            setTimeout(limpiarFormulario, 100);
+                        } else {
+                            Swal.close();
+                        }
+                    });
+                }
+
+                //_____________________________________ BOTONES GUARDAR _________________________________________
+
+                // Evento para el botón "Guardar y Continuar"
+                document.getElementById("btnGuardar").addEventListener("click", function() {
+                    continuarRecepcion();
+                });
+
+                // Función para continuar la recepción
+                function continuarRecepcion() {
+                    Swal.fire({
+                        title: "<span style='font-size: 24px;'>¿Desea agregar un material tecnológico adicional?</span>",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "No",
+                        confirmButtonColor: "#27AE60",
+                        cancelButtonColor: "#E74C3C",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Guardar solo los campos de recepción
+                            const idPersonalSeleccionado = document.getElementById("idpersonal").value;
+                            const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
+                            const tipoDocumento = document.getElementById("tipodocumento").value;
+                            const numeroDocumento = document.getElementById("nrodocumento").value;
+                            const serieDocumento = document.getElementById("serie_doc").value;
+
+                            const parametros = new FormData();
+                            parametros.append("operacion", "registrar");
+                            parametros.append("idusuario", <?php echo $idusuario ?>);
+                            parametros.append("idpersonal", idPersonalSeleccionado);
+                            parametros.append("fechayhorarecepcion", fechaRecepcion);
+                            parametros.append("tipodocumento", tipoDocumento);
+                            parametros.append("nrodocumento", numeroDocumento);
+                            parametros.append("serie_doc", serieDocumento);
+
+                            fetch(`../../controllers/recepcion.controller.php`, {
+                                method: "POST",
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.json())
+                            .then(datos => {
+                                if (datos.length > 0 && datos[0].idrecepcion > 0) {
+                                    console.log(`Recepción registrada con ID: ${datos[0].idrecepcion}`);
+                                    const idRecepcion = datos[0].idrecepcion;
+                                    document.getElementById("id_recepcion").value = idRecepcion;
+
+                                    // Deshabilitar campos de recepción y limpiar formulario
+                                    const camposHabilitar = [
+                                        document.getElementById("idpersonal"),
+                                        document.getElementById("fechayhorarecepcion"),
+                                        document.getElementById("tipodocumento"),
+                                        document.getElementById("nrodocumento"),
+                                        document.getElementById("serie_doc")
+                                    ];
+
+                                    camposHabilitar.forEach((campo) => {
+                                        campo.disabled = true;
+                                    });
+                                            añadirDetallesRecepcionTemporal(idRecepcion);
+                                            añadirEjemplarTemporal(idRecepcion);
+
+                                            habilitarCampos();                } else {
+                                    console.error("La respuesta JSON no tiene el formato esperado:", datos);
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error al enviar la solicitud:", error);
+                            });
+                        } else {
+                            Swal.close();
+                        }
+                    });
+                }
 
 
-                // Ocultar tabla de recursos y botones de guardar
-                document.getElementById("tablaRecursos").style.display = "none";
-                document.getElementById("botonesGuardarFinalizar").style.display = "none";
-            }
+                // Función para obtener un ID único para la recepción (simulado)
+                function obtenerNuevoIdRecepcion() {
+                    return detallesRecepcion.length + 1; // Simplemente incrementamos el tamaño de la lista como ID temporal
+                }
 
-            //_____________________________________ BTN FINALIZAR REGISTRO _________________________________________
-            document.getElementById("btnFinalizar").addEventListener("click", function() {
-                endingReception();
+
             });
-
-            function endingReception() {
-                showSaveChangesConfirmationFinally().then((result) => {
-                    if (result.isConfirmed) {
-                        añadirrecepcion();
-                        console.log("Recepción FINALIZADA");
-                        setTimeout(limpiarFormulario, 100); // **
-                    } else {
-                        console.log("Recepción NO FINALIZADA");
-                    }
-                });
-            }
-
-            //_____________________________________ BTN GUARDAR Y CONTINUAR _________________________________________
-            document.getElementById("btnGuardar").addEventListener("click", function() {
-    continuereception();
-});
-
-function continuereception() {
-    const tipoDocumento = document.getElementById("tipodocumento").value;
-    const numeroDocumento = document.getElementById("nrodocumento").value;
-    const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
-
-    // Capturar el valor del campo especial
-    const campoEspecial = document.getElementById("campoEspecial").value;
-
-    const mensaje = `A continuación, agregarás un material tecnológico más a la recepción ingresada el <strong>${fechaRecepcion}</strong>, con <strong>${tipoDocumento}</strong> N°<strong>${numeroDocumento}</strong>.`;
-
-    return Swal.fire({
-        title: "<span style='font-size: 24px;'>RECEPCIÓN REGISTRADA !</span>",
-        html: `<span style='font-size: 15px;'>${mensaje}</span>`,
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: "Agregar un material más a la recepción",
-        cancelButtonText: "No tengo más materiales que agregar",
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            permitirAgregarMaterial();
-        } else {
-            finalizarRecepcion();
-        }
-    });
-}
-
-function permitirAgregarMaterial() {
-    // Mostrar la tabla de recursos y los botones de guardar
-    document.getElementById("tablaRecursos").style.display = "block";
-    document.getElementById("botonesGuardarFinalizar").style.display = "block";
-
-    // Limpiar campos de detalle
-    limpiarCamposDetalle();
-}
-
-function finalizarRecepcion() {
-    // Realizar el registro completo de la recepción
-    añadirrecepcion();
-    console.log("Recepción finalizada");
-
-    // Limpiar campos de la cabecera
-    limpiarCamposCabecera();
-}
-
-function limpiarCamposCabecera() {
-    document.getElementById("idpersonal").value = "";
-    document.getElementById("fechayhorarecepcion").value = "";
-    document.getElementById("tipodocumento").selectedIndex = 0;
-    document.getElementById("nrodocumento").value = "";
-    document.getElementById("serie_doc").value = "";
-    document.getElementById("observaciones").value = "";
-}
-
-function limpiarCamposDetalle() {
-    document.getElementById("buscar").value = "";
-    document.getElementById("detalles").selectedIndex = 0;
-    document.getElementById("cantidadEnviada").value = "";
-    document.getElementById("cantidadRecibida").value = "";
-    document.getElementById("observaciones").value = "";
-
-    // También puedes limpiar la tabla de recursos si es necesario
-    var tablaRecursosBody = document.querySelector("#tablaRecursos tbody");
-    while (tablaRecursosBody.firstChild) {
-        tablaRecursosBody.removeChild(tablaRecursosBody.firstChild);
-    }
-}
+        </script>
 
 
+</body>
+
+</html>
 
 
         });
