@@ -19,6 +19,9 @@ UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
 WHERE idusuario =1;
 
+SELECT * FROM recepciones;
+SELECT * FROM detrecepciones;
+SELECT * FROM ejemplares;
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------      MARCAS       --------------------------------------
