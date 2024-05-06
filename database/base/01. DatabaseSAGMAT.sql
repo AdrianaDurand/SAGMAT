@@ -128,10 +128,13 @@ CREATE TABLE solicitudes
 	idsolicitud 					INT 				AUTO_INCREMENT PRIMARY KEY,
     idsolicita 						INT 				NOT NULL, -- FK
     idrecurso 						INT 				NOT NULL, -- FK
+    hora 							TIME 				NOT NULL,
+    cantidad		 				SMALLINT 			NOT NULL,
     fechasolicitud					DATE 				NOT NULL,
     CONSTRAINT fk_idsolicita_sl		FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idrecurso_sl  FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
+
 
 -- 10°
 -- *********************************************************************

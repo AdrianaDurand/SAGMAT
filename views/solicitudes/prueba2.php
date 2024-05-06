@@ -1,3 +1,24 @@
+<?php
+session_start();
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
+    header("Location:../../index.php");
+}
+
+if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESSION["idusuario"])) {
+    $apellidos = $_SESSION["apellidos"];
+    $nombres = $_SESSION["nombres"];
+    $idusuario = $_SESSION["idusuario"];
+    echo "<script>";
+    echo "var idusuario = " . json_encode($idusuario) . ";";
+    echo "</script>";
+    echo "<script>console.log('Apellidos:', " . json_encode($apellidos) . ");</script>";
+    echo "<script>console.log('Nombres:', " . json_encode($nombres) . ");</script>";
+    echo "<script>console.log('ID Usuario:', " . json_encode($idusuario) . ");</script>";
+} else {
+    echo "Las variables de sesión no están definidas.";
+}
+?>
+
 <!doctype html>
 <html lang="es">
 
@@ -101,7 +122,7 @@
         document.addEventListener('DOMContentLoaded', function() {
 
             var cantidadInput = document.getElementById('cantidad');
-           
+
 
             cantidadInput.addEventListener('input', function() {
                 if (cantidadInput.value < 1) {
@@ -192,10 +213,9 @@
                     eventSources: [{
 
                         events: datos.map(evento => ({
-                            id: evento.idreserva.toString(),
-                            title: evento.nombre_equipo,
-                            start: evento.fecha_reserva,
-                            estado: evento.color,
+                            id: evento.idsolicitud.toString(),
+                            title: evento.tipo,
+                            start: evento.fechasolicitud,
                             // Agrega más propiedades si es necesario
                         })),
                         color: "green",
@@ -224,8 +244,9 @@
             function listar_cronogramas() {
                 const parametros = new FormData();
                 parametros.append("operacion", "listar");
+                parametros.append("idsolicita",  idusuario );
 
-                fetch(`../../controllers/prueba.controller.php`, {
+                fetch(`../../controllers/solicitud.controller.php`, {
                         method: "POST",
                         body: parametros
                     })
