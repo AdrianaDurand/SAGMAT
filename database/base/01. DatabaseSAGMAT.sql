@@ -135,6 +135,14 @@ CREATE TABLE solicitudes
     CONSTRAINT fk_idrecurso_sl  FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
+SELECt * FROM solicitudes;
+
+SELECT * FROM roles;
+SELECt * FROM usuarios;
+SELECT * FROM personas;
+
+DROP TABLE solicitudes;
+SET foreign_key_checks =1;
 
 -- 10°
 -- *********************************************************************

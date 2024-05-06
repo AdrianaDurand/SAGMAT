@@ -75,12 +75,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                 <label for="hora" class="form-label">Hora:</label>
                                 <input type="time" class="form-control" id="hora" min="00:00" max="23:59" step="1">
                             </div>
-
-
                         </div>
-
-
-
 
                         <div class="mt-3">
                             <div id="informacion">
@@ -107,6 +102,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
+                    <input type="hidden" id="fechasolicitud" name="fechasolicitud">
                     <button type="button" class="btn btn-outline-primary flex-fill" id="btnAgregarCaracteristica"><i class="fi-sr-eye"></i>Añadir otro equipo</button>
                     <button type="button" class="btn btn-outline-success flex-fill" id="agregar"><i class="fi-sr-eye"></i>Finalizar</button>
                 </div>
@@ -222,19 +218,23 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                         textColor: "white"
                     }],
                     dateClick: function(info) {
-                        // Obtener la fecha actual
-                        var fechaActual = new Date();
+                        // Obtener la fecha actual en la zona horaria local
+                        var fechaActual = new Date().setHours(0, 0, 0, 0);
                         // Convertir la fecha seleccionada a objeto Date
-                        var fechaSeleccionada = new Date(info.date);
-                        // Verificar si la fecha seleccionada es anterior a la fecha actual
+                        var fechaSeleccionada = new Date(info.date).setHours(0, 0, 0, 0);
+                        // Verificar si la fecha seleccionada es anterior o igual a la fecha actual
                         if (fechaSeleccionada < fechaActual) {
                             // Mostrar mensaje de error
                             alert("No es posible reservar un equipo en fechas anteriores.");
                         } else {
                             // Mostrar el modal cuando se haga clic en una fecha válida
                             modalregistro.show();
+
+                            // Establecer la fecha de solicitud en el formulario con la fecha seleccionada
+                            document.getElementById('fechasolicitud').value = info.dateStr;
                         }
                     }
+
 
                 });
                 calendar.render();
@@ -244,7 +244,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             function listar_cronogramas() {
                 const parametros = new FormData();
                 parametros.append("operacion", "listar");
-                parametros.append("idsolicita",  idusuario );
+                parametros.append("idsolicita", idusuario);
 
                 fetch(`../../controllers/solicitud.controller.php`, {
                         method: "POST",
@@ -258,6 +258,39 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                         console.error(e);
                     });
             }
+
+            function registerCalendar(){
+    // Obtener la fecha de solicitud del campo oculto
+    var fechaSolicitud = $("#fechasolicitud").value;
+    var tipoRecurso = $("#tipo").value;
+    var cantidad = $("#cantidad").value;
+    var hora = $("#hora").value;
+
+    const parametros = new FormData();
+    parametros.append("operacion", "registrar");
+    parametros.append("idsolicita", idusuario);
+    parametros.append("idrecurso", tipoRecurso);
+    parametros.append("cantidad", cantidad);
+    parametros.append("hora", hora);
+    parametros.append("fechasolicitud", fechaSolicitud);
+
+    fetch(`../../controllers/solicitud.controller.php`,{
+        method: "POST",
+        body: parametros
+    })
+    .then(respuesta => respuesta.json())
+    .then(datos =>{
+        console.log("registrohecho")
+    })
+    .catch(e =>{
+        console.error(e)
+    });
+}
+
+
+            document.getElementById("agregar").addEventListener("click", function() {
+                registerCalendar();
+            });
 
             gettypes();
             listar_cronogramas();

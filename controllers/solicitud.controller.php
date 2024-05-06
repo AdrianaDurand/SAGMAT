@@ -14,6 +14,16 @@ if (isset($_POST['operacion'])){
             ];
             echo json_encode($solicitud->listar($datosEnviar));
         break;
+        case 'registrar':
+            $datosEnviar = [
+                "idsolicita"    => $_POST['idsolicita'],
+                "idrecurso"     => $_POST['idrecurso'],
+                "hora"          => $_POST['hora'],
+                "cantidad"      => $_POST['cantidad'],
+                "fechasolicitud" => $_POST['fechasolicitud']
+            ];
+            echo json_encode($solicitud->registar($datosEnviar));
+        break;
 
         
 

@@ -45,6 +45,9 @@ $accesos = [
         "Recursos" => ["Almacén", "Ajustes"],
         "Mantenimientos" => ["Manteni"],
         "Bajas" => ["Bajas"]
+    ],
+    "DOCENTE" => [
+        "Solicitudes" => ["Solicitudes"]
     ]
 ];
 

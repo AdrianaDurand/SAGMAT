@@ -17,7 +17,7 @@ SELECT * FROM tipos;
 -- NSC
 UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
-WHERE idusuario =1;
+WHERE idusuario =4;
 
 
 -- ----------------------------------------------------------------------------------------
