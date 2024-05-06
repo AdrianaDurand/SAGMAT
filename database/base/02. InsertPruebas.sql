@@ -19,9 +19,6 @@ UPDATE usuarios
 SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
 WHERE idusuario =1;
 
-SELECT * FROM recepciones;
-SELECT * FROM detrecepciones;
-SELECT * FROM ejemplares;
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------      MARCAS       --------------------------------------
@@ -107,6 +104,43 @@ INSERT INTO tipos (tipo) VALUES
     ('CABLE HDMI');
     
 SELECT * FROM tipos;
+
+UPDATE tipos
+SET acronimo = CASE 
+    WHEN tipo = 'AUDIFONOS' THEN 'AUD'
+    WHEN tipo = 'LAPTOP' THEN 'LPTP'
+    WHEN tipo = 'CPU' THEN 'CPU'
+    WHEN tipo = 'MONITOR' THEN 'MON'
+    WHEN tipo = 'TECLADO' THEN 'TCLD'
+    WHEN tipo = 'MOUSE' THEN 'MS'
+    WHEN tipo = 'PARLANTES' THEN 'PRL'
+    WHEN tipo = 'ECRAN' THEN 'ECR'
+    WHEN tipo = 'PROYECTOR MULTIMEDIA' THEN 'PRY'
+    WHEN tipo = 'ESTABILIZADOR' THEN 'EST'
+    WHEN tipo = 'SWITCH 48' THEN 'SWT'
+    WHEN tipo = 'SERVIDOR' THEN 'SRVD'
+    WHEN tipo = 'CONSOLA DE AUDIO' THEN 'CSA'
+    WHEN tipo = 'MICROFONO' THEN 'MIC'
+    WHEN tipo = 'PARLANTES PARA MICROFONO' THEN 'PPM'
+    WHEN tipo = 'ROUTER' THEN 'RTR'
+    WHEN tipo = 'HDD EXTERNO' THEN 'HDD'
+    WHEN tipo = 'BIOMETRICO' THEN 'BMT'
+    WHEN tipo = 'DVR VIDEO VIGILANCIA' THEN 'DVR'
+    WHEN tipo = 'IMPRESORA' THEN 'IMP'
+    WHEN tipo = 'AMPLIFICADOR DE SONIDO' THEN 'AMS'
+    WHEN tipo = 'MEGÁFONO' THEN 'MEG'
+    WHEN tipo = 'SIRENA DE EMERGENCIA' THEN 'SIR'
+    WHEN tipo = 'ACCES POINT' THEN 'ACP'
+    WHEN tipo = 'RACK2RU' THEN 'RCK'
+    WHEN tipo = 'DECODIFICADOR' THEN 'DCD'
+    WHEN tipo = 'EXTENSIONES' THEN 'EXT'
+    WHEN tipo = 'SUBWOOFER' THEN 'SBW'
+    WHEN tipo = 'REPROD. DVD' THEN 'DVD'
+    WHEN tipo = 'CARRO DE METAL TRANSPORTADOR' THEN 'CRT'
+    WHEN tipo = 'CABLE HDMI' THEN 'HDMI'
+    ELSE NULL
+END;
+
     
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------      ROLES        --------------------------------------
@@ -213,4 +247,13 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
 
 DROP TABLE recursos;
 SET foreign_key_checks =1;
+
+ALTER TABLE ejemplares AUTO_INCREMENT 1;
+use sagmat;
+SELECT * FROM recursos;
+SELECT *  FROM recepciones;
+SELECT * FROM detrecepciones;
+SELECT * FROM recursos;
+SELECT * FROM ejemplares;
+SELECT * FROM tipos;
 

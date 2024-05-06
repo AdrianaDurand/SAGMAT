@@ -26,6 +26,10 @@ CREATE TABLE tipos
     tipo 			VARCHAR(60) 	NOT NULL UNIQUE
 )ENGINE = INNODB;
 
+ALTER TABLE tipos
+ADD COLUMN acronimo VARCHAR(10) NULL;
+
+
 -- 3°
 -- *********************************************************************
 -- 								TABLA ROLES

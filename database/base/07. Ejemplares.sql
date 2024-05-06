@@ -41,13 +41,59 @@ BEGIN
 
 END $$
 
+DELIMITER $$
+CREATE PROCEDURE spu_addejemplar
+(
+    IN _iddetallerecepcion INT,
+    IN _nro_serie VARCHAR(50),
+    IN _estado_equipo VARCHAR(20)
+)
+BEGIN
+    DECLARE _cantidad_recursos INT;
+    DECLARE _acronimo_recurso VARCHAR(10);
+    DECLARE _nuevo_nro_equipo INT;
 
-CALL spu_addejemplar(1, 'ABC123', 'En uso');
+    -- Obtener el acrónimo del tipo de recurso asociado al detalle de recepción
+    SELECT acronimo INTO _acronimo_recurso
+    FROM tipos
+    WHERE idtipo = (SELECT idrecurso FROM detrecepciones WHERE iddetallerecepcion = _iddetallerecepcion);
+
+    -- Si no se encuentra el acrónimo del tipo de recurso, lanzar un error
+    IF _acronimo_recurso IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No se encontró el acrónimo del tipo de recurso asociado al detalle de recepción.';
+    END IF;
+
+    -- Contar la cantidad de recursos de ese tipo ya registrados
+    SELECT COUNT(*) INTO _cantidad_recursos
+    FROM ejemplares e
+    JOIN detrecepciones d ON e.iddetallerecepcion = d.iddetallerecepcion
+    JOIN tipos t ON d.idrecurso = t.idtipo
+    WHERE t.acronimo = _acronimo_recurso;
+
+    -- Calcular el nuevo número de equipo incrementando en la cantidad de recursos
+    SET _nuevo_nro_equipo = _cantidad_recursos + 1;
+
+    -- Formar el nuevo número de equipo
+    SET @nuevo_nro_equipo = CONCAT(_acronimo_recurso, '-', LPAD(_nuevo_nro_equipo, 4, '0'));
+
+    -- Insertar el nuevo registro
+    INSERT INTO ejemplares (iddetallerecepcion, nro_serie, nro_equipo, estado_equipo)
+    VALUES (_iddetallerecepcion, NULLIF(_nro_serie, ''), @nuevo_nro_equipo, _estado_equipo);
+END $$
+
+DELIMITER ;
+
+
+
+CALL spu_addejemplar(20, '11145', 'En uso');
 
 SELECT * FROM ejemplares;
 SELECT * FROM detrecepciones;
-SELECT * FROM recepciones;
 SELECT * FROM recursos;
+DELETE FROM recepciones;
+SELECT * FROM recursos;
+SELECT * FROM tipos;
 /*DELIMITER $$
 CREATE PROCEDURE spu_addejemplar
 (
