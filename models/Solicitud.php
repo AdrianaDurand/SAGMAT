@@ -34,7 +34,7 @@ class Solicitud extends Conexion
             $consulta->execute(
                 array(
                     $datos['idsolicita'],
-                    $datos['idrecurso'],
+                    $datos['idtipo'],
                     $datos['hora'],
                     $datos['cantidad'],
                     $datos['fechasolicitud']

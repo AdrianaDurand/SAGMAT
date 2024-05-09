@@ -17,7 +17,7 @@ if (isset($_POST['operacion'])){
         case 'registrar':
             $datosEnviar = [
                 "idsolicita"    => $_POST['idsolicita'],
-                "idrecurso"     => $_POST['idrecurso'],
+                "idtipo"     => $_POST['idtipo'],
                 "hora"          => $_POST['hora'],
                 "cantidad"      => $_POST['cantidad'],
                 "fechasolicitud" => $_POST['fechasolicitud']

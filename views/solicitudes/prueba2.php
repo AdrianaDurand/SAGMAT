@@ -62,8 +62,8 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 
 
                             <div class="col-md-4">
-                                <label for="tipo" class="form-label">Tipo de recurso:</label>
-                                <select name="" id="tipo" class="form-select" required>
+                                <label for="idtipo" class="form-label">Tipo de recurso:</label>
+                                <select name="" id="idtipo" class="form-select" required>
                                     <option value="">Seleccione:</option>
                                 </select>
                             </div>
@@ -137,25 +137,31 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             };
 
             function addrow() {
-                var tablaEquipos = document.getElementById("tablaEquipos");
-                var nuevaFila = document.createElement("tr");
-                nuevaFila.innerHTML = `
-                    <td>${$('#tipo option:checked').textContent}</td>
-                    <td>${$('#cantidad').value}</td>
-                    <td>${$('#hora').value}</td>
-                    <td><button type="button" class="btn btn-danger btnEliminarFila">Eliminar</button></td>
-                `;
-                tablaEquipos.appendChild(nuevaFila);
+    var tablaEquipos = document.getElementById("tablaEquipos");
+    var nuevaFila = document.createElement("tr");
+    nuevaFila.innerHTML = `
+        <td>${$('#idtipo option:checked').textContent}</td>
+        <td>${$('#cantidad').value}</td>
+        <td>${$('#hora').value}</td>
+        <td><button type="button" class="btn btn-danger btnEliminarFila">Eliminar</button></td>
+    `;
+    tablaEquipos.appendChild(nuevaFila);
 
-                // Limpiar los campos del formulario principal después de agregar la fila
-                $('#tipo').value = '';
-                $('#cantidad').value = '';
-                $('#hora').value = '';
-            }
+    // Imprimir en la consola el tipo seleccionado, la cantidad ingresada y la hora seleccionada
+    console.log('Tipo seleccionado:', $('#idtipo option:checked').textContent);
+    console.log('Cantidad ingresada:', $('#cantidad').value);
+    console.log('Hora seleccionada:', $('#hora').value);
+
+    // Limpiar los campos del formulario principal después de agregar la fila
+    $('#idtipo').value = '';
+    $('#cantidad').value = '';
+    $('#hora').value = '';
+}
+
 
             // Ahora el evento del botón Agregar recopila los valores del formulario principal y llama a la función addrow()
             document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
-                var tipo = $('#tipo').value;
+                var tipo = $('#idtipo').value;
                 var cantidad = $('#cantidad').value;
                 var hora = $('#hora').value;
 
@@ -187,7 +193,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                             const tagOption = document.createElement("option");
                             tagOption.innerText = element.tipo;
                             tagOption.value = element.idtipo;
-                            document.querySelector("#tipo").appendChild(tagOption)
+                            document.querySelector("#idtipo").appendChild(tagOption)
                         });
                     })
                     .catch(e => {
@@ -259,33 +265,29 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     });
             }
 
-            function registerCalendar(){
-    // Obtener la fecha de solicitud del campo oculto
-    var fechaSolicitud = $("#fechasolicitud").value;
-    var tipoRecurso = $("#tipo").value;
-    var cantidad = $("#cantidad").value;
-    var hora = $("#hora").value;
-
+            function registerCalendar() {
     const parametros = new FormData();
     parametros.append("operacion", "registrar");
     parametros.append("idsolicita", idusuario);
-    parametros.append("idrecurso", tipoRecurso);
-    parametros.append("cantidad", cantidad);
-    parametros.append("hora", hora);
-    parametros.append("fechasolicitud", fechaSolicitud);
+    parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
+    parametros.append("cantidad", $('#cantidad').value);
+    parametros.append("hora", $('#hora').value);
+    parametros.append("fechasolicitud", $('#fechasolicitud').value);
 
-    fetch(`../../controllers/solicitud.controller.php`,{
-        method: "POST",
-        body: parametros
-    })
-    .then(respuesta => respuesta.json())
-    .then(datos =>{
-        console.log("registrohecho")
-    })
-    .catch(e =>{
-        console.error(e)
-    });
+    fetch(`../../controllers/solicitud.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            console.log("Registro realizado:", datos);
+            // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
+        })
+        .catch(e => {
+            console.error(e)
+        });
 }
+
 
 
             document.getElementById("agregar").addEventListener("click", function() {

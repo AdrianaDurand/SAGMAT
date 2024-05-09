@@ -79,11 +79,9 @@ CREATE TABLE usuarios
 CREATE TABLE ubicaciones
 (
 	idubicacion 					INT 				AUTO_INCREMENT PRIMARY KEY,
-    idusuario 						INT 				NOT NULL, -- FK
     nombre							VARCHAR(30) 		NOT NULL, -- SECRETARIA, LABORATORIO, ETC.
     nro_piso 						SMALLINT 			NULL, --
-    numero 							VARCHAR(30) 		NULL, -- ENUMERADO POR AULA.
-    CONSTRAINT fk_idusuario_ub 		FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+    numero 							VARCHAR(30) 		NULL -- ENUMERADO POR AULA.
 )ENGINE = INNODB;
 
 
@@ -127,19 +125,23 @@ CREATE TABLE solicitudes
 (
 	idsolicitud 					INT 				AUTO_INCREMENT PRIMARY KEY,
     idsolicita 						INT 				NOT NULL, -- FK
-    idrecurso 						INT 				NOT NULL, -- FK
+    idtipo							INT 				NOT NULL, -- FK
+    idubicaciondocente				INT 				NOT NULL, -- FK
     hora 							TIME 				NOT NULL,
     cantidad		 				SMALLINT 			NOT NULL,
     fechasolicitud					DATE 				NOT NULL,
+    estado							INT 				NOT NULL DEFAULT 0,
     CONSTRAINT fk_idsolicita_sl		FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_idrecurso_sl  FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
+    CONSTRAINT fk_idtipo_sl  		FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
+    CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
 
 SELECt * FROM solicitudes;
-
+SELECT * FROM ubicaciones;
 SELECT * FROM roles;
 SELECt * FROM usuarios;
 SELECT * FROM personas;
+
 
 DROP TABLE solicitudes;
 SET foreign_key_checks =1;

@@ -173,8 +173,8 @@ INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
 -- -------------------------------    UBICACIONES    --------------------------------------
 -- ----------------------------------------------------------------------------------------
 SELECT * FROM ubicaciones;
- INSERT INTO ubicaciones (idusuario, nombre, nro_piso, numero) VALUES
-    (1, 'Aula de Innovación Pedagógica', 2, NULL);
+ INSERT INTO ubicaciones (nombre, nro_piso, numero) VALUES
+    ('Aula de Innovación Pedagógica', 2, NULL);
 
 
 -- ----------------------------------------------------------------------------------------
