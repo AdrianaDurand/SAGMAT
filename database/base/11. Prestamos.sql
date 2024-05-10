@@ -3,7 +3,7 @@
 -- ----------------------------------------------------------------------------------------
 -- Esto es para la parte en donde solo le envío los detalles de la recepción
 
-DELIMITER $$
+/*DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
     IN _idusuario		INT ,
@@ -18,4 +18,4 @@ BEGIN
     VALUES
 	(_idusuario, _fechaingreso, _tipodocumento, nro_documento, _serie_doc);
 END $$
-DELIMITER  ;
+DELIMITER  ;*/

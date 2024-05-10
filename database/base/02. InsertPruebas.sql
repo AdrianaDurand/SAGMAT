@@ -16,8 +16,7 @@ SELECT * FROM recursos;
 SELECT * FROM tipos;
 -- NSC
 UPDATE usuarios
-SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
-WHERE idusuario =4;
+SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi';
 
 
 -- ----------------------------------------------------------------------------------------
@@ -146,8 +145,9 @@ END;
 -- -------------------------------      ROLES        --------------------------------------
 -- ----------------------------------------------------------------------------------------
 INSERT INTO roles (rol) VALUES
+	('DOCENTE'),
     ('ADMINISTRADOR'),
-    ('DAIP'),
+    ('AIP'),
     ('CIST');
 
 -- ----------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ INSERT INTO roles (rol) VALUES
 
 SELECt * FROM personas;
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('Durand Buenamarca', 'Adriana', 'DNI', '78901029', '908890345', 'adriana@gmail.com'),  -- ADMINISTRADOR
+    ('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
 
@@ -166,8 +166,9 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) V
 SELECT * FROM usuarios;
 INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
 	(1,1,'NSC'),
-	(2, 3,'NSC'), 
-    (3, 3,'NSC');
+	(2, 2,'NSC'), 
+    (3, 3,'NSC'),
+    (4, 4, 'NSC');
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------    UBICACIONES    --------------------------------------
@@ -190,16 +191,16 @@ INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotograf
 -- -------------------------------     RECEPCION     --------------------------------------
 -- ----------------------------------------------------------------------------------------
 SELECT * FROM recepciones;
-INSERT INTO recepciones (idusuario, idpersonal, fechayhoraregistro, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc, observaciones) VALUES
-    (1, NULL, '2024-04-12', '2024-04-16', 'Boleta', '0004129', 'T0-150', 'Completo');
+INSERT INTO recepciones (idusuario, idpersonal, fechayhoraregistro, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc) VALUES
+    (1, NULL, '2024-04-12', '2024-04-16', 'Boleta', '0004129', 'T0-150');
     
 -- ----------------------------------------------------------------------------------------
 -- ------------------------------- DETALLE RECEPCION --------------------------------------
 -- ----------------------------------------------------------------------------------------
 SELECT * FROM recursos;
 SELECT * FROM detrecepciones;
-INSERT INTO detrecepciones (idrecepcion, idrecurso, cantidadrecibida, cantidadenviada) VALUES
-    (1, 1, 50, 25);
+INSERT INTO detrecepciones (idrecepcion, idrecurso, cantidadrecibida, cantidadenviada, observaciones) VALUES
+    (1, 1, 50, 25, 'Ninguna');
     
 -- ----------------------------------------------------------------------------------------
 -- --------------------------------- DETALLE RECURSO --------------------------------------

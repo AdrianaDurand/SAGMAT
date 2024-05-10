@@ -1,31 +1,5 @@
-DELIMITER $$
-CREATE PROCEDURE spu_listar_tipo_marca(
-    IN _idtipo INT
-)
-BEGIN
-   SELECT
-	m.idmarca,
-	m.marca
-    FROM marcas m
-    INNER JOIN recursos r ON m.idmarca = r.idmarca
-    WHERE r.idtipo = _idtipo;
-END $$
-
-CALL spu_listar_tipo_marca(17);
 
 
-DELIMITER $$
-CREATE PROCEDURE spu_listar_datasheets(
-	IN _idrecurso INT
-)
-BEGIN
-    SELECT idrecurso,
-    datasheets
-    FROM recursos
-     WHERE idrecurso = _idrecurso;
-END $$
-
-select * from recursos;
 
 DELETE FROM recursos WHERE idrecurso = 4;
 
@@ -50,16 +24,7 @@ AS
 		marcas m ON r.idmarca = m.idmarca
         LIMIT 12;
         
-/*DELIMITER $$
-CREATE PROCEDURE spu_listar_por_tipo(IN _idtipo 	INT)
-BEGIN
-	IF _idtipo = -1 THEN
-		SELECT * FROM vs_tipos_marcas;
-	ELSE
-		SELECT * FROM vs_tipos_marcas WHERE idtipo = _idtipo;
-    END IF;
-	
-END $$*/
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_listar_por_tipo_y_marca(

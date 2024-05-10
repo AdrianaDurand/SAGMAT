@@ -1,7 +1,6 @@
 -- ----------------------------------------------------------------------------------------
 --       --------------- INGRESAR DETALLE RECEPCIÓN  --------------------------
 -- ----------------------------------------------------------------------------------------
-
 DELIMITER $$
 CREATE PROCEDURE spu_addDetrecepcion
 (
@@ -23,3 +22,4 @@ select * from recursos;
 select * from ejemplares;
 select * from detrecepciones;
 select * from recepciones;
+*/	

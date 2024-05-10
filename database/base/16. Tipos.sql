@@ -17,5 +17,56 @@ CREATE PROCEDURE searchTipos(
 )
 BEGIN
     SELECT * FROM tipos
-    WHERE tiporecurso LIKE CONCAT(_tipobuscado, '%');
+    WHERE tipo LIKE CONCAT(_tipobuscado, '%');
 END $$
+
+SELECT * FROM recursos;
+SELECT * FROM tipos;
+
+-- ----------------------------------------------------------------------------------------
+-- --------------- LISTA DE DETALLES QUE COINCIDEN CON EL TIPO  --------------------------
+-- ----------------------------------------------------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE spu_listadetalles(
+    IN _tipo VARCHAR(50)
+)
+BEGIN
+    SELECT 
+		R.idrecurso,
+        M.marca,
+        R.descripcion,
+        R.modelo
+    FROM recursos R
+    INNER JOIN marcas M ON M.idmarca = R.idmarca
+    INNER JOIN tipos T ON T.idtipo= R.idtipo
+    WHERE T.tipo = _tipo;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_listar_tipo_marca(
+    IN _idtipo INT
+)
+BEGIN
+   SELECT
+	m.idmarca,
+	m.marca
+    FROM marcas m
+    INNER JOIN recursos r ON m.idmarca = r.idmarca
+    WHERE r.idtipo = _idtipo;
+END $$
+CALL spu_listar_tipo_marca(17);
+
+
+/*DELIMITER $$
+CREATE PROCEDURE spu_listar_por_tipo(IN _idtipo 	INT)
+BEGIN
+	IF _idtipo = -1 THEN
+		SELECT * FROM vs_tipos_marcas;
+	ELSE
+		SELECT * FROM vs_tipos_marcas WHERE idtipo = _idtipo;
+    END IF;
+	
+END $$*/

@@ -59,19 +59,23 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     <div id="descripcion"> </div>
                     <form action="" autocomplete="off" id="form-cronograma">
                         <div class="row">
-
-
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="idtipo" class="form-label">Tipo de recurso:</label>
                                 <select name="" id="idtipo" class="form-select" required>
                                     <option value="">Seleccione:</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label for="idubicaciondocente" class="form-label">Ubicación:</label>
+                                <select name="" id="idubicaciondocente" class="form-select" required>
+                                    <option value="">Seleccione:</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="cantidad" class="form-label" placeholder="Máximo 30">Cantidad:</label>
                                 <input type="number" class="form-control" id="cantidad" min="1" max="30">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="hora" class="form-label">Hora:</label>
                                 <input type="time" class="form-control" id="hora" min="00:00" max="23:59" step="1">
                             </div>
@@ -84,8 +88,9 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                     <thead>
                                         <tr>
                                             <th scope="col">Tipo de recurso</th>
-                                            <th scope="col">Cantidad</th>
+                                            <th scope="col">Ubicación</th>
                                             <th scope="col">Hora</th>
+                                            <th scope="col">Cantidad</th>
                                             <th scope="col">Acción</th>
                                         </tr>
                                     </thead>
@@ -137,26 +142,29 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             };
 
             function addrow() {
-    var tablaEquipos = document.getElementById("tablaEquipos");
-    var nuevaFila = document.createElement("tr");
-    nuevaFila.innerHTML = `
-        <td>${$('#idtipo option:checked').textContent}</td>
-        <td>${$('#cantidad').value}</td>
-        <td>${$('#hora').value}</td>
-        <td><button type="button" class="btn btn-danger btnEliminarFila">Eliminar</button></td>
-    `;
-    tablaEquipos.appendChild(nuevaFila);
+                var tablaEquipos = document.getElementById("tablaEquipos");
+                var nuevaFila = document.createElement("tr");
+                nuevaFila.innerHTML = `
+                    <td>${$('#idtipo option:checked').textContent}</td>
+                    <td>${$('#cantidad').value}</td>
+                    <td>${$('#hora').value}</td>
+                    <td>${$('#idubicaciondocente option:checked').value}</td>
+                    <td><button type="button" class="btn btn-danger btnEliminarFila">Eliminar</button></td>
+                `;
+                tablaEquipos.appendChild(nuevaFila);
 
-    // Imprimir en la consola el tipo seleccionado, la cantidad ingresada y la hora seleccionada
-    console.log('Tipo seleccionado:', $('#idtipo option:checked').textContent);
-    console.log('Cantidad ingresada:', $('#cantidad').value);
-    console.log('Hora seleccionada:', $('#hora').value);
+                // Imprimir en la consola el tipo seleccionado, la cantidad ingresada y la hora seleccionada
+                console.log('Tipo seleccionado:', $('#idtipo option:checked').textContent); 
+                console.log('Ubi seleccionado:', $('#idubicaciondocente option:checked').textContent); 
+                console.log('Cantidad ingresada:', $('#cantidad').value);
+                console.log('Hora seleccionada:', $('#hora').value);
 
-    // Limpiar los campos del formulario principal después de agregar la fila
-    $('#idtipo').value = '';
-    $('#cantidad').value = '';
-    $('#hora').value = '';
-}
+                // Limpiar los campos del formulario principal después de agregar la fila
+                $('#idtipo').value = '';
+                $('#idubicaciondocente').value = '';
+                $('#cantidad').value = '';
+                $('#hora').value = '';
+            }
 
 
             // Ahora el evento del botón Agregar recopila los valores del formulario principal y llama a la función addrow()
@@ -164,6 +172,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 var tipo = $('#idtipo').value;
                 var cantidad = $('#cantidad').value;
                 var hora = $('#hora').value;
+                var ubi = $("#idubicaciondocente").value;
 
                 if (tipo && cantidad && hora) {
                     addrow();
@@ -199,7 +208,30 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     .catch(e => {
                         console.error(e);
                     });
-            }
+
+                }
+                function getLocation(){
+
+                    const parametros = new FormData();
+                    parametros.append("operacion", "listar");
+
+                    fetch(`../../controllers/ubicacion.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            datos.forEach(element => {
+                                const tagOption = document.createElement("option");
+                                tagOption.innerText = element.nombre;
+                                tagOption.value = element.idubicacion;
+                                document.querySelector("#idubicaciondocente").appendChild(tagOption)
+                            });
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
 
             function calendario(datos) {
                 console.log('Datos recibidos del servidor:', datos);
@@ -266,27 +298,28 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             }
 
             function registerCalendar() {
-    const parametros = new FormData();
-    parametros.append("operacion", "registrar");
-    parametros.append("idsolicita", idusuario);
-    parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
-    parametros.append("cantidad", $('#cantidad').value);
-    parametros.append("hora", $('#hora').value);
-    parametros.append("fechasolicitud", $('#fechasolicitud').value);
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idsolicita", idusuario);
+                parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
+                parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+                parametros.append("cantidad", $('#cantidad').value);
+                parametros.append("hora", $('#hora').value);
+                parametros.append("fechasolicitud", $('#fechasolicitud').value);
 
-    fetch(`../../controllers/solicitud.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            console.log("Registro realizado:", datos);
-            // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
-        })
-        .catch(e => {
-            console.error(e)
-        });
-}
+                fetch(`../../controllers/solicitud.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        console.log("Registro realizado:", datos);
+                        // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
+                    })
+                    .catch(e => {
+                        console.error(e)
+                    });
+            }
 
 
 
@@ -295,6 +328,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             });
 
             gettypes();
+            getLocation();
             listar_cronogramas();
         });
     </script>

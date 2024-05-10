@@ -33,6 +33,7 @@ class Recurso extends Conexion
     }
   }
 
+  // FALTA PROCEDIMIENTO
   public function listar($datos = [])
   {
     try {

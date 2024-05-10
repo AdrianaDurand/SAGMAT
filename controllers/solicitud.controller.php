@@ -18,6 +18,7 @@ if (isset($_POST['operacion'])){
             $datosEnviar = [
                 "idsolicita"    => $_POST['idsolicita'],
                 "idtipo"     => $_POST['idtipo'],
+                "idubicaciondocente"     => $_POST['idubicaciondocente'],
                 "hora"          => $_POST['hora'],
                 "cantidad"      => $_POST['cantidad'],
                 "fechasolicitud" => $_POST['fechasolicitud']

@@ -1,11 +1,6 @@
 CREATE DATABASE SAGMAT;
 USE SAGMAT;
 
-
-SELECT * FROM detrecepciones;
-
-SELECT * FROM ejemplares;
-SELECT * FROM recepciones;
 -- 1°
 -- *********************************************************************
 -- 								TABLA MARCAS
@@ -13,7 +8,10 @@ SELECT * FROM recepciones;
 CREATE TABLE marcas
 (
 	idmarca		INT AUTO_INCREMENT PRIMARY KEY,
-    marca 		VARCHAR(50) NOT NULL UNIQUE
+    marca 		VARCHAR(50) NOT NULL UNIQUE,
+	create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL
 )ENGINE = INNODB;
 
 -- 2°
@@ -23,7 +21,11 @@ CREATE TABLE marcas
 CREATE TABLE tipos
 (
 	idtipo			INT 			AUTO_INCREMENT PRIMARY KEY,
-    tipo 			VARCHAR(60) 	NOT NULL UNIQUE
+    tipo 			VARCHAR(60) 	NOT NULL UNIQUE,
+    acronimo 		VARCHAR(10)		NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL
 )ENGINE = INNODB;
 
 ALTER TABLE tipos
@@ -37,7 +39,10 @@ ADD COLUMN acronimo VARCHAR(10) NULL;
 CREATE TABLE roles
 (
 	idrol					INT 			AUTO_INCREMENT PRIMARY KEY,
-    rol 					VARCHAR(35) 	NOT NULL UNIQUE
+    rol 					VARCHAR(35) 	NOT NULL UNIQUE,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL
 )ENGINE = INNODB;
 
 -- 4°
@@ -81,7 +86,10 @@ CREATE TABLE ubicaciones
 	idubicacion 					INT 				AUTO_INCREMENT PRIMARY KEY,
     nombre							VARCHAR(30) 		NOT NULL, -- SECRETARIA, LABORATORIO, ETC.
     nro_piso 						SMALLINT 			NULL, --
-    numero 							VARCHAR(30) 		NULL -- ENUMERADO POR AULA.
+    numero 							VARCHAR(30) 		NULL, -- ENUMERADO POR AULA.
+    create_at 						DATETIME			DEFAULT NOW(),
+	update_at						DATETIME			NULL,
+	inactive_at						DATETIME	 		NULL
 )ENGINE = INNODB;
 
 
@@ -98,6 +106,9 @@ CREATE TABLE recursos
     modelo                            VARCHAR(50)         NULL,
     datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}', -- características técnicas, MUY TÉCNICAS
     fotografia                         VARCHAR(200)         NULL,
+    create_at 							DATETIME			DEFAULT NOW(),
+	update_at							DATETIME			NULL,
+	inactive_at							DATETIME	 		NULL,
     CONSTRAINT fk_idtipo_re  FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
     CONSTRAINT fk_idmarca_re         FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
 )ENGINE = INNODB;
@@ -113,6 +124,9 @@ CREATE TABLE detrecursos
     idubicacion 					INT 				NOT NULL, -- FK
     fechainicio						DATE 				NOT NULL,
     fechafin						DATE 				NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idrecurso_dt 		FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso),
     CONSTRAINT fk_idubicacion_dt 	FOREIGN KEY (idubicacion) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
@@ -127,20 +141,18 @@ CREATE TABLE solicitudes
     idsolicita 						INT 				NOT NULL, -- FK
     idtipo							INT 				NOT NULL, -- FK
     idubicaciondocente				INT 				NOT NULL, -- FK
-    hora 							TIME 				NOT NULL,
+    horainicio						TIME 				NOT NULL,
+    horafin							TIME				NULL,
     cantidad		 				SMALLINT 			NOT NULL,
     fechasolicitud					DATE 				NOT NULL,
     estado							INT 				NOT NULL DEFAULT 0,
+	create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idsolicita_sl		FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idtipo_sl  		FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
     CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
-
-SELECt * FROM solicitudes;
-SELECT * FROM ubicaciones;
-SELECT * FROM roles;
-SELECt * FROM usuarios;
-SELECT * FROM personas;
 
 
 DROP TABLE solicitudes;
@@ -155,8 +167,14 @@ CREATE TABLE prestamos
 	idprestamo 						INT 				AUTO_INCREMENT PRIMARY KEY,
     idsolicitud 					INT 				NOT NULL, -- FK
     idatiende 						INT 				NOT NULL, -- FK
+    cantidadrecibida				INT 				NOT NULL, -- FK
+    estadoentrega					VARCHAR(30)			NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idsolicitud_pr	FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
-    CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario)
+    CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario),
+    CONSTRAINT fk_cantidadrecibida_pr FOREIGN KEY (cantidadrecibida) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
 
 -- 11°
@@ -166,7 +184,10 @@ CREATE TABLE prestamos
 CREATE TABLE observaciones
 (
 	idobservacion 					INT 				AUTO_INCREMENT PRIMARY KEY,
-    observacion 					VARCHAR(200) 		NULL
+    observacion 					VARCHAR(200) 		NULL,
+	create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL
 )ENGINE = INNODB; 
 -- FALTA INGRESAR DATOS A ESTA TABLA
 
@@ -184,7 +205,9 @@ CREATE TABLE recepciones
 	tipodocumento 					VARCHAR(30) 			NOT NULL, -- BOLETA, FACTURA, GUIA REMISIÓN.
 	nrodocumento					VARCHAR(20) 			NOT NULL,
 	serie_doc 						VARCHAR(30) 			NOT NULL,
-	-- observaciones 					VARCHAR(200) 			NULL,
+	create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idusuario_rcp 	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona)
 )ENGINE = INNODB;
@@ -200,6 +223,9 @@ CREATE TABLE detrecepciones(
     cantidadrecibida 				SMALLINT 				NOT NULL,
     cantidadenviada 				SMALLINT 				NOT NULL,
     observaciones 					VARCHAR(200) 			NULL,
+	create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idrecepcion_dtr	FOREIGN KEY (idrecepcion) REFERENCES recepciones (idrecepcion),
     CONSTRAINT fk_idrecurso_dtr FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
@@ -215,30 +241,16 @@ CREATE TABLE ejemplares
     iddetallerecepcion	 			INT 					NOT NULL, -- FK
     nro_serie						VARCHAR(30) 			NULL,
     nro_equipo						VARCHAR(20) 			NOT NULL,
+    estado_equipo				VARCHAR(30) 			NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
 ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL;
+ALTER TABLE ejemplares ADD estado_equipo VARCHAR(30) NULL;
 -- FALTA INGRESAR DATOS A LA TABLA
 
-SELECT * FROM ejemplares;
-
--- 15°
--- *********************************************************************
--- 						TABLA DETALLE PRESTAMOS
--- *********************************************************************
-CREATE TABLE detprestamos
-(
-	iddetalleprestamo 				INT 					AUTO_INCREMENT PRIMARY KEY,
-    idprestamo 						INT 					NOT NULL, -- FK
-    idejemplar 						INT 					NOT NULL, -- FK
-    idubicacion 					INT 					NOT NULL, -- FK
-    estadoentrega					VARCHAR(30) 			NOT NULL,
-    fechainicio 					DATE 					NOT NULL,
-    CONSTRAINT fk_idprestamo_dtp 	FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
-    CONSTRAINT fk_idejemplar_dtp 	FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar),
-    CONSTRAINT fk_idubicacion_dtp 	FOREIGN KEY (idubicacion) REFERENCES ubicaciones (idubicacion)
-)ENGINE = INNODB;
--- FALTA INGRESAR DATOS A LA TABLA
 
 -- 16°
 -- *********************************************************************
@@ -247,11 +259,13 @@ CREATE TABLE detprestamos
 CREATE TABLE devoluciones
 (
 	iddevolucion 					INT 					AUTO_INCREMENT PRIMARY KEY,
-    iddetalleprestamo 				INT 					NOT NULL, -- FK
+    idprestamo		 				INT 					NOT NULL, -- FK
     idobservacion 					INT 					NOT NULL, -- FK
     estadodevolucion 				VARCHAR(30) 			NOT NULL,
-    fechafin 						DATETIME 				NULL,
-    CONSTRAINT fk_iddetalleprestamo_dv FOREIGN KEY (iddetalleprestamo) REFERENCES detprestamos (iddetalleprestamo),
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
+    CONSTRAINT fk_idprestamo_dv FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
     CONSTRAINT fk_idobservacion_dv FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
 ) ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA
@@ -273,6 +287,9 @@ CREATE TABLE mantenimientos
     comentarios 					VARCHAR(200) 			NULL,
     ficha							VARCHAR(300) 			NULL,
     estado 							VARCHAR(20) 			NOT NULL, -- BUENO, DETERIORI....
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_iddevolucion_mtn 	FOREIGN KEY (iddevolucion) REFERENCES devoluciones (iddevolucion),
     CONSTRAINT fk_idusuario_mtn		FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idejemplar_mtn 	FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
@@ -291,5 +308,8 @@ CREATE TABLE bajas
     comentarios						VARCHAR(100) 			NULL,
     ficha							VARCHAR(300) 			NULL,
     estado							VARCHAR(20) 			NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idmantenimiento_bj FOREIGN KEY (idmantenimiento) REFERENCES mantenimientos (idmantenimiento)
 )ENGINE = INNODB;

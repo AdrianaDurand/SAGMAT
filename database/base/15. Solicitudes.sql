@@ -13,7 +13,8 @@ BEGIN
     t.acronimo,
     t.tipo,
     s.idsolicitud,
-    s.hora,
+    s.horainicio,
+    s.horafin,
     s.cantidad,
     s.fechasolicitud,
     u.nombre,
@@ -22,12 +23,12 @@ BEGIN
 FROM solicitudes s
 INNER JOIN tipos t ON s.idtipo = t.idtipo
 INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
-WHERE s.idsolicita = 4;
-
+WHERE s.idsolicita = _idsolicita;
 END $$
 CALL spu_listar_calendar(4);
 
 SELECt * FROM solicitudes;
+SELECT * FROM usuarios;
 SELECt * FROM ubicaciones;
 
 -- REGISTRO DE SOLICITUD
@@ -63,3 +64,8 @@ CALL spu_solicitudes_registrar(4, 1, 1, '13:15:55', 2, '2024-05-07');
 SELECt * FROM solicitudes;
 SELECT * FROM recursos;
 SELECT * FROM tipos;
+SELECT * FROM ubicaciones;
+SELECT * FROM personas;
+
+USE SAGMAT;
+

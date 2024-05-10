@@ -2,7 +2,7 @@
 -- -----------------------    DETALLE RECURSOS       -------------------------------------
 -- ---------------------------------------------------------------------------------------
 
-DELIMITER $$
+/*DELIMITER $$
 CREATE PROCEDURE spu_addDetrecurso
 (
     IN _idrecurso		 INT,
@@ -38,4 +38,4 @@ BEGIN
     INNER JOIN tipo t ON t.idtiporecurso = recur.idtiporecurso
     INNER JOIN marcas m ON m.idmarca = recur.idmarca
     ORDER BY recep.idrecepcion ASC;
-END $$
+END $$*/

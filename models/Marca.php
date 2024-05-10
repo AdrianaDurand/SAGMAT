@@ -22,6 +22,7 @@ class Marca extends Conexion{
         }
     }
 
+    // NO HAY PROCEDIMIENTO 
     public function listarrecurso($datos = [])
     {
         try {
