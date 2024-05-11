@@ -77,6 +77,8 @@ CREATE TABLE usuarios
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
 )ENGINE = INNODB;
 
+
+
 -- 6°
 -- *********************************************************************
 -- 								TABLA UBICACIONES
@@ -91,6 +93,17 @@ CREATE TABLE ubicaciones
 	update_at						DATETIME			NULL,
 	inactive_at						DATETIME	 		NULL
 )ENGINE = INNODB;
+
+-- ALMACENES
+CREATE TABLE almacenes
+(
+	idalmacen 						INT 				AUTO_INCREMENT PRIMARY KEY,
+	areas 							VARCHAR(30)			NOT NULL,
+	create_at 						DATETIME			DEFAULT NOW(),
+	update_at						DATETIME			NULL,
+	inactive_at						DATETIME	 		NULL
+)ENGINE = INNODB;
+
 
 
 -- 7°
@@ -177,18 +190,6 @@ CREATE TABLE prestamos
     CONSTRAINT fk_cantidadrecibida_pr FOREIGN KEY (cantidadrecibida) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
 
--- 11°
--- *********************************************************************
--- 						TABLA OBSERVACIONES
--- *********************************************************************
-CREATE TABLE observaciones
-(
-	idobservacion 					INT 				AUTO_INCREMENT PRIMARY KEY,
-    observacion 					VARCHAR(200) 		NULL,
-	create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL
-)ENGINE = INNODB; 
 -- FALTA INGRESAR DATOS A ESTA TABLA
 
 -- 12°
@@ -199,7 +200,8 @@ CREATE TABLE recepciones
 (
 	idrecepcion 					INT 					AUTO_INCREMENT PRIMARY KEY,
 	idusuario						INT 					NOT NULL, -- FK
-	idpersonal						INT 					NULL, -- FK (personas)
+	idpersonal						INT 					NULL, -- FK (personas),
+    idalmacen 						INT 					NOT NULL,
 	fechayhoraregistro				DATETIME				NOT NULL DEFAULT NOW(),
 	fechayhorarecepcion				DATETIME				NOT NULL,
 	tipodocumento 					VARCHAR(30) 			NOT NULL, -- BOLETA, FACTURA, GUIA REMISIÓN.
@@ -209,9 +211,14 @@ CREATE TABLE recepciones
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idusuario_rcp 	FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona)
+    CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona),
+    CONSTRAINT fk_idalmacen_rcp		FOREIGN KEY (idalmacen) REFERENCES almacenes (idalmacen)
 )ENGINE = INNODB;
 ALTER TABLE recepciones MODIFY fechayhoraregistro DATETIME NOT NULL DEFAULT NOW();
+
+DROP TABLE observaciones;
+SET foreign_key_checks =1;
+
 -- 13°
 -- *********************************************************************
 -- 						TABLA DETALLE RECEPCIONES
@@ -249,7 +256,30 @@ CREATE TABLE ejemplares
 )ENGINE = INNODB;
 ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL;
 ALTER TABLE ejemplares ADD estado_equipo VARCHAR(30) NULL;
--- FALTA INGRESAR DATOS A LA TABLA
+
+-- KARDEX
+CREATE TABLE kardex
+(
+	idkardex 		INT 				AUTO_INCREMENT PRIMARY KEY,
+    idrecurso		INT 				NOT NULL, -- FK
+    iddetallerecepcion 	INT 			NOT NULL, -- FK
+    cantidad			SMALLINT 		NULL,
+    CONSTRAINT fk_idrecurso_k FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso),
+    CONSTRAINT fk_iddetallerecepcion_k FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
+)ENGINE = INNODB;
+
+-- MOVIMIENTOS
+CREATE TABLE movimientos
+(
+	idmovimiento 		INT 		AUTO_INCREMENT PRIMARY KEY,
+    idkardex 			INT 		NOT NULL,
+    idprestamo			INT 		NOT NULL,
+    tipo 				CHAR(1) 	NULL, -- E / S
+    saldo				SMALLINT 	NULL,
+    CONSTRAINT fk_idkardex_m	FOREIGN KEY (idkardex) REFERENCES kardex (idkardex),
+    CONSTRAINT fk_idprestamo_m 	FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
+)ENGINE = INNODB;
+
 
 
 -- 16°
@@ -259,14 +289,13 @@ ALTER TABLE ejemplares ADD estado_equipo VARCHAR(30) NULL;
 CREATE TABLE devoluciones
 (
 	iddevolucion 					INT 					AUTO_INCREMENT PRIMARY KEY,
-    idprestamo		 				INT 					NOT NULL, -- FK
-    idobservacion 					INT 					NOT NULL, -- FK
+    idmovimiento 					INT 					NOT NULL,
+    observaciones 					VARCHAR(100) 			NULL,
     estadodevolucion 				VARCHAR(30) 			NOT NULL,
     create_at 				DATETIME			DEFAULT NOW(),
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idprestamo_dv FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
-    CONSTRAINT fk_idobservacion_dv FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
+    CONSTRAINT fk_idmovimiento_dv FOREIGN KEY (idmovimiento) REFERENCES movimientos (idmovimiento)
 ) ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA
 

@@ -258,3 +258,5 @@ SELECT * FROM recursos;
 SELECT * FROM ejemplares;
 SELECT * FROM tipos;
 
+USE SAGMAT;
+

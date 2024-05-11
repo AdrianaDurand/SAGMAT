@@ -48,16 +48,17 @@ CALL spu_solicitudes_registrar(4, 9, CURTIME(), 2, '2024-05-09');
 
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
-    IN _idsolicita INT,
-    IN _idtipo INT,
-    IN _idubicaciondocente INT,
-    IN _hora TIME,
-    IN _cantidad SMALLINT,
-    IN _fechasolicitud DATE
+    IN _idsolicita 			INT,
+    IN _idtipo 				INT,
+    IN _idubicaciondocente 	INT,
+    IN _horainicio 			TIME,
+    IN _horafin				TIME,
+    IN _cantidad 			SMALLINT,
+    IN _fechasolicitud 		DATE
 )
 BEGIN
-	INSERT INTO solicitudes (idsolicita, idtipo, idubicaciondocente, hora, cantidad, fechasolicitud)
-	VALUES (_idsolicita, _idtipo, _idubicaciondocente, _hora, _cantidad, _fechasolicitud);
+	INSERT INTO solicitudes (idsolicita, idtipo, idubicaciondocente, horainicio, horafin, cantidad, fechasolicitud)
+	VALUES (_idsolicita, _idtipo, _idubicaciondocente, _horainicio, _horafin, _cantidad, _fechasolicitud);
 END $$
 CALL spu_solicitudes_registrar(4, 1, 1, '13:15:55', 2, '2024-05-07');
 

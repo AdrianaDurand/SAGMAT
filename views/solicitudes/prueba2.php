@@ -59,25 +59,31 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     <div id="descripcion"> </div>
                     <form action="" autocomplete="off" id="form-cronograma">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <label for="idtipo" class="form-label">Tipo de recurso:</label>
                                 <select name="" id="idtipo" class="form-select" required>
                                     <option value="">Seleccione:</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <label for="idubicaciondocente" class="form-label">Ubicación:</label>
                                 <select name="" id="idubicaciondocente" class="form-select" required>
                                     <option value="">Seleccione:</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="horainicio" class="form-label">Hora Inicio:</label>
+                                <input type="time" class="form-control" id="horainicio">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="horafin" class="form-label">Hora Fin:</label>
+                                <input type="time" class="form-control" id="horafin">
+                            </div>
+                            <div class="col-md-4">
                                 <label for="cantidad" class="form-label" placeholder="Máximo 30">Cantidad:</label>
                                 <input type="number" class="form-control" id="cantidad" min="1" max="30">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="hora" class="form-label">Hora:</label>
-                                <input type="time" class="form-control" id="hora" min="00:00" max="23:59" step="1">
                             </div>
                         </div>
 
@@ -89,7 +95,8 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                         <tr>
                                             <th scope="col">Tipo de recurso</th>
                                             <th scope="col">Ubicación</th>
-                                            <th scope="col">Hora</th>
+                                            <th scope="col">Hora Inicio</th>
+                                            <th scope="col">Hora Fin</th>
                                             <th scope="col">Cantidad</th>
                                             <th scope="col">Acción</th>
                                         </tr>
@@ -141,52 +148,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 return document.querySelector(id)
             };
 
-            function addrow() {
-                var tablaEquipos = document.getElementById("tablaEquipos");
-                var nuevaFila = document.createElement("tr");
-                nuevaFila.innerHTML = `
-                    <td>${$('#idtipo option:checked').textContent}</td>
-                    <td>${$('#cantidad').value}</td>
-                    <td>${$('#hora').value}</td>
-                    <td>${$('#idubicaciondocente option:checked').value}</td>
-                    <td><button type="button" class="btn btn-danger btnEliminarFila">Eliminar</button></td>
-                `;
-                tablaEquipos.appendChild(nuevaFila);
-
-                // Imprimir en la consola el tipo seleccionado, la cantidad ingresada y la hora seleccionada
-                console.log('Tipo seleccionado:', $('#idtipo option:checked').textContent); 
-                console.log('Ubi seleccionado:', $('#idubicaciondocente option:checked').textContent); 
-                console.log('Cantidad ingresada:', $('#cantidad').value);
-                console.log('Hora seleccionada:', $('#hora').value);
-
-                // Limpiar los campos del formulario principal después de agregar la fila
-                $('#idtipo').value = '';
-                $('#idubicaciondocente').value = '';
-                $('#cantidad').value = '';
-                $('#hora').value = '';
-            }
-
-
-            // Ahora el evento del botón Agregar recopila los valores del formulario principal y llama a la función addrow()
-            document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
-                var tipo = $('#idtipo').value;
-                var cantidad = $('#cantidad').value;
-                var hora = $('#hora').value;
-                var ubi = $("#idubicaciondocente").value;
-
-                if (tipo && cantidad && hora) {
-                    addrow();
-                } else {
-                    alert("Por favor complete todos los campos antes de agregar.");
-                }
-            });
-
-            // evento del botón de eliminar fila
-            document.addEventListener("click", function(event) {
-                if (event.target.classList.contains("btnEliminarFila")) {
-                    event.target.closest("tr").remove(); // Con esto se elimina la fila más cercana al botón
-                }
-            });
+           
 
             function gettypes() {
                 const parametros = new FormData();
@@ -297,35 +259,87 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     });
             }
 
-            function registerCalendar() {
-                const parametros = new FormData();
-                parametros.append("operacion", "registrar");
-                parametros.append("idsolicita", idusuario);
-                parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
-                parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-                parametros.append("cantidad", $('#cantidad').value);
-                parametros.append("hora", $('#hora').value);
-                parametros.append("fechasolicitud", $('#fechasolicitud').value);
+            var equiposAgregados = []; // Lista para almacenar equipos añadidos
 
-                fetch(`../../controllers/solicitud.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        console.log("Registro realizado:", datos);
-                        // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
-                    })
-                    .catch(e => {
-                        console.error(e)
-                    });
-            }
+// Función para agregar una fila a la tabla de equipos
+function addRow(tipo, ubicacion, horaInicio, horaFin, cantidad) {
+    var tablaEquipos = document.getElementById("tablaEquipos");
+    var newRow = tablaEquipos.insertRow();
+    newRow.innerHTML = `
+        <td>${tipo}</td>
+        <td>${ubicacion}</td>
+        <td>${horaInicio}</td>
+        <td>${horaFin}</td>
+        <td>${cantidad}</td>
+        <td><button class="btnEliminarFila btn btn-danger">Eliminar</button></td>
+    `;
+    tablaEquipos.appendChild(newRow);
+}
 
+// Evento del botón Agregar
+document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
+    var tipo = $('#idtipo').value;
+    var cantidad = $('#cantidad').value;
+    var hora = $('#horainicio').value;
+    var horaFin = $('#horafin').value;
+    var ubicacion = $("#idubicaciondocente").value;
 
+    if (tipo && cantidad && hora && horaFin && ubicacion) {
+        addRow(tipo, ubicacion, hora, horaFin, cantidad);
+        equiposAgregados.push({ tipo: tipo, ubicacion: ubicacion, horaInicio: hora, horaFin: horaFin, cantidad: cantidad });
+    } else {
+        alert("Por favor complete todos los campos antes de agregar.");
+    }
+});
 
-            document.getElementById("agregar").addEventListener("click", function() {
-                registerCalendar();
-            });
+// Evento del botón de eliminar fila
+document.addEventListener("click", function(event) {
+    if (event.target.classList.contains("btnEliminarFila")) {
+        var rowIndex = event.target.closest("tr").rowIndex;
+        document.getElementById("tablaEquipos").deleteRow(rowIndex);
+        equiposAgregados.splice(rowIndex - 1, 1); // Eliminar el equipo de la lista
+    }
+});
+
+// Función para registrar la solicitud y los equipos añadidos
+function registerCalendar() {
+    const parametros = new FormData();
+    parametros.append("operacion", "registrar");
+    parametros.append("idsolicita", idusuario);
+    parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
+    parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+    parametros.append("cantidad", $('#cantidad').value);
+    parametros.append("horainicio", $('#horainicio').value);
+    parametros.append("horafin", $('#horafin').value);
+    parametros.append("fechasolicitud", $('#fechasolicitud').value);
+
+    // Agregar los equipos añadidos a los parámetros
+    equiposAgregados.forEach((equipo, index) => {
+        parametros.append(`equipo${index}_tipo`, equipo.tipo);
+        parametros.append(`equipo${index}_ubicacion`, equipo.ubicacion);
+        parametros.append(`equipo${index}_horaInicio`, equipo.horaInicio);
+        parametros.append(`equipo${index}_horaFin`, equipo.horaFin);
+        parametros.append(`equipo${index}_cantidad`, equipo.cantidad);
+    });
+
+    fetch(`../../controllers/solicitud.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            console.log("Registro realizado:", datos);
+            // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
+        })
+        .catch(e => {
+            console.error(e)
+        });
+}
+
+// Evento del botón Finalizar
+document.getElementById("agregar").addEventListener("click", function() {
+    registerCalendar();
+});
 
             gettypes();
             getLocation();
