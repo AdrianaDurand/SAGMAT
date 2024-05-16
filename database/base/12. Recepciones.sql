@@ -52,8 +52,10 @@ BEGIN
 END $$
 CALL searchTipos('a');
 
+-- REGISTRAR RECURSOS.
 DELIMITER $$
-CREATE PROCEDURE spu_registrar_recursos(
+CREATE PROCEDURE spu_registrar_recursos
+(
     IN _idtipo                 INT,
     IN _idmarca             INT,
     IN _descripcion            VARCHAR(100),
@@ -62,7 +64,15 @@ CREATE PROCEDURE spu_registrar_recursos(
     IN _fotografia             VARCHAR(200)
 )
 BEGIN
+    DECLARE last_insert_id INT; -- último
+
     INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
     (_idtipo, _idmarca, _descripcion, _modelo, _datasheets, NULLIF(_fotografia, ''));
-END $$
 
+     -- El ultimo ID
+    SET last_insert_id = LAST_INSERT_ID();
+
+    -- Insertamos en la tabla stock
+    INSERT INTO stock (idrecurso, stock)
+    VALUES (last_insert_id, 0);
+END $$

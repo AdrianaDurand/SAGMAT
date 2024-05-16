@@ -1,7 +1,10 @@
+USE SAGMAT;
 -- ----------------------------------------------------------------------------------------
 --       --------------- INGRESAR DETALLE RECEPCIÓN  --------------------------
 -- ----------------------------------------------------------------------------------------
-DELIMITER $$
+
+SELECT * FROM detrecepciones;
+/*DELIMITER $$
 CREATE PROCEDURE spu_addDetrecepcion
 (
     IN _idrecepcion		 INT,
@@ -17,8 +20,41 @@ BEGIN
     (_idrecepcion, _idrecurso, _cantidadenviada, _cantidadrecibida, _observaciones);
     SELECT @@last_insert_id 'iddetallerecepcion';
 END $$
-
+*/
 DELIMITER $$
+CREATE PROCEDURE spu_addDetrecepcion
+(
+    IN _idrecepcion INT,
+    IN _idrecurso INT,
+    IN _cantidadenviada        SMALLINT,
+    IN _cantidadrecibida     SMALLINT,
+    IN _observaciones           VARCHAR(200)
+)
+BEGIN
+    DECLARE _saldo_actual INT;
+
+    -- Agregamos datos al detalle de recepciones
+    INSERT INTO detrecepciones (idrecepcion, idrecurso, cantidadenviada, cantidadrecibida, observaciones)
+    VALUES (_idrecepcion, _idrecurso, _cantidadenviada, _cantidadrecibida, _observaciones);
+
+    -- Obtenemos
+    SET _saldo_actual = (
+        SELECT stock
+        FROM stock
+        WHERE idrecurso = _idrecurso
+    );
+
+    -- Actualizamos
+    UPDATE stock
+    SET stock = _saldo_actual + _cantidadrecibida
+    WHERE idrecurso = _idrecurso;
+END $$
+CALL spu_addDetrecepcion(1,1, 30,50, 'Ninguna');
+SELECT * FROM detrecepciones;
+SELECT * FROM recepciones;
+SELECT * FROM recursos;
+SELECT * FROM stock;
+/*DELIMITER $$
 DROP PROCEDURE spu_detrecepciones_add
 (
     IN _idrecepcion INT,
@@ -102,4 +138,4 @@ select * from recepciones;
 select * from almacenes;
 select * from kardex;
 
-INSERT INTO almacenes (areas) VALUES ('AIP');
+INSERT INTO almacenes (areas) VALUES ('AIP');*/
