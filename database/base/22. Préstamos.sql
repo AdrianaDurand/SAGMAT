@@ -101,7 +101,7 @@ BEGIN
     SELECT error_message AS 'Hecho';
 END $$
 
-CALL sp_registrar_prestamo_stock(1, 10, 1, 'bueno');
+CALL sp_registrar_prestamo_stock(1, 14, 1, 'bueno');
 SELECT * FROM solicitudes;
 SELECT * FROM prestamos;
 SELECT * FROM stock;
