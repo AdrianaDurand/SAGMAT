@@ -1,3 +1,4 @@
+
 CREATE DATABASE SAGMAT;
 USE SAGMAT;
 
@@ -126,23 +127,7 @@ CREATE TABLE recursos
     CONSTRAINT fk_idmarca_re         FOREIGN KEY (idmarca) REFERENCES marcas (idmarca)
 )ENGINE = INNODB;
 ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}';
--- 8°
--- *********************************************************************
--- 						TABLA DETALLE RECURSOS
--- *********************************************************************
-CREATE TABLE detrecursos
-(
-	iddetallerecurso				INT 				AUTO_INCREMENT PRIMARY KEY,
-    idrecurso						INT 				NOT NULL, -- FK
-    idubicacion 					INT 				NOT NULL, -- FK
-    fechainicio						DATE 				NOT NULL,
-    fechafin						DATE 				NULL,
-    create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idrecurso_dt 		FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso),
-    CONSTRAINT fk_idubicacion_dt 	FOREIGN KEY (idubicacion) REFERENCES ubicaciones (idubicacion)
-)ENGINE = INNODB;
+
 
 -- 9°
 -- *********************************************************************
@@ -171,6 +156,18 @@ CREATE TABLE solicitudes
 DROP TABLE solicitudes;
 SET foreign_key_checks =1;
 
+
+CREATE TABLE stock
+(
+	idstock 				INT 				AUTO_INCREMENT PRIMARY KEY,
+    idrecurso 				INT 				NOT NULL, -- FK
+    stock 					SMALLINT 			NOT NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
+    CONSTRAINT fk_idrecurso_st	FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
+)ENGINE = INNODB;
+
 -- 10°
 -- *********************************************************************
 -- 							TABLA PRESTAMOS
@@ -178,16 +175,16 @@ SET foreign_key_checks =1;
 CREATE TABLE prestamos
 (
 	idprestamo 						INT 				AUTO_INCREMENT PRIMARY KEY,
+    idstock 						INT 				NOT NULL, -- FK
     idsolicitud 					INT 				NOT NULL, -- FK
     idatiende 						INT 				NOT NULL, -- FK
-    cantidadrecibida				INT 				NOT NULL, -- FK
     estadoentrega					VARCHAR(30)			NULL,
     create_at 				DATETIME			DEFAULT NOW(),
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idsolicitud_pr	FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
-    CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_cantidadrecibida_pr FOREIGN KEY (cantidadrecibida) REFERENCES ejemplares (idejemplar)
+    CONSTRAINT fk_idstock_pr		FOREIGN KEY (idstock) REFERENCES stock (idstock),
+    CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
 -- FALTA INGRESAR DATOS A ESTA TABLA
@@ -288,14 +285,14 @@ CREATE TABLE movimientos
 -- *********************************************************************
 CREATE TABLE devoluciones
 (
-	iddevolucion 					INT 					AUTO_INCREMENT PRIMARY KEY,
-    idmovimiento 					INT 					NOT NULL,
-    observaciones 					VARCHAR(100) 			NULL,
-    estadodevolucion 				VARCHAR(30) 			NOT NULL,
+	iddevolucion 			INT 				AUTO_INCREMENT PRIMARY KEY,
+    idprestamo	 			INT 				NOT NULL,
+    observaciones 			VARCHAR(100) 		NULL,
+    estadodevolucion 		VARCHAR(30) 		NOT NULL,
     create_at 				DATETIME			DEFAULT NOW(),
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idmovimiento_dv FOREIGN KEY (idmovimiento) REFERENCES movimientos (idmovimiento)
+    CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA
 

@@ -148,7 +148,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 return document.querySelector(id)
             };
 
-           
+
 
             function gettypes() {
                 const parametros = new FormData();
@@ -171,29 +171,30 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                         console.error(e);
                     });
 
-                }
-                function getLocation(){
+            }
 
-                    const parametros = new FormData();
-                    parametros.append("operacion", "listar");
+            function getLocation() {
 
-                    fetch(`../../controllers/ubicacion.controller.php`, {
-                            method: "POST",
-                            body: parametros
-                        })
-                        .then(respuesta => respuesta.json())
-                        .then(datos => {
-                            datos.forEach(element => {
-                                const tagOption = document.createElement("option");
-                                tagOption.innerText = element.nombre;
-                                tagOption.value = element.idubicacion;
-                                document.querySelector("#idubicaciondocente").appendChild(tagOption)
-                            });
-                        })
-                        .catch(e => {
-                            console.error(e);
+                const parametros = new FormData();
+                parametros.append("operacion", "listar");
+
+                fetch(`../../controllers/ubicacion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        datos.forEach(element => {
+                            const tagOption = document.createElement("option");
+                            tagOption.innerText = element.nombre;
+                            tagOption.value = element.idubicacion;
+                            document.querySelector("#idubicaciondocente").appendChild(tagOption)
                         });
-                }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
 
             function calendario(datos) {
                 console.log('Datos recibidos del servidor:', datos);
@@ -261,85 +262,91 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 
             var equiposAgregados = []; // Lista para almacenar equipos añadidos
 
-// Función para agregar una fila a la tabla de equipos
-function addRow(tipo, ubicacion, horaInicio, horaFin, cantidad) {
-    var tablaEquipos = document.getElementById("tablaEquipos");
-    var newRow = tablaEquipos.insertRow();
-    newRow.innerHTML = `
-        <td>${tipo}</td>
-        <td>${ubicacion}</td>
-        <td>${horaInicio}</td>
-        <td>${horaFin}</td>
-        <td>${cantidad}</td>
-        <td><button class="btnEliminarFila btn btn-danger">Eliminar</button></td>
-    `;
-    tablaEquipos.appendChild(newRow);
-}
+            // Función para agregar una fila a la tabla de equipos
+            function addRow(tipo, ubicacion, horaInicio, horaFin, cantidad) {
+                var tablaEquipos = document.getElementById("tablaEquipos");
+                var newRow = tablaEquipos.insertRow();
+                newRow.innerHTML = `
+                    <td>${tipo}</td>
+                    <td>${ubicacion}</td>
+                    <td>${horaInicio}</td>
+                    <td>${horaFin}</td>
+                    <td>${cantidad}</td>
+                    <td><button class="btnEliminarFila btn btn-danger">Eliminar</button></td>
+                `;
+                    tablaEquipos.appendChild(newRow);
+                }
 
-// Evento del botón Agregar
-document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
-    var tipo = $('#idtipo').value;
-    var cantidad = $('#cantidad').value;
-    var hora = $('#horainicio').value;
-    var horaFin = $('#horafin').value;
-    var ubicacion = $("#idubicaciondocente").value;
+            // Evento del botón Agregar
+            document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
+                var tipo = $('#idtipo').value;
+                var cantidad = $('#cantidad').value;
+                var hora = $('#horainicio').value;
+                var horaFin = $('#horafin').value;
+                var ubicacion = $("#idubicaciondocente").value;
 
-    if (tipo && cantidad && hora && horaFin && ubicacion) {
-        addRow(tipo, ubicacion, hora, horaFin, cantidad);
-        equiposAgregados.push({ tipo: tipo, ubicacion: ubicacion, horaInicio: hora, horaFin: horaFin, cantidad: cantidad });
-    } else {
-        alert("Por favor complete todos los campos antes de agregar.");
-    }
-});
+                if (tipo && cantidad && hora && horaFin && ubicacion) {
+                    addRow(tipo, ubicacion, hora, horaFin, cantidad);
+                    equiposAgregados.push({
+                        tipo: tipo,
+                        ubicacion: ubicacion,
+                        horaInicio: hora,
+                        horaFin: horaFin,
+                        cantidad: cantidad
+                    });
+                } else {
+                    alert("Por favor complete todos los campos antes de agregar.");
+                }
+            });
 
-// Evento del botón de eliminar fila
-document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("btnEliminarFila")) {
-        var rowIndex = event.target.closest("tr").rowIndex;
-        document.getElementById("tablaEquipos").deleteRow(rowIndex);
-        equiposAgregados.splice(rowIndex - 1, 1); // Eliminar el equipo de la lista
-    }
-});
+            // Evento del botón de eliminar fila
+            document.addEventListener("click", function(event) {
+                if (event.target.classList.contains("btnEliminarFila")) {
+                    var rowIndex = event.target.closest("tr").rowIndex;
+                    document.getElementById("tablaEquipos").deleteRow(rowIndex);
+                    equiposAgregados.splice(rowIndex - 1, 1); // Eliminar el equipo de la lista
+                }
+            });
 
-// Función para registrar la solicitud y los equipos añadidos
-function registerCalendar() {
-    const parametros = new FormData();
-    parametros.append("operacion", "registrar");
-    parametros.append("idsolicita", idusuario);
-    parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
-    parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-    parametros.append("cantidad", $('#cantidad').value);
-    parametros.append("horainicio", $('#horainicio').value);
-    parametros.append("horafin", $('#horafin').value);
-    parametros.append("fechasolicitud", $('#fechasolicitud').value);
+            // Función para registrar la solicitud y los equipos añadidos
+            function registerCalendar() {
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idsolicita", idusuario);
+                parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
+                parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+                parametros.append("cantidad", $('#cantidad').value);
+                parametros.append("horainicio", $('#horainicio').value);
+                parametros.append("horafin", $('#horafin').value);
+                parametros.append("fechasolicitud", $('#fechasolicitud').value);
 
-    // Agregar los equipos añadidos a los parámetros
-    equiposAgregados.forEach((equipo, index) => {
-        parametros.append(`equipo${index}_tipo`, equipo.tipo);
-        parametros.append(`equipo${index}_ubicacion`, equipo.ubicacion);
-        parametros.append(`equipo${index}_horaInicio`, equipo.horaInicio);
-        parametros.append(`equipo${index}_horaFin`, equipo.horaFin);
-        parametros.append(`equipo${index}_cantidad`, equipo.cantidad);
-    });
+                // Agregar los equipos añadidos a los parámetros
+                equiposAgregados.forEach((equipo, index) => {
+                    parametros.append(`equipo${index}_tipo`, equipo.tipo);
+                    parametros.append(`equipo${index}_ubicacion`, equipo.ubicacion);
+                    parametros.append(`equipo${index}_horaInicio`, equipo.horaInicio);
+                    parametros.append(`equipo${index}_horaFin`, equipo.horaFin);
+                    parametros.append(`equipo${index}_cantidad`, equipo.cantidad);
+                });
 
-    fetch(`../../controllers/solicitud.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            console.log("Registro realizado:", datos);
-            // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
-        })
-        .catch(e => {
-            console.error(e)
-        });
-}
+                fetch(`../../controllers/solicitud.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        console.log("Registro realizado:", datos);
+                        // Aquí puedes hacer algo después de que se registren los datos, como mostrar un mensaje de éxito o actualizar la interfaz de usuario
+                    })
+                    .catch(e => {
+                        console.error(e)
+                    });
+            }
 
-// Evento del botón Finalizar
-document.getElementById("agregar").addEventListener("click", function() {
-    registerCalendar();
-});
+            // Evento del botón Finalizar
+            document.getElementById("agregar").addEventListener("click", function() {
+                registerCalendar();
+            });
 
             gettypes();
             getLocation();
