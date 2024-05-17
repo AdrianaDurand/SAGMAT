@@ -54,7 +54,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                 <th>Docente</th>
                                 <th>Recurso</th>
                                 <th>Fecha</th>
-                                <th>Hora</th>
+                                <th>Ubicación</th>
                                 <th>Cantidad</th>
                                 <th>Acciones</th>
                             </tr>
@@ -95,18 +95,18 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                 let nuevafila = ``;
                                 // Enviar los valores obtenidos en celdas <td></td>
                                 nuevafila = `
-                    <tr>
-                        <td>${numFila}</td>
-                        <td>${registro.docente}</td>
-                        <td>${registro.tipo}</td>
-                        <td>${registro.fechasolicitud}</td>
-                        <td>${registro.hora}</td>
-                        <td>${registro.cantidad}</td>
-                        <td>
-                            <button data-idsolicitud="${registro.idsolicitud}" class='btn btn-warning btn-sm editar' type="submit">Editar</button>
-                        </td>
-                    </tr>
-                `;
+                                    <tr>
+                                        <td>${numFila}</td>
+                                        <td>${registro.docente}</td>
+                                        <td>${registro.tipo}</td>
+                                        <td>${registro.fechayhora}</td>
+                                        <td>${registro.nombre}</td>
+                                        <td>${registro.cantidad}</td>
+                                        <td>
+                                        <button data-idsolicitud="${registro.idsolicitud}" data-idstock="${registro.idstock}" class='btn btn-warning btn-sm editar' type="button">Editar</button>
+                                        </td>
+                                    </tr>
+                                `;
                                 $("#tabla-solicitud tbody").innerHTML += nuevafila;
                                 numFila++;
                             });
@@ -116,11 +116,14 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                         });
                 }
 
-                function registrar(idsolicitud) {
+                function registrar(idsolicitud, idstock) {
+                    console.log(idsolicitud, idstock);
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
+                    parametros.append("idstock", idstock);
                     parametros.append("idsolicitud", idsolicitud);
                     parametros.append("idsolicita", idusuario);
+                    parametros.append("estadoentrega", "Bueno");
 
                     fetch(`../../controllers/prestamo.controller.php`, {
                             method: "POST",
@@ -144,7 +147,8 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 document.addEventListener("click", (event) => {
                     if (event.target.classList.contains("editar")) {
                         const idsolicitud = event.target.getAttribute('data-idsolicitud');
-                        registrar(idsolicitud);
+                        const idstock = event.target.getAttribute('data-idstock');
+                        registrar(idsolicitud, idstock);
                     }
                 });
 
