@@ -32,5 +32,7 @@ BEGIN
 END $$
 
 CALL spu_registrar_devolucion(21, 'xd', 'bueno' );
+
+SELECT * FROM solicitudes;
 SELECT * FROM prestamos;
 SELECT * FROM stock;

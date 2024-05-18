@@ -31,6 +31,10 @@ SELECt * FROM solicitudes;
 SELECT * FROM usuarios;
 SELECt * FROM ubicaciones;
 
+
+SELECT * FROM detrecepciones;
+SELECT * FROM ejemplares;
+
 -- REGISTRO DE SOLICITUD
 /*DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
@@ -70,3 +74,29 @@ SELECT * FROM personas;
 
 USE SAGMAT;
 
+
+SELECT * FROM SOLICITUDES;
+SELECT * FROM prestamos;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_listar_solicitudes()
+BEGIN
+    SELECT 
+        s.idsolicitud,
+        s.cantidad,
+        CONCAT(s.fechasolicitud, ' ', s.horainicio, '-', s.horafin) AS fechayhora,
+        t.tipo,
+        u.nombre,
+        CONCAT(p.apellidos, ', ', p.nombres) AS docente,
+        st.idstock -- Añadiendo el idstock al SELECT
+    FROM 
+        solicitudes s
+        INNER JOIN tipos t ON s.idtipo = t.idtipo
+        INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
+        INNER JOIN personas p ON s.idsolicita = p.idpersona
+        INNER JOIN recursos r ON s.idtipo = r.idtipo -- Uniendo con recursos para obtener el idrecurso
+        INNER JOIN stock st ON r.idrecurso = st.idrecurso -- Uniendo con stock para obtener el idstock
+    WHERE 
+        s.estado = 0;
+END $$

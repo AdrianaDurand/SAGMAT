@@ -14,6 +14,7 @@ if(isset($_POST['operacion'])){
             $datosEnviar = [
                 "idusuario"             => $_SESSION['idusuario'],
                 "idpersonal"            => $_POST['idpersonal'],
+                "idalmacen"            => $_POST['idalmacen'],
                 "fechayhorarecepcion"   => $_POST['fechayhorarecepcion'], 
                 "tipodocumento"         => $_POST['tipodocumento'],
                 "nrodocumento"          => $_POST['nrodocumento'],

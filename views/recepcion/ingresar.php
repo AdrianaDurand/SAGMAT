@@ -70,7 +70,7 @@
                                 <h5 class="card-header">Recepción</h5>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label for="idpersonal"><strong>Buscar personal:</strong></label>
                                             <div class="input-group mb-3">
                                                 <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
@@ -80,11 +80,19 @@
                                                 <!-- Sugerencias de búsqueda -->
                                             </ul>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label><strong>Fecha y hora de recepción:</strong></label>
                                             <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
                                         </div>
-                                        <div class="col-md-4">
+                                    </div>
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                            <label for="idalmacen" class="form-label">Ubicación:</label>
+                                            <select name="" id="idalmacen" class="form-select" required>
+                                                <option value="">Seleccione:</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
                                             <label><strong>Tipo documento:</strong></label>
                                             <select id="tipodocumento" class="form-select">
                                                 <option value="Boleta">Boleta</option>
@@ -306,6 +314,29 @@
             }
             let timeoutId;
             let timeoutId2;
+
+            function getAlmacen() {
+
+                const parametros = new FormData();
+                parametros.append("operacion", "listar");
+
+                fetch(`../../controllers/almacen.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        datos.forEach(element => {
+                            const tagOption = document.createElement("option");
+                            tagOption.innerText = element.areas;
+                            tagOption.value = element.idalmacen;
+                            document.querySelector("#idalmacen").appendChild(tagOption)
+                        });
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
 
             //__________________________ ZONA MODAL  _______________________________
             // Añadiendo características al modal
@@ -765,6 +796,7 @@
             // Función para añadir una recepción
             function añadirRecepcion(skipAñadirDetalle = false) {
                 const idPersonalSeleccionado = document.getElementById("idpersonal").value;
+                const idareaseleccion = document.getElementById("idalmacen").value;
                 const fechaRecepcion = document.getElementById("fechayhorarecepcion").value;
                 const tipoDocumento = document.getElementById("tipodocumento").value;
                 const numeroDocumento = document.getElementById("nrodocumento").value;
@@ -777,6 +809,7 @@
                     console.log("Recepción actual:");
                     console.log({
                         idPersonalSeleccionado,
+                        idareaseleccion,
                         fechaRecepcion,
                         tipoDocumento,
                         numeroDocumento,
@@ -789,6 +822,7 @@
                 parametros.append("operacion", "registrar");
                 parametros.append("idusuario", <?php echo $idusuario ?>);
                 parametros.append("idpersonal", idPersonalSeleccionado);
+                parametros.append("idalmacen", idareaseleccion);
                 parametros.append("fechayhorarecepcion", fechaRecepcion);
                 parametros.append("tipodocumento", tipoDocumento);
                 parametros.append("nrodocumento", numeroDocumento);
@@ -1066,7 +1100,7 @@
 
                             // Verificar y agregar ejemplares al contenedor
                             const nroSerieInputs = document.querySelectorAll(".nro_serie");
-                            const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
+                            // const nroEquipoInputs = document.querySelectorAll(".nro_equipo");
                             const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
                             nroSerieInputs.forEach((nroSerieInput, index) => {
@@ -1214,7 +1248,8 @@
                 return detallesRecepcion.length + 1; // Simplemente incrementamos el tamaño de la lista como ID temporal
             }
 
-
+            
+            getAlmacen();
         });
     </script>
 

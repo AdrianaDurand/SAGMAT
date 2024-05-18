@@ -4,7 +4,8 @@ DELIMITER $$
 CREATE PROCEDURE spu_addrecepcion
 (
     IN _idusuario                INT,
-    IN _idpersonal                 INT,
+    IN _idpersonal               INT,
+    IN _idalmacen 					INT,
     IN _fechayhorarecepcion     DATETIME,
     IN _tipodocumento             VARCHAR(30),
     IN _nrodocumento            CHAR(11),
@@ -12,16 +13,26 @@ CREATE PROCEDURE spu_addrecepcion
 )
 BEGIN 
     INSERT INTO recepciones
-    (idusuario, idpersonal, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc)
+    (idusuario, idpersonal, idalmacen, fechayhorarecepcion, tipodocumento, nrodocumento, serie_doc)
     VALUES
-    (_idusuario, NULLIF(_idpersonal, ''), _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc);
+    (_idusuario, NULLIF(_idpersonal, ''), _idalmacen, _fechayhorarecepcion, _tipodocumento, _nrodocumento, _serie_doc);
     SELECT @@last_insert_id 'idrecepcion';
 END $$
 
+DELIMITER $$
+CREATE PROCEDURE spu_listar_almacen()
+BEGIN
+	SELECT *
+    FROM almacenes;
+END $$
 
 
-
-select * from tipos;
+SELECT * FROM tipos;
+SELECT * FROM ejemplares;
+SELECT * FROM recepciones;
+select * from detrecepciones;
+SELECT * FROM recursos;
+select * from almacenes;
 
 CALL searchTipos('ACCES POINT');
 

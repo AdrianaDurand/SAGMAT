@@ -41,6 +41,7 @@ BEGIN
 
 END $$*/
 
+
 DELIMITER $$
 CREATE PROCEDURE spu_addejemplar
 (
@@ -58,10 +59,9 @@ BEGIN
     FROM tipos
     WHERE idtipo = (SELECT idrecurso FROM detrecepciones WHERE iddetallerecepcion = _iddetallerecepcion);
 
-    -- Si no se encuentra el acrónimo del tipo de recurso, lanzar un error
+    -- Si no se encuentra el acrónimo del tipo de recurso, establecer un valor predeterminado
     IF _acronimo_recurso IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'No se encontró el acrónimo del tipo de recurso asociado al detalle de recepción.';
+        SET _acronimo_recurso = 'DEF'; -- Valor predeterminado
     END IF;
 
     -- Contar la cantidad de recursos de ese tipo ya registrados
@@ -81,7 +81,7 @@ BEGIN
     INSERT INTO ejemplares (iddetallerecepcion, nro_serie, nro_equipo, estado_equipo)
     VALUES (_iddetallerecepcion, NULLIF(_nro_serie, ''), @nuevo_nro_equipo, _estado_equipo);
 END $$
-CALL spu_addejemplar(20, '11145', 'En uso');
+CALL spu_addejemplar(3, '11145', 'En uso');
 
 SELECT * FROM ejemplares;
 SELECT * FROM detrecepciones;
@@ -115,8 +115,10 @@ BEGIN
     VALUES (_iddetallerecepcion, NULLIF(_nro_serie, ''), @nuevo_nro_equipo, _estado_equipo);
 
 END $$*/
-CALL spu_addejemplar(1, 'ABC123', 'Bueno');
+CALL spu_addejemplar(4, 'ABC123', 'Bueno');
 
+
+SELECT * FROm detrecepciones;
 SELECt * FROM ejemplares;
 SELECT * FROM recursos WHERE idtipo = 26;
 SELECT * FROM recursos;

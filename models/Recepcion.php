@@ -12,11 +12,12 @@ class Recepcion extends Conexion{
 
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_addrecepcion(?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_addrecepcion(?,?,?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idusuario'],
                     $datos['idpersonal'],
+                    $datos['idalmacen'],
                     $datos['fechayhorarecepcion'],
                     $datos['tipodocumento'],
                     $datos['nrodocumento'],
