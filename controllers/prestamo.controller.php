@@ -21,5 +21,9 @@ if (isset($_POST['operacion'])) {
             $prestamo->registrar($datosEnviar);
 
             break;
+
+        case 'listarprestamo':
+            echo json_encode($prestamo->listarPrestamo());
+            break;
     }
 }

@@ -41,4 +41,15 @@ class Prestamo extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function listarPrestamo()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_prestamos()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

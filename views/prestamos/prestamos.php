@@ -41,21 +41,23 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     <table class="table table-lg table-bordered" id="tabla-solicitud">
                         <colgroup>
                             <col width="5%"> <!-- ID -->
-                            <col width="20%"> <!-- Docente-->
-                            <col width="20%"> <!-- Recurso -->
+                            <col width="15%"> <!-- Docente-->
+                            <col width="10%"> <!-- Recurso -->
                             <col width="20%"> <!-- Fecha -->
                             <col width="15%"> <!-- Hora -->
                             <col width="5%"> <!-- Cantidad -->
+                            <col width="20%"> <!-- Cantidad -->
                             <col width="15%"> <!-- Acciones -->
                         </colgroup>
                         <thead>
                             <tr class="table-primary">
-                                <th>ID</th>
-                                <th>Docente</th>
+                                <th>N°</th>
+                                <th>Solicitante</th>
                                 <th>Recurso</th>
-                                <th>Fecha</th>
+                                <th>Fecha de Solicitud</th>
                                 <th>Ubicación</th>
                                 <th>Cantidad</th>
+                                <th>Descripción</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -102,8 +104,9 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                         <td>${registro.fechayhora}</td>
                                         <td>${registro.nombre}</td>
                                         <td>${registro.cantidad}</td>
+                                        <td>"Descripcion de los equipos"</td>
                                         <td>
-                                        <button data-idsolicitud="${registro.idsolicitud}" data-idstock="${registro.idstock}" class='btn btn-warning btn-sm editar' type="button">Editar</button>
+                                        <button data-idsolicitud="${registro.idsolicitud}" data-idstock="${registro.idstock}" class='btn btn-warning btn-sm editar' type="button">Aceptar solicitud</button>
                                         </td>
                                     </tr>
                                 `;

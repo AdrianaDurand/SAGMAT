@@ -62,6 +62,8 @@
         </div>
     </div>
 
+    
+
 
 
 
@@ -224,14 +226,14 @@
                             });
                         }
                         contenidoModal += `
-                    <div class="modal-item">
-                        <div class="modal-table">
-                            <table class="table table-striped table-sm">
-                                ${etiqueta}
-                            </table>
-                        </div>
-                    </div>
-                `;
+                            <div class="modal-item">
+                                <div class="modal-table">
+                                    <table class="table table-striped table-sm">
+                                        ${etiqueta}
+                                    </table>
+                                </div>
+                            </div>
+                        `;
                     });
 
                     modalMessage.innerHTML = contenidoModal;
