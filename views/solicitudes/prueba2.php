@@ -4,16 +4,18 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
     header("Location:../../index.php");
 }
 
-if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESSION["idusuario"])) {
+if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESSION["idusuario"]) && isset($_SESSION["email"])) {
     $apellidos = $_SESSION["apellidos"];
     $nombres = $_SESSION["nombres"];
     $idusuario = $_SESSION["idusuario"];
+    $email = $_SESSION["email"];
     echo "<script>";
     echo "var idusuario = " . json_encode($idusuario) . ";";
     echo "</script>";
     echo "<script>console.log('Apellidos:', " . json_encode($apellidos) . ");</script>";
     echo "<script>console.log('Nombres:', " . json_encode($nombres) . ");</script>";
     echo "<script>console.log('ID Usuario:', " . json_encode($idusuario) . ");</script>";
+    echo "<script>console.log('Email:', " . json_encode($email) . ");</script>";
 } else {
     echo "Las variables de sesión no están definidas.";
 }
@@ -49,7 +51,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 
     <!-- Modal -->
     <div class="modal fade" id="modal-cronograma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-primary lg">
                     <h1 class="modal-title fs-5 text-center text-white" id="titulo-modalC"></h1>
@@ -59,13 +61,19 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     <div id="descripcion"> </div>
                     <form action="" autocomplete="off" id="form-cronograma">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="idtipo" class="form-label">Tipo de recurso:</label>
                                 <select name="" id="idtipo" class="form-select" required>
                                     <option value="">Seleccione:</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label for="idtipo1" class="form-label">N° Equipo</label>
+                                <select name="" id="idtipo1" class="form-select" required>
+                                    <option value="">Seleccione:</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="idubicaciondocente" class="form-label">Ubicación:</label>
                                 <select name="" id="idubicaciondocente" class="form-select" required>
                                     <option value="">Seleccione:</option>
@@ -94,6 +102,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                     <thead>
                                         <tr>
                                             <th scope="col">Tipo de recurso</th>
+                                            <th scope="col">N° Equipo</th>
                                             <th scope="col">Ubicación</th>
                                             <th scope="col">Hora Inicio</th>
                                             <th scope="col">Hora Fin</th>
@@ -170,9 +179,8 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                     .catch(e => {
                         console.error(e);
                     });
-
             }
-
+            
             function getLocation() {
 
                 const parametros = new FormData();
@@ -263,11 +271,12 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             var equiposAgregados = []; // Lista para almacenar equipos añadidos
 
             // Función para agregar una fila a la tabla de equipos
-            function addRow(tipo, ubicacion, horaInicio, horaFin, cantidad) {
+            function addRow(tipo, ejemplar, ubicacion, horaInicio, horaFin, cantidad) {
                 var tablaEquipos = document.getElementById("tablaEquipos");
                 var newRow = tablaEquipos.insertRow();
                 newRow.innerHTML = `
                     <td>${tipo}</td>
+                    <td>${ejemplar}</td>
                     <td>${ubicacion}</td>
                     <td>${horaInicio}</td>
                     <td>${horaFin}</td>
@@ -280,16 +289,18 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             // Evento del botón Agregar
             document.getElementById("btnAgregarCaracteristica").addEventListener("click", function() {
                 var tipo = $('#idtipo').value;
+                var ejemplar = $('#idtipo1').value;
                 var cantidad = $('#cantidad').value;
                 var hora = $('#horainicio').value;
                 var horaFin = $('#horafin').value;
                 var ubicacion = $("#idubicaciondocente").value;
 
-                if (tipo && cantidad && hora && horaFin && ubicacion) {
-                    addRow(tipo, ubicacion, hora, horaFin, cantidad);
+                if (tipo && cantidad && hora && horaFin && ubicacion && ejemplar) {
+                    addRow(tipo, ubicacion, hora, horaFin, cantidad, ejemplar);
                     equiposAgregados.push({
                         tipo: tipo,
                         ubicacion: ubicacion,
+                        ejemplar: ejemplar,
                         horaInicio: hora,
                         horaFin: horaFin,
                         cantidad: cantidad
@@ -300,13 +311,16 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             });
 
             // Evento del botón de eliminar fila
-            document.addEventListener("click", function(event) {
-                if (event.target.classList.contains("btnEliminarFila")) {
-                    var rowIndex = event.target.closest("tr").rowIndex;
-                    document.getElementById("tablaEquipos").deleteRow(rowIndex);
-                    equiposAgregados.splice(rowIndex - 1, 1); // Eliminar el equipo de la lista
-                }
-            });
+            // Evento del botón de eliminar fila
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("btnEliminarFila")) {
+                event.stopPropagation(); // Detener la propagación del evento clic para evitar que se cierre el modal
+                var rowIndex = event.target.closest("tr").rowIndex;
+                document.getElementById("tablaEquipos").deleteRow(rowIndex);
+                equiposAgregados.splice(rowIndex - 1, 1); // Eliminar el equipo de la lista
+            }
+        });
+
 
             // Función para registrar la solicitud y los equipos añadidos
             function registerCalendar() {
@@ -315,6 +329,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 parametros.append("idsolicita", idusuario);
                 parametros.append("idtipo", $('#idtipo option:checked').value); // Obtener el valor del tipo seleccionado
                 parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+                parametros.append("idejemplar", $('#idtipo1').value); // Obtener el valor del tipo seleccionado
                 parametros.append("cantidad", $('#cantidad').value);
                 parametros.append("horainicio", $('#horainicio').value);
                 parametros.append("horafin", $('#horafin').value);
@@ -323,6 +338,7 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                 // Agregar los equipos añadidos a los parámetros
                 equiposAgregados.forEach((equipo, index) => {
                     parametros.append(`equipo${index}_tipo`, equipo.tipo);
+                    parametros.append(`equipo${index}_tipo1`, equipo.ejemplar);
                     parametros.append(`equipo${index}_ubicacion`, equipo.ubicacion);
                     parametros.append(`equipo${index}_horaInicio`, equipo.horaInicio);
                     parametros.append(`equipo${index}_horaFin`, equipo.horaFin);
@@ -347,6 +363,60 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
             document.getElementById("agregar").addEventListener("click", function() {
                 registerCalendar();
             });
+
+           // Evento change para el campo idtipo
+document.getElementById('idtipo').addEventListener('change', function() {
+    // Obtener el valor seleccionado
+    var selectedType = this.value;
+    // Mostrar el ID del tipo de recurso seleccionado en la consola
+    console.log("ID del tipo de recurso seleccionado:", selectedType);
+    // Llamar a la función listarTipos pasando el ID del tipo de recurso seleccionado
+    listarTipos(selectedType);
+});
+
+// Función para listar los N° Equipos disponibles para un tipo de recurso dado
+function listarTipos(idTipo) {
+    const parametros = new FormData();
+    parametros.append("operacion", "listarTipos");
+    parametros.append("idtipo", idTipo);
+
+    fetch(`../../controllers/solicitud.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            // Limpiar las opciones actuales del select idtipo1
+            document.getElementById("idtipo1").innerHTML = "<option value=''>Seleccione:</option>";
+            // Verificar si hay datos disponibles
+            if (datos.length > 0) {
+                // Iterar sobre los datos recibidos y agregar opciones al select idtipo1
+                datos.forEach(element => {
+                    const tagOption = document.createElement("option");
+                    tagOption.innerText = element.nro_equipo;
+                    tagOption.value = element.idejemplar;
+                    document.querySelector("#idtipo1").appendChild(tagOption);
+                });
+            } else {
+                // Si no hay datos disponibles, mostrar mensaje y deshabilitar el select idtipo1
+                const tagOption = document.createElement("option");
+                tagOption.innerText = "No hay datos disponibles";
+                tagOption.disabled = true;
+                document.querySelector("#idtipo1").appendChild(tagOption);
+            }
+        })
+        .catch(e => {
+            console.error(e);
+        });
+}
+
+// Evento change para el campo idtipo1
+document.getElementById('idtipo1').addEventListener('change', function() {
+    // Obtener el valor seleccionado
+    var selectedId = this.value;
+    // Mostrar el ID seleccionado en la consola
+    console.log("ID seleccionado:", selectedId);
+});
 
             gettypes();
             getLocation();

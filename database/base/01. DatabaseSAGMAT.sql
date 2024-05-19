@@ -139,6 +139,7 @@ CREATE TABLE solicitudes
     idsolicita 						INT 				NOT NULL, -- FK
     idtipo							INT 				NOT NULL, -- FK
     idubicaciondocente				INT 				NOT NULL, -- FK
+    idejemplar						INT					NOT NULL, -- FK
     horainicio						TIME 				NOT NULL,
     horafin							TIME				NULL,
     cantidad		 				SMALLINT 			NOT NULL,
@@ -149,9 +150,11 @@ CREATE TABLE solicitudes
 	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_idsolicita_sl		FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idtipo_sl  		FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
-    CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
+    CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion),
+    CONSTRAINT fk_idejemplar_sl  		FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
-
+DROP TABLE recepciones;
+SET foreign_key_checks =0;
 
 DROP TABLE solicitudes;
 SET foreign_key_checks =1;
@@ -213,7 +216,7 @@ CREATE TABLE recepciones
 )ENGINE = INNODB;
 ALTER TABLE recepciones MODIFY fechayhoraregistro DATETIME NOT NULL DEFAULT NOW();
 
-DROP TABLE observaciones;
+DROP TABLE recursos;
 SET foreign_key_checks =1;
 
 -- 13°
@@ -234,7 +237,7 @@ CREATE TABLE detrecepciones(
     CONSTRAINT fk_idrecurso_dtr FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
-
+SELECT * FROM personas;
 -- 14°
 -- *********************************************************************
 -- 						TABLA EJEMPLARES
@@ -285,15 +288,22 @@ CREATE TABLE movimientos
 -- *********************************************************************
 CREATE TABLE devoluciones
 (
-	iddevolucion 			INT 				AUTO_INCREMENT PRIMARY KEY,
-    idprestamo	 			INT 				NOT NULL,
-    observaciones 			VARCHAR(100) 		NULL,
-    estadodevolucion 		VARCHAR(30) 		NOT NULL,
-    create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
+    iddevolucion             INT                 AUTO_INCREMENT PRIMARY KEY,
+    idprestamo                 INT                 NOT NULL,
+    idobservacion             INT                 NOT NULL,
+    estadodevolucion         VARCHAR(30)         NOT NULL,
+    create_at                 DATETIME            DEFAULT NOW(),
+    update_at                DATETIME            NULL,
+    inactive_at                DATETIME             NULL,
+    CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
+    CONSTRAINT fk_idobservacion_dev FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
 ) ENGINE = INNODB;
+
+CREATE TABLE observaciones
+(
+    idobservacion             INT                 AUTO_INCREMENT PRIMARY KEY,
+    observaciones             VARCHAR(100)         NULL
+)ENGINE = INNODB;
 -- FALTA INGRESAR DATOS A LA TABLA
 
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS

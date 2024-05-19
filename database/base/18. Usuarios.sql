@@ -9,7 +9,8 @@ BEGIN
         p.nombres,
         p.numerodoc,
         u.claveacceso,
-        r.rol
+        r.rol,
+        p.email
     FROM
         usuarios u
     INNER JOIN personas p ON p.idpersona = u.idpersona

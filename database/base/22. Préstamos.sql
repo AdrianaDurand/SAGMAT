@@ -264,7 +264,26 @@ END $$
 
 
 
-
+DELIMITER $$
+CREATE PROCEDURE spu_listar_prestamos()
+BEGIN
+    SELECT 
+        p.idprestamo,
+        CONCAT(pe.nombres, ' ', pe.apellidos) AS docente,
+        s.cantidad,
+        s.fechasolicitud,
+        p.create_at AS fechaprestamo
+    FROM 
+        prestamos p
+    JOIN solicitudes s ON p.idsolicitud = s.idsolicitud
+    JOIN usuarios u ON s.idsolicita = u.idusuario
+    JOIN personas pe ON u.idpersona = pe.idpersona;
+END $$
+DELIMITER $$
+CREATE PROCEDURE spu_listar_observaciones()
+BEGIN
+    SELECT * FROM observaciones;
+END $$
 
 
 

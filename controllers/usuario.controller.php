@@ -31,6 +31,7 @@ if (isset($_POST['operacion'])) {
         $_SESSION["nombres"] = $registro["nombres"];
         $_SESSION["rol"] = $registro["rol"];
         $_SESSION["numerodoc"] = $registro["numerodoc"];
+        $_SESSION["email"] = $registro["email"];
   
         if(password_verify($_POST['claveacceso'], $claveencriptada)){
           $_SESSION["status"] = true;

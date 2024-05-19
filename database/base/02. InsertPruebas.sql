@@ -256,7 +256,20 @@ SELECT *  FROM recepciones;
 SELECT * FROM detrecepciones;
 SELECT * FROM recursos;
 SELECT * FROM ejemplares;
+SELECT * FROM solicitudes;
 SELECT * FROM tipos;
 
 USE SAGMAT;
 
+
+INSERT INTO observaciones (observaciones) VALUES 
+('Producto en buen estado, sin signos de daño externo.'),
+('Falta el manual de usuario.'),
+('Empaque ligeramente dañado.'),
+('Se observa un pequeño rasguño en la parte posterior.'),
+('Presenta marcas de uso moderadas en la superficie.'),
+('Componente interno suelto, requiere ajuste.'),
+('Se requiere limpieza y mantenimiento.'),
+('Se observa corrosión en los conectores.'),
+('Daños por manipulación inadecuada durante el transporte.'),
+('Etiqueta de identificación desprendida.');
