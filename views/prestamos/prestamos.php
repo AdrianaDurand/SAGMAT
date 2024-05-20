@@ -46,7 +46,6 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                             <col width="20%"> <!-- Fecha -->
                             <col width="15%"> <!-- Hora -->
                             <col width="5%"> <!-- Cantidad -->
-                            <col width="20%"> <!-- Cantidad -->
                             <col width="15%"> <!-- Acciones -->
                         </colgroup>
                         <thead>
@@ -57,7 +56,6 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                 <th>Fecha de Solicitud</th>
                                 <th>Ubicación</th>
                                 <th>Cantidad</th>
-                                <th>Descripción</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -104,7 +102,6 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
                                         <td>${registro.fechayhora}</td>
                                         <td>${registro.nombre}</td>
                                         <td>${registro.cantidad}</td>
-                                        <td>"Descripcion de los equipos"</td>
                                         <td>
                                         <button data-idsolicitud="${registro.idsolicitud}" data-idstock="${registro.idstock}" class='btn btn-warning btn-sm editar' type="button">Aceptar solicitud</button>
                                         </td>

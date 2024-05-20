@@ -29,6 +29,41 @@ BEGIN
         s.estado = 0;
 END $$
 
+SELECT 
+    s.idsolicitud,
+    s.cantidad,
+    CONCAT(s.fechasolicitud, ' ', s.horainicio, '-', s.horafin) AS fechayhora,
+    t.tipo,
+    u.nombre AS ubicacion,
+    CONCAT(p.apellidos, ', ', p.nombres) AS docente,
+    GROUP_CONCAT(DISTINCT st.idstock SEPARATOR ', ') AS ejemplares -- Agrupar y listar los idstock
+FROM 
+    solicitudes s
+    INNER JOIN tipos t ON s.idtipo = t.idtipo
+    INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
+    INNER JOIN personas p ON s.idsolicita = p.idpersona
+    INNER JOIN recursos r ON s.idtipo = r.idtipo -- Uniendo con recursos para obtener el idrecurso
+    INNER JOIN stock st ON r.idrecurso = st.idrecurso -- Uniendo con stock para obtener el idstock
+WHERE 
+    s.estado = 0
+GROUP BY
+    s.idsolicitud,
+    s.cantidad,
+    s.fechasolicitud,
+    s.horainicio,
+    s.horafin,
+    t.tipo,
+    u.nombre,
+    p.apellidos,
+    p.nombres;
+    
+    
+
+
+
+    
+  
+
 
 
 CALL spu_listar_solicitudes();
@@ -56,7 +91,6 @@ DELIMITER $$
 CREATE PROCEDURE sp_registrar_prestamo_stock
 (
     IN _idstock INT,
-    IN _idejemplar INT,
     IN _idsolicitud INT,
     IN _idatiende INT,
     IN _estadoentrega VARCHAR(30)
@@ -107,8 +141,8 @@ BEGIN
                 WHERE idstock = _idstock;
 
                 -- Registrar el préstamo
-                INSERT INTO prestamos (idstock, idejemplar, idsolicitud, idatiende, estadoentrega, create_at) 
-                VALUES (_idstock, _idejemplar, _idsolicitud, _idatiende, _estadoentrega, NOW());
+                INSERT INTO prestamos (idstock, idsolicitud, idatiende, estadoentrega, create_at) 
+                VALUES (_idstock, _idsolicitud, _idatiende, _estadoentrega, NOW());
                 
                 -- Actualizar el estado de la solicitud
                 UPDATE solicitudes 

@@ -246,10 +246,10 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
     (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
 
-DROP TABLE ejemplares;
+DELETE FROM  prestamos;
 SET foreign_key_checks =1;
 
-ALTER TABLE ejemplares AUTO_INCREMENT 1;
+ALTER TABLE prestamos AUTO_INCREMENT 1;
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
