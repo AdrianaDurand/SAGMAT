@@ -37,3 +37,4 @@ SELECT * FROM solicitudes;
 SELECT * FROM prestamos;
 SELECT * FROM stock;
 SELECT * FROM devoluciones;
+SELECT * FROM ejemplares;
