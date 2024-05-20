@@ -251,7 +251,7 @@ DELETE FROM  detrecepciones;
 DELETE FROM  ejemplares;
 SET foreign_key_checks =1;
 
-ALTER TABLE ejemplares AUTO_INCREMENT 1;
+ALTER TABLE recepciones AUTO_INCREMENT 1;
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
@@ -260,6 +260,7 @@ SELECT * FROM recursos;
 SELECT * FROM ejemplares;
 SELECT * FROM solicitudes;
 SELECT * FROM tipos;
+SELECT * FROM stock;
 
 USE SAGMAT;
 

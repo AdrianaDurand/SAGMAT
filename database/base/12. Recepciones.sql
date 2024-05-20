@@ -26,7 +26,7 @@ BEGIN
     FROM almacenes;
 END $$
 
-
+SELECT * FROM recepciones;
 SELECT * FROM tipos;
 SELECT * FROM ejemplares;
 SELECT * FROM recepciones;
