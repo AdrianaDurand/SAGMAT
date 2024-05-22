@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-05-2024 a las 07:05:11
+-- Tiempo de generación: 22-05-2024 a las 07:23:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -65,10 +65,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_addDetrecepcion` (IN `_idrecepc
     VALUES (_idrecepcion, _idrecurso, _cantidadenviada, _cantidadrecibida, _observaciones);
 
     -- Obtenemos
-    SELECT stock INTO _saldo_actual
-    FROM stock
-    WHERE idrecurso = _idrecurso
-    LIMIT 1;
+    SET _saldo_actual = (
+        SELECT stock
+        FROM stock
+        WHERE idrecurso = _idrecurso
+    );
 
     -- Actualizamos
     UPDATE stock
@@ -468,7 +469,9 @@ INSERT INTO `detrecepciones` (`iddetallerecepcion`, `idrecepcion`, `idrecurso`, 
 (9, 1, 1, 50, 30, 'Ninguna', '2024-05-20 17:35:22', NULL, NULL),
 (10, 1, 2, 30, 30, 'Ninguna', '2024-05-20 17:35:55', NULL, NULL),
 (11, 1, 2, 30, 30, 'Ninguna', '2024-05-20 17:36:04', NULL, NULL),
-(12, 13, 1, 22, 22, 'o', '2024-05-20 17:36:55', NULL, NULL);
+(12, 13, 1, 22, 22, 'o', '2024-05-20 17:36:55', NULL, NULL),
+(13, 1, 2, 30, 30, 'Ninguna', '2024-05-22 00:06:59', NULL, NULL),
+(14, 1, 1, 22, 22, 'o', '2024-05-22 00:07:44', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -855,8 +858,8 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`idstock`, `idrecurso`, `stock`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 0, '2024-05-22 00:04:26', NULL, NULL),
-(2, 2, 0, '2024-05-22 00:04:26', NULL, NULL),
+(1, 1, 22, '2024-05-22 00:04:26', NULL, NULL),
+(2, 2, 30, '2024-05-22 00:04:26', NULL, NULL),
 (3, 3, 0, '2024-05-22 00:04:26', NULL, NULL),
 (4, 4, 0, '2024-05-22 00:04:26', NULL, NULL),
 (5, 5, 0, '2024-05-22 00:04:26', NULL, NULL),
@@ -1163,7 +1166,7 @@ ALTER TABLE `bajas`
 -- AUTO_INCREMENT de la tabla `detrecepciones`
 --
 ALTER TABLE `detrecepciones`
-  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `iddetallerecepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
