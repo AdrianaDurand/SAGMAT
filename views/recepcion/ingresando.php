@@ -118,12 +118,10 @@
                                 </div>
                             </div>
                             <br>
-                            <input type="hidden" id="id_recepcion" value="">
-                            <input type="hidden" id="id_detrecepcion" value="">
 
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="" id="detrecepcion">
+                                    <form action="" id="form-detrecepcion">
                                         <div class="row">
 
                                             <div class="col-md-6">
@@ -216,10 +214,11 @@
                     body: parametros
                 })
                 .then(respuesta => respuesta.json())
-                .then(data => {
-                    alert(`Recepcion exitoso`);
-                    $("#form-recepcion").reset();
-                    console.log(data.idrecepcion);
+                .then(datos => {
+                    if (datos.idrecepcion > 0) {
+                        alert(`Recepción registrado con el ID: ${datos.idrecepcion}`)
+                        añadirDetallesRecepcion(datos.idrecepcion);
+                    }
                 })
                 .catch(error => {
                     console.error("Error al enviar la solicitud:", error);
@@ -227,8 +226,8 @@
                 });
         }
 
-        /*function añadirDetallesRecepcion(idrecepcion) {
-            console.log(idrecepcion);
+        function añadirDetallesRecepcion(idrecepcion) {
+            console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
             const parametros = new FormData();
             parametros.append("operacion", "registrar");
             parametros.append("idrecepcion", idrecepcion);
@@ -250,7 +249,7 @@
                 .catch(error => {
                     console.error("Error al enviar la solicitud:", error);
                 });
-        }*/
+        }
 
 
 
