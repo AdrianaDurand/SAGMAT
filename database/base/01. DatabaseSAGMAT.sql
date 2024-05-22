@@ -257,30 +257,6 @@ CREATE TABLE ejemplares
 ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL;
 ALTER TABLE ejemplares ADD estado_equipo VARCHAR(30) NULL;
 
--- KARDEX
-CREATE TABLE kardex
-(
-	idkardex 		INT 				AUTO_INCREMENT PRIMARY KEY,
-    idrecurso		INT 				NOT NULL, -- FK
-    iddetallerecepcion 	INT 			NOT NULL, -- FK
-    cantidad			SMALLINT 		NULL,
-    CONSTRAINT fk_idrecurso_k FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso),
-    CONSTRAINT fk_iddetallerecepcion_k FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
-)ENGINE = INNODB;
-
--- MOVIMIENTOS
-CREATE TABLE movimientos
-(
-	idmovimiento 		INT 		AUTO_INCREMENT PRIMARY KEY,
-    idkardex 			INT 		NOT NULL,
-    idprestamo			INT 		NOT NULL,
-    tipo 				CHAR(1) 	NULL, -- E / S
-    saldo				SMALLINT 	NULL,
-    CONSTRAINT fk_idkardex_m	FOREIGN KEY (idkardex) REFERENCES kardex (idkardex),
-    CONSTRAINT fk_idprestamo_m 	FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
-)ENGINE = INNODB;
-
-
 
 -- 16°
 -- *********************************************************************
