@@ -219,17 +219,19 @@
                 .then(data => {
                     alert(`Recepcion exitoso`);
                     $("#form-recepcion").reset();
-                    return data.idrecepcion;
+                    console.log(data.idrecepcion);
                 })
                 .catch(error => {
                     console.error("Error al enviar la solicitud:", error);
+                    throw error;
                 });
         }
 
-        function añadirDetallesRecepcion(idRecepcion) {
+        /*function añadirDetallesRecepcion(idrecepcion) {
+            console.log(idrecepcion);
             const parametros = new FormData();
             parametros.append("operacion", "registrar");
-            parametros.append("idrecepcion", idRecepcion);
+            parametros.append("idrecepcion", idrecepcion);
             parametros.append("idrecurso", idRecursoSeleccionado);
             parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
             parametros.append("cantidadenviada", $("#cantidadEnviada").value);
@@ -239,7 +241,7 @@
                     method: "POST",
                     body: parametros
                 })
-                .then(respuesta => respuesta.json())
+                .then(respuesta => respuesta.text())
                 .then(datos => {
                     alert(`Detalle exitoso`);
                     $("#form-detrecepcion").reset();
@@ -248,7 +250,7 @@
                 .catch(error => {
                     console.error("Error al enviar la solicitud:", error);
                 });
-        }
+        }*/
 
 
 
@@ -257,11 +259,7 @@
 
         // Evento click para el botón de enviar el formulario de recepción
         $("#btnFinalizar").addEventListener("click", function() {
-            // Llamar a la función añadirRecepcion y esperar a que devuelva el idRecepcion
-            añadirRecepcion().then(idRecepcion => {
-                // Una vez que tengas el idRecepcion, llama a la función añadirDetallesRecepcion
-                añadirDetallesRecepcion(idRecepcion);
-            });
+            añadirRecepcion()
         });
     });
 </script>
