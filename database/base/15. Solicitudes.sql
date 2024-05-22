@@ -37,18 +37,21 @@ SELECT * FROM detrecepciones;
 SELECT * FROM ejemplares;
 
 -- REGISTRO DE SOLICITUD
-/*DELIMITER $$
+DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
-	IN _idsolicita 			INT,
-    IN _idrecurso 			INT,
-    IN _hora				TIME,
-    IN _cantidad			SMALLINT,
-    IN _fechasolicitud 		DATE
+    IN _idsolicita             INT,
+    IN _idtipo                INT,
+    IN _idubicaciondocente     INT,
+    IN _idejemplar            INT,
+    IN _horainicio            TIME,
+    IN _horafin                TIME,
+    IN _cantidad            SMALLINT,
+    IN _fechasolicitud         DATE
 )
 BEGIN
-	INSERT INTO solicitudes (idsolicita, idrecurso, hora, cantidad, fechasolicitud) VALUES
-    (_idsolicita, _idrecurso, _hora, _cantidad, _fechasolicitud);
-END $$*/
+    INSERT INTO solicitudes (idsolicita, idtipo, idubicaciondocente, idejemplar, horainicio, horafin, cantidad, fechasolicitud) VALUES
+    (_idsolicita, _idtipo, _idubicaciondocente, _idejemplar, _horainicio, _horafin, _cantidad, _fechasolicitud);
+END $$
 CALL spu_solicitudes_registrar(4, 9, CURTIME(), 2, '2024-05-09');
 
 DELIMITER $$

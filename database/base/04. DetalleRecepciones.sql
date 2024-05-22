@@ -49,7 +49,39 @@ BEGIN
     SET stock = _saldo_actual + _cantidadrecibida
     WHERE idrecurso = _idrecurso;
 END $$
-CALL spu_addDetrecepcion(1,1, 30,50, 'Ninguna');
+
+DELIMITER $$
+CREATE PROCEDURE spu_addDetrecepcion
+(
+    IN _idrecepcion INT,
+    IN _idrecurso INT,
+    IN _cantidadenviada        SMALLINT,
+    IN _cantidadrecibida     SMALLINT,
+    IN _observaciones           VARCHAR(200)
+)
+BEGIN
+    DECLARE _saldo_actual INT;
+
+    -- Agregamos datos al detalle de recepciones
+    INSERT INTO detrecepciones (idrecepcion, idrecurso, cantidadenviada, cantidadrecibida, observaciones)
+    VALUES (_idrecepcion, _idrecurso, _cantidadenviada, _cantidadrecibida, _observaciones);
+
+    -- Obtenemos
+    SELECT stock INTO _saldo_actual
+    FROM stock
+    WHERE idrecurso = _idrecurso
+    LIMIT 1;
+
+    -- Actualizamos
+    UPDATE stock
+    SET stock = _saldo_actual + _cantidadrecibida
+    WHERE idrecurso = _idrecurso;
+END $$
+
+
+
+
+CALL spu_addDetrecepcion(1,2, 30,30, 'Ninguna');
 SELECT * FROM detrecepciones;
 SELECT * FROM recepciones;
 SELECT * FROM recursos;

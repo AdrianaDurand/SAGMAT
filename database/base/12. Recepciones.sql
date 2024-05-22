@@ -32,6 +32,7 @@ SELECT * FROM ejemplares;
 SELECT * FROM recepciones;
 select * from detrecepciones;
 SELECT * FROM recursos;
+SELECT * FROM stock;
 select * from almacenes;
 
 CALL searchTipos('ACCES POINT');

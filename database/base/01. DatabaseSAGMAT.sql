@@ -95,7 +95,11 @@ CREATE TABLE ubicaciones
 	inactive_at						DATETIME	 		NULL
 )ENGINE = INNODB;
 
--- ALMACENES
+-- 7°
+-- *********************************************************************
+-- 								TABLA ALMACENES
+-- *********************************************************************
+
 CREATE TABLE almacenes
 (
 	idalmacen 						INT 				AUTO_INCREMENT PRIMARY KEY,
@@ -107,7 +111,7 @@ CREATE TABLE almacenes
 
 
 
--- 7°
+-- 8°
 -- *********************************************************************
 -- 								TABLA RECURSOS
 -- *********************************************************************
@@ -135,30 +139,31 @@ ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL
 -- *********************************************************************
 CREATE TABLE solicitudes
 (
-	idsolicitud 					INT 				AUTO_INCREMENT PRIMARY KEY,
-    idsolicita 						INT 				NOT NULL, -- FK
-    idtipo							INT 				NOT NULL, -- FK
-    idubicaciondocente				INT 				NOT NULL, -- FK
-    idejemplar						INT					NOT NULL, -- FK
-    horainicio						TIME 				NOT NULL,
-    horafin							TIME				NULL,
-    cantidad		 				SMALLINT 			NOT NULL,
-    fechasolicitud					DATE 				NOT NULL,
-    estado							INT 				NOT NULL DEFAULT 0,
-	create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idsolicita_sl		FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_idtipo_sl  		FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
+    idsolicitud                     INT                 AUTO_INCREMENT PRIMARY KEY,
+    idsolicita                         INT                 NOT NULL, -- FK
+    idtipo                            INT                 NOT NULL, -- FK
+    idubicaciondocente                INT                 NOT NULL, -- FK
+    idejemplar                        INT                 NOT NULL,
+    horainicio                        TIME                 NOT NULL,
+    horafin                            TIME                NULL,
+    cantidad                         SMALLINT             NOT NULL,
+    fechasolicitud                    DATE                 NOT NULL,
+    estado                            INT                 NOT NULL DEFAULT 0,
+    create_at                 DATETIME            DEFAULT NOW(),
+    update_at                DATETIME            NULL,
+    inactive_at                DATETIME             NULL,
+    CONSTRAINT fk_idsolicita_sl        FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
+    CONSTRAINT fk_idtipo_sl          FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
     CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion),
-    CONSTRAINT fk_idejemplar_sl  		FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
+    CONSTRAINT fk_idejemplar_sl          FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
-DROP TABLE recepciones;
-SET foreign_key_checks =0;
 
-DROP TABLE solicitudes;
-SET foreign_key_checks =1;
 
+
+-- 10°
+-- *********************************************************************
+-- 						TABLA stocks
+-- *********************************************************************
 
 CREATE TABLE stock
 (
@@ -171,7 +176,7 @@ CREATE TABLE stock
     CONSTRAINT fk_idrecurso_st	FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
--- 10°
+-- 11°
 -- *********************************************************************
 -- 							TABLA PRESTAMOS
 -- *********************************************************************
@@ -214,10 +219,7 @@ CREATE TABLE recepciones
     CONSTRAINT fk_idpersonal_rcp 	FOREIGN KEY (idpersonal) REFERENCES personas (idpersona),
     CONSTRAINT fk_idalmacen_rcp		FOREIGN KEY (idalmacen) REFERENCES almacenes (idalmacen)
 )ENGINE = INNODB;
-ALTER TABLE recepciones MODIFY fechayhoraregistro DATETIME NOT NULL DEFAULT NOW();
 
-DROP TABLE recursos;
-SET foreign_key_checks =1;
 
 -- 13°
 -- *********************************************************************
@@ -237,28 +239,25 @@ CREATE TABLE detrecepciones(
     CONSTRAINT fk_idrecurso_dtr FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
-SELECT * FROM personas;
 -- 14°
 -- *********************************************************************
 -- 						TABLA EJEMPLARES
 -- *********************************************************************
 CREATE TABLE ejemplares
 (
-	idejemplar 						INT 					AUTO_INCREMENT PRIMARY KEY,
-    iddetallerecepcion	 			INT 					NOT NULL, -- FK
-    nro_serie						VARCHAR(30) 			NULL,
-    nro_equipo						VARCHAR(20) 			NOT NULL,
-    estado_equipo				VARCHAR(30) 			NULL,
-    create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
+    idejemplar                         INT                     AUTO_INCREMENT PRIMARY KEY,
+    iddetallerecepcion                 INT                     NOT NULL, -- FK
+    nro_serie                        VARCHAR(30)             NULL,
+    nro_equipo                        VARCHAR(20)             NOT NULL,
+    estado_equipo                VARCHAR(30)             NULL,
+    create_at                 DATETIME            DEFAULT NOW(),
+    update_at                DATETIME            NULL,
+    inactive_at                DATETIME             NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
-ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL;
-ALTER TABLE ejemplares ADD estado_equipo VARCHAR(30) NULL;
 
 
--- 16°
+-- 15°
 -- *********************************************************************
 -- 						TABLA DEVOLUCIONES
 -- *********************************************************************
@@ -274,6 +273,11 @@ CREATE TABLE devoluciones
     CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
     CONSTRAINT fk_idobservacion_dev FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
 ) ENGINE = INNODB;
+
+-- 16°
+-- *********************************************************************
+-- 						TABLA DEVOLUCIONES
+-- *********************************************************************
 
 CREATE TABLE observaciones
 (
