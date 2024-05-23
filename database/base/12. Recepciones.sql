@@ -27,10 +27,9 @@ BEGIN
 END $$
 
 SELECT * FROM recepciones;
-SELECT * FROM tipos;
-SELECT * FROM ejemplares;
-SELECT * FROM recepciones;
 select * from detrecepciones;
+SELECT * FROM ejemplares;
+SELECT * FROM tipos;
 SELECT * FROM recursos;
 SELECT * FROM stock;
 select * from almacenes;

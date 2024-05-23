@@ -220,8 +220,10 @@
             return document.querySelector(id);
         }
 
-
-
+        function limpiarTablaRecursos() {
+            document.querySelector("#tablaRecursos tbody").innerHTML = "";
+            document.getElementById("tablaRecursosContainer").style.display = "none";
+        }
 
         function añadirRecepcion() {
 
@@ -242,7 +244,7 @@
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if (datos.idrecepcion > 0) {
-                        idRecepcionGlobal = datos.idrecepcion; 
+                        idRecepcionGlobal = datos.idrecepcion;
                         alert(`Recepción registrado con el ID: ${datos.idrecepcion}`)
                         añadirDetallesRecepcion(datos.idrecepcion);
                     }
@@ -251,6 +253,8 @@
                     console.error("Error al enviar la solicitud:", error);
                     throw error;
                 });
+
+                
         }
 
         function añadirDetallesRecepcion(idrecepcion) {
@@ -270,7 +274,7 @@
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if (datos.iddetallerecepcion > 0) {
-                        alert(`Recepción registrado con el ID: ${datos.iddetallerecepcion}`)
+                        alert(`Detalle registrado con el ID: ${datos.iddetallerecepcion}`)
                         añadirEjemplar(datos.iddetallerecepcion);
                     }
 
@@ -278,6 +282,9 @@
                 .catch(error => {
                     console.error("Error al enviar la solicitud:", error);
                 });
+            document.getElementById("form-detrecepcion").reset();
+            
+            //document.getElementById("form-recepcion").reset();
         }
 
 
@@ -341,7 +348,9 @@
                     .catch(error => {
                         console.error("Error al enviar la solicitud:", error);
                     });
+
             });
+            limpiarTablaRecursos();
         }
 
 
@@ -352,6 +361,8 @@
             } else {
                 añadirRecepcion();
             }
+            /*document.getElementById("form-detrecepcion").reset();
+            document.getElementById("form-recepcion").reset();*/
         });
 
         $("#btnFinalizar").addEventListener("click", function() {
@@ -361,6 +372,9 @@
             } else {
                 añadirRecepcion();
             }
+            document.getElementById("form-recepcion").reset();
+            
+            //document.getElementById("form-detrecepcion").reset();
         });
     });
 </script>

@@ -275,13 +275,14 @@ DELETE FROM tipos;
 DELETE FROM marcas;
 DELETE FROM recursos;
 DELETE FROM  recepciones;
-DELETE FROM  recepciones;
 DELETE FROM  detrecepciones;
 DELETE FROM  ejemplares;
 DELETE FROM  stock;
 SET foreign_key_checks =1;
 
-ALTER TABLE prestamos AUTO_INCREMENT 1;
+ALTER TABLE recepciones AUTO_INCREMENT 1;
+ALTER TABLE detrecepciones AUTO_INCREMENT 1;
+ALTER TABLE ejemplares AUTO_INCREMENT 1;
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
