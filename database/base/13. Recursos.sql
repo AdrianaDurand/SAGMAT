@@ -31,3 +31,17 @@ END $$
 CALL searchTipos('SONIDO');
 
 
+DELIMITER$$
+CREATE PROCEDURE spu_listar_datasheets(IN _idrecurso INT)
+BEGIN
+    SELECT idrecurso,
+    datasheets
+    FROM recursos
+     WHERE idrecurso = _idrecurso;
+END$$
+CALL spu_listar_datasheets(1);
+
+SELECT * FROM recursos;
+SELECT * FROM marcas;
+
+CALL spu_listar_por_tipo_y_marca(10,8);

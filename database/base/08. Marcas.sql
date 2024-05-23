@@ -25,8 +25,7 @@ AS
 	INNER JOIN 
 		tipos t ON r.idtipo = t.idtipo
 	INNER JOIN 
-		marcas m ON r.idmarca = m.idmarca
-        LIMIT 12;
+		marcas m ON r.idmarca = m.idmarca;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_por_tipo_y_marca(
     IN _idtipo INT,

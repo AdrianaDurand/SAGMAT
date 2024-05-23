@@ -186,63 +186,82 @@
 
 
 
-    function mostrarDatasheets(button) {
-        const idRecurso = button.dataset.idrecurso;
-        const modalMessage = document.getElementById('modalMessage');
+  function mostrarDatasheets(button) {
+    const idRecurso = button.dataset.idrecurso;
+    const modalMessage = document.getElementById('modalMessage');
 
-        const parametros = new FormData();
-        parametros.append("operacion", "listardatasheet");
-        parametros.append("idrecurso", idRecurso);
-        console.log(idRecurso);
+    console.log("ID del recurso:", idRecurso); // Registro para verificar el ID del recurso
 
-        fetch(`../../controllers/marca.controller.php`, {
-                method: "POST",
-                body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                if (datos.length === 0) {
-                    modalMessage.innerHTML = '<p>No se encontraron características para este recurso.</p>';
-                } else {
-                    let contenidoModal = '';
+    const parametros = new FormData();
+    parametros.append("operacion", "listardatasheet");
+    parametros.append("idrecurso", idRecurso);
 
-                    datos.forEach(element => {
-                        let jparse = JSON.parse(element.datasheets);
-                        let etiqueta = "";
+    fetch(`../../controllers/marca.controller.php`, {
+        method: "POST",
+        body: parametros
+    })
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+    console.log("Datos recibidos:", datos); // Registro para verificar los datos recibidos
 
-                        if (jparse) {
-                            let arraykey = jparse.clave;
-                            let arrayvalue = jparse.valor;
+    if (!datos || datos.length === 0) {
+        modalMessage.innerHTML = '<p>No se encontraron características para este recurso.</p>';
+    } else {
+        let contenidoModal = '';
 
-                            arraykey.forEach((key, index) => {
-                                let value = arrayvalue[index];
+        datos.forEach(element => {
+            console.log("Elemento de datos:", element); // Registro para verificar cada elemento de datos
+            let jparse = null;
 
-                                if (key !== "" || value !== "") {
-                                    etiqueta += `<tr>
-                                <td><strong>${key}</strong></td>
-                                <td>${value}</td>
-                            </tr>`;
-                                }
-                            });
-                        }
-                        contenidoModal += `
-                            <div class="modal-item">
-                                <div class="modal-table">
-                                    <table class="table table-striped table-sm">
-                                        ${etiqueta}
-                                    </table>
-                                </div>
-                            </div>
-                        `;
-                    });
+            try {
+                jparse = JSON.parse(element.datasheets);
+            } catch (error) {
+                console.error("Error al analizar JSON:", error);
+                return; // Salir del bucle actual si hay un error en el análisis JSON
+            }
 
-                    modalMessage.innerHTML = contenidoModal;
+            if (!Array.isArray(jparse)) {
+                console.error("Los datos no están en el formato esperado.");
+                return; // Salir del bucle actual si los datos no están en el formato esperado
+            }
+
+            let etiqueta = "";
+
+            jparse.forEach(data => {
+                const { clave, valor } = data;
+
+                if (clave && valor && clave !== "" && valor !== "") {
+                    etiqueta += `<tr>
+                        <td><strong>${clave}</strong></td>
+                        <td>${valor}</td>
+                    </tr>`;
                 }
-            })
-            .catch(e => {
-                console.error(e)
             });
+
+            if (etiqueta !== "") {
+                contenidoModal += `
+                    <div class="modal-item">
+                        <div class="modal-table">
+                            <table class="table table-striped table-sm">
+                                ${etiqueta}
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        if (contenidoModal === "") {
+            modalMessage.innerHTML = '<p>No se encontraron características para este recurso.</p>';
+        } else {
+            modalMessage.innerHTML = contenidoModal;
+        }
     }
+})
+
+}
+
+
 
 
 
