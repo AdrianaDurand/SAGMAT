@@ -22,7 +22,7 @@ class DetailReception extends Conexion{
 
                 )
             );
-            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+            return $consulta->fetch(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

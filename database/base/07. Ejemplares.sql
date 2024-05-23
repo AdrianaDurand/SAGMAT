@@ -91,6 +91,7 @@ BEGIN
 END $$
 
 CALL spu_addejemplar(17, 'ZAWQE-ED', 'En uso');
+use sagmat;
 SELECT * FROM ejemplares;
 SELECT * FROM detrecepciones;
 SELECT * FROM recursos;

@@ -156,12 +156,38 @@
                                                 <label><strong>Observaciones</strong></label>
                                                 <input type="text" class="form-control border" id="observaciones">
                                             </div>
+                                        </div>
 
 
-
+                                        <div class="row">
+                                            <div class="col-md-2 text-center mt-3">
+                                                <div style="margin-bottom: 10px;">
+                                                    <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Agregar</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
 
+                            <!-- Tabla para mostrar los recursos agregados -->
+                            <div class="card mt-4" id="tablaRecursosContainer" style="display: none;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recursos Agregados</h5>
+                                    <table class="table table-bordered" id="tablaRecursos">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Tipo de Recurso</th>
+                                                <th>Detalle</th>
+                                                <th>N° Serie</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Filas agregadas dinámicamente -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +213,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
+        let idRecepcionGlobal = null;
 
 
         function $(id) {
@@ -216,6 +242,7 @@
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if (datos.idrecepcion > 0) {
+                        idRecepcionGlobal = datos.idrecepcion; 
                         alert(`Recepción registrado con el ID: ${datos.idrecepcion}`)
                         añadirDetallesRecepcion(datos.idrecepcion);
                     }
@@ -240,10 +267,12 @@
                     method: "POST",
                     body: parametros
                 })
-                .then(respuesta => respuesta.text())
+                .then(respuesta => respuesta.json())
                 .then(datos => {
-                    alert(`Detalle exitoso`);
-                    $("#form-detrecepcion").reset();
+                    if (datos.iddetallerecepcion > 0) {
+                        alert(`Recepción registrado con el ID: ${datos.iddetallerecepcion}`)
+                        añadirEjemplar(datos.iddetallerecepcion);
+                    }
 
                 })
                 .catch(error => {
@@ -252,13 +281,86 @@
         }
 
 
+        document.getElementById("btnAgregar").addEventListener("click", function() {
+            var buscar = document.getElementById("buscar").value.trim();
+            var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
+            var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
+            var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
+
+            if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                alert("Por favor complete todos los campos correctamente.");
+                return;
+            }
+
+            document.querySelector("#tablaRecursos tbody").innerHTML = "";
+            for (var i = 1; i <= cantidadRecibida; i++) {
+                var newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td>${i}</td>
+                    <td>${buscar}</td>
+                    <td>${detalles}</td>
+                    <td><input type="text" class="form-control nro_serie" required></td>
+                    <td>
+                        <select class="form-select estado_equipo" required>
+                            <option value="Bueno">Bueno</option>
+                            <option value="Dañado">Dañado</option>
+                            <option value="Malo">Malo</option>
+                        </select>
+                    </td>
+                `;
+                document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+            }
+            document.getElementById("tablaRecursosContainer").style.display = "block";
+
+        });
+
+        function añadirEjemplar(iddetallerecepcion) {
+            const nroSerieInputs = document.querySelectorAll(".nro_serie");
+            const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+
+            nroSerieInputs.forEach((nroSerieInput, index) => {
+                const nroSerie = nroSerieInput.value;
+                const estadoEquipo = estadoEquipoInputs[index].value;
+
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("iddetallerecepcion", iddetallerecepcion);
+                parametros.append("nro_serie", nroSerie);
+                parametros.append("estado_equipo", estadoEquipo);
+
+                fetch(`../../controllers/ejemplar.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        if (datos.idejemplar > 0) {
+                            console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar la solicitud:", error);
+                    });
+            });
+        }
 
 
 
+        $("#btnGuardar").addEventListener("click", function() {
+            if (idRecepcionGlobal) {
+                añadirDetallesRecepcion(idRecepcionGlobal);
+            } else {
+                añadirRecepcion();
+            }
+        });
 
-        // Evento click para el botón de enviar el formulario de recepción
         $("#btnFinalizar").addEventListener("click", function() {
-            añadirRecepcion()
+            if (idRecepcionGlobal) {
+                añadirDetallesRecepcion(idRecepcionGlobal);
+                idRecepcionGlobal = null;
+            } else {
+                añadirRecepcion();
+            }
         });
     });
 </script>
