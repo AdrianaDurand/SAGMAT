@@ -143,7 +143,7 @@ CREATE TABLE solicitudes
     idsolicita                         INT                 NOT NULL, -- FK
     idtipo                            INT                 NOT NULL, -- FK
     idubicaciondocente                INT                 NOT NULL, -- FK
-    idejemplar                        INT                 NOT NULL,
+    -- idejemplar                        INT                 NOT NULL,
     horainicio                        TIME                 NOT NULL,
     horafin                            TIME                NULL,
     cantidad                         SMALLINT             NOT NULL,
@@ -154,11 +154,20 @@ CREATE TABLE solicitudes
     inactive_at                DATETIME             NULL,
     CONSTRAINT fk_idsolicita_sl        FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idtipo_sl          FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
-    CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion),
-    CONSTRAINT fk_idejemplar_sl          FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
+    CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
 
-
+-- DETALLE SOLCIITUDES
+CREATE TABLE detsolicitudes(
+	iddetallesolicitud 				INT 			AUTO_INCREMENT PRIMARY KEY,
+    idsolicitud 					INT 			NOT NULL, -- FK
+    idejemplar                        INT                 NOT NULL,
+    create_at                 		DATETIME        DEFAULT NOW(),
+    update_at                		DATETIME        NULL,
+    inactive_at                		DATETIME        NULL,
+    CONSTRAINT fk_idsolocitud_ds	FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
+     CONSTRAINT fk_idejemplar_ds    FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
+)ENGINE = INNODB;
 
 -- 10°
 -- *********************************************************************
@@ -247,7 +256,7 @@ CREATE TABLE ejemplares
 (
     idejemplar                         INT                     AUTO_INCREMENT PRIMARY KEY,
     iddetallerecepcion                 INT                     NOT NULL, -- FK
-    nro_serie                        VARCHAR(30)             NULL,
+    nro_serie                        VARCHAR(30)             NULL UNIQUE,
     nro_equipo                        VARCHAR(20)             NOT NULL,
     estado_equipo                VARCHAR(30)             NULL,
     create_at                 DATETIME            DEFAULT NOW(),
@@ -255,6 +264,9 @@ CREATE TABLE ejemplares
     inactive_at                DATETIME             NULL,
     CONSTRAINT fk_iddetallerecepcion_ej FOREIGN KEY (iddetallerecepcion) REFERENCES detrecepciones (iddetallerecepcion)
 )ENGINE = INNODB;
+SELECT * FROM ejemplares;
+ALTER TABLE ejemplares MODIFY nro_serie VARCHAR(30) NULL UNIQUE;
+ALTER TABLE ejemplares ADD estado CHAR(1) NOT NULL DEFAULT 0;
 
 
 -- 15°

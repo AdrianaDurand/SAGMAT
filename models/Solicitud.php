@@ -44,20 +44,19 @@ class Solicitud extends Conexion
 
     public function registar($datos = []){
         try {
-            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idsolicita'],
                     $datos['idtipo'],
                     $datos['idubicaciondocente'],
-                    $datos['idejemplar'],
+                    $datos['cantidad'],
                     $datos['horainicio'],
                     $datos['horafin'],
-                    $datos['cantidad'],
                     $datos['fechasolicitud']
                 )
             );
-            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+            return $consulta->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
         }

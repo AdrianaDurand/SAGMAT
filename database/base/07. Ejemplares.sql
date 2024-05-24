@@ -41,6 +41,7 @@ BEGIN
 
 END $$*/
 
+SELECT * FROM recepciones;
 
 DELIMITER $$
 CREATE PROCEDURE spu_addejemplar

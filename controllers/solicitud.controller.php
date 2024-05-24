@@ -25,10 +25,9 @@ if (isset($_POST['operacion'])){
                 "idsolicita"            => $_POST['idsolicita'],
                 "idtipo"                => $_POST['idtipo'],
                 "idubicaciondocente"    => $_POST['idubicaciondocente'],
-                "idejemplar"                => $_POST['idejemplar'],
+                "cantidad"                => $_POST['cantidad'],
                 "horainicio"            => $_POST['horainicio'],
                 "horafin"               => $_POST['horafin'],
-                "cantidad"              => $_POST['cantidad'],
                 "fechasolicitud"        => $_POST['fechasolicitud']
             ];
             echo json_encode($solicitud->registar($datosEnviar));
