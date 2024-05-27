@@ -85,6 +85,7 @@
                                             <div class="col-md-6">
                                                 <label for="fechayhorarecepcion"><strong>Fecha y hora de recepción:</strong></label>
                                                 <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
+
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -101,6 +102,7 @@
                                                     <option value="Factura">Factura</option>
                                                     <option value="Guía R.">Guía R.</option>
                                                 </select>
+
                                             </div>
                                         </div>
                                         <div class="row">
@@ -206,9 +208,11 @@
         </div>
         <!-- End of Content Wrapper -->
     </div>
-    <script src="../../javascript/sweetalert.js"></script>
-    <script src="../../js/almacen.js"></script>
+
 </body>
+
+<script src="../../javascript/sweetalert.js"></script>
+<script src="../../js/almacen.js"></script>
 
 
 <script>
@@ -218,6 +222,11 @@
 
         function $(id) {
             return document.querySelector(id);
+        }
+
+        function limpiarTablaRecursos() {
+            document.querySelector("#tablaRecursos tbody").innerHTML = "";
+            document.getElementById("tablaRecursosContainer").style.display = "none";
         }
 
         function añadirRecepcion() {
@@ -248,6 +257,8 @@
                     console.error("Error al enviar la solicitud:", error);
                     throw error;
                 });
+
+
         }
 
         function añadirDetallesRecepcion(idrecepcion) {
@@ -276,6 +287,7 @@
                     console.error("Error al enviar la solicitud:", error);
                 });
             document.getElementById("form-detrecepcion").reset();
+
             //document.getElementById("form-recepcion").reset();
         }
 
@@ -342,6 +354,7 @@
                     });
 
             });
+            limpiarTablaRecursos();
         }
 
 
@@ -364,6 +377,7 @@
                 añadirRecepcion();
             }
             document.getElementById("form-recepcion").reset();
+
             //document.getElementById("form-detrecepcion").reset();
         });
     });

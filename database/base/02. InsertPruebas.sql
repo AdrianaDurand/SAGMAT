@@ -60,8 +60,7 @@ INSERT INTO marcas (marca) VALUES
 
 
     
-CREATE DATABASE sagmat;
-DROP TABLE solicitudes;
+DELETE FROM tipos;
 ALTER TABLE tipos AUTO_INCREMENT 1;
 -- Volver a activar la restricción de clave externa
 SET foreign_key_checks = 1;
@@ -275,7 +274,7 @@ DELETE FROM prestamos;
 DELETE FROM tipos;
 DELETE FROM marcas;
 DELETE FROM recursos;
-DELETE FROM  recepciones;
+DELETE FROM  recepciones;	
 DELETE FROM  detrecepciones;
 DELETE FROM  ejemplares;
 DELETE FROM  stock;

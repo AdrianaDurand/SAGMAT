@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,13 +69,12 @@
                             <div class="card">
                                 <h5 class="card-header">Recepción</h5>
                                 <div class="card-body">
-                                    <form action="" id="form-recepcion">
+                                    <form id="form-recepcion" class="needs-validation" novalidate>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="idpersonal"><strong>Buscar personal:</strong></label>
-                                                <div class="input-group">
+                                                <div class="input-group has-validation">
                                                     <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
-                                                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
                                                 </div>
                                                 <ul class="list-group" id="resultados">
                                                     <!-- Sugerencias de búsqueda -->
@@ -85,6 +83,7 @@
                                             <div class="col-md-6">
                                                 <label for="fechayhorarecepcion"><strong>Fecha y hora de recepción:</strong></label>
                                                 <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
+                                                <div class="invalid-feedback">Por favor, ingrese una fecha y hora válida.</div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -93,42 +92,46 @@
                                                 <select id="idalmacen" class="form-select" required>
                                                     <option value="">Seleccione:</option>
                                                 </select>
+                                                <div class="invalid-feedback">Por favor, seleccione una ubicación.</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="tipodocumento"><strong>Tipo documento:</strong></label>
-                                                <select id="tipodocumento" class="form-select">
+                                                <select id="tipodocumento" class="form-select" required>
+                                                    <option value="">Seleccione:</option>
                                                     <option value="Boleta">Boleta</option>
                                                     <option value="Factura">Factura</option>
                                                     <option value="Guía R.">Guía R.</option>
                                                 </select>
+                                                <div class="invalid-feedback">Por favor, seleccione un tipo de documento.</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label for="nrodocumento" class="form-label"><strong>N° documento</strong></label>
                                                 <input type="text" class="form-control border" id="nrodocumento" required oninput="this.value = this.value.replace(/\D/g, '')">
+                                                <div class="invalid-feedback">Por favor, ingrese el número de documento.</div>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
                                                 <input type="text" class="form-control border" id="serie_doc" required>
+                                                <div class="invalid-feedback">Por favor, ingrese la serie del documento.</div>
                                             </div>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                             <br>
 
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="" id="form-detrecepcion">
+                                    <form id="form-detrecepcion" class="needs-validation" novalidate>
                                         <div class="row">
-
                                             <div class="col-md-6">
                                                 <label for="buscar"><strong>Buscar tipo de recurso:</strong></label>
-                                                <div class="input-group mb-3">
-                                                    <input type="text" id="buscar" class="form-control border" placeholder="¿Qué quieres buscar?" aria-label="Buscar tipo de recurso" aria-describedby="basic-addon2">
+                                                <div class="input-group mb-3 has-validation">
+                                                    <input type="text" id="buscar" class="form-control border" placeholder="¿Qué quieres buscar?" aria-label="Buscar tipo de recurso" aria-describedby="basic-addon2" required>
                                                     <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
+                                                    <div class="invalid-feedback">Por favor, ingrese un recurso.</div>
                                                 </div>
                                                 <ul class="container" id="resultados2">
                                                     <!-- Sugerencias de búsqueda -->
@@ -136,34 +139,32 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="detalles"><strong>Seleccionar detalles:</strong></label>
-                                                <select id="detalles" class="form-select" disabled>
+                                                <select id="detalles" class="form-select" required disabled>
                                                     <option>Primero busque el tipo de recurso</option>
-
-                                                    <!-- Los etalles se cargarán dinámicamente -->
                                                 </select>
+                                                <div class="invalid-feedback">Por favor, seleccione un detalle.</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for=""><strong>Cantidad Enviada:</strong></label>
+                                                <label for="cantidadEnviada"><strong>Cantidad Enviada:</strong></label>
                                                 <input type="number" class="form-control border" id="cantidadEnviada" required min="1">
+                                                <div class="invalid-feedback">Por favor, ingrese una cantidad válida.</div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for=""><strong>Cantidad Recibida:</strong></label>
+                                                <label for="cantidadRecibida"><strong>Cantidad Recibida:</strong></label>
                                                 <input type="number" class="form-control border" id="cantidadRecibida" required min="1">
+                                                <div class="invalid-feedback">Por favor, ingrese una cantidad válida.</div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label><strong>Observaciones</strong></label>
+                                                <label for="observaciones"><strong>Observaciones</strong></label>
                                                 <input type="text" class="form-control border" id="observaciones">
                                             </div>
                                         </div>
 
-
                                         <div class="row">
-                                            <div class="col-md-2 text-center mt-3">
-                                                <div style="margin-bottom: 10px;">
-                                                    <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Agregar</button>
-                                                </div>
+                                            <div class="col-md-12 d-flex flex-row-reverse mt-3">
+                                                <button type="button" id="btnAgregar" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i> Agregar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -198,196 +199,212 @@
                             </div>
                         </div>
                     </div>
-
-
                     <!-- End of Main Content -->
                 </div>
             </div>
         </div>
         <!-- End of Content Wrapper -->
     </div>
+
     <script src="../../javascript/sweetalert.js"></script>
     <script src="../../js/almacen.js"></script>
-</body>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let idRecepcionGlobal = null;
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let idRecepcionGlobal = null;
-
-
-        function $(id) {
-            return document.querySelector(id);
-        }
-
-
-
-
-
-
-        function añadirRecepcion() {
-
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idusuario", <?php echo $idusuario ?>);
-            parametros.append("idpersonal", idPersonalSeleccionado);
-            parametros.append("idalmacen", $("#idalmacen").value);
-            parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
-            parametros.append("tipodocumento", $("#tipodocumento").value);
-            parametros.append("nrodocumento", $("#nrodocumento").value);
-            parametros.append("serie_doc", $("#serie_doc").value);
-
-            fetch(`../../controllers/recepcion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    if (datos.idrecepcion > 0) {
-                        idRecepcionGlobal = datos.idrecepcion;
-                        alert(`Recepción registrado con el ID: ${datos.idrecepcion}`)
-                        añadirDetallesRecepcion(datos.idrecepcion);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al enviar la solicitud:", error);
-                    throw error;
-                });
-        }
-
-        function añadirDetallesRecepcion(idrecepcion) {
-            console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idrecepcion", idrecepcion);
-            parametros.append("idrecurso", idRecursoSeleccionado);
-            parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
-            parametros.append("cantidadenviada", $("#cantidadEnviada").value);
-            parametros.append("observaciones", $("#observaciones").value);
-
-            fetch(`../../controllers/detrecepcion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    if (datos.iddetallerecepcion > 0) {
-                        alert(`Recepción registrado con el ID: ${datos.iddetallerecepcion}`)
-                        añadirEjemplar(datos.iddetallerecepcion);
-                    }
-
-                })
-                .catch(error => {
-                    console.error("Error al enviar la solicitud:", error);
-                });
-        }
-
-
-        document.getElementById("btnAgregar").addEventListener("click", function() {
-            var buscar = document.getElementById("buscar").value.trim();
-            var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
-            var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
-            var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
-
-            if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
-                alert("Por favor complete todos los campos correctamente.");
-                return;
+            function $(id) {
+                return document.querySelector(id);
             }
 
-            document.querySelector("#tablaRecursos tbody").innerHTML = "";
-            for (var i = 1; i <= cantidadRecibida; i++) {
-                var newRow = document.createElement("tr");
-                newRow.innerHTML = `
-                    <td>${i}</td>
-                    <td>${buscar}</td>
-                    <td>${detalles}</td>
-                    <td><input type="text" class="form-control nro_serie" required></td>
-                    <td>
-                        <select class="form-select estado_equipo" required>
-                            <option value="Bueno">Bueno</option>
-                            <option value="Dañado">Dañado</option>
-                            <option value="Malo">Malo</option>
-                        </select>
-                    </td>
-                `;
-                document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+            function limpiarTablaRecursos() {
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                document.getElementById("tablaRecursosContainer").style.display = "none";
             }
-            document.getElementById("tablaRecursosContainer").style.display = "block";
 
-        });
+            function resetearFormulario(form) {
+                form.reset();
+                form.classList.remove('was-validated');
+                form.querySelectorAll('.form-control, .form-select').forEach(function (input) {
+                    input.classList.remove('input-error');
+                    input.classList.remove('input-filled');
+                });
+            }
 
-        function añadirEjemplar(iddetallerecepcion) {
-            const nroSerieInputs = document.querySelectorAll(".nro_serie");
-            const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+            let idPersonalSeleccionado = null;
 
-            nroSerieInputs.forEach((nroSerieInput, index) => {
-                const nroSerie = nroSerieInput.value;
-                const estadoEquipo = estadoEquipoInputs[index].value;
-
+            function añadirRecepcion() {
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
-                parametros.append("iddetallerecepcion", iddetallerecepcion);
-                parametros.append("nro_serie", nroSerie);
-                parametros.append("estado_equipo", estadoEquipo);
+                parametros.append("idusuario", <?php echo $idusuario ?>);
+                parametros.append("idpersonal", idPersonalSeleccionado);
+                parametros.append("idalmacen", $("#idalmacen").value);
+                parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
+                parametros.append("tipodocumento", $("#tipodocumento").value);
+                parametros.append("nrodocumento", $("#nrodocumento").value);
+                parametros.append("serie_doc", $("#serie_doc").value);
 
-                fetch(`../../controllers/ejemplar.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
+                fetch(`../../controllers/recepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
-                        if (datos.idejemplar > 0) {
-                            console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                        if (datos.idrecepcion > 0) {
+                            idRecepcionGlobal = datos.idrecepcion;
+                            Swal.fire('Éxito', `Recepción registrada con el ID: ${datos.idrecepcion}`, 'success');
+                            añadirDetallesRecepcion(datos.idrecepcion);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar la solicitud:", error);
+                        throw error;
+                    });
+            }
+
+            function añadirDetallesRecepcion(idrecepcion) {
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idrecepcion", idrecepcion);
+                parametros.append("idrecurso", idRecursoSeleccionado);
+                parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
+                parametros.append("cantidadenviada", $("#cantidadEnviada").value);
+                parametros.append("observaciones", $("#observaciones").value);
+
+                fetch(`../../controllers/detrecepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        if (datos.iddetallerecepcion > 0) {
+                            Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success');
+                            añadirEjemplar(datos.iddetallerecepcion);
                         }
                     })
                     .catch(error => {
                         console.error("Error al enviar la solicitud:", error);
                     });
+                resetearFormulario(document.getElementById("form-detrecepcion"));
+            }
+
+            function añadirEjemplar(iddetallerecepcion) {
+                const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
+
+                nroSerieInputs.forEach((nroSerieInput, index) => {
+                    const nroSerie = nroSerieInput.value;
+                    const estadoEquipo = estadoEquipoInputs[index].value;
+
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("iddetallerecepcion", iddetallerecepcion);
+                    parametros.append("nro_serie", nroSerie);
+                    parametros.append("estado_equipo", estadoEquipo);
+
+                    fetch(`../../controllers/ejemplar.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (datos.idejemplar > 0) {
+                                console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar la solicitud:", error);
+                        });
+
+                });
+                limpiarTablaRecursos();
+            }
+
+            function validarFormulario(form) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    Swal.fire('Error', 'Por favor complete todos los campos correctamente.', 'error');
+                }
+                form.classList.add('was-validated');
+            }
+
+            function agregarFilaTablaRecursos(buscar, detalles, cantidadRecibida) {
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                for (var i = 1; i <= cantidadRecibida; i++) {
+                    var newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td>${i}</td>
+                        <td>${buscar}</td>
+                        <td>${detalles}</td>
+                        <td><input type="text" class="form-control nro_serie" required></td>
+                        <td>
+                            <select class="form-select estado_equipo" required>
+                                <option value="Bueno">Bueno</option>
+                                <option value="Dañado">Dañado</option>
+                                <option value="Malo">Malo</option>
+                            </select>
+                        </td>
+                    `;
+                    document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+                }
+                document.getElementById("tablaRecursosContainer").style.display = "block";
+            }
+
+            $("#btnAgregar").addEventListener("click", function () {
+                validarFormulario(document.getElementById("form-detrecepcion"));
+
+                var buscar = $("#buscar").value.trim();
+                var detalles = $("#detalles").options[$("#detalles").selectedIndex].textContent.trim();
+                var cantidadEnviada = parseInt($("#cantidadEnviada").value);
+                var cantidadRecibida = parseInt($("#cantidadRecibida").value);
+
+                if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                    Swal.fire('Error', 'Por favor complete todos los campos correctamente.', 'error');
+                    return;
+                }
+
+                agregarFilaTablaRecursos(buscar, detalles, cantidadRecibida);
             });
-        }
 
+            $("#btnGuardar").addEventListener("click", function () {
+                validarFormulario(document.getElementById("form-recepcion"));
+                
 
+                if (idRecepcionGlobal) {
+                    añadirDetallesRecepcion(idRecepcionGlobal);
+                } else {
+                    añadirRecepcion();
+                }
+                resetearFormulario(document.getElementById("form-detrecepcion"));
+            });
 
-        $("#btnGuardar").addEventListener("click", function() {
-            if (idRecepcionGlobal) {
-                const cantidadRecibida = $("#cantidadRecibida").value;
-                const cantidadEnviada = $("#cantidadEnviada").value;
+            $("#btnFinalizar").addEventListener("click", function () {
+                validarFormulario(document.getElementById("form-recepcion"));
+                
 
-                // Asegurarse de que los valores se capturan correctamente antes de resetear
-                añadirDetallesRecepcion(idRecepcionGlobal);
-
-                // Resetear solo después de que los valores hayan sido capturados
-                setTimeout(() => {
-                    $("#form-detrecepcion").reset();
-                }, 1000);
-            } else {
-                añadirRecepcion();
-            }
-        });
-
-        $("#btnFinalizar").addEventListener("click", function() {
-            if (idRecepcionGlobal) {
-                const cantidadRecibida = $("#cantidadRecibida").value;
-                const cantidadEnviada = $("#cantidadEnviada").value;
-
-                añadirDetallesRecepcion(idRecepcionGlobal);
-                setTimeout(() => {
-                    añadirEjemplar(idRecepcionGlobal);
-                }, 1000);
-
-                setTimeout(() => {
+                if (idRecepcionGlobal) {
+                    añadirDetallesRecepcion(idRecepcionGlobal);
                     idRecepcionGlobal = null;
-                    $("#form-recepcion").reset(); // Restablecer el formulario de recepción
-                    $("#form-detrecepcion").reset(); // Restablecer el formulario de detalle de recepción
-                    document.querySelector("#tablaRecursos tbody").innerHTML = "";
-                    document.getElementById("tablaRecursosContainer").style.display = "none";
-                }, 2000);
-            } else {
-                añadirRecepcion();
-            }
-        });
+                } else {
+                    añadirRecepcion();
+                }
+                resetearFormulario(document.getElementById("form-recepcion"));
+            });
 
-    });
-</script>
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+    </script>
+
+</body>
 
 </html>

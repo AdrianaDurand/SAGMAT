@@ -26,6 +26,8 @@ BEGIN
     FROM almacenes;
 END $$
 
+
+use sagmat;
 SELECT * FROM recepciones;
 select * from detrecepciones;
 SELECT * FROM ejemplares;
@@ -33,6 +35,8 @@ SELECT * FROM tipos;
 SELECT * FROM recursos;
 SELECT * FROM stock;
 select * from almacenes;
+select * from solicitudes;
+select * from detsolicitudes;
 
 CALL searchTipos('ACCES POINT');
 
