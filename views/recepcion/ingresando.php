@@ -208,7 +208,7 @@
 
 </body>
 
-<script src="../../javascript/sweetalert.js"></script>
+<script src="../../js/sweetalert.js"></script>
 <script src="../../js/almacen.js"></script>
 
 
@@ -292,7 +292,7 @@
             var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
 
             if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
-                alert("Por favor complete todos los campos correctamente.");
+                completefields(); //** */
                 return;
             }
 
@@ -361,7 +361,7 @@
         function validarTablaRecursos() {
             const filas = document.querySelectorAll("#tablaRecursos tbody tr");
             if (filas.length === 0) {
-                alert("Por favor, añada al menos un recurso a la tabla.");
+                addresource(); //** */
                 return false;
             }
             return true;
