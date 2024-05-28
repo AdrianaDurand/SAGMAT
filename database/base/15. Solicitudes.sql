@@ -69,6 +69,9 @@ END $$
 SELECT * FROM DETSOLICITUDES;
 
 SELECt * FROM solicitudes;
+SELECt * FROM detsolicitudes;
+
+
 SELECT * FROM personas;
 SELECT * FROM detrecepciones;
 SELECT * FROM ejemplares;
@@ -119,6 +122,7 @@ SELECT * FROM recursos;
 SELECT * FROM ubicaciones;
 SELECT * FROM recursos;
 SELECT * FROM solicitudes;
+SELECT * FROM detsolicitudes;
 
 
 DELIMITER $$
