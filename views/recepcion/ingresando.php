@@ -263,8 +263,8 @@
             parametros.append("operacion", "registrar");
             parametros.append("idrecepcion", idrecepcion);
             parametros.append("idrecurso", idRecursoSeleccionado);
-            parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
             parametros.append("cantidadenviada", $("#cantidadEnviada").value);
+            parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
             parametros.append("observaciones", $("#observaciones").value);
 
             fetch(`../../controllers/detrecepcion.controller.php`, {
