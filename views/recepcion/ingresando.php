@@ -37,6 +37,22 @@
         .list-group-item-action {
             cursor: pointer;
         }
+
+        .alonso {
+            animation: glow 1s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px #1cc88a;
+            }
+
+            to {
+                box-shadow: 0 0 20px #1cc88a;
+            }
+        }
+
+        
     </style>
 </head>
 
@@ -164,7 +180,8 @@
 
                                         <div class="row">
                                             <div class="col-md-12 d-flex flex-row-reverse mt-3">
-                                                <button type="button" id="btnAgregar" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i> Agregar</button>
+                                                <button type="button" id="btnAgregar" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>Añadir</button>
+
                                             </div>
                                         </div>
                                     </form>
@@ -206,100 +223,109 @@
         <!-- End of Content Wrapper -->
     </div>
 
-</body>
-
-<script src="../../js/sweetalert.js"></script>
-<script src="../../js/almacen.js"></script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let idRecepcionGlobal = null;
+    <script src="../../js/almacen.js"></script>
 
-        let idPersonalSeleccionado = null;
 
-        function $(id) {
-            return document.querySelector(id);
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let idRecepcionGlobal = null;
 
-        function limpiarTablaRecursos() {
-            document.querySelector("#tablaRecursos tbody").innerHTML = "";
-            document.getElementById("tablaRecursosContainer").style.display = "none";
-        }
+            let idPersonalSeleccionado = null;
 
-        function añadirRecepcion() {
-            console.log("ID del personal seleccionado:", idPersonalSeleccionado);
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idusuario", <?php echo $idusuario ?>);
-            parametros.append("idpersonal", idPersonalSeleccionado);
-            parametros.append("idalmacen", $("#idalmacen").value);
-            parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
-            parametros.append("tipodocumento", $("#tipodocumento").value);
-            parametros.append("nrodocumento", $("#nrodocumento").value);
-            parametros.append("serie_doc", $("#serie_doc").value);
-
-            fetch(`../../controllers/recepcion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    if (datos.idrecepcion > 0) {
-                        idRecepcionGlobal = datos.idrecepcion;
-                        alert(`Recepción registrado con el ID: ${datos.idrecepcion}`);
-                        añadirDetallesRecepcion(datos.idrecepcion);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al enviar la solicitud:", error);
-                    throw error;
-                });
-        }
-
-        function añadirDetallesRecepcion(idrecepcion) {
-            console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idrecepcion", idrecepcion);
-            parametros.append("idrecurso", idRecursoSeleccionado);
-            parametros.append("cantidadenviada", $("#cantidadEnviada").value);
-            parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
-            parametros.append("observaciones", $("#observaciones").value);
-
-            fetch(`../../controllers/detrecepcion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    if (datos.iddetallerecepcion > 0) {
-                        alert(`Detalle registrado con el ID: ${datos.iddetallerecepcion}`);
-                        añadirEjemplar(datos.iddetallerecepcion);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al enviar la solicitud:", error);
-                });
-
-            document.getElementById("form-detrecepcion").reset();
-        }
-
-        document.getElementById("btnAgregar").addEventListener("click", function() {
-            var buscar = document.getElementById("buscar").value.trim();
-            var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
-            var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
-            var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
-
-            if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
-                completefields(); //** */
-                return;
+            function $(id) {
+                return document.querySelector(id);
             }
 
-            document.querySelector("#tablaRecursos tbody").innerHTML = "";
-            for (var i = 1; i <= cantidadRecibida; i++) {
-                var newRow = document.createElement("tr");
-                newRow.innerHTML = `
+            function limpiarTablaRecursos() {
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                document.getElementById("tablaRecursosContainer").style.display = "none";
+                toggleAgregarButtonGlow(false);
+            }
+
+            function toggleAgregarButtonGlow(shouldGlow) {
+                const btnAgregar = document.getElementById("btnAgregar");
+                if (shouldGlow) {
+                    btnAgregar.classList.add("alonso");
+                } else {
+                    btnAgregar.classList.remove("alonso");
+                }
+            }
+
+            function añadirRecepcion() {
+                console.log("ID del personal seleccionado:", idPersonalSeleccionado);
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idusuario", <?php echo $idusuario ?>);
+                parametros.append("idpersonal", idPersonalSeleccionado);
+                parametros.append("idalmacen", $("#idalmacen").value);
+                parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
+                parametros.append("tipodocumento", $("#tipodocumento").value);
+                parametros.append("nrodocumento", $("#nrodocumento").value);
+                parametros.append("serie_doc", $("#serie_doc").value);
+
+                fetch(`../../controllers/recepcion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        if (datos.idrecepcion > 0) {
+                            idRecepcionGlobal = datos.idrecepcion;
+                            alert(`Recepción registrado con el ID: ${datos.idrecepcion}`);
+                            añadirDetallesRecepcion(datos.idrecepcion);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar la solicitud:", error);
+                        throw error;
+                    });
+            }
+
+            function añadirDetallesRecepcion(idrecepcion) {
+                console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idrecepcion", idrecepcion);
+                parametros.append("idrecurso", idRecursoSeleccionado);
+                parametros.append("cantidadenviada", $("#cantidadEnviada").value);
+                parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
+                parametros.append("observaciones", $("#observaciones").value);
+
+                fetch(`../../controllers/detrecepcion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        if (datos.iddetallerecepcion > 0) {
+                            alert(`Detalle registrado con el ID: ${datos.iddetallerecepcion}`);
+                            añadirEjemplar(datos.iddetallerecepcion);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar la solicitud:", error);
+                    });
+
+                document.getElementById("form-detrecepcion").reset();
+            }
+
+            document.getElementById("btnAgregar").addEventListener("click", function() {
+                var buscar = document.getElementById("buscar").value.trim();
+                var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
+                var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
+                var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
+
+                if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                    completefields(); //** */
+                    return;
+                }
+
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                for (var i = 1; i <= cantidadRecibida; i++) {
+                    var newRow = document.createElement("tr");
+                    newRow.innerHTML = `
                     <td>${i}</td>
                     <td>${buscar}</td>
                     <td>${detalles}</td>
@@ -312,95 +338,100 @@
                         </select>
                     </td>
                 `;
-                document.querySelector("#tablaRecursos tbody").appendChild(newRow);
-            }
-            document.getElementById("tablaRecursosContainer").style.display = "block";
-        });
-
-        function añadirEjemplar(iddetallerecepcion) {
-            const nroSerieInputs = document.querySelectorAll(".nro_serie");
-            const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
-
-            nroSerieInputs.forEach((nroSerieInput, index) => {
-                const nroSerie = nroSerieInput.value;
-                const estadoEquipo = estadoEquipoInputs[index].value;
-
-                const parametros = new FormData();
-                parametros.append("operacion", "registrar");
-                parametros.append("iddetallerecepcion", iddetallerecepcion);
-                parametros.append("nro_serie", nroSerie);
-                parametros.append("estado_equipo", estadoEquipo);
-
-                fetch(`../../controllers/ejemplar.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        if (datos.idejemplar > 0) {
-                            console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar la solicitud:", error);
-                    });
+                    document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+                }
+                document.getElementById("tablaRecursosContainer").style.display = "block";
+                toggleAgregarButtonGlow(false);
             });
 
-            limpiarTablaRecursos();
-        }
+            function añadirEjemplar(iddetallerecepcion) {
+                const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
-        function validarFormulario(formulario) {
-            if (formulario.checkValidity() === false) {
-                formulario.classList.add('was-validated');
-                return false;
+                nroSerieInputs.forEach((nroSerieInput, index) => {
+                    const nroSerie = nroSerieInput.value;
+                    const estadoEquipo = estadoEquipoInputs[index].value;
+
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("iddetallerecepcion", iddetallerecepcion);
+                    parametros.append("nro_serie", nroSerie);
+                    parametros.append("estado_equipo", estadoEquipo);
+
+                    fetch(`../../controllers/ejemplar.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (datos.idejemplar > 0) {
+                                console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar la solicitud:", error);
+                        });
+                });
+
+                limpiarTablaRecursos();
             }
-            formulario.classList.remove('was-validated');
-            return true;
-        }
 
-        function validarTablaRecursos() {
-            const filas = document.querySelectorAll("#tablaRecursos tbody tr");
-            if (filas.length === 0) {
-                addresource(); //** */
-                return false;
-            }
-            return true;
-        }
-
-        $("#btnGuardar").addEventListener("click", function() {
-            const formRecepcion = document.getElementById("form-recepcion");
-            const formDetRecepcion = document.getElementById("form-detrecepcion");
-
-            if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
-                if (idRecepcionGlobal) {
-                    añadirDetallesRecepcion(idRecepcionGlobal);
-                } else {
-                    añadirRecepcion();
+            function validarFormulario(formulario) {
+                if (formulario.checkValidity() === false) {
+                    formulario.classList.add('was-validated');
+                    return false;
                 }
-            } else {
-                alert("Por favor complete todos los campos requeridos correctamente.");
+                formulario.classList.remove('was-validated');
+                return true;
             }
-        });
 
-        $("#btnFinalizar").addEventListener("click", function() {
-            const formRecepcion = document.getElementById("form-recepcion");
-            const formDetRecepcion = document.getElementById("form-detrecepcion");
 
-            if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
-                if (idRecepcionGlobal) {
-                    añadirDetallesRecepcion(idRecepcionGlobal);
-                    idRecepcionGlobal = null;
-                } else {
-                    añadirRecepcion();
+
+
+            function validarTablaRecursos() {
+                const filas = document.querySelectorAll("#tablaRecursos tbody tr");
+                if (filas.length === 0) {
+                    toggleAgregarButtonGlow(true); // Habilitar el brillo si la tabla está vacía
+                    alert("Por favor, añada el recurso seleccionado.");
+                    return false;
                 }
-                formRecepcion.reset();
-            } else {
-                alert("Por favor complete todos los campos requeridos correctamente.");
+                return true;
             }
+
+            $("#btnGuardar").addEventListener("click", function() {
+                const formRecepcion = document.getElementById("form-recepcion");
+                const formDetRecepcion = document.getElementById("form-detrecepcion");
+
+                if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
+                    if (idRecepcionGlobal) {
+                        añadirDetallesRecepcion(idRecepcionGlobal);
+                    } else {
+                        añadirRecepcion();
+                    }
+                } else {
+                    alert("Por favor complete todos los campos requeridos correctamente.");
+                }
+            });
+
+            $("#btnFinalizar").addEventListener("click", function() {
+                const formRecepcion = document.getElementById("form-recepcion");
+                const formDetRecepcion = document.getElementById("form-detrecepcion");
+
+                if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
+                    if (idRecepcionGlobal) {
+                        añadirDetallesRecepcion(idRecepcionGlobal);
+                        idRecepcionGlobal = null;
+                    } else {
+                        añadirRecepcion();
+                    }
+                    formRecepcion.reset();
+                } else {
+                    alert("Por favor complete todos los campos requeridos correctamente.");
+                }
+            });
         });
-    });
-</script>
+    </script>
 
-
+</body>
 
 </html>
