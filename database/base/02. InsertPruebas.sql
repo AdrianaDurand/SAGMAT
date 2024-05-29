@@ -25,108 +25,84 @@ SET claveacceso = '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi'
 SELECT * FROM marcas;
 
 INSERT INTO marcas (marca) VALUES
-    ('LIFECHAT - LX3000'),
-    ('OLPC'),
-    ('Genérico'),
-	('SYSTEM'),   
-    ('ALTRON'),
-	('EPSON'),
-	('VIEWSONIC'),
-    ('LINKSYS'),
-    ('HP'),
-    ('MICROSOFT'),
     ('SONY'),
-    ('PLANET'),
-    ('D-LINK'),
     ('LENOVO'),
-    ('MACKI'),
-	('LEXSEN'),
-    ('SHURE'),
+	('EPSON'),   
+    ('D-LINK'),
+	('MACKI'),
+	('SHURE'),
+    ('LEXSEN'),
     ('BEHRINGER'),
     ('BENQ'),
     ('LYNKSYS'),
     ('HUAWEI'),
+    ('METAL'),
     ('IBM'),
     ('SEAGATE'),
     ('ZKTECO'),
+	('VITEL'),
     ('CANON'),
-    ('BATBLACK'),
+    ('HP'),
+    ('BATCLACK'),
+    ('SYSTEM'),
+    ('ALTRON'),
+    ('VIEWSONIC'),
+    ('MOVISTAR'),
+    ('TRAVIS'),
     ('HALION'),
     ('SAMSUNG'),
     ('LG'),
     ('LOGITECH'),
+    ('OLPC'),
     ('SOOFTWOOFER'),
-    ('VIEW SONIC');
+    ('PLANET'),
+    ('MICROSOFT'),
+    ('TECNIASES'),
+    ('DELL');
 
 
     
-DELETE FROM tipos;
-ALTER TABLE tipos AUTO_INCREMENT 1;
+DROP TABLE tipos;
+ALTER TABLE negocios AUTO_INCREMENT 1;
 -- Volver a activar la restricción de clave externa
 SET foreign_key_checks = 1;
-select * from tipos;
 -- ----------------------------------------------------------------------------------------
 -- ------------------------------   TIPO RECURSOS    --------------------------------------
 -- ----------------------------------------------------------------------------------------
-INSERT INTO tipos (tipo, acronimo) VALUES
-    ('LAPTOP', 'LT'),
-    ('AUDÍFONO', 'AF'),
-    ('LAPTOP XO SECUNDARIA', 'LXS'),
-    ('SUBWOOFER', 'SWB'),
-    ('REPROD. DVD', 'DVD'),
-    ('EXTENSIONES', 'EXT'),
-    ('DECODIFICADOR', 'DCD'),
-    ('CABLE HDMI', 'HDMI'),
-    ('CARRO DE METAL TRANSPORTADOR', 'CMT'),
-    ('SERVIDOR', 'SRV'),
-    ('PROYECTOR MULTIMEDIA', 'PM'),
-    ('EQUIPO DE ALARMA Y PROTECCIÓN', 'EAP'),
-    ('ADAPTADOR DE POTENCIA SOBRE ETHERNET 30w', 'APSE'),
-    ('EQUIPO DE COMUNICACIÓN LAN', 'ECL'),
-    ('CENTRAL DE ALARMA', 'CAL'),
-    ('TECLADO CON CLAVE', 'TKC'),
-    ('SENSORES INFRAROJOS', 'SI'),
-    ('SENSOR PARA PUERTA Y SENSOR PARA VENTANA', 'SPSV'),
-    ('ACUMULADOR DE ENERGÍA - EQUIPO DE UPS DE 2000 KVA', 'AE-UPSK'),
-    ('GABINETE DE METAL DE PISO 24 RU PARA SERVIDORES', 'G24RPS'),
-    ('PUNTO DE ACCESO INALÁMBRICO - ACCESS POINT WIRELESS', 'PAI-APW'),
-    ('SWITCH PARA RED - PRINCIPAL CORE DE 24 SLOTS', 'SWP-24S'),
-    ('TABLERO DE CONTROL ELÉCTRICO DE 3 POLOS', 'TCE-3P'),
-    ('TABLERO DE CONTROL ELÉCTRICO DE 4 POLOS', 'TCE-4P'),
-    ('TABLERO DE CONTROL ELÉCTRICO DE 5 POLOS', 'TCE-5P'),
-    ('PANTALLA ECRAN', 'PE'),
-    ('CONSOLA DE AUDIO', 'CA'),
-    ('ACCES POINT', 'AP'),
-    ('MICRÓFONO', 'MIC'),
-    ('PARLANTE PARA MICRÓFONO', 'PPM'),
-    ('PARLANTES', 'PRL'),
-    ('ROUTER', 'RT'),
-    ('ROUTER CISCO', 'RTC'),
-    ('ROUTER CLARO', 'RTCLR'),
-    ('RACK 2RU', 'R2RU'),
-    ('SERVER', 'SRV'),
-    ('HDD EXTERNO 1TB', 'HDD1TB'),
-    ('SWTICH DE 24 PUERTOS', 'SW24P'),
-    ('BIOMÉTRICO', 'BIO'),
-    ('DVR VIDEO VIGILANCIA ', 'DVRVV'),
-    ('ROUTER VITEL', 'RTVL'),
-    ('CONVERTOR DE FIBRA RJ45', 'CFRJ45'),
-    ('TELEFONO CLARO', 'TELCLR'),
-    ('IMPRESORA', 'IMP'),
-    ('MONITOR ', 'MNTR'),
-    ('CONSOLA PARA MICR.INALÁMBRICO ', 'CPM'),
-    ('MEGÁFONO ', 'MEG'),
-    ('SIRENA DE EMERGENCIA ', 'SRE'),
-    ('CPU ', 'CPU'),
-    ('TECLADO ', 'TK'),
-    ('MOUSE ', 'MS'),
-    ('CARGADOR ', 'CG'),
-    ('BATERÍA ', 'BAT'),
-    ('AMPLIFICADOR DE SONIDO 250W', 'AS250W');
+INSERT INTO tipos (tipo) VALUES
+    ('AUDIFONOS'),
+    ('LAPTOP'),
+	('CPU'),
+    ('MONITOR'),
+    ('TECLADO'),
+    ('MOUSE'),
+	('PARLANTES'),
+    ('ECRAN'),
+	('PROYECTOR MULTIMEDIA'),
+    ('ESTABILIZADOR'),
+    ('SWITCH 48'),
+    ('SERVIDOR'),
+    ('CONSOLA DE AUDIO'),
+    ('MICROFONO'),
+    ('PARLANTES PARA MICROFONO'),
+    ('ROUTER'),
+    ('HDD EXTERNO'),
+	('BIOMETRICO'),
+	('DVR VIDEO VIGILANCIA'),
+	('IMPRESORA'),
+    ('AMPLIFICADOR DE SONIDO'),
+    ('MEGÁFONO'),
+    ('SIRENA DE EMERGENCIA'),
+    ('ACCES POINT'),
+    ('RACK2RU'),
+    ('DECODIFICADOR'),
+	('EXTENSIONES'),
+	('SUBWOOFER'),
+    ('REPROD. DVD'),
+	('CARRO DE METAL TRANSPORTADOR'),
+    ('CABLE HDMI');
     
 SELECT * FROM tipos;
-
-
 
 UPDATE tipos
 SET acronimo = CASE 
@@ -180,7 +156,8 @@ INSERT INTO roles (rol) VALUES
 
 SELECt * FROM personas;
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
+    ('Durand', 'Adriana', 'DNI', '74129177', '946989939', 'adrianadurand@gmail.com'),  -- ADMINISTRADOR
+	('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
 
@@ -207,7 +184,7 @@ SELECT * FROM ubicaciones;
 -- ----------------------------------------------------------------------------------------
 SELECT  * FROM recursos;
 INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
-    (9, 22, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL),
+    (1, 1, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL);
     (4, 22, 'Es un buen equipo', '00928', '{"COLOR": "AZUL", "CONECTIVIDAD": "OK"}', NULL),
     (4, 18, 'Monitor nuevo', 'RU28389', '{"COLOR": "NEUTRO", "CONECTIVIDAD": "SIMPLE"}', NULL);
 
@@ -269,24 +246,18 @@ INSERT INTO mantenimientos (idrecurso, idusuario, fecha_iniciomant, fecha_finman
 INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_baja) VALUES
     (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
-DELETE FROM solicitudes;
-DELETE FROM prestamos;
-DELETE FROM tipos;
-DELETE FROM marcas;
-DELETE FROM recursos;
-DELETE FROM  recepciones;	
-DELETE FROM  detrecepciones;
-DELETE FROM  ejemplares;
-DELETE FROM  stock;
-SET foreign_key_checks =1;
+
+DROP TABLE stock;
+DROP TABLE detrecepciones;
+DROP TABLE ejemplares;
+
+SET foreign_key_checks =0;
 
 ALTER TABLE recepciones AUTO_INCREMENT 1;
-ALTER TABLE detrecepciones AUTO_INCREMENT 1;
-ALTER TABLE ejemplares AUTO_INCREMENT 1;
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
-SELECT * FROM ubicaciones;
+SELECT * FROM detrecepciones;
 SELECT * FROM recursos;
 SELECT * FROM ejemplares;
 SELECT * FROM solicitudes;

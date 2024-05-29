@@ -232,8 +232,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             let idRecepcionGlobal = null;
 
-            let idPersonalSeleccionado = null;
-
             function $(id) {
                 return document.querySelector(id);
             }
