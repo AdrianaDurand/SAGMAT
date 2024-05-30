@@ -27,7 +27,7 @@
             text-align: center;
         }
 
-        
+
 
         .show-more-click {
             background-color: transparent;
@@ -37,7 +37,6 @@
             margin: 6px 0 20px;
             padding: 0;
         }
-
     </style>
 </head>
 
@@ -76,8 +75,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-lg  text-center" id="tabla-prestamo">
-                                        
+                                        <table class="table table-lg  text-center" id="tabla-mantenimiento">
+
                                             <colgroup>
                                                 <col width="5%"> <!-- ID -->
                                                 <col width="25%"> <!-- Solicitante-->
@@ -85,7 +84,7 @@
                                                 <col width="25%"> <!-- Fecha de Préstamo -->
                                                 <col width="20%"> <!-- Acciones -->
                                             </colgroup>
-                                        
+
                                             <thead>
                                                 <tr class="table prueba">
                                                     <th>N°</th>
@@ -96,7 +95,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Datos de prueba -->
+                                                <!-- Datos de prueba 
                                                 <tr>
                                                     <th>1</th>
                                                     <td>LAP-002</td>
@@ -141,7 +140,7 @@
                                                     <td>
                                                         <button class="show-more-click">Imprimir</button>
                                                     </td>
-                                                </tr>
+                                                </tr>-->
                                             </tbody>
                                         </table>
                                     </div>
@@ -155,6 +154,101 @@
             </div>
             <!-- End of Content Wrapper -->
         </div>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+                const tabla = document.querySelector("#tabla-mantenimiento tbody");
+
+                function $(id) {
+                    return document.querySelector(id);
+                }
+
+                function listar() {
+                    // Preparar los parametros a enviar
+                    const parametros = new FormData();
+                    parametros.append("operacion", "historial");
+
+                    fetch(`../../controllers/mantenimiento.controller.php`, {
+                            method: 'POST',
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datosRecibidos => {
+                            // Recorrer cada fila del arreglo
+                            let numFila = 1;
+                            $("#tabla-mantenimiento tbody").innerHTML = '';
+                            datosRecibidos.forEach(registro => {
+                                let nuevafila = ``;
+                                // Enviar los valores obtenidos en celdas <td></td>
+                                nuevafila = `
+                                    <tr>
+                                        <td>${numFila}</td>
+                                        <td>${registro.nro_equipo}</td>
+                                        <td>${registro.fechainicio}</td>
+                                        <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
+                                        <td>  
+                                        <div class="dropdown">
+                                            <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                               <img src="../../img/puntitos.svg">
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                `;
+                                $("#tabla-mantenimiento tbody").innerHTML += nuevafila;
+                                numFila++;
+                            });
+
+
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+
+
+                tabla.addEventListener("click", function(event) {
+                    const target = event.target;
+                    if (target.classList.contains('actualizar-estado')) {
+                        // Obtener el idpersona del botón clickeado
+                        idmantenimiento = target.getAttribute('data-idmantenimiento');
+                        // Obtener datos del cliente por su idpersona
+                        const parametros = new FormData();
+                        parametros.append("operacion", "actualizar");
+                        parametros.append("idmantenimiento", idmantenimiento);
+
+                        fetch(`../../controllers/mantenimiento.controller.php`, {
+                                method: 'POST',
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.json())
+                            .then(datosRecibidos => {
+                                console.log(datosRecibidos)
+                                alert("Actualizado")
+
+                                
+                                listar();
+
+                            })
+                            .catch(e => {
+                                console.error(e);
+                            });
+                    }
+                })
+
+
+
+                listar()
+
+
+
+            });
+        </script>
 
 </body>
 

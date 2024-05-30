@@ -64,9 +64,11 @@
                         </div>
                     </div>
 
+                    <div class="col-md-12">
+                        <div class="row" id="lista-mantenimientos"></div>
+                    </div>
 
-
-                    <div class="d-flex justify-content-center">
+                    <!--<div class="d-flex justify-content-center">
                         <div class="card mb-3" style="max-width: 900px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
@@ -74,8 +76,8 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="card-body">
-                                        <span class="badge badge-success card-title">Mantenimiento Realizado</span>
-                                        <h4 class="card-title"><strong>LAP-001</strong></h4>
+                                        <span class="badge badge-danger card-title">Necesita Mantenimiento</span>
+                                        <h4 class="card-title"><strong>LAP-002</strong></h4>
                                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                                     </div>
@@ -90,9 +92,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
-                    <div class="d-flex justify-content-center">
+                    <!--<div class="d-flex justify-content-center">
                         <div class="card mb-3" style="max-width: 900px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
@@ -168,7 +170,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                 </div>
                 <!-- End of Main Content -->
@@ -200,12 +202,8 @@
                         </div>
 
                         <div class="col-md-12">
-                            <label for="Comentarios" class="form-label">Comentarios:</label>
-                            <textarea class="form-control" id="Comentarios" rows="4"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="Ficha" class="form-label">Ficha:</label>
-                            <input type="file" class="form-control" id="Ficha">
+                            <label for="comentarios" class="form-label">Comentarios:</label>
+                            <textarea class="form-control" id="comentarios" rows="4"></textarea>
                         </div>
                     </form>
 
@@ -217,13 +215,118 @@
         </div>
     </div>
 
-    <script>
-        ocument.addEventListener("DOMContentLoaded", () => {
-            function $(id) {
-                return document.querySelector(id);
-            }
-        })
-    </script>
+
+
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        function $(id) {
+            return document.querySelector(id);
+        }
+
+        function listar() {
+            const parametros = new FormData();
+            parametros.append("operacion", "listar");
+
+            fetch(`../../controllers/mantenimiento.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    dataObtenida = datos
+                    if (dataObtenida.length == 0) {
+                        $("#lista-mantenimientos").innerHTML = `<p>No se encontraron mantenimientos</p>`;
+                    } else {
+                        $("#lista-mantenimientos").innerHTML = ``;
+                        dataObtenida.forEach(element => {
+                            //Evaluar si tiene una fotografía
+                            const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
+
+                            //Renderizado
+                            const nuevoItem = `
+
+                                <div class="d-flex justify-content-center">
+                                    <div class="card mb-3" style="max-width: 900px;">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="card-body">
+                                                    <span class="badge badge-warning card-title">${element.estado}</span>
+                                                    <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
+                                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 d-flex align-items-center">
+                                                <div class="card-body">
+                                                    <div class="d-grid gap-2">
+                                                        <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
+                                                        <button class="btn btn-outline-danger">Dar de baja</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                                    `;
+                            $("#lista-mantenimientos").innerHTML += nuevoItem;
+                        });
+
+                        document.querySelectorAll(".btn-outline-primary").forEach(btn => {
+                            btn.addEventListener("click", (event) => {
+                                const idejemplar = event.target.getAttribute("data-idejemplar");
+                                $("#guardar").onclick = () => registrar(idejemplar);
+                            });
+                        });
+                    }
+
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
+
+
+        function registrar(idejemplar) {
+            const parametros = new FormData();
+            parametros.append("operacion", "registrar");
+            parametros.append("idusuario", <?php echo $idusuario ?>);
+            parametros.append("idejemplar", idejemplar);
+            parametros.append("fechainicio", $("#fechainicio").value);
+            parametros.append("fechafin", $("#fechafin").value);
+            parametros.append("comentarios", $("#comentarios").value);
+
+
+            fetch(`../../controllers/mantenimiento.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+
+                    alert(`Mantenimiento exitoso`);
+                    $("#form-mantenimiento").reset();
+                    listar();
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
+
+
+        listar();
+
+
+    })
+</script>
 
 
 
