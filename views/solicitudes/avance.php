@@ -78,16 +78,19 @@
                     <select name="" id="idubicaciondocente" class="form-select" required>
                       <option value="">Seleccione:</option>
                     </select>
+                    <div class="invalid-feedback">Por favor, seleccione una ubicación.</div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <label for="horainicio" class="form-label">Hora Inicio:</label>
                     <input type="time" class="form-control" id="horainicio">
+                    <div class="invalid-feedback">Por favor, ingrese una hora de inicio.</div>
                   </div>
                   <div class="col-md-6">
                     <label for="horafin" class="form-label">Hora Fin:</label>
                     <input type="time" class="form-control" id="horafin">
+                    <div class="invalid-feedback">Por favor, ingrese una hora de fin</div>
                   </div>
                 </div>
               </form>
@@ -98,12 +101,14 @@
                     <select name="" id="idtipo" class="form-select" required>
                       <option value="">Seleccione:</option>
                     </select>
+                    <div class="invalid-feedback">Por favor, seleccione un recurso.</div>
                   </div>
                   <div class="col-md-4">
                     <label for="idejemplar" class="form-label">N° Equipo</label>
                     <select name="" id="idejemplar" class="form-select" required>
                       <option value="">Seleccione:</option>
                     </select>
+                    <div class="invalid-feedback">Por favor, seleccione que N° Equipo desea.</div>
                   </div>
                   <div class="col-md-4">
                     <label for="cantidad" class="form-label" placeholder="Máximo 30">Cantidad:</label>
@@ -346,7 +351,9 @@
       }
 
       document.getElementById("btnFinalizar").addEventListener("click", function() {
-    registrarSolicitudes();
+   if (validarFormulario()) {
+        registrarSolicitudes();
+    }
 });
 
       function registrarSolicitudes() {
@@ -406,7 +413,45 @@ function registroDetalle(idSolicitud) {
             });
       });
 }
+function validarFormulario() {
+    let formularioValido = true;
 
+    // Validar ubicación
+    if ($('#idubicaciondocente').value === '') {
+        $('#idubicaciondocente').classList.add('input-error');
+        formularioValido = false;
+    } else {
+        $('#idubicaciondocente').classList.remove('input-error');
+    }
+
+    // Validar hora de inicio
+    if ($('#horainicio').value === '') {
+        $('#horainicio').classList.add('input-error');
+        formularioValido = false;
+    } else {
+        $('#horainicio').classList.remove('input-error');
+    }
+
+    // Validar hora de fin
+    if ($('#horafin').value === '') {
+        $('#horafin').classList.add('input-error');
+        formularioValido = false;
+    } else {
+        $('#horafin').classList.remove('input-error');
+    }
+
+    // Validar cantidad
+    if (parseInt($('#cantidad').value) === 0) {
+        $('#cantidad').classList.add('input-error');
+        formularioValido = false;
+    } else {
+        $('#cantidad').classList.remove('input-error');
+    }
+
+    // Agregar más validaciones según sea necesario
+
+    return formularioValido;
+}
       gettypes();
       getLocation();
       listar_cronogramas();

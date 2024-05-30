@@ -146,7 +146,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="triggerId">
                             <a class="dropdown-item view" data-idprestamo='${element.idddetalle}' data-idsolicitud='${element.idSolicitud}' href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle</a>
-                            <button class="dropdown-item eliminar" data-idprestamo="${element.idvehiculo}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
+                            <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
                             <button class="dropdown-item registrar" data-idprestamo="${element.idvehiculo}" type="button"><i class="fa-solid fa-check" style="color: #ffc300;"></i> Aceptar préstamo</button>  
                             </div>
                             </div>
@@ -163,7 +163,6 @@
             }
 
             // Controlador de eventos para los enlaces de "Ver detalle"
-            // Controlador de eventos para los enlaces de "Ver detalle"
             document.addEventListener('click', function(event) {
                 if (event.target.classList.contains('view')) {
                     event.preventDefault();
@@ -172,6 +171,34 @@
                         const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
                         console.log("ID de la solicitud:", idsolicitud);
                         mostrarDetalle(idsolicitud);
+                    } else {
+                        console.error("No se encontró la fila de la tabla.");
+                    }
+                }
+                if(event.target.classList.contains('eliminar')){
+                    event.preventDefault();
+                    const fila = event.target.closest('tr'); // Obtener la fila más cercana
+                    if (fila) {
+                        const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
+                        if(confirm("¿Está seguro de eliminar la solicitud?")){
+                            let parametros = new FormData();
+                            parametros.append("operacion", "eliminar");
+                            parametros.append("idsolicitud", idsolicitud);
+
+                            fetch(`../../controllers/prestamo.controller.php`, {
+                                method: "POST",
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.text())
+                            .then(datos=>{
+                                if(datos.trim() == ""){
+                                    listar();
+                                }
+                            })
+                            .catch(e => {
+                                console.error(e)
+                            })
+                        }
                     } else {
                         console.error("No se encontró la fila de la tabla.");
                     }
