@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end mt-3">
+                        <div class="text-end mt-3 mb-4">
                             <div class="d-flex">
                                 <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1"><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
                                 <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
@@ -431,6 +431,7 @@
                         añadirRecepcion(idPersonalFinal);
                     }
                     formRecepcion.reset();
+                    location.reload();  // recarga la página
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
