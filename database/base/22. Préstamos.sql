@@ -120,6 +120,7 @@ END //
 
 DELIMITER ;
 
+
 SELECT * FROM solicitudes;
 SELECT * FROM detsolicitudes;
 

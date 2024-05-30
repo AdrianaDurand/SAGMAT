@@ -370,10 +370,19 @@
       }
 
       document.getElementById("btnFinalizar").addEventListener("click", function() {
+    // Forzar la validación de ambos formularios
+    document.getElementById('form-cronograma').classList.add('was-validated');
+    document.getElementById('form-detalle').classList.add('was-validated');
 
+    // Verificar si ambos formularios son válidos antes de registrar la solicitud
+    if (document.getElementById('form-cronograma').checkValidity() && document.getElementById('form-detalle').checkValidity()) {
         registrarSolicitudes();
+    } else {
+        // Si hay campos inválidos, mostrar un mensaje de error
+        alert("Por favor complete todos los campos correctamente.");
+    }
+});
 
-      });
 
       function registrarSolicitudes() {
         // Verificar y ajustar la cantidad antes de registrar la solicitud
