@@ -2,29 +2,29 @@ USE SAGMAT;
 
 SELECT * FROM solicitudes;
 
+
 DELIMITER $$
 CREATE PROCEDURE spu_listar_calendar(
     IN _idsolicita INT
 )
 BEGIN
     SELECT 
-        s.idsolicitud,
-        t.idtipo,
-        t.acronimo,
-        t.tipo,
-        s.horainicio,
-        s.horafin,
-        s.cantidad,
-        s.fechasolicitud,
-        u.nombre,
-        u.nro_piso,
-        u.numero,
-        ds.idejemplar
-    FROM solicitudes s
-    INNER JOIN tipos t ON s.idtipo = t.idtipo
-    INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
-    INNER JOIN detsolicitudes ds ON s.idsolicitud = ds.idsolicitud -- Se agrega la unión con detsolicitudes
-    WHERE s.idsolicita = _idsolicita;
+    s.idsolicitud,
+    t.tipo,
+    t.acronimo,
+    s.horainicio,
+    s.horafin,
+    s.fechasolicitud,
+    u.nombre,
+    u.numero,
+    e.nro_equipo,
+    ds.idejemplar
+	FROM detsolicitudes ds
+	INNER JOIN tipos t ON ds.idtipo = t.idtipo
+	INNER JOIN solicitudes s ON ds.idsolicitud = s.idsolicitud
+	INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
+	INNER JOIN ejemplares e ON ds.idejemplar = e.idejemplar
+	WHERE s.idsolicita = _idsolicita;
 END $$
 CALL spu_listar_calendar(4);
 
@@ -41,33 +41,35 @@ SELECT * FROM ejemplares;
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
     IN _idsolicita             INT,
-    IN _idtipo                INT,
+    -- IN _idtipo                INT,
     IN _idubicaciondocente     INT,
-    IN _cantidad 	           INT,
+    -- IN _cantidad 	           INT,
     IN _horainicio            TIME,
     IN _horafin                TIME,
     IN _fechasolicitud         DATE
 )
 BEGIN
-    INSERT INTO solicitudes (idsolicita, idtipo, idubicaciondocente, cantidad, horainicio, horafin, fechasolicitud) VALUES
-    (_idsolicita, _idtipo, _idubicaciondocente, _cantidad, _horainicio, _horafin, _fechasolicitud);
+    INSERT INTO solicitudes (idsolicita, idubicaciondocente, horainicio, horafin, fechasolicitud) VALUES
+    (_idsolicita, _idubicaciondocente, _horainicio, _horafin, _fechasolicitud);
     SELECT @@last_insert_id 'idsolicitud';
 END $$
 CALL spu_solicitudes_registrar(4, 9, CURTIME(), 2, '2024-05-09');
 
+
 DELIMITER $$
 CREATE PROCEDURE spu_detallesolicitudes_registrar(
     IN _idsolicitud 			INT,
-    IN _idejemplar 				SMALLINT
+    IN _idtipo 					INT,
+    IN _idejemplar 				SMALLINT,
+    IN _cantidad				SMALLINT
 )
 BEGIN
-	INSERT INTO detsolicitudes (idsolicitud, idejemplar)
-    VALUES (_idsolicitud, _idejemplar);
+	INSERT INTO detsolicitudes (idsolicitud, idtipo, idejemplar, cantidad)
+    VALUES (_idsolicitud, _idtipo, _idejemplar, _cantidad);
     SELECT @@last_insert_id 'iddetallesolicitud';
 END $$
 
 SELECT * FROM DETSOLICITUDES;
-
 SELECt * FROM solicitudes;
 SELECT * FROM personas;
 SELECT * FROM detrecepciones;

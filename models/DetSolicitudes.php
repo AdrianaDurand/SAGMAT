@@ -15,11 +15,13 @@ class DetSolicitudes extends Conexion
 
     public function registar($datos = []){
         try {
-            $consulta = $this->conexion->prepare("CALL spu_detallesolicitudes_registrar(?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_detallesolicitudes_registrar(?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idsolicitud'],
-                    $datos['idejemplar']
+                    $datos['idtipo'],
+                    $datos['idejemplar'],
+                    $datos['cantidad']
                 )
             );
             return $consulta->fetch(PDO::FETCH_ASSOC);

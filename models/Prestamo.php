@@ -16,8 +16,23 @@ class Prestamo extends Conexion
     public function listar()
     {
         try {
-            $consulta = $this->conexion->prepare("CALL spu_listar_solicitudes()");
+            $consulta = $this->conexion->prepare("CALL spu_listado_solic()");
             $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    
+    public function listarDet($datos =[])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_listado_detsoli(?)");
+            $consulta->execute(
+                array(
+                    $datos['idsolicitud']
+                )
+            );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
@@ -27,11 +42,11 @@ class Prestamo extends Conexion
     public function registrar($datos = [])
     {
         try {
-            $consulta = $this->conexion->prepare("CALL sp_registrar_prestamo_stock(?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL RegistrarPrestamo(?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idstock'],
-                    $datos['idsolicitud'],
+                    $datos['iddetallesolicitud'],
                     $datos['idatiende'],
                     $datos['estadoentrega']
                 )
@@ -51,5 +66,18 @@ class Prestamo extends Conexion
         } catch (Exception $e) {
             die($e->getMessage());
         }
+    }
+
+    public function eliminar($datos = []){
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_eliminar_sol(?)");
+            $consulta->execute(
+              array(
+                $datos['idsolicitud']
+              )
+            );
+          } catch (Exception $e) {
+            die($e->getMessage());
+          }
     }
 }

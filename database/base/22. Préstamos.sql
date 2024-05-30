@@ -1,194 +1,140 @@
-use SAGMAT;
+USE SAGMAT;
 
-
-select * from ejemplares;
-
-SELECT *
-FROM solicitudes
-WHERE estado = 0;
-
+SELECT * FROM solicitudes;
+-- LISTADO SOLICITUDES PENDIENTES
 DELIMITER $$
-CREATE PROCEDURE spu_listar_solicitudes()
+CREATE PROCEDURE spu_listado_solic()
 BEGIN
 	SELECT 
-        s.idsolicitud,
-        s.cantidad,
-        CONCAT(s.fechasolicitud, ' ', s.horainicio, '-', s.horafin) AS fechayhora,
-        t.tipo,
-        u.nombre,
-        CONCAT(p.apellidos, ', ', p.nombres) AS docente,
-        st.idstock -- Añadiendo el idstock al SELECT
-    FROM 
-        solicitudes s
-        INNER JOIN tipos t ON s.idtipo = t.idtipo
-        INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
-        INNER JOIN personas p ON s.idsolicita = p.idpersona
-        INNER JOIN recursos r ON s.idtipo = r.idtipo -- Uniendo con recursos para obtener el idrecurso
-        INNER JOIN stock st ON r.idrecurso = st.idrecurso -- Uniendo con stock para obtener el idstock
-    WHERE 
-        s.estado = 0;
+		s.idsolicitud,
+		CONCAT(p.nombres, ' ', p.apellidos) AS docente,
+		u.nombre AS ubicacion,
+		s.fechasolicitud,
+		CONCAT(s.horainicio, ' - ', s.horafin) AS horario
+	FROM 
+		solicitudes s
+	JOIN 
+		usuarios us ON s.idsolicita = us.idusuario
+	JOIN 
+		personas p ON us.idpersona = p.idpersona
+	JOIN 
+		ubicaciones u ON s.idubicaciondocente = u.idubicacion
+	WHERE 
+		s.estado = 0;
 END $$
+CALL spu_listado_solic();
 
-SELECT 
-    s.idsolicitud,
-    s.cantidad,
-    CONCAT(s.fechasolicitud, ' ', s.horainicio, '-', s.horafin) AS fechayhora,
-    t.tipo,
-    u.nombre AS ubicacion,
-    CONCAT(p.apellidos, ', ', p.nombres) AS docente,
-    GROUP_CONCAT(DISTINCT st.idstock SEPARATOR ', ') AS ejemplares -- Agrupar y listar los idstock
-FROM 
-    solicitudes s
-    INNER JOIN tipos t ON s.idtipo = t.idtipo
-    INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
-    INNER JOIN personas p ON s.idsolicita = p.idpersona
-    INNER JOIN recursos r ON s.idtipo = r.idtipo -- Uniendo con recursos para obtener el idrecurso
-    INNER JOIN stock st ON r.idrecurso = st.idrecurso -- Uniendo con stock para obtener el idstock
-WHERE 
-    s.estado = 0
-GROUP BY
-    s.idsolicitud,
-    s.cantidad,
-    s.fechasolicitud,
-    s.horainicio,
-    s.horafin,
-    t.tipo,
-    u.nombre,
-    p.apellidos,
-    p.nombres;
-    
-    
-
-
-
-    
-  
-
-
-
-CALL spu_listar_solicitudes();
-
-SELECT * FROM recursos;
-SELECT * FROM tipos;
 SELECT * FROM solicitudes;
 
-delete from prestamos;
-delete from devoluciones;
-ALTER TABLE prestamos AUTO_INCREMENT 1;
-SET foreign_key_checks =1;
-DELETE FROM  prestamos;
-CALL spu_registrar_prestamos(2,1);
+-- LISTADO DETALLESOLICITUDES PENDIENTES
+DELIMITER $$
+CREATE PROCEDURE sp_listado_detsoli(IN _idsolicitud INT)
+BEGIN
+	SELECT 
+		ds.iddetallesolicitud,
+		ds.idsolicitud,
+		t.tipo AS tipo,
+		e.nro_equipo,
+		ds.cantidad DIV total_registros.cantidad_total AS cantidad_por_registro
+	FROM 
+		detsolicitudes ds
+	JOIN 
+		tipos t ON ds.idtipo = t.idtipo
+	JOIN 
+		ejemplares e ON ds.idejemplar = e.idejemplar
+	JOIN
+		(SELECT 
+			idsolicitud,
+			COUNT(*) AS cantidad_total
+		FROM 
+         detsolicitudes
+     WHERE 
+         estado = 0
+     GROUP BY 
+         idsolicitud) AS total_registros ON ds.idsolicitud = total_registros.idsolicitud
+	WHERE 
+		ds.idsolicitud = _idsolicitud AND ds.estado = 0;
+END$$
+CALL sp_listado_detsoli(5);
 
-SELECT * FROM usuarios;
-SELECT * FROM personas;
 SELECT * FROM solicitudes;
+
+
+-- REGISTRO DE PRESTAMO
+SELECT * FROM stock;
+SELECT  * FROM detsolicitudes;
 SELECT * FROM prestamos;
 
+CALL RegistrarPrestamo(3,2,2,'ninguna' );
+DELIMITER //
 
-
-
-DELIMITER $$
-CREATE PROCEDURE sp_registrar_prestamo_stock
-(
-    IN _idstock INT,
-    IN _idsolicitud INT,
-    IN _idatiende INT,
-    IN _estadoentrega VARCHAR(30)
+CREATE PROCEDURE RegistrarPrestamo(
+    IN p_idstock INT,
+    IN p_iddetallesolicitud INT,
+    IN p_idatiende INT,
+    IN p_estadoentrega VARCHAR(30)
 )
 BEGIN
-    DECLARE current_stock INT;
-    DECLARE new_stock INT;
-    DECLARE stock_tipo INT;
-    DECLARE solicitud_tipo INT;
-    DECLARE cantidad_solicitada INT;
-    DECLARE error_message VARCHAR(255);
+    DECLARE v_cantidad_solicitada INT;
+    DECLARE v_stock_actual INT;
+    
+    -- Obtener la cantidad solicitada
+    SELECT cantidad INTO v_cantidad_solicitada
+    FROM detsolicitudes
+    WHERE iddetallesolicitud = p_iddetallesolicitud;
 
-    -- Obtener el tipo de recurso asociado al stock
-    SELECT r.idtipo INTO stock_tipo 
-    FROM recursos r
-    INNER JOIN stock s ON r.idrecurso = s.idrecurso
-    WHERE s.idstock = _idstock;
+    -- Obtener el stock actual del recurso
+    SELECT stock INTO v_stock_actual
+    FROM stock
+    WHERE idstock = p_idstock;
 
-    -- Obtener el tipo de solicitud y la cantidad solicitada
-    SELECT s.idtipo, s.cantidad INTO solicitud_tipo, cantidad_solicitada 
-    FROM solicitudes s
-    WHERE s.idsolicitud = _idsolicitud;
+    -- Verificar si hay suficiente stock para realizar el préstamo
+    IF v_stock_actual >= v_cantidad_solicitada THEN
+        -- Insertar el préstamo
+        INSERT INTO prestamos (idstock, iddetallesolicitud, idatiende, estadoentrega, create_at)
+        VALUES (p_idstock, p_iddetallesolicitud, p_idatiende, p_estadoentrega, NOW());
 
-    IF stock_tipo IS NULL THEN
-        SET error_message = 'El recurso especificado no es válido';
-    ELSEIF solicitud_tipo IS NULL THEN
-        SET error_message = 'La solicitud especificada no es válida';
-    ELSEIF stock_tipo != solicitud_tipo THEN
-        SET error_message = 'El tipo de recurso asociado al stock no coincide con el tipo de solicitud';
+        -- Actualizar estado de la solicitud
+        UPDATE solicitudes
+        SET estado = 1
+        WHERE idsolicitud = (
+            SELECT idsolicitud
+            FROM detsolicitudes
+            WHERE iddetallesolicitud = p_iddetallesolicitud
+        );
+
+        -- Actualizar estado de los detalles de la solicitud
+        UPDATE detsolicitudes
+        SET estado = 1
+        WHERE iddetallesolicitud = p_iddetallesolicitud;
+        
+        -- Disminuir el stock del recurso
+        UPDATE stock
+        SET stock = stock - v_cantidad_solicitada
+        WHERE idstock = p_idstock;
     ELSE
-        -- Verificar si hay suficiente stock disponible
-        SELECT st.stock INTO current_stock 
-        FROM stock st
-        WHERE st.idstock = _idstock;
-
-        IF current_stock IS NULL THEN
-            SET error_message = 'No hay stock disponible para el recurso especificado';
-        ELSE
-            -- Calcular el nuevo stock
-            SET new_stock = current_stock - cantidad_solicitada;
-
-            IF new_stock < 0 THEN
-                SET error_message = 'No hay suficiente stock disponible para realizar el préstamo';
-            ELSE
-                -- Actualizar el stock
-                UPDATE stock 
-                SET stock = new_stock 
-                WHERE idstock = _idstock;
-
-                -- Registrar el préstamo
-                INSERT INTO prestamos (idstock, idsolicitud, idatiende, estadoentrega, create_at) 
-                VALUES (_idstock, _idsolicitud, _idatiende, _estadoentrega, NOW());
-                
-                -- Actualizar el estado de la solicitud
-                UPDATE solicitudes 
-                SET estado = 1 
-                WHERE idsolicitud = _idsolicitud;
-
-                -- No hay necesidad de asignar un valor a error_message, ya que no hay errores
-                SET error_message = 'Préstamo registrado exitosamente';
-            END IF;
-        END IF;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No hay suficiente stock para realizar el préstamo';
     END IF;
+END //
 
-    -- Mostrar el mensaje de error o éxito
-    SELECT error_message AS 'Mensaje';
-END $$
-
-
-DELIMITER $$
-CREATE PROCEDURE spu_listar_prestamos()
-BEGIN
-	SELECT 
-        p.idprestamo,
-        CONCAT(pe.nombres, ' ', pe.apellidos) AS docente,
-        s.cantidad,
-        s.fechasolicitud,
-        p.create_at AS fechaprestamo
-    FROM 
-        prestamos p
-    JOIN solicitudes s ON p.idsolicitud = s.idsolicitud
-    JOIN usuarios u ON s.idsolicita = u.idusuario
-    JOIN personas pe ON u.idpersona = pe.idpersona;
-END $$
-
-
+DELIMITER ;
 
 SELECT * FROM solicitudes;
-SELECT * FROM prestamos;
-SELECT * FROM recursos;
-SELECT * FROM stock;
-SELECT * FROM ejemplares;
-	
+SELECT * FROM detsolicitudes;
 
+CALL sp_eliminar_sol(8);
+-- ELIMINACION DE DET SOLICITUDES Y SOLICITUDES
+DELIMITER $$
+CREATE PROCEDURE sp_eliminar_sol(
+    IN p_idsolicitud INT
+)
+BEGIN
+    -- Eliminar los registros de detsolicitudes asociados al idsolicitud
+    DELETE FROM detsolicitudes
+    WHERE idsolicitud = p_idsolicitud;
 
-
-
-
-
-
-
+    -- Eliminar el registro de solicitudes
+    DELETE FROM solicitudes
+    WHERE idsolicitud = p_idsolicitud;
+END $$

@@ -9,21 +9,29 @@ if (isset($_POST['operacion'])) {
     switch ($_POST['operacion']) {
         case 'listar':
             echo json_encode($prestamo->listar());
-            break;
+        break;
+        case 'listarDet':
+            $datosEnviar = ["idsolicitud" => $_POST['idsolicitud']];
+            echo json_encode($prestamo->listarDet($datosEnviar));
+        break;
 
         case 'registrar':
             $datosEnviar = [
                 "idstock"                 => $_POST['idstock'],
-                "idsolicitud"             => $_POST['idsolicitud'],
+                "iddetallesolicitud"             => $_POST['iddetallesolicitud'],
                 "idatiende"               => $_SESSION['idusuario'],
                 "estadoentrega"           => $_POST['estadoentrega'],
             ];
             $prestamo->registrar($datosEnviar);
 
-            break;
+        break;
 
         case 'listarprestamo':
             echo json_encode($prestamo->listarPrestamo());
-            break;
+        break;
+        
+        case 'eliminar':
+            $prestamo->eliminar(["idsolicitud" => $_POST["idsolicitud"]]);
+        break;
     }
 }

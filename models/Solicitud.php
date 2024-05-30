@@ -44,13 +44,12 @@ class Solicitud extends Conexion
 
     public function registar($datos = []){
         try {
-            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idsolicita'],
-                    $datos['idtipo'],
                     $datos['idubicaciondocente'],
-                    $datos['cantidad'],
+                    // $datos['cantidad'],
                     $datos['horainicio'],
                     $datos['horafin'],
                     $datos['fechasolicitud']

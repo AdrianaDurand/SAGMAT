@@ -11,7 +11,9 @@ if (isset($_POST['operacion'])){
         case 'registrarDetalle':
             $datosEnviar = [
                 "idsolicitud"            => $_POST['idsolicitud'],
-                "idejemplar"                => $_POST['idejemplar']
+                "idtipo"            => $_POST['idtipo'],
+                "idejemplar"                => $_POST['idejemplar'],
+                "cantidad"                => $_POST['cantidad']
             ];
             echo json_encode($detsolicitud->registar($datosEnviar));
         break;

@@ -141,19 +141,19 @@ CREATE TABLE solicitudes
 (
     idsolicitud                     INT                 AUTO_INCREMENT PRIMARY KEY,
     idsolicita                         INT                 NOT NULL, -- FK
-    idtipo                            INT                 NOT NULL, -- FK
+    -- idtipo                            INT                 NOT NULL, -- FK
     idubicaciondocente                INT                 NOT NULL, -- FK
     -- idejemplar                        INT                 NOT NULL,
     horainicio                        TIME                 NOT NULL,
     horafin                            TIME                NULL,
-    cantidad                         SMALLINT             NOT NULL,
+    -- cantidad                         SMALLINT             NOT NULL,
     fechasolicitud                    DATE                 NOT NULL,
     estado                            INT                 NOT NULL DEFAULT 0,
     create_at                 DATETIME            DEFAULT NOW(),
     update_at                DATETIME            NULL,
     inactive_at                DATETIME             NULL,
     CONSTRAINT fk_idsolicita_sl        FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_idtipo_sl          FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
+    -- CONSTRAINT fk_idtipo_sl          FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
     CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
 
@@ -161,11 +161,15 @@ CREATE TABLE solicitudes
 CREATE TABLE detsolicitudes(
 	iddetallesolicitud 				INT 			AUTO_INCREMENT PRIMARY KEY,
     idsolicitud 					INT 			NOT NULL, -- FK
+    idtipo							INT 			NOT NULL,	
     idejemplar                        INT                 NOT NULL,
+    cantidad						SMALLINT 		NOT NULL,
+    estado 							INT 			NOT NULL DEFAULT 0,
     create_at                 		DATETIME        DEFAULT NOW(),
     update_at                		DATETIME        NULL,
     inactive_at                		DATETIME        NULL,
     CONSTRAINT fk_idsolocitud_ds	FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
+    CONSTRAINT fk_idtipo_ds 		FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
      CONSTRAINT fk_idejemplar_ds    FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
 
@@ -193,13 +197,13 @@ CREATE TABLE prestamos
 (
 	idprestamo 						INT 				AUTO_INCREMENT PRIMARY KEY,
     idstock 						INT 				NOT NULL, -- FK
-    idsolicitud 					INT 				NOT NULL, -- FK
+    iddetallesolicitud 					INT 				NOT NULL, -- FK
     idatiende 						INT 				NOT NULL, -- FK
     estadoentrega					VARCHAR(30)			NULL,
     create_at 				DATETIME			DEFAULT NOW(),
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idsolicitud_pr	FOREIGN KEY (idsolicitud) REFERENCES solicitudes (idsolicitud),
+    CONSTRAINT fk_iddetallesolicitud_pr	FOREIGN KEY (iddetallesolicitud) REFERENCES detsolicitudes (iddetallesolicitud),
     CONSTRAINT fk_idstock_pr		FOREIGN KEY (idstock) REFERENCES stock (idstock),
     CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
@@ -305,39 +309,33 @@ CREATE TABLE observaciones
 -- *********************************************************************
 CREATE TABLE mantenimientos
 (
-	idmantenimiento 				INT 					AUTO_INCREMENT PRIMARY KEY,
-    iddevolucion 					INT 					NOT NULL, -- FK
-    idusuario 						INT 					NOT NULL, -- FK
-    idejemplar						INT 					NOT NULL, -- FK
-    fecharegistro					DATE 					NOT NULL,
-    fechainicio 					DATE 					NOT NULL,
-    fechafin 						DATE 					NULL,
-    comentarios 					VARCHAR(200) 			NULL,
-    ficha							VARCHAR(300) 			NULL,
-    estado 							VARCHAR(20) 			NOT NULL, -- BUENO, DETERIORI....
-    create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_iddevolucion_mtn 	FOREIGN KEY (iddevolucion) REFERENCES devoluciones (iddevolucion),
-    CONSTRAINT fk_idusuario_mtn		FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
-    CONSTRAINT fk_idejemplar_mtn 	FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
+    idmantenimiento                 INT                     AUTO_INCREMENT PRIMARY KEY,
+    idusuario                         INT                     NOT NULL, -- FK
+    idejemplar                        INT                     NOT NULL, -- FK
+    fechainicio                     DATE                     NOT NULL,
+    fechafin                         DATE                     NULL,
+    comentarios                     VARCHAR(200)             NULL,
+    estado                             CHAR(1) NOT NULL DEFAULT 0,
+    create_at                 DATETIME            DEFAULT NOW(),
+    update_at                DATETIME            NULL,
+    inactive_at                DATETIME             NULL,
+    CONSTRAINT fk_idusuario_mtn        FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
+    CONSTRAINT fk_idejemplar_mtn     FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 ) ENGINE = INNODB;
 
 -- 18°
--- *********************************************************************
--- 								TABLA BAJAS
--- *********************************************************************
+-- **
+--                                 TABLA BAJAS
+-- **
 CREATE TABLE bajas
 (
-	idbaja 							INT 					AUTO_INCREMENT PRIMARY KEY,
-    idmantenimiento 				INT 					NOT NULL, -- FK
-    fechabaja						DATE					NOT NULL,
-    motivo							VARCHAR(100) 			NULL,
-    comentarios						VARCHAR(100) 			NULL,
-    ficha							VARCHAR(300) 			NULL,
-    estado							VARCHAR(20) 			NULL,
-    create_at 				DATETIME			DEFAULT NOW(),
-	update_at				DATETIME			NULL,
-	inactive_at				DATETIME	 		NULL,
-    CONSTRAINT fk_idmantenimiento_bj FOREIGN KEY (idmantenimiento) REFERENCES mantenimientos (idmantenimiento)
+    idbaja                             INT                     AUTO_INCREMENT PRIMARY KEY,
+    idejemplar                         INT                     NOT NULL,
+    fechabaja                        DATE                    NOT NULL,
+    comentarios                        VARCHAR(100)             NULL,
+    ficha                            VARCHAR(300)             NULL,
+    create_at                 DATETIME            DEFAULT NOW(),
+    update_at                DATETIME            NULL,
+    inactive_at                DATETIME             NULL,
+    CONSTRAINT fk_idejemplar_bjs     FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 )ENGINE = INNODB;
