@@ -195,6 +195,7 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
                                                 <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
+                                                <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
                                             </div>
                                         </div>
                                     </td>
