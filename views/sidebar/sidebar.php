@@ -53,7 +53,7 @@ $accesos = [
         "Bajas" => ["Bajas"]
     ],
     "DOCENTE" => [
-        "Solicitudes" => ["Solicitudes"]
+        "Solicitudes" => ["Registrar"]
     ]
 ];
 
