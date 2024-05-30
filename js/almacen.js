@@ -8,7 +8,8 @@ const tipoRecursoDiv = document.getElementById('resultados2');
 let timeoutId;
 let timeoutId2;
 
-let mostrarSugerencias = false; 
+let idPersonalSeleccionado = 1;
+
 
 function resourcefinder() {
     const parametros = new FormData();
@@ -19,57 +20,41 @@ function resourcefinder() {
         method: "POST",
         body: parametros
     })
-    .then(respuesta => respuesta.json())
-    .then(datos => {
-        if (datos.hasOwnProperty('mensaje')) {
-            mostrarMensajeNoEncontrado(datos.mensaje);
-            mostrarSugerencias = false; 
-        } else {
-            searchresult(datos);
-            if (datos.length > 0) {
-                buscarInput.value = datos[0].nombres + ' ' + datos[0].apellidos;
-                idPersonalSeleccionado = datos[0].idpersona;
-                mostrarSugerencias = true; 
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.hasOwnProperty('mensaje')) {
+                mostrarMensajeNoEncontrado(datos.mensaje);
             } else {
-                buscarInput.value = "Datos del registro ID 1";
-                idPersonalSeleccionado = 1; 
-                mostrarSugerencias = false; 
-                mostrarDatosID1(); 
+                searchresult(datos);
             }
-        }
-    })
-    .catch(error => {
-        console.error("Error en la búsqueda:", error);
-        mostrarSugerencias = false;
-    });
+        })
+        .catch(error => {
+            console.error("Error en la búsqueda:", error);
+        });
 }
 
 function searchresult(datos) {
-    if (buscarInput.value === "Datos del registro ID 1") {
-        resultadosDiv.innerHTML = ''; 
-        if (datos.length > 0) {
-            const enlaceResultado = document.createElement('a');
-            enlaceResultado.href = '#';
-            enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
-    
-            const nombreCompleto = document.createElement('span');
-            nombreCompleto.textContent = datos[0].nombres + ' ' + datos[0].apellidos;
-    
-            enlaceResultado.appendChild(nombreCompleto);
-            resultadosDiv.appendChild(enlaceResultado);
-    
-            enlaceResultado.addEventListener('click', function (event) {
-                event.preventDefault();
-                buscarInput.value = datos[0].nombres + ' ' + datos[0].apellidos;
-                idPersonalSeleccionado = datos[0].idpersona; 
-                resultadosDiv.innerHTML = ''; 
-            });
-        } else {
-            mostrarMensajeNoEncontrado("No se encontraron datos para el ID 1");
-        }
-    }
-}
+    resultadosDiv.innerHTML = '';
 
+    datos.forEach(function (resultado) {
+        const enlaceResultado = document.createElement('a');
+        enlaceResultado.href = '#';
+        enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
+
+        const nombreCompleto = document.createElement('span');
+        nombreCompleto.textContent = resultado.nombres + ' ' + resultado.apellidos;
+
+        enlaceResultado.appendChild(nombreCompleto);
+        resultadosDiv.appendChild(enlaceResultado);
+
+        enlaceResultado.addEventListener('click', function (event) {
+            event.preventDefault();
+            buscarInput.value = resultado.nombres + ' ' + resultado.apellidos;
+            idPersonalSeleccionado = resultado.idpersona; 
+            resultadosDiv.innerHTML = ''; 
+        });
+    });
+}
 
 
 buscarInput.addEventListener('input', function () {
@@ -78,12 +63,10 @@ buscarInput.addEventListener('input', function () {
         resultadosDiv.innerHTML = '';
         return;
     }
-    // Mostrar sugerencias siempre que se escriba algo en el input
     timeoutId = setTimeout(function () {
         resourcefinder();
     }, 500);
 });
-
 
 function mostrarMensajeNoEncontrado(mensaje) {
     const noEncontrado = document.createElement('li');
@@ -245,4 +228,3 @@ tipoRecursoDiv.addEventListener('click', function (event) {
 });
 
 getAlmacen();
-resourcefinder();      

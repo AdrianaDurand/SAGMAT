@@ -232,7 +232,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             let idRecepcionGlobal = null;
 
-            function $(id) {
+
+        function $(id) {
                 return document.querySelector(id);
             }
 
@@ -252,7 +253,6 @@
             }
 
             function añadirRecepcion() {
-                console.log("ID del personal seleccionado:", idPersonalSeleccionado);
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
                 parametros.append("idusuario", <?php echo $idusuario ?>);
@@ -414,19 +414,32 @@
             $("#btnFinalizar").addEventListener("click", function() {
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
+                
+                // ¿Está o no definido?
+                let idPersonalFinal;
+                if (typeof idPersonalSeleccionado !== 'undefined' && idPersonalSeleccionado !== null) {
+                    idPersonalFinal = idPersonalSeleccionado;
+                } else {
+                    idPersonalFinal = 1; // No está definido = idpersonal 1
+                }
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
                     if (idRecepcionGlobal) {
-                        añadirDetallesRecepcion(idRecepcionGlobal);
+                        añadirDetallesRecepcion(idRecepcionGlobal, idPersonalFinal);
                         idRecepcionGlobal = null;
                     } else {
-                        añadirRecepcion();
+                        añadirRecepcion(idPersonalFinal);
                     }
                     formRecepcion.reset();
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
             });
+
+
+
+
+
         });
     </script>
 
