@@ -71,7 +71,7 @@
             </div>
             <div class="modal-body">
               <div id="descripcion"> </div>
-              <form action="" autocomplete="off" id="form-cronograma">
+              <form action="" autocomplete="off" id="form-cronograma" class="needs-validation" novalidate>
                 <div class="row">
                   <div class="col-md-12">
                     <label for="idubicaciondocente" class="form-label">Ubicación:</label>
@@ -94,7 +94,7 @@
                   </div>
                 </div>
               </form>
-              <form action="" id="form-detalle">
+              <form action="" id="form-detalle" class="needs-validation" novalidate>
                 <div class="row">
                   <div class="col-md-4">
                     <label for="idtipo" class="form-label">Tipo de recurso:</label>
@@ -200,7 +200,7 @@
 
         // Agregar el recurso a la tabla
         var newRow = document.createElement('tr');
-        newRow.innerHTML = `<td>${tipo}</td><td>${numeroEquipo}</td>`;
+        newRow.innerHTML = `<td>${tipo}</td><td>${numeroEquipo}</td><td><button type="button" class="btn btn-outline-danger btnEliminar">Eliminar</button></td>`;
         document.querySelector('#tablaRecursos tbody').appendChild(newRow);
 
         // Agregar a la lista de equipos agregados
@@ -215,6 +215,26 @@
         document.getElementById('idtipo').value = '';
         document.getElementById('idejemplar').innerHTML = '<option value="">Seleccione:</option>';
 
+        // Agregar evento de clic para eliminar
+        newRow.querySelector('.btnEliminar').addEventListener('click', function() {
+          eliminarRecurso(this);
+        });
+      }
+
+      function eliminarRecurso(button) {
+        var row = button.closest('tr');
+        var numeroEquipo = row.querySelector('td:nth-child(2)').innerText;
+
+        // Reducir la cantidad
+        cantidadInput.value = parseInt(cantidadInput.value) - 1;
+
+        // Eliminar de la lista de equipos agregados
+        equiposAgregados = equiposAgregados.filter(function(equipo) {
+          return equipo.numeroEquipo !== numeroEquipo;
+        });
+
+        // Eliminar la fila de la tabla
+        row.remove();
       }
 
 
@@ -350,107 +370,70 @@
       }
 
       document.getElementById("btnFinalizar").addEventListener("click", function() {
-   if (validarFormulario()) {
+
         registrarSolicitudes();
-    }
-});
+
+      });
 
       function registrarSolicitudes() {
-    // Verificar y ajustar la cantidad antes de registrar la solicitud
-    if (parseInt(cantidadInput.value) === 0) {
-      cantidadInput.value = 1;
-    }
-
-    const parametros = new FormData();
-    parametros.append("operacion", "registrar");
-    parametros.append("idsolicita", <?php echo $idusuario ?>);
-    parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-    // parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
-    parametros.append("horainicio", $('#horainicio').value);
-    parametros.append("horafin", $('#horafin').value);
-    parametros.append("fechasolicitud", $('#fechasolicitud').value);
-
-    fetch(`../../controllers/solicitud.controller.php`, {
-        method: "POST",
-        body: parametros
-      })
-      .then(respuesta => respuesta.json())
-      .then(datos => {
-        if (datos.idsolicitud > 0) {
-          console.log(`Solicitud registrado con ID: ${datos.idsolicitud}`);
-          // Después de registrar la solicitud, registramos los detalles
-          registroDetalle(datos.idsolicitud);
+        // Verificar y ajustar la cantidad antes de registrar la solicitud
+        if (parseInt(cantidadInput.value) === 0) {
+          cantidadInput.value = 1;
         }
-      })
-      .catch(e => {
-        console.error(e);
-      });
-}
 
-function registroDetalle(idSolicitud) {
-    equiposAgregados.forEach(equipo => {
-    const parametros = new FormData();
-    parametros.append("operacion", "registrarDetalle");
-    parametros.append("idsolicitud", idSolicitud);
-        parametros.append("idtipo", equipo.idTipo);
-        parametros.append("idejemplar", equipo.idEjemplar);
-        parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
-        // parametros.append("cantidad", 1); // Siempre registramos un equipo a la vez
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("idsolicita", <?php echo $idusuario ?>);
+        parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+        // parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
+        parametros.append("horainicio", $('#horainicio').value);
+        parametros.append("horafin", $('#horafin').value);
+        parametros.append("fechasolicitud", $('#fechasolicitud').value);
 
-    fetch(`../../controllers/detsolicitudes.controller.php`, {
-        method: "POST",
-        body: parametros
-      })
-      .then(respuesta => respuesta.json())
-      .then(datos => {
-        if (datos.iddetallesolicitud > 0) {
-          console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
-        }
-      })
-      .catch(e => {
-        console.error(e);
+        fetch(`../../controllers/solicitud.controller.php`, {
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            if (datos.idsolicitud > 0) {
+              console.log(`Solicitud registrado con ID: ${datos.idsolicitud}`);
+              // Después de registrar la solicitud, registramos los detalles
+              registroDetalle(datos.idsolicitud);
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      function registroDetalle(idSolicitud) {
+        equiposAgregados.forEach(equipo => {
+          const parametros = new FormData();
+          parametros.append("operacion", "registrarDetalle");
+          parametros.append("idsolicitud", idSolicitud);
+          parametros.append("idtipo", equipo.idTipo);
+          parametros.append("idejemplar", equipo.idEjemplar);
+          parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
+          // parametros.append("cantidad", 1); // Siempre registramos un equipo a la vez
+
+          fetch(`../../controllers/detsolicitudes.controller.php`, {
+              method: "POST",
+              body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              if (datos.iddetallesolicitud > 0) {
+                console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
+              }
+            })
+            .catch(e => {
+              console.error(e);
             });
-      });
-}
-function validarFormulario() {
-    let formularioValido = true;
+        });
+      }
 
-    // Validar ubicación
-    if ($('#idubicaciondocente').value === '') {
-        $('#idubicaciondocente').classList.add('input-error');
-        formularioValido = false;
-    } else {
-        $('#idubicaciondocente').classList.remove('input-error');
-    }
 
-    // Validar hora de inicio
-    if ($('#horainicio').value === '') {
-        $('#horainicio').classList.add('input-error');
-        formularioValido = false;
-    } else {
-        $('#horainicio').classList.remove('input-error');
-    }
-
-    // Validar hora de fin
-    if ($('#horafin').value === '') {
-        $('#horafin').classList.add('input-error');
-        formularioValido = false;
-    } else {
-        $('#horafin').classList.remove('input-error');
-    }
-
-    // Validar cantidad
-    if (parseInt($('#cantidad').value) === 0) {
-        $('#cantidad').classList.add('input-error');
-        formularioValido = false;
-    } else {
-        $('#cantidad').classList.remove('input-error');
-    }
-
-    // Agregar más validaciones según sea necesario
-
-    return formularioValido;
-}
       gettypes();
       getLocation();
       listar_cronogramas();
