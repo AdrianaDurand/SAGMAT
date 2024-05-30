@@ -16,8 +16,8 @@ class DetailReception extends Conexion{
                 array(
                     $datos['idrecepcion'],
                     $datos['idrecurso'],
-                    $datos['cantidadrecibida'],
                     $datos['cantidadenviada'],
+                    $datos['cantidadrecibida'],
                     $datos['observaciones']
 
                 )

@@ -8,6 +8,8 @@ const tipoRecursoDiv = document.getElementById('resultados2');
 let timeoutId;
 let timeoutId2;
 
+let idPersonalSeleccionado = 1;
+
 
 function resourcefinder() {
     const parametros = new FormData();
@@ -35,24 +37,28 @@ function searchresult(datos) {
     resultadosDiv.innerHTML = '';
 
     datos.forEach(function (resultado) {
-        const enlaceResultado = document.createElement('a');
-        enlaceResultado.href = '#';
-        enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
+        // no tiene que listar el id1
+        if (resultado.idpersona !== 1) {
+            const enlaceResultado = document.createElement('a');
+            enlaceResultado.href = '#';
+            enlaceResultado.classList.add('list-group-item', 'list-group-item-action');
 
-        const nombreCompleto = document.createElement('span');
-        nombreCompleto.textContent = resultado.nombres + ' ' + resultado.apellidos;
+            const nombreCompleto = document.createElement('span');
+            nombreCompleto.textContent = resultado.nombres + ' ' + resultado.apellidos;
 
-        enlaceResultado.appendChild(nombreCompleto);
-        resultadosDiv.appendChild(enlaceResultado);
+            enlaceResultado.appendChild(nombreCompleto);
+            resultadosDiv.appendChild(enlaceResultado);
 
-        enlaceResultado.addEventListener('click', function (event) {
-            event.preventDefault();
-            buscarInput.value = resultado.nombres + ' ' + resultado.apellidos;
-            idPersonalSeleccionado = resultado.idpersona; // Actualiza idPersonalSeleccionado
-            resultadosDiv.innerHTML = ''; // Limpiar los resultados
-        });
+            enlaceResultado.addEventListener('click', function (event) {
+                event.preventDefault();
+                buscarInput.value = resultado.nombres + ' ' + resultado.apellidos;
+                idPersonalSeleccionado = resultado.idpersona; 
+                resultadosDiv.innerHTML = ''; 
+            });
+        }
     });
 }
+
 
 
 buscarInput.addEventListener('input', function () {
@@ -155,7 +161,6 @@ buscarTipoInput.addEventListener('input', function () {
 });
 
 // evento de clic en la lista de sugerencias (resultados de búsqueda)
-
 listaTipoRecurso.addEventListener('click', function (event) {
     const selectedTipoRecurso = event.target.textContent;
     buscarTipoInput.value = selectedTipoRecurso;

@@ -32,18 +32,18 @@ $accesos = [
         "Recepción" => ["Ingresar", "Histórico"],
         "Recursos" => ["Almacén", "Ajustes", "Listado"],
         "Solicitudes" => ["Soli"],
-        "Mantenimientos" => ["Manteni"],
+        "Mantenimientos" => ["Mantenimiento"],
         "Bajas" => ["Bajas"]
     ],
     "DAIP" => [
         "Recepción" => ["Ingresar", "Histórico"],
         "Recursos" => ["Almacén", "Ajustes"],
-        "Solicitudes" => ["Manteni"],
+        "Solicitudes" => ["Mantenimiento"],
         "Bajas" => ["Bajas"]
     ],
     "CIST" => [
         "Recursos" => ["Almacén", "Ajustes"],
-        "Mantenimientos" => ["Manteni"],
+        "Mantenimientos" => ["Mantenimiento"],
         "Bajas" => ["Bajas"]
     ],
     "DOCENTE" => [
