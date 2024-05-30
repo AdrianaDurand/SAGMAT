@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
-    <title>SB Admin 2 - Blank</title>
+    <title>Nueva Recepción</title>
 
     <style>
         .xd {
@@ -248,11 +248,10 @@
                                                     <input class="form-control" type="file" id="fotografia">
                                                 </div>
                                             </form>
+                                            <button type="submit" class="btn btn-success">Enviar</button>
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-success">Enviar</button>
-
                                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                                         </div>
                                     </div>

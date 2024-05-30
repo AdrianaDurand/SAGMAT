@@ -20,30 +20,36 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 }
 
 $iconos = [
-    "Recepción" => "fa-hand-holding",
+    "Recepciones" => "fa-hand-holding",
     "Recursos" => "fa-computer",
     "Solicitudes" => "fa-file-invoice",
+    "Prestamos" => "fa-file-invoice",
+    "Devoluciones" => "fa-file-invoice",
     "Mantenimientos" => "fa-screwdriver-wrench",
     "Bajas" => "fa-minus-circle"
 ];
 
 $accesos = [
     "ADMINISTRADOR" => [
-        "Recepción" => ["Ingresar", "Histórico"],
-        "Recursos" => ["Almacén", "Ajustes", "Listado"],
-        "Solicitudes" => ["Soli"],
-        "Mantenimientos" => ["Mantenimiento"],
+        "Recepciones" => ["Registrar"],
+        "Recursos" => ["Inventario"],
+        "Solicitudes" => ["Registrar"],
+        "Prestamos" => ["Registrar"],
+        "Devoluciones" => ["Registrar"],
+        "Mantenimientos" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
     "DAIP" => [
-        "Recepción" => ["Ingresar", "Histórico"],
-        "Recursos" => ["Almacén", "Ajustes"],
-        "Solicitudes" => ["Mantenimiento"],
+        "Recepciones" => ["Registrar"],
+        "Recursos" => ["Inventario"],
+        "Solicitudes" => ["Registrar"],
+        "Prestamos" => ["Registrar"],
+        "Devoluciones" => ["Registrar"],
         "Bajas" => ["Bajas"]
     ],
     "CIST" => [
-        "Recursos" => ["Almacén", "Ajustes"],
-        "Mantenimientos" => ["Mantenimiento"],
+        "Recursos" => ["Inventario"],
+        "Mantenimientos" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
     "DOCENTE" => [

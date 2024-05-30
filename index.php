@@ -2,7 +2,7 @@
 
 session_start();
 if(isset($_SESSION["status"]) && $_SESSION["status"]){
-	header("Location:./views/recepcion/ingresar.php");
+	header("Location:./views/recepciones/registrar.php");
   }
 
 ?>
@@ -114,7 +114,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
       .then(datos => {
         console.log(datos);
         if (datos.acceso == true){
-        window.location.href = "./views/recepcion/ingresar.php";
+        window.location.href = "./views/recepciones/registrar.php";
       } else{
           alert(datos.mensaje);
         }
