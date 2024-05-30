@@ -184,7 +184,7 @@ SELECT * FROM ubicaciones;
 -- ----------------------------------------------------------------------------------------
 SELECT  * FROM recursos;
 INSERT INTO recursos (idtipo, idmarca, descripcion, modelo, datasheets, fotografia) VALUES
-    (1, 1, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL);
+    (1, 1, 'Es una descripción inicial', 'VS13869', '{"COLOR": "NEGRO", "CONECTIVIDAD": "HDMI, VGA, USB y entrada/salida de audio"}', NULL),
     (4, 22, 'Es un buen equipo', '00928', '{"COLOR": "AZUL", "CONECTIVIDAD": "OK"}', NULL),
     (4, 18, 'Monitor nuevo', 'RU28389', '{"COLOR": "NEUTRO", "CONECTIVIDAD": "SIMPLE"}', NULL);
 
@@ -249,20 +249,29 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
 
 DROP TABLE stock;
 DROP TABLE detrecepciones;
-DROP TABLE ejemplares;
+DELETE FROM personas;
+
+INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
+    ('no asignado', 'Personal', 'DNI', '00000000', '000000000', 'Personal no asignado'),  -- 
+    ('Durand', 'Adriana', 'DNI', '74129177', '946989939', 'adrianadurand@gmail.com'),  -- ADMINISTRADOR
+	('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
+    ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
+	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
 
 SET foreign_key_checks =0;
-
-ALTER TABLE recepciones AUTO_INCREMENT 1;
+DELETE FROM recepciones;
+DELETE FROM detrecepciones;
+DELETE FROM ejemplares;
+ALTER TABLE ejemplares AUTO_INCREMENT 1;
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
 SELECT * FROM detrecepciones;
-SELECT * FROM recursos;
 SELECT * FROM ejemplares;
 SELECT * FROM solicitudes;
 SELECT * FROM tipos;
 SELECT * FROM stock;
+SELECT * FROM personas;
 
 USE SAGMAT;
 
