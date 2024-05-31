@@ -197,10 +197,9 @@
                                     <div class="card mt-5" style="background-color: #F7F9FD;">
                                     <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
                                         <div class="card-body">
-                                            <h4 class="card-title text-dark">${element.modelo}</h4>
+                                            <h4 class="card-title text-dark" style="text-align:center; font-size:20px">${element.modelo}</h4>
                                             <hr>
-                                            <p class="card-text">Número de equipo: <strong>LAP001</strong></p>
-                                            <p class="card-text">Stock: <strong>10</strong></p>
+                                            <p class="card-text">Stock: <strong>${element.stock}</strong></p>
                                         </div>
                                         <!-- Botón movido y alineado a la derecha -->
                                         <div class="card-body d-flex justify-content-end">
