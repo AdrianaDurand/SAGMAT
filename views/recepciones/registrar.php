@@ -296,7 +296,6 @@
 
 
     <script src="../../js/almacen.js"></script>
-    <script src="../../js/nuevorecurso.js"></script>
 
 
 
@@ -501,24 +500,12 @@
                     } else {
                         añadirRecepcion(idPersonalFinal);
                     }
-                    formRecepcion.reset();
-                    location.reload();  // recarga la página
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
             });
 
-            // Resetear los campos del formulario
-            const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
-            const inputs = document.querySelectorAll("#form-recurso input, #form-recurso select");
-
-            $("#form-recurso").addEventListener("submit", (event) => {
-                event.preventDefault(); // Stop al evento
-
-                if (confirm("¿Está seguro de guardar?")) {
-                    registrarRecurso();
-                }
-            });
+            
 
 
         });

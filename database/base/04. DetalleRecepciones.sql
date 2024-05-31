@@ -58,11 +58,11 @@ END $$
 
 
 CALL spu_addDetrecepcion(1,1, 30,30, 'Ninguna');
-SELECT * FROM detrecepciones;
 SELECT * FROM recepciones;
-SELECT * FROM recursos;
+SELECT * FROM detrecepciones;
 SELECT * FROM ejemplares;
 SELECT * FROM stock;
+SELECT * FROM recursos;
 /*DELIMITER $$
 DROP PROCEDURE spu_detrecepciones_add
 (
