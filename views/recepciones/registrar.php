@@ -371,8 +371,11 @@
                             console.error("Error al enviar la solicitud:", error);
                         });
                 });
-
                 limpiarTablaRecursos();
+
+                if (esFinalizar) {
+                    window.location.href = window.location.pathname + window.location.search;
+                }
             }
 
             function validarFormulario(formulario) {
@@ -383,8 +386,6 @@
                 formulario.classList.remove('was-validated');
                 return true;
             }
-
-
 
 
             function validarTablaRecursos() {
@@ -398,6 +399,7 @@
             }
 
             $("#btnGuardar").addEventListener("click", function() {
+                esFinalizar = false;
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
 
@@ -412,9 +414,14 @@
                 }
             });
 
+           
             $("#btnFinalizar").addEventListener("click", function() {
+                esFinalizar = true;
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
+
+                //manejando el id personal
+                const idPersonalSeleccionado = $("#idpersonal").value.trim() !== "" ? $("#idpersonal").value : null;
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
                     if (idRecepcionGlobal) {
@@ -424,10 +431,12 @@
                         añadirRecepcion();
                     }
                     formRecepcion.reset();
+                    
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
             });
+
         });
     </script>
 
