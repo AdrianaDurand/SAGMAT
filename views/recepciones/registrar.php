@@ -12,9 +12,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -22,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
-    <title>Nueva Recepción</title>
+    <title>SB Admin 2 - Blank</title>
 
     <style>
         .xd {
@@ -180,81 +177,14 @@
                                                 <input type="text" class="form-control border" id="observaciones">
                                             </div>
                                         </div>
-                                        <br>
+
                                         <div class="row">
-                                            <div class="col-md-12 flex-row-reverse">
-                                                <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-circle"></i>Añadir</button>                                            
-                                                <button type="button" id="btnNuevo" class="btn btn-outline-warning" data-bs-target="#modalAgregar" data-bs-toggle="modal" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-floppy-fill"></i> Nuevo recurso</button>
+                                            <div class="col-md-12 d-flex flex-row-reverse mt-3">
+                                                <button type="button" id="btnAgregar" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>Añadir</button>
+
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-
-                            <!------------------------------------------------------------------------------------------------------------------>
-                            <!--Formulario de RECEPCIÓN > BODY > MODAL AGREGAR-->
-                            <!------------------------------------------------------------------------------------------------------------------>
-
-
-                            <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header" style="background-color: #CCD1D1; color: #000;">
-                                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 3em; width: 3em; margin-right: 0.5em;">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Nuevo Recurso</strong></h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="form-recurso">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label for="idtipo"><strong>Tipo Recurso:</strong></label>
-                                                        <select name="idtipo" id="idtipo" class="form-select">
-                                                            <option value="-1">Mostrar todas</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="idmarca"><strong>Marca:</strong></label>
-                                                        <select class="form-select" id="idmarca" name="idmarca" class="form-select">
-                                                            <option value="-1">Mostrar todas</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="mb-3">
-                                                    <label for="descripcion" class="form-label"><strong>Descripcion básica:</strong></label>
-                                                    <input type="text" class="form-control border" id="descripcion" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="modelo" class="form-label"><strong>Modelo:</strong></label>
-                                                    <input type="text" class="form-control border" id="modelo" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="datasheets" class="form-label"><strong>Características específicas del equipo:</strong></label>
-                                                    <div class="row" id="datasheets">
-                                                        <div class="col-md-5 mb-3">
-                                                            <input type="text" class="form-control border car" placeholder="Característica" required>
-                                                        </div>
-                                                        <div class="col-md-5 mb-3">
-                                                            <input type="text" class="form-control border det" placeholder="Detalle" required>
-                                                        </div>
-                                                        <div class="col-md-2 d-flex align-items-end mb-3">
-                                                            <button type="button" class="btn btn-white border" id="btnAgregarCaracteristica"><i class="bi bi-plus-lg"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="fotografia" class="form-label"><strong>Fotografía:</strong></label>
-                                                    <input class="form-control" type="file" id="fotografia">
-                                                </div>
-                                            </form>
-                                            <button type="submit" class="btn btn-success">Enviar</button>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -279,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-end mt-3 mb-4">
+                        <div class="text-end mt-3">
                             <div class="d-flex">
                                 <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1"><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
                                 <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
@@ -298,10 +228,10 @@
     <script src="../../js/almacen.js"></script>
 
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let idRecepcionGlobal = null;
+
 
             function $(id) {
                 return document.querySelector(id);
@@ -323,6 +253,7 @@
             }
 
             function añadirRecepcion() {
+                console.log("ID del personal seleccionado:", idPersonalSeleccionado);
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
                 parametros.append("idusuario", <?php echo $idusuario ?>);
@@ -386,7 +317,7 @@
                 var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
 
                 if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
-                    completefields(); //** */
+                    
                     return;
                 }
 
@@ -442,7 +373,6 @@
                 });
 
                 limpiarTablaRecursos();
-
             }
 
             function validarFormulario(formulario) {
@@ -485,32 +415,19 @@
             $("#btnFinalizar").addEventListener("click", function() {
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
-                
-                // ¿Está o no definido?
-                let idPersonalFinal;
-                if (typeof idPersonalSeleccionado !== 'undefined' && idPersonalSeleccionado !== null) {
-                    idPersonalFinal = idPersonalSeleccionado;
-                } else {
-                    idPersonalFinal = 1; // No está definido = idpersonal 1
-                }
+
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
                     if (idRecepcionGlobal) {
-                        añadirDetallesRecepcion(idRecepcionGlobal, idPersonalFinal);
+                        añadirDetallesRecepcion(idRecepcionGlobal);
                         idRecepcionGlobal = null;
                     } else {
-                        añadirRecepcion(idPersonalFinal);
+                        añadirRecepcion();
                     }
+                    formRecepcion.reset();
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
-
-    
-  
             });
-
-            
-
-
         });
     </script>
 

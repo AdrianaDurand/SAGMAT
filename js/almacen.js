@@ -8,7 +8,7 @@ const tipoRecursoDiv = document.getElementById('resultados2');
 let timeoutId;
 let timeoutId2;
 
-let idPersonalSeleccionado = 1;
+let idPersonalSeleccionado;
 
 
 function resourcefinder() {
