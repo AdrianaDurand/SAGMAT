@@ -442,8 +442,6 @@
                 });
 
                 limpiarTablaRecursos();
-                // sube y recarga
-                window.location.href = window.location.pathname + window.location.search;
 
             }
 
@@ -502,7 +500,6 @@
                     } else {
                         añadirRecepcion(idPersonalFinal);
                     }
-                    formRecepcion.reset();
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
