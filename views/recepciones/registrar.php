@@ -180,7 +180,7 @@
                                                 <input type="text" class="form-control border" id="observaciones">
                                             </div>
                                         </div>
-
+                                        <br>
                                         <div class="row">
                                             <div class="col-md-12 flex-row-reverse">
                                                 <button type="button" id="btnAgregar" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-circle"></i>Añadir</button>                                            
@@ -442,6 +442,9 @@
                 });
 
                 limpiarTablaRecursos();
+                // sube y recarga
+                window.location.href = window.location.pathname + window.location.search;
+
             }
 
             function validarFormulario(formulario) {
@@ -492,7 +495,6 @@
                 } else {
                     idPersonalFinal = 1; // No está definido = idpersonal 1
                 }
-
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
                     if (idRecepcionGlobal) {
                         añadirDetallesRecepcion(idRecepcionGlobal, idPersonalFinal);
@@ -500,9 +502,13 @@
                     } else {
                         añadirRecepcion(idPersonalFinal);
                     }
+                    formRecepcion.reset();
                 } else {
                     alert("Por favor complete todos los campos requeridos correctamente.");
                 }
+
+    
+  
             });
 
             
