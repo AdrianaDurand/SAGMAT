@@ -68,4 +68,19 @@ class Mantenimiento extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function buscar($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL listado_por_id(?)");
+            $consulta->execute(
+                array(
+                    $datos['idmantenimiento']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

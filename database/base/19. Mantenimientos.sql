@@ -102,13 +102,22 @@ BEGIN
     WHERE idejemplar = v_idejemplar;
 END $$
 
+DELIMITER $$
+CREATE PROCEDURE listado_por_id(
+	IN _idmantenimiento CHAR(1)
+)
+BEGIN
+    SELECT *
+    FROM mantenimientos
+    WHERE idmantenimiento = _idmantenimiento;
+END $$
 
-
-
+CALL listado_por_id(2);
 
 CALL spu_actualizar_estado(1);
 CALL spu_listar_historial();
 SELECT *  FROM ejemplares;
+SELECT *  FROM mantenimientos;
 
 
 CALL spu_registrar_mantenimiento(1,9,'2024-05-29','2024-06-02','Mantenimiento Realizado');

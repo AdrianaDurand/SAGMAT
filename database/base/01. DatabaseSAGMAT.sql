@@ -329,13 +329,23 @@ CREATE TABLE mantenimientos
 -- **
 CREATE TABLE bajas
 (
-    idbaja                             INT                     AUTO_INCREMENT PRIMARY KEY,
-    idejemplar                         INT                     NOT NULL,
-    fechabaja                        DATE                    NOT NULL,
-    comentarios                        VARCHAR(100)             NULL,
-    ficha                            VARCHAR(300)             NULL,
+    idbaja                    INT                     AUTO_INCREMENT PRIMARY KEY,
+    idusuario                 INT                     NOT NULL, -- FK
+    idejemplar                INT                     NOT NULL,
+    fechabaja                 DATE                    NOT NULL,
+    motivo           		  VARCHAR(100)             NULL,
+    comentarios               VARCHAR(100)             NULL,
     create_at                 DATETIME            DEFAULT NOW(),
-    update_at                DATETIME            NULL,
-    inactive_at                DATETIME             NULL,
+    update_at                 DATETIME            NULL,
+    inactive_at               DATETIME             NULL,
+     CONSTRAINT fk_idusuario_bjs        FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idejemplar_bjs     FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
+)ENGINE = INNODB;
+
+CREATE TABLE galerias
+(
+	idgaleria             INT           AUTO_INCREMENT PRIMARY KEY,
+    idbaja                INT          	NOT NULL,
+	rutafoto				VARCHAR(100) 	NULL,
+	CONSTRAINT fk_idbaja_glr     FOREIGN KEY (idbaja) REFERENCES bajas (idbaja)
 )ENGINE = INNODB;

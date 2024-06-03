@@ -1,4 +1,4 @@
-
+use sagmat;
 
 
 DELETE FROM recursos WHERE idrecurso = 4;

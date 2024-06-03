@@ -32,6 +32,13 @@ if (isset($_POST['operacion'])){
             ];
             echo json_encode($mantenimiento->actualizar($datosEnviar));
         break;
+
+        case 'buscar':
+            $datosEnviar = [
+                "idmantenimiento"     => $_POST['idmantenimiento']
+            ];
+            echo json_encode($mantenimiento->buscar($datosEnviar));
+        break;
         
     }
 }

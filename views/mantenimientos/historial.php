@@ -37,6 +37,10 @@
             margin: 6px 0 20px;
             padding: 0;
         }
+
+        .dropdown-toggle::after {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -159,6 +163,8 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
 
+
+
                 const tabla = document.querySelector("#tabla-mantenimiento tbody");
 
                 function $(id) {
@@ -195,7 +201,7 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
                                                 <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
-                                                <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
+                                                <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
                                             </div>
                                         </div>
                                     </td>
@@ -232,13 +238,16 @@
                                 console.log(datosRecibidos)
                                 alert("Actualizado")
 
-                                
+
                                 listar();
 
                             })
                             .catch(e => {
                                 console.error(e);
                             });
+                    } else if (target.classList.contains('imprimir')) {
+                        idmantenimiento = target.getAttribute('data-idmantenimiento');
+                        window.open(`../reportes/reporte.php?idmantenimiento=${idmantenimiento}`, '_blank');
                     }
                 })
 

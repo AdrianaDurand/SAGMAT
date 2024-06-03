@@ -52,17 +52,7 @@
 
                     </div>
 
-                    <!-- Switches -->
-                    <div class="d-flex justify-content-center mb-3">
-                        <div class="form-check form-switch me-4">
-                            <input class="form-check-input" type="checkbox" id="enEspera" name="maintenanceStatus" value="En espera">
-                            <label class="form-check-label" for="enEspera">En espera</label>
-                        </div>
-                        <div class="form-check form-switch me-5">
-                            <input class="form-check-input" type="checkbox" id="faltaReparar" name="maintenanceStatus" value="Falta Reparar">
-                            <label class="form-check-label" for="faltaReparar">Falta Reparar</label>
-                        </div>
-                    </div>
+                   
 
                     <div class="col-md-12">
                         <div class="row" id="lista-mantenimientos"></div>
@@ -215,6 +205,50 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Baja de un equipo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalMessage">
+                    <form action="" autocomplete="off" id="form-baja" enctype="multipart/form-data">
+
+                        <div class="col-md-12">
+                            <label for="fechabaja"><strong>Fecha Baja:</strong></label>
+                            <input type="date" class="form-control border" id="fechabaja">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="motivo"><strong>Motivo:</strong></label>
+                            <input type="text" class="form-control border" id="motivo">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="comentarios-baja" class="form-label">Comentario del Encargado:</label>
+                            <textarea class="form-control" id="comentarios-baja" rows="4"></textarea>
+                        </div>
+                    </form>
+
+                    <form action="" autocomplete="off" id="form-galeria" enctype="multipart/form-data">
+
+                        <div class="col-md-12">
+                            <label for="rutafoto"><strong>Fotos:</strong></label>
+                            <input type="file" class="form-control border" id="rutafoto" name="rutafoto[]" multiple>
+                        </div>
+                    </form>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success editar" id="enviar" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -268,7 +302,7 @@
                                                 <div class="card-body">
                                                     <div class="d-grid gap-2">
                                                         <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
-                                                        <button class="btn btn-outline-danger">Dar de baja</button>
+                                                        <button data-bs-target="#modalEliminar" data-bs-toggle="modal" class="btn btn-outline-danger" data-idejemplar="${element.idejemplar}">Dar de baja</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -284,6 +318,13 @@
                             btn.addEventListener("click", (event) => {
                                 const idejemplar = event.target.getAttribute("data-idejemplar");
                                 $("#guardar").onclick = () => registrar(idejemplar);
+                            });
+                        });
+
+                        document.querySelectorAll(".btn-outline-danger").forEach(btn => {
+                            btn.addEventListener("click", (event) => {
+                                const idejemplar = event.target.getAttribute("data-idejemplar");
+                                $("#enviar").onclick = () => dardebaja(idejemplar);
                             });
                         });
                     }
@@ -320,6 +361,70 @@
                     console.error(e)
                 });
         }
+
+
+        function dardebaja(idejemplar) {
+            const parametros = new FormData();
+            parametros.append("operacion", "registrar");
+            parametros.append("idusuario", <?php echo $idusuario ?>);
+            parametros.append("idejemplar", idejemplar);
+            parametros.append("fechabaja", $("#fechabaja").value);
+            parametros.append("motivo", $("#motivo").value);
+            parametros.append("comentarios", $("#comentarios-baja").value);
+
+
+            fetch(`../../controllers/baja.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+
+                    if (datos.idbaja > 0) {
+                        alert(`Detalle registrado con el ID: ${datos.idbaja}`);
+                        insertGaleria(datos.idbaja);
+                        $("#form-baja").reset();
+
+                    }
+
+
+                    listar();
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
+
+
+        function insertGaleria(idbaja) {
+            const parametros = new FormData();
+            const fileInput = $("#rutafoto");
+            parametros.append("operacion", "galeria"); 
+            parametros.append("idbaja", idbaja);
+            for (let i = 0; i < fileInput.files.length; i++) {
+                parametros.append("rutafoto[]", fileInput.files[i]);
+            }
+
+            fetch(`../../controllers/baja.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    if (datos.length > 0) {
+                        alert(`Imagenes subidas: ${datos.length}`);
+                        $("#form-galeria").reset();
+                    }
+                    listar();
+                })
+                .catch(e => {
+                    console.error(e);
+                });
+        }
+
+
+
+
 
 
         listar();

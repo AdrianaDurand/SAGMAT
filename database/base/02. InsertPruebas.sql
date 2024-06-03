@@ -65,7 +65,7 @@ INSERT INTO marcas (marca) VALUES
 DROP TABLE tipos;
 ALTER TABLE negocios AUTO_INCREMENT 1;
 -- Volver a activar la restricción de clave externa
-SET foreign_key_checks = 1;
+SET foreign_key_checks = 0;
 -- ----------------------------------------------------------------------------------------
 -- ------------------------------   TIPO RECURSOS    --------------------------------------
 -- ----------------------------------------------------------------------------------------
@@ -258,16 +258,29 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) V
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
 
-SET foreign_key_checks =0;
+SET foreign_key_checks =1;
 DELETE FROM recepciones;
 DELETE FROM detrecepciones;
 DELETE FROM ejemplares;
+ALTER TABLE recepciones AUTO_INCREMENT 1;
+ALTER TABLE detrecepciones AUTO_INCREMENT 1;
 ALTER TABLE ejemplares AUTO_INCREMENT 1;
+
+DELETE FROM mantenimientos;
+DELETE FROM bajas;
+DELETE FROM galerias;
+ALTER TABLE mantenimientos AUTO_INCREMENT 1;
+ALTER TABLE bajas AUTO_INCREMENT 1;
+ALTER TABLE galerias AUTO_INCREMENT 1;
+
 use sagmat;
 SELECT * FROM recursos;
 SELECT *  FROM recepciones;
 SELECT * FROM detrecepciones;
 SELECT * FROM ejemplares;
+SELECT * FROM mantenimientos;
+SELECT * FROM bajas;
+SELECT * FROM galerias;
 SELECT * FROM solicitudes;
 SELECT * FROM tipos;
 SELECT * FROM stock;
