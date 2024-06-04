@@ -12,6 +12,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Bootstrap ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -38,7 +41,7 @@
             cursor: pointer;
         }
 
-        .alonso {
+        .shininggreen {
             animation: glow 1s infinite alternate;
         }
 
@@ -51,8 +54,22 @@
                 box-shadow: 0 0 20px #1cc88a;
             }
         }
-
         
+        .shiningred {
+            animation: error 1s infinite alternate; 
+        }
+
+        @keyframes error {
+            from {
+                box-shadow: 0 0 5px red;
+            }
+
+            to {
+                box-shadow: 0 0 10px red;
+            }
+        }
+
+
     </style>
 </head>
 
@@ -215,6 +232,7 @@
                                 <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
                             </div>
                         </div>
+                        <br>
                     </div>
                     <!-- End of Main Content -->
                 </div>
@@ -224,9 +242,8 @@
     </div>
 
 
-
     <script src="../../js/almacen.js"></script>
-
+    <script src="../../js/sweetalert.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -246,9 +263,17 @@
             function toggleAgregarButtonGlow(shouldGlow) {
                 const btnAgregar = document.getElementById("btnAgregar");
                 if (shouldGlow) {
-                    btnAgregar.classList.add("alonso");
+                    btnAgregar.classList.add("shininggreen");
                 } else {
-                    btnAgregar.classList.remove("alonso");
+                    btnAgregar.classList.remove("shininggreen");
+                }
+            }
+
+            function toggleInputError(input, showError) {
+                if (showError) {
+                    input.classList.add('shiningred'); 
+                } else {
+                    input.classList.remove('shiningred');
                 }
             }
 
@@ -272,7 +297,7 @@
                     .then(datos => {
                         if (datos.idrecepcion > 0) {
                             idRecepcionGlobal = datos.idrecepcion;
-                            alert(`Recepción registrado con el ID: ${datos.idrecepcion}`);
+                            console.log(`Recepción registrado con el ID: ${datos.idrecepcion}`);
                             añadirDetallesRecepcion(datos.idrecepcion);
                         }
                     })
@@ -299,7 +324,7 @@
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         if (datos.iddetallerecepcion > 0) {
-                            alert(`Detalle registrado con el ID: ${datos.iddetallerecepcion}`);
+                            console.log(`Detalle registrado con el ID: ${datos.iddetallerecepcion}`);
                             añadirEjemplar(datos.iddetallerecepcion);
                         }
                     })
@@ -315,9 +340,13 @@
                 var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
                 var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
                 var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
+               
+                if (cantidadRecibida > cantidadEnviada) {
+                    cantidadenviada();
+                    return;
+                }
 
                 if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
-                    
                     return;
                 }
 
@@ -372,10 +401,6 @@
                         });
                 });
                 limpiarTablaRecursos();
-
-                if (esFinalizar) {
-                    window.location.href = window.location.pathname + window.location.search;
-                }
             }
 
             function validarFormulario(formulario) {
@@ -387,19 +412,17 @@
                 return true;
             }
 
-
             function validarTablaRecursos() {
                 const filas = document.querySelectorAll("#tablaRecursos tbody tr");
                 if (filas.length === 0) {
-                    toggleAgregarButtonGlow(true); // Habilitar el brillo si la tabla está vacía
-                    alert("Por favor, añada el recurso seleccionado.");
+                    toggleAgregarButtonGlow(true);
+                    addresource();
                     return false;
                 }
                 return true;
             }
-
+            
             $("#btnGuardar").addEventListener("click", function() {
-                esFinalizar = false;
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
 
@@ -410,17 +433,43 @@
                         añadirRecepcion();
                     }
                 } else {
-                    alert("Por favor complete todos los campos requeridos correctamente.");
-                }
+                    completefields();                }
             });
 
            
             $("#btnFinalizar").addEventListener("click", function() {
-                esFinalizar = true;
                 const formRecepcion = document.getElementById("form-recepcion");
-                const formDetRecepcion = document.getElementById("form-detrecepcion");
+                if (!formRecepcion.checkValidity()) {
+                    formRecepcion.classList.add('was-validated');
+                    completefields();
+                    return;
+                }
 
-                //manejando el id personal
+                const formDetRecepcion = document.getElementById("form-detrecepcion");
+                if (!formDetRecepcion.checkValidity()) {
+                    formDetRecepcion.classList.add('was-validated');
+                    completefields();
+                    return; 
+                }
+
+                const numerosSerie = new Set();
+                const inputsNumerosDeSerie = document.querySelectorAll('.nro_serie'); 
+
+                inputsNumerosDeSerie.forEach(input => {
+                    input.classList.remove('brillar-rojo');
+                });
+
+                for (let input of inputsNumerosDeSerie) {
+                    const numeroSerie = input.value.trim();
+                    if (numeroSerie === '') continue; // Ignorar campos vacíos ya que pueden ser genéricos 
+
+                    if (numerosSerie.has(numeroSerie)) {
+                        showDuplicateSerialNumberError(inputsNumerosDeSerie, numeroSerie, toggleInputError);
+                        return;
+                    }
+                    numerosSerie.add(numeroSerie);
+                }
+
                 const idPersonalSeleccionado = $("#idpersonal").value.trim() !== "" ? $("#idpersonal").value : null;
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
@@ -428,14 +477,21 @@
                         añadirDetallesRecepcion(idRecepcionGlobal);
                         idRecepcionGlobal = null;
                     } else {
-                        añadirRecepcion();
+                        store().then((result) => {
+                            if (result.isConfirmed) {
+                                añadirRecepcion(); 
+                                successfulreception();
+                                /*setTimeout(() => {
+                                    window.location.href = window.location.pathname + window.location.search;
+                                }, 2000);*/                            
+                            }
+                        });
                     }
-                    formRecepcion.reset();
-                    
-                } else {
-                    alert("Por favor complete todos los campos requeridos correctamente.");
+                                
                 }
             });
+
+
 
         });
     </script>
