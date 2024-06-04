@@ -52,7 +52,7 @@
 
                     </div>
 
-                   
+
 
                     <div class="col-md-12">
                         <div class="row" id="lista-mantenimientos"></div>
@@ -178,16 +178,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalMessage">
-                    <form action="" autocomplete="off" id="form-mantenimiento" enctype="multipart/form-data">
+                    <form action="" autocomplete="off" id="form-mantenimiento" enctype="multipart/form-data" class="needs-validation" novalidate>
                         <!-- Aquí se mostrarán los comentarios restantes -->
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="fechainicio"><strong>Fecha de inicio:</strong></label>
-                                <input type="datetime-local" class="form-control border" id="fechainicio" required max="<?php echo date('Y-m-d\TH:i'); ?>">
+                                <input type="datetime-local" class="form-control border" id="fechainicio" required>
+                                <div class="invalid-feedback">Por favor, ingrese una fecha de inicio.</div>
                             </div>
                             <div class="col-md-6">
                                 <label for="fechafin"><strong>Fecha de Fin:</strong></label>
-                                <input type="datetime-local" class="form-control border" id="fechafin" required max="<?php echo date('Y-m-d\TH:i'); ?>">
+                                <input type="datetime-local" class="form-control border" id="fechafin" required>
+                                <div class="invalid-feedback">Por favor, ingrese una fecha de fin.</div>
                             </div>
                         </div>
 
@@ -198,7 +200,7 @@
                     </form>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success editar" id="guardar" data-bs-dismiss="modal">Guardar</button>
+                        <button type="button" class="btn btn-success editar" id="guardar">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -213,16 +215,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalMessage">
-                    <form action="" autocomplete="off" id="form-baja" enctype="multipart/form-data">
+                    <form action="" autocomplete="off" id="form-baja" enctype="multipart/form-data" class="needs-validation" novalidate>
 
                         <div class="col-md-12">
                             <label for="fechabaja"><strong>Fecha Baja:</strong></label>
-                            <input type="date" class="form-control border" id="fechabaja">
+                            <input type="date" class="form-control border" id="fechabaja" required>
+                            <div class="invalid-feedback">Por favor, ingrese una fecha.</div>
                         </div>
 
                         <div class="col-md-12">
                             <label for="motivo"><strong>Motivo:</strong></label>
-                            <input type="text" class="form-control border" id="motivo">
+                            <input type="text" class="form-control border" id="motivo" required>
+                            <div class="invalid-feedback">Por favor, ingrese el motivo para dar de baja este equipo.</div>
                         </div>
 
                         <div class="col-md-12">
@@ -241,8 +245,8 @@
 
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success editar" id="enviar" data-bs-dismiss="modal">Guardar</button>
+                    <div class="modal-footer mt-5">
+                        <button type="button" class="btn btn-success editar" id="enviar">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -258,8 +262,19 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const myModal = new bootstrap.Modal(document.getElementById("modalAgregar"));
+        const cerrar = new bootstrap.Modal(document.getElementById("modalEliminar"));
         function $(id) {
             return document.querySelector(id);
+        }
+
+        function validarFormulario(formulario) {
+            if (formulario.checkValidity() === false) {
+                formulario.classList.add('was-validated');
+                return false;
+            }
+            formulario.classList.remove('was-validated');
+            return true;
         }
 
         function listar() {
@@ -337,6 +352,12 @@
 
 
         function registrar(idejemplar) {
+
+            const formMantenimiento = $("#form-mantenimiento");
+
+            if (!validarFormulario(formMantenimiento)) {
+                return;
+            }
             const parametros = new FormData();
             parametros.append("operacion", "registrar");
             parametros.append("idusuario", <?php echo $idusuario ?>);
@@ -355,6 +376,7 @@
 
                     alert(`Mantenimiento exitoso`);
                     $("#form-mantenimiento").reset();
+                    myModal.hide();
                     listar();
                 })
                 .catch(e => {
@@ -364,6 +386,11 @@
 
 
         function dardebaja(idejemplar) {
+            const formBaja = $("#form-baja");
+
+            if (!validarFormulario(formBaja)) {
+                return;
+            }
             const parametros = new FormData();
             parametros.append("operacion", "registrar");
             parametros.append("idusuario", <?php echo $idusuario ?>);
@@ -384,6 +411,7 @@
                         alert(`Detalle registrado con el ID: ${datos.idbaja}`);
                         insertGaleria(datos.idbaja);
                         $("#form-baja").reset();
+                        cerrar.hide();
 
                     }
 
@@ -399,7 +427,7 @@
         function insertGaleria(idbaja) {
             const parametros = new FormData();
             const fileInput = $("#rutafoto");
-            parametros.append("operacion", "galeria"); 
+            parametros.append("operacion", "galeria");
             parametros.append("idbaja", idbaja);
             for (let i = 0; i < fileInput.files.length; i++) {
                 parametros.append("rutafoto[]", fileInput.files[i]);
@@ -421,6 +449,7 @@
                     console.error(e);
                 });
         }
+
 
 
 

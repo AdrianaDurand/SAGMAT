@@ -68,3 +68,12 @@ function successfulreception() {
         showConfirmButton: false
     });
 }
+
+function seguir() {
+    Swal.fire({
+        icon: "success",
+        title: 'Detalle exitoso',
+        text: 'Siga recepcionando más recursos.',
+        showConfirmButton: false
+    });
+}

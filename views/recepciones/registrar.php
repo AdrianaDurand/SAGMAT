@@ -54,9 +54,9 @@
                 box-shadow: 0 0 20px #1cc88a;
             }
         }
-        
+
         .shiningred {
-            animation: error 1s infinite alternate; 
+            animation: error 1s infinite alternate;
         }
 
         @keyframes error {
@@ -68,8 +68,6 @@
                 box-shadow: 0 0 10px red;
             }
         }
-
-
     </style>
 </head>
 
@@ -271,7 +269,7 @@
 
             function toggleInputError(input, showError) {
                 if (showError) {
-                    input.classList.add('shiningred'); 
+                    input.classList.add('shiningred');
                 } else {
                     input.classList.remove('shiningred');
                 }
@@ -340,7 +338,7 @@
                 var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
                 var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
                 var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
-               
+
                 if (cantidadRecibida > cantidadEnviada) {
                     cantidadenviada();
                     return;
@@ -421,7 +419,8 @@
                 }
                 return true;
             }
-            
+
+
             $("#btnGuardar").addEventListener("click", function() {
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
@@ -430,30 +429,30 @@
                     if (idRecepcionGlobal) {
                         añadirDetallesRecepcion(idRecepcionGlobal);
                     } else {
-                        añadirRecepcion();
+                        store().then((result) => {
+                            /*if (result.isConfirmed) {
+                                añadirRecepcion();
+                                seguir();
+                                /*setTimeout(() => {
+                                    window.location.href = window.location.pathname + window.location.search;
+                                }, 2000);
+                            }*/
+                        });
                     }
                 } else {
-                    completefields();                }
+                    alert("Por favor complete todos los campos requeridos correctamente.");
+
+
+                }
             });
 
-           
+
             $("#btnFinalizar").addEventListener("click", function() {
                 const formRecepcion = document.getElementById("form-recepcion");
-                if (!formRecepcion.checkValidity()) {
-                    formRecepcion.classList.add('was-validated');
-                    completefields();
-                    return;
-                }
-
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
-                if (!formDetRecepcion.checkValidity()) {
-                    formDetRecepcion.classList.add('was-validated');
-                    completefields();
-                    return; 
-                }
 
                 const numerosSerie = new Set();
-                const inputsNumerosDeSerie = document.querySelectorAll('.nro_serie'); 
+                const inputsNumerosDeSerie = document.querySelectorAll('.nro_serie');
 
                 inputsNumerosDeSerie.forEach(input => {
                     input.classList.remove('brillar-rojo');
@@ -479,15 +478,16 @@
                     } else {
                         store().then((result) => {
                             if (result.isConfirmed) {
-                                añadirRecepcion(); 
+                                añadirRecepcion();
                                 successfulreception();
                                 /*setTimeout(() => {
                                     window.location.href = window.location.pathname + window.location.search;
-                                }, 2000);*/                            
+                                }, 2000);*/
                             }
+                            formRecepcion.reset();
                         });
                     }
-                                
+
                 }
             });
 
