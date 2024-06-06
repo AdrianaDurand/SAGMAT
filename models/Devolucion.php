@@ -28,5 +28,17 @@ class Devolucion extends Conexion{
         }
     }
 
+    // FUNCION PARA LISTAR
+    public function listar()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_devoluciones()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
     
 }

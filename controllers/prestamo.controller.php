@@ -17,10 +17,10 @@ if (isset($_POST['operacion'])) {
 
         case 'registrar':
             $datosEnviar = [
-                "idstock"                 => $_POST['idstock'],
+                // "idstock"                 => $_POST['idstock'],
                 "iddetallesolicitud"             => $_POST['iddetallesolicitud'],
                 "idatiende"               => $_SESSION['idusuario'],
-                "estadoentrega"           => $_POST['estadoentrega'],
+                // "estadoentrega"           => $_POST['estadoentrega'],
             ];
             $prestamo->registrar($datosEnviar);
 

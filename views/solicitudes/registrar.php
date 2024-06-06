@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Solicitudes</title>
 
   <style>
     .xd {
@@ -37,6 +37,14 @@
     .list-group-item-action {
       cursor: pointer;
     }
+    #calendar {
+      max-width: 990px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
 
@@ -49,10 +57,12 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
       <section>
-        <div class="container">
+        <div class="container mt-3">
           <div class="row">
             <div class="col-md-12">
-              <h1 style="text-align: center;">Hacer una Solicitud</h1>
+              <h1 class="text-center">
+                <img src="../../images/icons/solicitudes.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em;         margin-right: 0.5em;"> Solicitudes
+              </h1>
             </div>
           </div>
           <div class="row">
@@ -326,7 +336,7 @@
       function listar_cronogramas() {
         const parametros = new FormData();
         parametros.append("operacion", "listar");
-        parametros.append("idsolicita", 1);
+        parametros.append("idsolicita", <?php echo $idusuario ?>);
 
         fetch(`../../controllers/solicitud.controller.php`, {
             method: "POST",
@@ -370,77 +380,66 @@
       }
 
       document.getElementById("btnFinalizar").addEventListener("click", function() {
-    // Forzar la validación de ambos formularios
-    document.getElementById('form-cronograma').classList.add('was-validated');
-    document.getElementById('form-detalle').classList.add('was-validated');
-
-    // Verificar si ambos formularios son válidos antes de registrar la solicitud
-    if (document.getElementById('form-cronograma').checkValidity() && document.getElementById('form-detalle').checkValidity()) {
-        registrarSolicitudes();
-    } else {
-        // Si hay campos inválidos, mostrar un mensaje de error
-        alert("Por favor complete todos los campos correctamente.");
-    }
+    registrarSolicitudes();
 });
 
 
-      function registrarSolicitudes() {
-        // Verificar y ajustar la cantidad antes de registrar la solicitud
-        if (parseInt(cantidadInput.value) === 0) {
-          cantidadInput.value = 1;
+function registrarSolicitudes() {
+  if (parseInt(cantidadInput.value) === 0) {
+    cantidadInput.value = 1;
+  }
+
+  const parametros = new FormData();
+  parametros.append("operacion", "registrar");
+  parametros.append("idsolicita", <?php echo $idusuario ?>);
+  parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+  parametros.append("horainicio", $('#horainicio').value);
+  parametros.append("horafin", $('#horafin').value);
+  parametros.append("fechasolicitud", $('#fechasolicitud').value);
+
+  fetch(`../../controllers/solicitud.controller.php`, {
+      method: "POST",
+      body: parametros
+    })
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+      if (datos.idsolicitud > 0) {
+        console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
+        registroDetalle(datos.idsolicitud); // Llamar a registroDetalle aquí
+        // Cerrar el modal después de registrar todo
+        modalregistro.hide();
+      }
+    })
+    .catch(e => {
+      console.error(e);
+    });
+}
+
+function registroDetalle(idSolicitud) {
+  equiposAgregados.forEach(equipo => {
+    const parametros = new FormData();
+    parametros.append("operacion", "registrarDetalle");
+    parametros.append("idsolicitud", idSolicitud);
+    parametros.append("idtipo", equipo.idTipo);
+    parametros.append("idejemplar", equipo.idEjemplar);
+    parametros.append("cantidad", 1); // Registrar un equipo a la vez
+
+    fetch(`../../controllers/detsolicitudes.controller.php`, {
+        method: "POST",
+        body: parametros
+      })
+      .then(respuesta => respuesta.json())
+      .then(datos => {
+        if (datos.iddetallesolicitud > 0) {
+          console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
         }
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  });
+}
 
-        const parametros = new FormData();
-        parametros.append("operacion", "registrar");
-        parametros.append("idsolicita", <?php echo $idusuario ?>);
-        parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-        // parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
-        parametros.append("horainicio", $('#horainicio').value);
-        parametros.append("horafin", $('#horafin').value);
-        parametros.append("fechasolicitud", $('#fechasolicitud').value);
-
-        fetch(`../../controllers/solicitud.controller.php`, {
-            method: "POST",
-            body: parametros
-          })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-            if (datos.idsolicitud > 0) {
-              console.log(`Solicitud registrado con ID: ${datos.idsolicitud}`);
-              // Después de registrar la solicitud, registramos los detalles
-              registroDetalle(datos.idsolicitud);
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
-
-      function registroDetalle(idSolicitud) {
-        equiposAgregados.forEach(equipo => {
-          const parametros = new FormData();
-          parametros.append("operacion", "registrarDetalle");
-          parametros.append("idsolicitud", idSolicitud);
-          parametros.append("idtipo", equipo.idTipo);
-          parametros.append("idejemplar", equipo.idEjemplar);
-          parametros.append("cantidad", $('#cantidad').value); // Se está pasando la cantidad actualizada
-          // parametros.append("cantidad", 1); // Siempre registramos un equipo a la vez
-
-          fetch(`../../controllers/detsolicitudes.controller.php`, {
-              method: "POST",
-              body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-              if (datos.iddetallesolicitud > 0) {
-                console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
-              }
-            })
-            .catch(e => {
-              console.error(e);
-            });
-        });
-      }
 
 
       gettypes();

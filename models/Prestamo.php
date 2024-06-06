@@ -42,13 +42,13 @@ class Prestamo extends Conexion
     public function registrar($datos = [])
     {
         try {
-            $consulta = $this->conexion->prepare("CALL RegistrarPrestamo(?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL registrar_prestamo1(?,?)");
             $consulta->execute(
                 array(
-                    $datos['idstock'],
+                    // $datos['idstock'],
                     $datos['iddetallesolicitud'],
                     $datos['idatiende'],
-                    $datos['estadoentrega']
+                    // $datos['estadoentrega']
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);

@@ -31,7 +31,6 @@ BEGIN
     SELECT @@last_insert_id 'idgaleria';
 END $$
 
-
 DELIMITER $$
 CREATE PROCEDURE spu_listas_bajas()
 BEGIN

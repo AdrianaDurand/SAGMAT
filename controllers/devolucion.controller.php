@@ -14,6 +14,9 @@ if(isset($_POST['operacion'])){
             ];
             echo json_encode($devolucion->registrar($datosEnviar));
         break;
+        case 'listar':
+            echo json_encode($devolucion->listar());
+        break;
 
        
     }

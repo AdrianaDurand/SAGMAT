@@ -189,6 +189,22 @@ CREATE TABLE stock
     CONSTRAINT fk_idrecurso_st	FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
 )ENGINE = INNODB;
 
+-- 10°
+-- *********************************************************************
+-- 						TABLA stocks
+-- *********************************************************************
+
+CREATE TABLE stock
+(
+	idstock 				INT 				AUTO_INCREMENT PRIMARY KEY,
+    idrecurso 				INT 				NOT NULL, -- FK
+    stock 					SMALLINT 			NOT NULL,
+    create_at 				DATETIME			DEFAULT NOW(),
+	update_at				DATETIME			NULL,
+	inactive_at				DATETIME	 		NULL,
+    CONSTRAINT fk_idrecurso_st	FOREIGN KEY (idrecurso) REFERENCES recursos (idrecurso)
+)ENGINE = INNODB;
+
 -- 11°
 -- *********************************************************************
 -- 							TABLA PRESTAMOS
@@ -322,7 +338,8 @@ CREATE TABLE mantenimientos
     CONSTRAINT fk_idusuario_mtn        FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_idejemplar_mtn     FOREIGN KEY (idejemplar) REFERENCES ejemplares (idejemplar)
 ) ENGINE = INNODB;
-
+DROP TABLE mantenimientos;
+SET foreign_key_checks = 1;
 -- 18°
 -- **
 --                                 TABLA BAJAS
