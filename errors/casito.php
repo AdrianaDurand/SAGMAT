@@ -314,15 +314,12 @@
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         if (datos.iddetallerecepcion > 0) {
-                            Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success').then((result) => {
-                                if (result.isConfirmed) {
-                                    añadirEjemplar(datos.iddetallerecepcion);
-                                    if (isFinalizing) {
-                                        location.reload(); // Refrescar la página al confirmar el Sweet Alert
-                                    }
+                            Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success').then(() => {
+                                añadirEjemplar(datos.iddetallerecepcion);
+                                if (isFinalizing) {
+                                    setTimeout(() => location.reload(), 2000); // Refrescar la página después de 3 segundos si estamos finalizando
                                 }
                             });
-
                         }
                     })
                     .catch(error => {

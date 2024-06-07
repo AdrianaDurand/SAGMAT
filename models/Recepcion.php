@@ -31,4 +31,35 @@ class Recepcion extends Conexion{
         }
     }
 
+    public function historial($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_listar_porfecha(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['fecha_inicio'],
+                    $datos['fecha_fin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function detalles($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_historial_detalle(?)");
+            $consulta->execute(
+                array(
+                    $datos['idrecepcion']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
 }

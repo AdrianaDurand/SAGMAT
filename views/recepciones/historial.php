@@ -45,6 +45,26 @@
         .dropdown-toggle::after {
             display: none !important;
         }
+
+        .card {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            /* Bordes */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            /* Sombra */
+            transition: box-shadow 0.3s ease;
+            /* Transición suave de la sombra */
+        }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+            /* Cambia la sombra al pasar el mouse */
+        }
+
+
+        .detalles-container {
+            margin-top: 10px;
+            /* Espacio entre el card y la tabla */
+        }
     </style>
 </head>
 
@@ -84,12 +104,13 @@
                             <div class="col-md-8">
                                 <!-- Input de rango de fecha -->
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="fecha_inicio">Desde</span>
-                                    <input type="date" class="form-control" aria-describedby="fechainicio">
-                                    <span class="input-group-text" id="fecha_fin">Hasta</span>
-                                    <input type="date" class="form-control" aria-describedby="fechainicio">
+                                    <span class="input-group-text">Desde</span>
+                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
+                                    <span class="input-group-text">Hasta</span>
+                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
+                                    <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
                                 </div>
-                                <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
+
                             </div>
                         </div>
 
@@ -113,49 +134,18 @@
                                     </div>
                                 </div>
                             </div>-->
-                           <!-- <div class="col-md-8 mt-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-lg text-center" id="tabla-recepcion">
-                                                <colgroup>
-                                                    <col width="5%">
-                                                    <col width="25%"> 
-                                                    <col width="25%"> 
-                                                    <col width="25%"> 
-                                                </colgroup>
-                                                <thead>
-                                                    <tr class="table prueba">
-                                                        <th>N°</th>
-                                                        <th>Recurso</th>
-                                                        <th>Cantidad Recibida</th>
-                                                        <th>Cantidad Enviada</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    Datos de prueba
-                                                     Aquí puedes insertar filas de la tabla según tus datos 
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                        </div>
+
                     </div>
-
-
-
-
-
-
                 </div>
 
 
-                <!-- End of Main Content -->
             </div>
+
+
+            <!-- End of Main Content -->
         </div>
-        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Content Wrapper -->
     </div>
 
 
@@ -165,7 +155,6 @@
             function $(id) {
                 return document.querySelector(id);
             }
-
 
             function listar() {
                 const parametros = new FormData();
@@ -188,35 +177,108 @@
 
                                 //Renderizado
                                 const nuevoItem = `
-
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center mb-3"> <!-- Agregamos la clase mb-3 para añadir un margen inferior -->
                                     <div class="col-md-8">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
-                                                        <h4 class="card-title">${element.idalmacen}</h4>
+                                                        <h4 class="card-title">${element.areas}</h4>
                                                         <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
                                                     </div>
                                                     <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                                        <button type="button" class="show-more-click">Ver características</button>
+                                                        <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
+                                                    </div>
+                                                </div>
+                                                <!-- Contenedor para la información detallada -->
+                                                <div class="detalles-container mt-3" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-lg text-center" id="tabla-recepcion">
+                                                            <colgroup>
+                                                                <col width="5%">
+                                                                <col width="25%">
+                                                                <col width="25%">
+                                                                <col width="25%">
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr class="table prueba">
+                                                                    <th>N°</th>
+                                                                    <th>Recurso</th>
+                                                                    <th>Cantidad Recibida</th>
+                                                                    <th>Cantidad Enviada</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                    
-                                    `;
+                                `;
                                 $("#lista-recepcion").innerHTML += nuevoItem;
                             });
 
-                        }
+                            document.querySelectorAll(".show-more-click").forEach(btn => {
+                                btn.addEventListener("click", () => {
+                                    const idrecepcion = btn.getAttribute("data-idrecepcion");
+                                    const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
+                                    const cardBody = btn.parentNode.parentNode;
+                                    if (detallesContainer.style.display === 'none') {
+                                        detalles(idrecepcion, detallesContainer);
+                                        cardBody.classList.add('expanded');
+                                    } else {
+                                        detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
+                                        cardBody.classList.remove('expanded');
+                                    }
+                                });
+                            });
 
+                        }
                     })
                     .catch(e => {
                         console.error(e)
+                    });
+            }
+
+            function detalles(idrecepcion, detallesContainer) {
+                const parametros = new FormData();
+                parametros.append("operacion", "detalles");
+                parametros.append("idrecepcion", idrecepcion);
+
+                fetch(`../../controllers/recepcion.controller.php`, {
+                        method: 'POST',
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datosRecibidos => {
+                        detallesContainer.style.display = 'block'; // Mostrar el contenedor de características
+
+                        const tablaRecepcionBody = detallesContainer.querySelector("tbody");
+                        tablaRecepcionBody.innerHTML = ''; // Limpiar el contenido de la tabla antes de agregar los nuevos datos
+
+                        // Recorrer cada fila del arreglo
+                        let numFila = 1;
+                        datosRecibidos.forEach(registro => {
+                            let nuevafila = ``;
+                            // Enviar los valores obtenidos en celdas <td></td>
+                            nuevafila = `
+                                <tr>
+                                    <td>${numFila}</td>
+                                    <td>${registro.descripcion}</td>
+                                    <td>${registro.cantidadrecibida}</td>
+                                    <td>${registro.cantidadenviada}</td>
+                                </tr>
+                            `;
+                            tablaRecepcionBody.innerHTML += nuevafila;
+                            numFila++;
+                        });
+                    })
+                    .catch(e => {
+                        console.error(e);
                     });
             }
 
@@ -224,9 +286,7 @@
                 listar(); // Llamar a la función listar() cuando se haga clic en el botón
             });
 
-
-
-        })
+        });
     </script>
 
 </body>

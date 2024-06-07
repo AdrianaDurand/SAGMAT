@@ -24,5 +24,22 @@ if(isset($_POST['operacion'])){
             
         break;
 
+        case 'historial':
+            $datosEnviar = [
+                "fecha_inicio"          => $_POST['fecha_inicio'],
+                "fecha_fin"             => $_POST['fecha_fin']
+            ];
+            echo json_encode($recepcion->historial($datosEnviar));
+            
+        break;
+
+        case 'detalles':
+            $datosEnviar = [
+                "idrecepcion"          => $_POST['idrecepcion']
+            ];
+            echo json_encode($recepcion->detalles($datosEnviar));
+            
+        break;
+
     }
 }
