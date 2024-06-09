@@ -288,6 +288,7 @@ SELECT * FROM personas;
 
 USE SAGMAT;
 
+select * from observaciones;
 
 INSERT INTO observaciones (observaciones) VALUES 
 ('Producto en buen estado, sin signos de daño externo.'),

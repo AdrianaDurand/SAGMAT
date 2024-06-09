@@ -226,7 +226,6 @@
                     <tr>
                     <th>Tipo</th>
                     <th>Número de Equipo</th>
-                    <th>Cantidad</th>
                     </tr>
                     `;
                             datos.forEach(dato => {
@@ -234,7 +233,7 @@
                         <tr>
                         <td>${dato.tipo}</td>
                         <td>${dato.nro_equipo}</td>
-                        <td>${dato.cantidad}</td>
+                        
                         </tr>
                         `;
                             });

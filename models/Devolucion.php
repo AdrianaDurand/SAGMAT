@@ -11,14 +11,12 @@ class Devolucion extends Conexion{
 
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_registrar_devolucion(?, ?, ?)");
+            $consulta = $this->conexion->prepare("CALL RegistrarDevolucion(?, ?, ?)");
             $consulta->execute(
                 array(
                     $datos['idprestamo'],
-                    $datos['idobservacion'],               
+                    $datos['observacion'],               
                     $datos['estadodevolucion'],
-
-
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
@@ -38,7 +36,7 @@ class Devolucion extends Conexion{
         } catch (Exception $e) {
             die($e->getMessage());
         }
-    }
+    }    
 
     
 }

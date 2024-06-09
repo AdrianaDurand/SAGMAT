@@ -102,7 +102,7 @@ BEGIN
         t.tipo,
         u.nombre,
         CONCAT(p.apellidos, ', ', p.nombres) AS docente,
-        st.idstock -- AÃ±adiendo el idstock al SELECT
+        st.idstock -- Añadiendo el idstock al SELECT
     FROM 
         solicitudes s
         INNER JOIN tipos t ON s.idtipo = t.idtipo
@@ -143,4 +143,6 @@ BEGIN
         t.idtipo = _idtipo
         AND e.estado = 0;
 END $$
-CALL listar_tipos(1);
+CALL listar_tipos(2);
+ 
+        

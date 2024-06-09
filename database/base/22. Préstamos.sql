@@ -65,65 +65,101 @@ SELECT * FROM stock;
 SELECT  * FROM detsolicitudes;
 SELECT * FROM prestamos;
 
-CALL RegistrarPrestamo(3,2,2,'ninguna' );
 DELIMITER //
-
-CREATE PROCEDURE RegistrarPrestamo(
-    IN p_idstock INT,
+CREATE PROCEDURE registrar_prestamo1(
     IN p_iddetallesolicitud INT,
-    IN p_idatiende INT,
-    IN p_estadoentrega VARCHAR(30)
+    IN p_idatiende INT
 )
 BEGIN
-    DECLARE v_cantidad_solicitada INT;
+    DECLARE v_idsolicitud INT;
     DECLARE v_stock_actual INT;
+    DECLARE v_cantidad_solicitada INT;
+    DECLARE v_iddetallesolicitud INT; 
+    DECLARE v_idrecurso INT;
+    DECLARE done INT DEFAULT FALSE;
     
-    -- Obtener la cantidad solicitada
-    SELECT cantidad INTO v_cantidad_solicitada
-    FROM detsolicitudes
-    WHERE iddetallesolicitud = p_iddetallesolicitud;
-
-    -- Obtener el stock actual del recurso
-    SELECT stock INTO v_stock_actual
-    FROM stock
-    WHERE idstock = p_idstock;
-
-    -- Verificar si hay suficiente stock para realizar el préstamo
-    IF v_stock_actual >= v_cantidad_solicitada THEN
-        -- Insertar el préstamo
-        INSERT INTO prestamos (idstock, iddetallesolicitud, idatiende, estadoentrega, create_at)
-        VALUES (p_idstock, p_iddetallesolicitud, p_idatiende, p_estadoentrega, NOW());
-
-        -- Actualizar estado de la solicitud
-        UPDATE solicitudes
-        SET estado = 1
-        WHERE idsolicitud = (
+    -- Cursor para obtener todos los detalles de solicitud asociados al mismo idsolicitud
+    DECLARE cur_detalles CURSOR FOR 
+        SELECT ds.iddetallesolicitud, ds.idejemplar, ds.cantidad
+        FROM detsolicitudes ds
+        WHERE ds.idsolicitud = (
             SELECT idsolicitud
             FROM detsolicitudes
             WHERE iddetallesolicitud = p_iddetallesolicitud
         );
 
-        -- Actualizar estado de los detalles de la solicitud
-        UPDATE detsolicitudes
-        SET estado = 1
-        WHERE iddetallesolicitud = p_iddetallesolicitud;
-        
-        -- Disminuir el stock del recurso
-        UPDATE stock
-        SET stock = stock - v_cantidad_solicitada
-        WHERE idstock = p_idstock;
-    ELSE
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'No hay suficiente stock para realizar el préstamo';
-    END IF;
-END //
+    -- Declaraciones necesarias para manejar el cursor
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
+    -- Abrir el cursor
+    OPEN cur_detalles;
+
+    -- Obtener el idsolicitud asociado al iddetallesolicitud
+    SELECT idsolicitud INTO v_idsolicitud
+    FROM detsolicitudes
+    WHERE iddetallesolicitud = p_iddetallesolicitud;
+
+    -- Cambiar el estado de todas las solicitudes asociadas al idsolicitud a 1 (prestado)
+    UPDATE solicitudes
+    SET estado = 1
+    WHERE idsolicitud = v_idsolicitud;
+
+    -- Cambiar el estado de todos los detalles de solicitud asociados al idsolicitud a 1 (prestado)
+    UPDATE detsolicitudes
+    SET estado = 1
+    WHERE idsolicitud = v_idsolicitud;
+    
+    UPDATE ejemplares
+		SET estado = 1
+		WHERE idejemplar = (
+			SELECT idejemplar
+				FROM detrecepciones
+				WHERE iddetallesolicitud = v_iddetallesolicitud
+	);
+
+    -- Iniciar la iteración sobre los detalles de solicitud
+    detalle_loop: LOOP
+        -- Leer el próximo registro del cursor
+        FETCH cur_detalles INTO v_iddetallesolicitud, v_idrecurso, v_cantidad_solicitada;
+
+        -- Salir del bucle si no hay más detalles de solicitud
+        IF done THEN
+            LEAVE detalle_loop;
+        END IF;
+
+        -- Obtener el stock actual del recurso (ejemplar)
+        SELECT stock INTO v_stock_actual
+        FROM stock
+        WHERE idrecurso = v_idrecurso;
+
+        -- Verificar si hay suficiente stock para el préstamo
+        IF v_stock_actual >= v_cantidad_solicitada THEN
+            -- Registrar el préstamo
+            INSERT INTO prestamos (iddetallesolicitud, idatiende, create_at)
+            VALUES (v_iddetallesolicitud, p_idatiende, NOW());
+
+            -- Actualizar el stock
+            UPDATE stock
+            SET stock = v_stock_actual - v_cantidad_solicitada
+            WHERE idrecurso = v_idrecurso;
+
+            SELECT 'Préstamo registrado exitosamente.' AS Message;
+        ELSE
+            SELECT 'No hay suficiente stock para realizar el préstamo.' AS Error;
+        END IF;
+    END LOOP detalle_loop;
+
+    -- Cerrar el cursor
+    CLOSE cur_detalles;
+END//
 DELIMITER ;
+
+
 
 
 SELECT * FROM solicitudes;
 SELECT * FROM detsolicitudes;
-
+SELECT * FROM ejemplares;
 CALL sp_eliminar_sol(8);
 -- ELIMINACION DE DET SOLICITUDES Y SOLICITUDES
 DELIMITER $$
