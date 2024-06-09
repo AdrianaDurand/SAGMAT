@@ -10,6 +10,13 @@ if (isset($_POST['operacion'])){
         case 'listar':
             echo json_encode($observacion->listar());
         break;
+        case 'search':
+            $datosEnviar = [
+                "tipobuscado"      => $_POST['tipobuscado']
+            ];
+            echo json_encode($observacion->search($datosEnviar));
+            
+        break;
 
     }
 }

@@ -305,8 +305,6 @@ CREATE TABLE devoluciones
     CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
 
-
-
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS
 -- 17°
 -- *********************************************************************

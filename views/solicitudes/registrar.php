@@ -37,6 +37,7 @@
     .list-group-item-action {
       cursor: pointer;
     }
+
     #calendar {
       max-width: 990px;
       margin: 0 auto;
@@ -328,10 +329,13 @@
               modalregistro.show();
               document.getElementById('fechasolicitud').value = info.dateStr;
             }
-          }
+          },
+          // Ocultar sábado y domingo
+          hiddenDays: [0, 6] // Domingo (0) y Sábado (6)
         });
         calendar.render();
       }
+
 
       function listar_cronogramas() {
         const parametros = new FormData();
@@ -364,7 +368,7 @@
           .then(datos => {
             datos.forEach(element => {
               const tagOption = document.createElement("option");
-              tagOption.innerText = element.nro_equipo;
+              tagOption.innerText = element.descripcion_equipo;
               tagOption.value = element.idejemplar;
               document.querySelector("#idejemplar").appendChild(tagOption);
             });
@@ -380,65 +384,65 @@
       }
 
       document.getElementById("btnFinalizar").addEventListener("click", function() {
-    registrarSolicitudes();
-});
-
-
-function registrarSolicitudes() {
-  if (parseInt(cantidadInput.value) === 0) {
-    cantidadInput.value = 1;
-  }
-
-  const parametros = new FormData();
-  parametros.append("operacion", "registrar");
-  parametros.append("idsolicita", <?php echo $idusuario ?>);
-  parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-  parametros.append("horainicio", $('#horainicio').value);
-  parametros.append("horafin", $('#horafin').value);
-  parametros.append("fechasolicitud", $('#fechasolicitud').value);
-
-  fetch(`../../controllers/solicitud.controller.php`, {
-      method: "POST",
-      body: parametros
-    })
-    .then(respuesta => respuesta.json())
-    .then(datos => {
-      if (datos.idsolicitud > 0) {
-        console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
-        registroDetalle(datos.idsolicitud); // Llamar a registroDetalle aquí
-        // Cerrar el modal después de registrar todo
-        modalregistro.hide();
-      }
-    })
-    .catch(e => {
-      console.error(e);
-    });
-}
-
-function registroDetalle(idSolicitud) {
-  equiposAgregados.forEach(equipo => {
-    const parametros = new FormData();
-    parametros.append("operacion", "registrarDetalle");
-    parametros.append("idsolicitud", idSolicitud);
-    parametros.append("idtipo", equipo.idTipo);
-    parametros.append("idejemplar", equipo.idEjemplar);
-    parametros.append("cantidad", 1); // Registrar un equipo a la vez
-
-    fetch(`../../controllers/detsolicitudes.controller.php`, {
-        method: "POST",
-        body: parametros
-      })
-      .then(respuesta => respuesta.json())
-      .then(datos => {
-        if (datos.iddetallesolicitud > 0) {
-          console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
-        }
-      })
-      .catch(e => {
-        console.error(e);
+        registrarSolicitudes();
       });
-  });
-}
+
+
+      function registrarSolicitudes() {
+        if (parseInt(cantidadInput.value) === 0) {
+          cantidadInput.value = 1;
+        }
+
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("idsolicita", <?php echo $idusuario ?>);
+        parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
+        parametros.append("horainicio", $('#horainicio').value);
+        parametros.append("horafin", $('#horafin').value);
+        parametros.append("fechasolicitud", $('#fechasolicitud').value);
+
+        fetch(`../../controllers/solicitud.controller.php`, {
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            if (datos.idsolicitud > 0) {
+              console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
+              registroDetalle(datos.idsolicitud); // Llamar a registroDetalle aquí
+              // Cerrar el modal después de registrar todo
+              modalregistro.hide();
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      function registroDetalle(idSolicitud) {
+        equiposAgregados.forEach(equipo => {
+          const parametros = new FormData();
+          parametros.append("operacion", "registrarDetalle");
+          parametros.append("idsolicitud", idSolicitud);
+          parametros.append("idtipo", equipo.idTipo);
+          parametros.append("idejemplar", equipo.idEjemplar);
+          parametros.append("cantidad", 1); // Registrar un equipo a la vez
+
+          fetch(`../../controllers/detsolicitudes.controller.php`, {
+              method: "POST",
+              body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              if (datos.iddetallesolicitud > 0) {
+                console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
+              }
+            })
+            .catch(e => {
+              console.error(e);
+            });
+        });
+      }
 
 
 

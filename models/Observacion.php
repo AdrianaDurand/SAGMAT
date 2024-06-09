@@ -23,4 +23,19 @@ class Observacion extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function search($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL searchObservaciones(?)");
+            $consulta->execute(
+                array(
+                    $datos['tipobuscado']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }
