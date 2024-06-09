@@ -83,4 +83,46 @@ class Mantenimiento extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function disponibles()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_disponibles()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function prueba($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_operativos(?)");
+            $consulta->execute(
+                array(
+                    $datos['idtipo']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function fecha($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_listar_mantenimiento_fecha(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['fecha_inicio'],
+                    $datos['fecha_fin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }

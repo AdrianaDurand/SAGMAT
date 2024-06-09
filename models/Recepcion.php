@@ -62,4 +62,15 @@ class Recepcion extends Conexion{
         }
     }
 
+    public function listarCompleto()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listado_historial_todo()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
 }

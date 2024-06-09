@@ -41,5 +41,9 @@ if(isset($_POST['operacion'])){
             
         break;
 
+        case 'listar':
+            echo json_encode($recepcion->listarCompleto());
+        break;
+
     }
 }

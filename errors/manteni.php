@@ -30,7 +30,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="mt-2">
+            <div class="mt-3">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -52,16 +52,28 @@
 
                     </div>
 
-                    <div class="col-md-6 mt-3">
-                        <label for="" class="form-label">Seleccione un tipo:</label>
-                        <select name="tipos" id="tipos" class="form-select">
-                            <option value="-1">Mostrar todas</option>
-                        </select>
+                    <div class="card" style="max-width: 100%;">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-mantenimiento" href="#">Mantenimiento</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-operativos" href="#">Operativos</a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="col-md-12 mt-3">
+                            <div class="row" id="lista-mantenimientos"></div>
+
+                        </div>
+
+
                     </div>
 
-                    <div class="col-md-12 mt-3">
-                        <div class="row" id="lista-mantenimientos"></div>
-                    </div>
+                    
 
                 </div>
                 <!-- End of Main Content -->
@@ -163,35 +175,31 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const tabMantenimiento = document.getElementById("tab-mantenimiento");
+        const tabOperativos = document.getElementById("tab-operativos");
         const myModal = new bootstrap.Modal(document.getElementById("modalAgregar"));
         const cerrar = new bootstrap.Modal(document.getElementById("modalEliminar"));
+        const selectOperativos = document.getElementById("select-operativos");
 
+        tabMantenimiento.addEventListener("click", (event) => {
+            event.preventDefault();
+            listar();
+            activarTab(tabMantenimiento);
+        });
 
+        tabOperativos.addEventListener("click", (event) => {
+            event.preventDefault();
+            disponibles();
+            selectOperativos.style.display = "block";
+            activarTab(tabOperativos);
+        });
 
-        function getTipos() {
-
-            const parametros = new FormData();
-            parametros.append("operacion", "listar");
-
-            fetch(`../../controllers/tipo.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    datos.forEach(element => {
-                        const tagOption = document.createElement("option");
-                        tagOption.innerText = element.tipo;
-                        tagOption.value = element.idtipo;
-                        $("#tipos").appendChild(tagOption)
-                    });
-                })
-                .catch(e => {
-                    console.error(e);
-                });
+        function activarTab(tab) {
+            document.querySelectorAll(".nav-link").forEach(tab => {
+                tab.classList.remove("active");
+            });
+            tab.classList.add("active");
         }
-
-
 
         function $(id) {
             return document.querySelector(id);
@@ -208,8 +216,7 @@
 
         function listar() {
             const parametros = new FormData();
-            parametros.append("operacion", "prueba");
-            parametros.append("idtipo", $("#tipos").value);
+            parametros.append("operacion", "listar");
 
             fetch(`../../controllers/mantenimiento.controller.php`, {
                     method: "POST",
@@ -226,13 +233,6 @@
                             //Evaluar si tiene una fotografía
                             const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
 
-                            let estadoClass = '';
-                            if (element.estado === 'Necesita mantenimiento') {
-                                estadoClass = 'badge-warning'; // clase para el estado 'Necesita mantenimiento'
-                            } else if (element.estado === 'Disponible') {
-                                estadoClass = 'badge-success'; // clase para el estado 'Disponible'
-                            }
-
                             //Renderizado
                             const nuevoItem = `
 
@@ -240,13 +240,13 @@
                                     <div class="card mb-3" style="max-width: 900px;">
                                         <div class="row g-0">
                                             <div class="col-md-4">
-                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">
+                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start" alt="...">
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="card-body">
-                                                    <span class="badge ${estadoClass} card-title">${element.estado}</span>
+                                                    <span class="badge badge-warning card-title">${element.estado}</span>
                                                     <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
-                                                    <p class="card-text"><small class="text-muted">${element.create_at}</small></p>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 d-flex align-items-center">
@@ -286,7 +286,70 @@
                 });
         }
 
+        function disponibles() {
+            const parametros = new FormData();
+            parametros.append("operacion", "disponibles");
 
+            fetch(`../../controllers/mantenimiento.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    dataObtenida = datos
+                    if (dataObtenida.length == 0) {
+                        $("#lista-mantenimientos").innerHTML = `<p>No se encontraron mantenimientos</p>`;
+                    } else {
+                        $("#lista-mantenimientos").innerHTML = ``;
+                        dataObtenida.forEach(element => {
+                            //Evaluar si tiene una fotografía
+                            const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
+
+                            //Renderizado
+                            const nuevoItem = `
+
+                                <div class="d-flex justify-content-center">
+                                    <div class="card mb-3" style="max-width: 900px;">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start" alt="...">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="card-body">
+                                                    <span class="badge badge-success card-title">${element.estado}</span>
+                                                    <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 d-flex align-items-center">
+                                                <div class="card-body">
+                                                    <div class="d-grid gap-2">
+                                                        <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                                    `;
+                            $("#lista-mantenimientos").innerHTML += nuevoItem;
+                        });
+
+                        document.querySelectorAll(".btn-outline-primary").forEach(btn => {
+                            btn.addEventListener("click", (event) => {
+                                const idejemplar = event.target.getAttribute("data-idejemplar");
+                                $("#guardar").onclick = () => registrar(idejemplar);
+                            });
+                        });
+
+                    }
+
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
 
 
         function registrar(idejemplar) {
@@ -392,14 +455,9 @@
 
 
 
-        getTipos();
+
 
         listar();
-        $("#tipos").addEventListener("change", function() {
-            listar();
-
-        });
-
 
 
     })

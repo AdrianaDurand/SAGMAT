@@ -73,6 +73,24 @@
 
                     </div>
 
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <!-- Input de rango de fecha -->
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Desde</span>
+                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
+                                <span class="input-group-text">Hasta</span>
+                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
+                                <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row" id="lista-recepcion"></div>
+                    </div>
+
                     <div class="d-flex justify-content-center">
 
                         <div class="container-fluid mt-5">
@@ -99,52 +117,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Datos de prueba 
-                                                <tr>
-                                                    <th>1</th>
-                                                    <td>LAP-002</td>
-                                                    <td>2024-01-10</td>
-                                                    <td><span class="badge bg-success">Completado</span></td>
-                                                    <td>
-                                                        <button class="show-more-click">Imprimir</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>2</th>
-                                                    <td>LAP-003</td>
-                                                    <td>2024-02-20</td>
-                                                    <td><span class="badge bg-success">Completado</span></td>
-                                                    <td>
-                                                        <button class="show-more-click">Imprimir</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>3</th>
-                                                    <td>LAP-004</td>
-                                                    <td>2024-03-15</td>
-                                                    <td><span class="badge bg-success">Completado</span></td>
-                                                    <td>
-                                                        <button class="show-more-click">Imprimir</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>4</th>
-                                                    <td>LAP-005</td>
-                                                    <td>2024-04-05</td>
-                                                    <td><span class="badge bg-success">Completado</span></td>
-                                                    <td>
-                                                        <button class="show-more-click">Imprimir</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>5</th>
-                                                    <td>LAP-006</td>
-                                                    <td>2024-05-18</td>
-                                                    <td><span class="badge bg-success">Completado</span></td>
-                                                    <td>
-                                                        <button class="show-more-click">Imprimir</button>
-                                                    </td>
-                                                </tr>-->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -171,7 +144,8 @@
                     return document.querySelector(id);
                 }
 
-                function listar() {
+
+                function todo() {
                     // Preparar los parametros a enviar
                     const parametros = new FormData();
                     parametros.append("operacion", "historial");
@@ -184,39 +158,97 @@
                         .then(datosRecibidos => {
                             // Recorrer cada fila del arreglo
                             let numFila = 1;
-                            $("#tabla-mantenimiento tbody").innerHTML = '';
-                            datosRecibidos.forEach(registro => {
-                                let nuevafila = ``;
-                                // Enviar los valores obtenidos en celdas <td></td>
-                                nuevafila = `
-                                    <tr>
-                                        <td>${numFila}</td>
-                                        <td>${registro.nro_equipo}</td>
-                                        <td>${registro.fechainicio}</td>
-                                        <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
-                                        <td>  
-                                        <div class="dropdown">
-                                            <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                               <img src="../../img/puntitos.svg">
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
-                                                <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                `;
-                                $("#tabla-mantenimiento tbody").innerHTML += nuevafila;
-                                numFila++;
-                            });
+                            const tabla = $("#tabla-mantenimiento tbody");
+                            tabla.innerHTML = '';
 
-
+                            if (datosRecibidos.length === 0) {
+                                tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
+                            } else {
+                                datosRecibidos.forEach(registro => {
+                                    let nuevafila = ``;
+                                    // Enviar los valores obtenidos en celdas <td></td>
+                                    nuevafila = `
+                                        <tr>
+                                            <td>${numFila}</td>
+                                            <td>${registro.nro_equipo}</td>
+                                            <td>${registro.fechainicio}</td>
+                                            <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
+                                            <td>  
+                                                <div class="dropdown">
+                                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <img src="../../img/puntitos.svg">
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                        <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
+                                                        <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tabla.innerHTML += nuevafila;
+                                    numFila++;
+                                });
+                            }
                         })
                         .catch(e => {
                             console.error(e);
                         });
                 }
+
+                function listar() {
+                    // Preparar los parametros a enviar
+                    const parametros = new FormData();
+                    parametros.append("operacion", "fecha");
+                    parametros.append("fecha_inicio", $("#fecha_inicio").value);
+                    parametros.append("fecha_fin", $("#fecha_fin").value);
+
+                    fetch(`../../controllers/mantenimiento.controller.php`, {
+                            method: 'POST',
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datosRecibidos => {
+                            // Recorrer cada fila del arreglo
+                            let numFila = 1;
+                            const tabla = $("#tabla-mantenimiento tbody");
+                            tabla.innerHTML = '';
+
+                            if (datosRecibidos.length === 0) {
+                                tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
+                            } else {
+                                datosRecibidos.forEach(registro => {
+                                    let nuevafila = ``;
+                                    // Enviar los valores obtenidos en celdas <td></td>
+                                    nuevafila = `
+                                        <tr>
+                                            <td>${numFila}</td>
+                                            <td>${registro.nro_equipo}</td>
+                                            <td>${registro.fechainicio}</td>
+                                            <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
+                                            <td>  
+                                                <div class="dropdown">
+                                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <img src="../../img/puntitos.svg">
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                        <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
+                                                        <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tabla.innerHTML += nuevafila;
+                                    numFila++;
+                                });
+                            }
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+
 
 
                 tabla.addEventListener("click", function(event) {
@@ -251,10 +283,11 @@
                     }
                 })
 
+                todo();
 
-
-                listar()
-
+                $("#btnBuscar").addEventListener("click", () => {
+                    listar(); // Llamar a la función listar() cuando se haga clic en el botón
+                });
 
 
             });

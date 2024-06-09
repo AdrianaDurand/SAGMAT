@@ -44,9 +44,23 @@ END $$
 CALL spu_historial_detalle(2);
 CALL spu_listar_porfecha('2024-06-03', '2024-06-04');
 
+DELIMITER $$
+CREATE PROCEDURE spu_listado_historial_todo()
+BEGIN
+    SELECT 
+        rec.idrecepcion,
+        rec.idusuario,
+        rec.idpersonal,
+        rec.fechayhoraregistro,
+        rec.fechayhorarecepcion,
+        alm.areas
+    FROM
+        recepciones rec
+    INNER JOIN
+        almacenes alm ON rec.idalmacen = alm.idalmacen;
+END $$
 
-
-
+CALL spu_listado_historial_todo();
 SELECT *  FROM recepciones;
 SELECT * FROM detrecepciones;
 SELECT * FROM ejemplares;

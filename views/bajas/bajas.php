@@ -73,12 +73,29 @@
 
                     </div>
 
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <!-- Input de rango de fecha -->
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Desde</span>
+                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
+                                <span class="input-group-text">Hasta</span>
+                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
+                                <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="d-flex justify-content-center">
+
+
 
                         <div class="container-fluid mt-5">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="table-responsive">
+
+                                    <div class="table-responsive mt-3">
                                         <table class="table table-lg  text-center" id="tabla-baja">
 
                                             <colgroup>
@@ -101,7 +118,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -115,18 +132,70 @@
             </div>
             <!-- End of Content Wrapper -->
         </div>
-
-
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-
-
-
                 const tabla = document.querySelector("#tabla-baja tbody");
 
                 function $(id) {
                     return document.querySelector(id);
                 }
+
+
+                function fecha() {
+                    // Preparar los parametros a enviar
+                    const parametros = new FormData();
+                    parametros.append("operacion", "fecha");
+                    parametros.append("fecha_inicio", $("#fecha_inicio").value);
+                    parametros.append("fecha_fin", $("#fecha_fin").value);
+
+                    fetch(`../../controllers/baja.controller.php`, {
+                            method: 'POST',
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datosRecibidos => {
+                            // Recorrer cada fila del arreglo
+                            if (datosRecibidos.length === 0) {
+                                $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
+                            } else {
+                                let numFila = 1;
+                                $("#tabla-baja tbody").innerHTML = '';
+                                datosRecibidos.forEach(registro => {
+                                    let nuevafila = ``;
+                                    // Enviar los valores obtenidos en celdas <td></td>
+                                    nuevafila = `
+                                        <tr>
+                                            <td>${numFila}</td>
+                                            <td>${registro.encargado}</td>
+                                            <td>${registro.descripcion}</td>
+                                            <td>${registro.nro_equipo}</td>
+                                            <td>${registro.fechabaja}</td>
+                                            <td>  
+                                            <div class="dropdown">
+                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <img src="../../img/puntitos.svg">
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    `;
+                                    $("#tabla-baja tbody").innerHTML += nuevafila;
+                                    numFila++;
+                                });
+                            }
+
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+
+                $("#btnBuscar").addEventListener("click", () => {
+                    fecha(); // Llamar a la función listar() cuando se haga clic en el botón
+                });
 
                 function listar() {
                     // Preparar los parametros a enviar
@@ -140,54 +209,54 @@
                         .then(respuesta => respuesta.json())
                         .then(datosRecibidos => {
                             // Recorrer cada fila del arreglo
-                            let numFila = 1;
-                            $("#tabla-baja tbody").innerHTML = '';
-                            datosRecibidos.forEach(registro => {
-                                let nuevafila = ``;
-                                // Enviar los valores obtenidos en celdas <td></td>
-                                nuevafila = `
-                                    <tr>
-                                        <td>${numFila}</td>
-                                        <td>${registro.encargado}</td>
-                                        <td>${registro.descripcion}</td>
-                                        <td>${registro.nro_equipo}</td>
-                                        <td>${registro.fechabaja}</td>
-                                        <td>  
-                                        <div class="dropdown">
-                                            <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                               <img src="../../img/puntitos.svg">
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
+                            if (datosRecibidos.length === 0) {
+                                $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
+                            } else {
+                                let numFila = 1;
+                                $("#tabla-baja tbody").innerHTML = '';
+                                datosRecibidos.forEach(registro => {
+                                    let nuevafila = ``;
+                                    // Enviar los valores obtenidos en celdas <td></td>
+                                    nuevafila = `
+                                        <tr>
+                                            <td>${numFila}</td>
+                                            <td>${registro.encargado}</td>
+                                            <td>${registro.descripcion}</td>
+                                            <td>${registro.nro_equipo}</td>
+                                            <td>${registro.fechabaja}</td>
+                                            <td>  
+                                            <div class="dropdown">
+                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <img src="../../img/puntitos.svg">
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                `;
-                                $("#tabla-baja tbody").innerHTML += nuevafila;
-                                numFila++;
-                            });
+                                        </td>
+                                        </tr>
+                                    `;
+                                    $("#tabla-baja tbody").innerHTML += nuevafila;
+                                    numFila++;
+                                });
 
-
+                            }
                         })
                         .catch(e => {
                             console.error(e);
                         });
                 }
 
-                tabla.addEventListener("click", function(event) {
+                /*tabla.addEventListener("click", function(event) {
                     const target = event.target;
                     if (target.classList.contains('imprimir')) {
                         idbaja = target.getAttribute('data-idbaja');
                         window.open(`../reportes/reporte.php?idbaja=${idbaja}`, '_blank');
-                    } 
-                })
+                    }
+                })*/
 
 
-
-                listar()
-
-
+                listar();
 
             });
         </script>

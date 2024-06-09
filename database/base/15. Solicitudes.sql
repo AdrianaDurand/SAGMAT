@@ -102,7 +102,7 @@ BEGIN
         t.tipo,
         u.nombre,
         CONCAT(p.apellidos, ', ', p.nombres) AS docente,
-        st.idstock -- Añadiendo el idstock al SELECT
+        st.idstock -- AÃ±adiendo el idstock al SELECT
     FROM 
         solicitudes s
         INNER JOIN tipos t ON s.idtipo = t.idtipo
@@ -130,16 +130,9 @@ SELECT * FROM detsolicitudes;
 DELIMITER $$
 CREATE PROCEDURE listar_tipos(IN _idtipo INT)
 BEGIN
-    SELECT 
+     SELECT 
         e.idejemplar,
-        -- e.nro_serie,
-        e.nro_equipo
-        -- e.estado_equipo,
-        -- r.descripcion AS recurso_descripcion,
-        -- r.modelo AS recurso_modelo,
-        -- t.tipo AS tipo_recurso,
-        -- m.marca AS marca_recurso,
-        -- e.create_at AS fecha_creacion
+        CONCAT(e.nro_equipo, ' - ', r.descripcion) AS descripcion_equipo
     FROM 
         ejemplares e
         INNER JOIN detrecepciones dtr ON e.iddetallerecepcion = dtr.iddetallerecepcion
@@ -147,6 +140,7 @@ BEGIN
         INNER JOIN tipos t ON r.idtipo = t.idtipo
         INNER JOIN marcas m ON r.idmarca = m.idmarca
     WHERE 
-        t.idtipo = _idtipo;
+        t.idtipo = _idtipo
+        AND e.estado = 0;
 END $$
 CALL listar_tipos(1);

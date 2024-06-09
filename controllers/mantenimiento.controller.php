@@ -39,7 +39,26 @@ if (isset($_POST['operacion'])){
             ];
             echo json_encode($mantenimiento->buscar($datosEnviar));
         break;
+
+        case 'disponibles':
+            echo json_encode($mantenimiento->disponibles());
+        break;
+
+        case 'prueba':
+            $datosEnviar = [
+                "idtipo"     => $_POST['idtipo']
+            ];
+            echo json_encode($mantenimiento->prueba($datosEnviar));
+        break;
         
+        case 'fecha':
+            $datosEnviar = [
+                "fecha_inicio"          => $_POST['fecha_inicio'],
+                "fecha_fin"             => $_POST['fecha_fin']
+            ];
+            echo json_encode($mantenimiento->fecha($datosEnviar));
+            
+        break;
     }
 }
 

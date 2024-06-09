@@ -244,6 +244,92 @@
                     });
             }
 
+            function completo() {
+                const parametros = new FormData();
+                parametros.append("operacion", "listar");
+
+                fetch(`../../controllers/recepcion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        dataObtenida = datos
+                        if (dataObtenida.length == 0) {
+                            $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
+                        } else {
+                            $("#lista-recepcion").innerHTML = ``;
+                            dataObtenida.forEach(element => {
+
+                                //Renderizado
+                                const nuevoItem = `
+                                <div class="d-flex justify-content-center mb-3"> <!-- Agregamos la clase mb-3 para añadir un margen inferior -->
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
+                                                        <h4 class="card-title">${element.areas}</h4>
+                                                        <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
+                                                    </div>
+                                                    <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                                        <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
+                                                    </div>
+                                                </div>
+                                                <!-- Contenedor para la información detallada -->
+                                                <div class="detalles-container mt-3" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-lg text-center" id="tabla-recepcion">
+                                                            <colgroup>
+                                                                <col width="5%">
+                                                                <col width="25%">
+                                                                <col width="25%">
+                                                                <col width="25%">
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr class="table prueba">
+                                                                    <th>N°</th>
+                                                                    <th>Recurso</th>
+                                                                    <th>Cantidad Recibida</th>
+                                                                    <th>Cantidad Enviada</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+                                $("#lista-recepcion").innerHTML += nuevoItem;
+                            });
+
+                            document.querySelectorAll(".show-more-click").forEach(btn => {
+                                btn.addEventListener("click", () => {
+                                    const idrecepcion = btn.getAttribute("data-idrecepcion");
+                                    const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
+                                    const cardBody = btn.parentNode.parentNode;
+                                    if (detallesContainer.style.display === 'none') {
+                                        detalles(idrecepcion, detallesContainer);
+                                        cardBody.classList.add('expanded');
+                                    } else {
+                                        detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
+                                        cardBody.classList.remove('expanded');
+                                    }
+                                });
+                            });
+
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e)
+                    });
+            }
+
             function detalles(idrecepcion, detallesContainer) {
                 const parametros = new FormData();
                 parametros.append("operacion", "detalles");
@@ -281,6 +367,8 @@
                         console.error(e);
                     });
             }
+
+            completo();
 
             $("#btnBuscar").addEventListener("click", () => {
                 listar(); // Llamar a la función listar() cuando se haga clic en el botón

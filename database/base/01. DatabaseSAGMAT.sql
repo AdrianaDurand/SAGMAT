@@ -296,27 +296,16 @@ ALTER TABLE ejemplares ADD estado CHAR(1) NOT NULL DEFAULT 0;
 CREATE TABLE devoluciones
 (
     iddevolucion             INT                 AUTO_INCREMENT PRIMARY KEY,
-    idprestamo                 INT                 NOT NULL,
-    idobservacion             INT                 NOT NULL,
+    idprestamo                 INT               NOT NULL,
+    observacion             VARCHAR(300)         NULL,
     estadodevolucion         VARCHAR(30)         NOT NULL,
-    create_at                 DATETIME            DEFAULT NOW(),
+    create_at                 DATETIME           DEFAULT NOW(),
     update_at                DATETIME            NULL,
-    inactive_at                DATETIME             NULL,
-    CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo),
-    CONSTRAINT fk_idobservacion_dev FOREIGN KEY (idobservacion) REFERENCES observaciones (idobservacion)
+    inactive_at                DATETIME          NULL,
+    CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
 
--- 16°
--- *********************************************************************
--- 						TABLA DEVOLUCIONES
--- *********************************************************************
 
-CREATE TABLE observaciones
-(
-    idobservacion             INT                 AUTO_INCREMENT PRIMARY KEY,
-    observaciones             VARCHAR(100)         NULL
-)ENGINE = INNODB;
--- FALTA INGRESAR DATOS A LA TABLA
 
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS
 -- 17°

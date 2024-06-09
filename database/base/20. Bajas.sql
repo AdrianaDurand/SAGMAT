@@ -50,7 +50,33 @@ BEGIN
 	WHERE e.estado = '4';
 END $$
 
-CALL spu_listas_bajas();
+
+DELIMITER $$
+CREATE PROCEDURE spu_listas_bajas_fecha(
+    IN _fecha_inicio DATETIME,
+    IN _fecha_fin DATETIME
+)
+BEGIN
+    SELECT 
+        CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
+        b.idbaja,
+        b.idusuario,
+        b.fechabaja,
+        r.idrecurso,
+        e.nro_equipo,
+        r.descripcion
+    FROM bajas b
+    JOIN ejemplares e ON b.idejemplar = e.idejemplar
+    JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
+    JOIN usuarios u ON b.idusuario = u.idusuario
+    JOIN personas p ON u.idpersona = p.idpersona
+    WHERE e.estado = '4'
+      AND b.fechabaja BETWEEN _fecha_inicio AND _fecha_fin
+    ORDER BY
+        b.fechabaja DESC;
+END $$
+
+CALL spu_listas_bajas_fecha('2024-06-26', '2024-06-29');
 
 SELECT * FROM recursos;
 SELECT * FROM personas;

@@ -52,16 +52,33 @@
 
                     </div>
 
-                    <div class="col-md-6 mt-3">
-                        <label for="" class="form-label">Seleccione un tipo:</label>
-                        <select name="tipos" id="tipos" class="form-select">
-                            <option value="-1">Mostrar todas</option>
-                        </select>
+                    <div class="card" style="max-width: 100%;">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-mantenimiento" href="#">Mantenimiento</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-operativos" href="#">Operativos</a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="col-md-6 mt-3">
+                            <label for="" class="form-label">Seleccione un tipo:</label>
+                            <select name="tipos" id="tipos" class="form-select">
+                                <option value="-1">Mostrar todas</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+                            <div class="row" id="lista-mantenimientos"></div>
+                        </div>
+
+
                     </div>
 
-                    <div class="col-md-12 mt-3">
-                        <div class="row" id="lista-mantenimientos"></div>
-                    </div>
 
                 </div>
                 <!-- End of Main Content -->
@@ -226,13 +243,6 @@
                             //Evaluar si tiene una fotografía
                             const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
 
-                            let estadoClass = '';
-                            if (element.estado === 'Necesita mantenimiento') {
-                                estadoClass = 'badge-warning'; // clase para el estado 'Necesita mantenimiento'
-                            } else if (element.estado === 'Disponible') {
-                                estadoClass = 'badge-success'; // clase para el estado 'Disponible'
-                            }
-
                             //Renderizado
                             const nuevoItem = `
 
@@ -240,13 +250,13 @@
                                     <div class="card mb-3" style="max-width: 900px;">
                                         <div class="row g-0">
                                             <div class="col-md-4">
-                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">
+                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start" alt="...">
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="card-body">
-                                                    <span class="badge ${estadoClass} card-title">${element.estado}</span>
+                                                    <span class="badge badge-warning card-title">${element.estado}</span>
                                                     <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
-                                                    <p class="card-text"><small class="text-muted">${element.create_at}</small></p>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 d-flex align-items-center">

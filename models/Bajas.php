@@ -59,5 +59,36 @@ class Baja extends Conexion
         }
     }
 
+    public function buscar($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_recursos_buscar(?)");
+            $consulta->execute(
+                array(
+                    $datos['tipobuscado']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function fecha($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listas_bajas_fecha(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['fecha_inicio'],
+                    $datos['fecha_fin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
     
 }

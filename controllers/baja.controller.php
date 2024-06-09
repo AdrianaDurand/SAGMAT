@@ -10,7 +10,7 @@ if (isset($_POST['operacion'])) {
 
         case 'listar':
             echo json_encode($baja->listar());
-        break;
+            break;
 
         case 'registrar':
             $datosEnviar = [
@@ -52,6 +52,15 @@ if (isset($_POST['operacion'])) {
                 }
             }
             echo json_encode($respuestas);
+            break;
+
+            case 'fecha':
+                $datosEnviar = [
+                    "fecha_inicio"          => $_POST['fecha_inicio'],
+                    "fecha_fin"             => $_POST['fecha_fin']
+                ];
+                echo json_encode($baja->fecha($datosEnviar));
+                
             break;
     }
 }
