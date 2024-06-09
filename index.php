@@ -1,34 +1,11 @@
 <?php
+
 session_start();
-
-// Verificar si el usuario ya tiene una sesión activa
-if(isset($_SESSION["status"]) && $_SESSION["status"]) {
-    // Si hay una sesión activa, redirigir al usuario según su rol
-    $rolUsuario = isset($_SESSION["rol"]) ? $_SESSION["rol"] : "";
-
-    switch($rolUsuario) {
-        case "ADMINISTRADOR":
-            header("Location:./views/recepciones/registrar.php");
-            break;
-        case "DAIP":
-            header("Location:./views/recepciones/registrar.php");
-            break;
-        case "CIST":
-            header("Location:./views/recepciones/registrar.php");
-            break;
-        case "DOCENTE":
-            header("Location:./views/solicitudes/registrar.php");
-            break;
-        default:
-            // Si el rol no está definido, redirigir a una página predeterminada
-            header("Location:./views/recepciones/registrar.php");
-            break;
-    }
-    exit(); // Asegurar que el script termine después de la redirección
-}
+if(isset($_SESSION["status"]) && $_SESSION["status"]){
+	header("Location:./views/recepciones/registrar.php");
+  }
 
 ?>
-
 
 
 <!doctype html>
@@ -117,7 +94,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]) {
 </body>
 
 <script>
- function $(id){
+  function $(id){
     return document.querySelector(id); 
   }
 
@@ -137,8 +114,15 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]) {
       .then(datos => {
         console.log(datos);
         if (datos.acceso == true){
-        window.location.href = "./views/recepciones/registrar.php";
-      } else{
+          if (datos.rol === "ADMINISTRADOR") {
+            window.location.href = "./views/recepciones/registrar.php";
+          } else if (datos.rol === "DOCENTE") {
+            window.location.href = "./views/solicitudes/registrar.php";
+          } else {
+            // Redirigir a una página por defecto si el rol no coincide
+            window.location.href = "./views/default.php";
+          }
+        } else {
           alert(datos.mensaje);
         }
       })

@@ -37,6 +37,7 @@ if (isset($_POST['operacion'])) {
           $_SESSION["status"] = true;
           $statusLogin["acceso"] = true;
           $statusLogin["mensaje"] = "Acceso correcto";
+          $statusLogin["rol"] = $registro["rol"]; // Agregar el rol a la respuesta
         }else{
           $_SESSION["status"] = false;
           $statusLogin["mensaje"] = "Error en la constraseña";
