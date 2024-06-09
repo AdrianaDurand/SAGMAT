@@ -22,9 +22,9 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 $iconos = [
     "Recepciones" => "fa-hand-holding",
     "Recursos" => "fa-computer",
-    "Solicitudes" => "fa-file-invoice",
-    "Prestamos" => "fa-file-invoice",
-    "Devoluciones" => "fa-file-invoice",
+    "Solicitudes" => "fa-id-card",
+    "Prestamos" => "fa-file-arrow-up",
+    "Devoluciones" => "fa-file-arrow-down",
     "Mantenimientos" => "fa-screwdriver-wrench",
     "Bajas" => "fa-minus-circle"
 ];

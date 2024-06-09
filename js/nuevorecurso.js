@@ -1,3 +1,4 @@
+
 function addrow() {
     var caracteristicasContainer = document.getElementById("datasheets");
 
@@ -78,6 +79,16 @@ function getbrands() {
         });
 }
 
+document.getElementById("btnEnviar").addEventListener("click", function(event) {
+    event.preventDefault();
+    const form = document.getElementById("form-recurso");
+    if (form.checkValidity()) {
+        guardarRecurso();
+    } else {
+        form.reportValidity(); 
+    }
+});
+
 
 function registrarRecurso() {
     // Realizar el registro del recurso
@@ -91,7 +102,7 @@ function registrarRecurso() {
     const recursoExistente = recursosRegistrados.find(recurso => recurso.idmarca === idmarca && recurso.modelo === modelo);
 
     if (recursoExistente) {
-        alert("No se puede registrar un recurso existente.");
+        Swal.fire('Error', 'No se puede registrar un recurso existente.', 'error');
         return;
     }
 
@@ -127,6 +138,8 @@ function registrarRecurso() {
                 idmarca
             });
             localStorage.setItem('recursos', JSON.stringify(recursosRegistrados));
+            
+            finalizando();
 
             // Resetear los campos del formulario
             const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
@@ -150,32 +163,33 @@ function registrarRecurso() {
             caracteristicasContainer.innerHTML = `
                 <div class="col-md-5 mb-3">
                     <input type="text" class="form-control border car" placeholder="Característica" required>
-                    </div>
-                    <div class="col-md-5 mb-3">
+                </div>
+                <div class="col-md-5 mb-3">
                     <input type="text" class="form-control border det" placeholder="Detalle" required>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end mb-3">
+                </div>
+                <div class="col-md-2 d-flex align-items-end mb-3">
                     <button type="button" class="btn btn-white border" id="btnAgregarCaracteristica"><i class="bi bi-plus-lg"></i></button>
-                    </div>
-                    `;
+                </div>
+            `;
 
             // Resetear el estado de los campos deshabilitados
             const camposDeshabilitar = [document.getElementById("idpersonal"), document.getElementById("fechayhorarecepcion"), document.getElementById("tipodocumento"), document.getElementById("nrodocumento"), document.getElementById("serie_doc"), document.getElementById("observaciones")];
 
             camposDeshabilitar.forEach(campo => {
-                // Resetear los campos del formulario
-                const camposNoResetear = ["idpersonal", "fechayhorarecepcion", "tipodocumento", "nrodocumento", "serie_doc", "observaciones"];
-                const inputs = document.querySelectorAll("#form-recurso input, #form-recurso select");
                 campo.disabled = false;
             });
         })
         .catch(error => {
-
-            alert("No se puede agregar un recurso existente.");
+            Swal.fire('Error', 'No se puede agregar un recurso existente.', 'error');
         });
 }
 
 
 
+
+
 getbrands();
 gettypes();
+
+
+

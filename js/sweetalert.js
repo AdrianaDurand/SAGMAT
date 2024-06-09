@@ -69,11 +69,28 @@ function successfulreception() {
     });
 }
 
-function seguir() {
+function guardarRecurso() {
     Swal.fire({
-        icon: "success",
-        title: 'Detalle exitoso',
-        text: 'Siga recepcionando más recursos.',
+        title: '¿Está seguro de guardar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            registrarRecurso();
+        }
+    });
+}
+
+function finalizando() {
+    Swal.fire({
+        title: 'Éxito',
+        text: 'Recurso registrado correctamente',
+        icon: 'success',
+        timer: 1500,
         showConfirmButton: false
     });
 }
