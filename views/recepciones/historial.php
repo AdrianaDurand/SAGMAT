@@ -31,8 +31,6 @@
             text-align: center;
         }
 
-
-
         .show-more-click {
             background-color: transparent;
             border: none;
@@ -48,22 +46,61 @@
 
         .card {
             border: 1px solid rgba(0, 0, 0, 0.125);
-            /* Bordes */
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            /* Sombra */
             transition: box-shadow 0.3s ease;
-            /* Transición suave de la sombra */
         }
 
         .card:hover {
             box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
-            /* Cambia la sombra al pasar el mouse */
         }
-
 
         .detalles-container {
             margin-top: 10px;
-            /* Espacio entre el card y la tabla */
+        }
+
+        /* Estilos para la paginación */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+
+        .pagination-item.active {
+            color: #2c7be5;
+            font-weight: bold;
+        }
+
+        .pagination-arrow {
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-arrow.disabled {
+            color: #808080;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -94,10 +131,7 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
 
                     <div class="xd">
                         <div class="row justify-content-center">
@@ -110,50 +144,62 @@
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
                                     <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
                                 </div>
-
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="row" id="lista-recepcion"></div>
                         </div>
-                        <!--<div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3 class="card-title">N° Recepción: #1</h3>
-                                                <h4 class="card-title">AIP</h4>
-                                                <p class="card-text"><small class="text-muted">2024-06-03 23:29:00</small></p>
-                                            </div>
-                                            <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                                <button type="button" class="show-more-click">Ver características</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
+
+                        <!-- Contenedor de paginación -->
+                        <div class="pagination">
+                            <div class="pagination-arrow" id="prev">&laquo;</div>
+                            <div class="pagination-item" id="item-1" data-page="1">1</div>
+                            <div class="pagination-item" id="item-2" data-page="2">2</div>
+                            <div class="pagination-item" id="item-3" data-page="3">3</div>
+                            <div class="pagination-arrow" id="next">&raquo;</div>
+                        </div>
 
                     </div>
                 </div>
-
-
             </div>
-
-
-            <!-- End of Main Content -->
         </div>
     </div>
-    <!-- End of Content Wrapper -->
-    </div>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
+            const itemsPerPage = 8; // Número de elementos por página
+            let currentPage = 1;
+            let totalPages = 1;
+
             function $(id) {
                 return document.querySelector(id);
+            }
+
+            function completo() {
+                const parametros = new FormData();
+                parametros.append("operacion", "listar");
+
+                fetch(`../../controllers/recepcion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        dataObtenida = datos
+                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+                        if (dataObtenida.length == 0) {
+                            $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
+                        } else {
+                            $("#lista-recepcion").innerHTML = ``;
+                            renderPage(currentPage);
+                        }
+                        updatePagination();
+                    })
+                    .catch(e => {
+                        console.error(e)
+                    });
             }
 
             function listar() {
@@ -169,165 +215,85 @@
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         dataObtenida = datos
+                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                         if (dataObtenida.length == 0) {
                             $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
                         } else {
                             $("#lista-recepcion").innerHTML = ``;
-                            dataObtenida.forEach(element => {
-
-                                //Renderizado
-                                const nuevoItem = `
-                                <div class="d-flex justify-content-center mb-3"> <!-- Agregamos la clase mb-3 para añadir un margen inferior -->
-                                    <div class="col-md-8">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
-                                                        <h4 class="card-title">${element.areas}</h4>
-                                                        <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
-                                                    </div>
-                                                    <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                                        <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
-                                                    </div>
-                                                </div>
-                                                <!-- Contenedor para la información detallada -->
-                                                <div class="detalles-container mt-3" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-lg text-center" id="tabla-recepcion">
-                                                            <colgroup>
-                                                                <col width="5%">
-                                                                <col width="25%">
-                                                                <col width="25%">
-                                                                <col width="25%">
-                                                            </colgroup>
-                                                            <thead>
-                                                                <tr class="table prueba">
-                                                                    <th>N°</th>
-                                                                    <th>Recurso</th>
-                                                                    <th>Cantidad Recibida</th>
-                                                                    <th>Cantidad Enviada</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                `;
-                                $("#lista-recepcion").innerHTML += nuevoItem;
-                            });
-
-                            document.querySelectorAll(".show-more-click").forEach(btn => {
-                                btn.addEventListener("click", () => {
-                                    const idrecepcion = btn.getAttribute("data-idrecepcion");
-                                    const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
-                                    const cardBody = btn.parentNode.parentNode;
-                                    if (detallesContainer.style.display === 'none') {
-                                        detalles(idrecepcion, detallesContainer);
-                                        cardBody.classList.add('expanded');
-                                    } else {
-                                        detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
-                                        cardBody.classList.remove('expanded');
-                                    }
-                                });
-                            });
-
+                            renderPage(currentPage);
                         }
+                        updatePagination();
                     })
                     .catch(e => {
                         console.error(e)
                     });
             }
 
-            function completo() {
-                const parametros = new FormData();
-                parametros.append("operacion", "listar");
-
-                fetch(`../../controllers/recepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        dataObtenida = datos
-                        if (dataObtenida.length == 0) {
-                            $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
-                        } else {
-                            $("#lista-recepcion").innerHTML = ``;
-                            dataObtenida.forEach(element => {
-
-                                //Renderizado
-                                const nuevoItem = `
-                                <div class="d-flex justify-content-center mb-3"> <!-- Agregamos la clase mb-3 para añadir un margen inferior -->
-                                    <div class="col-md-8">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
-                                                        <h4 class="card-title">${element.areas}</h4>
-                                                        <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
-                                                    </div>
-                                                    <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                                        <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
-                                                    </div>
-                                                </div>
-                                                <!-- Contenedor para la información detallada -->
-                                                <div class="detalles-container mt-3" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-lg text-center" id="tabla-recepcion">
-                                                            <colgroup>
-                                                                <col width="5%">
-                                                                <col width="25%">
-                                                                <col width="25%">
-                                                                <col width="25%">
-                                                            </colgroup>
-                                                            <thead>
-                                                                <tr class="table prueba">
-                                                                    <th>N°</th>
-                                                                    <th>Recurso</th>
-                                                                    <th>Cantidad Recibida</th>
-                                                                    <th>Cantidad Enviada</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
+            function renderPage(page) {
+                $("#lista-recepcion").innerHTML = ``;
+                let start = (page - 1) * itemsPerPage;
+                let end = start + itemsPerPage;
+                let dataToRender = dataObtenida.slice(start, end);
+                dataToRender.forEach(element => {
+                    const nuevoItem = `
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
+                                            <h4 class="card-title">${element.areas}</h4>
+                                            <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
+                                        </div>
+                                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                            <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="detalles-container mt-3" style="display: none;">
+                                        <div class="table-responsive">
+                                            <table class="table table-lg text-center" id="tabla-recepcion">
+                                                <colgroup>
+                                                    <col width="5%">
+                                                    <col width="25%">
+                                                    <col width="25%">
+                                                    <col width="25%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr class="table prueba">
+                                                        <th>N°</th>
+                                                        <th>Recurso</th>
+                                                        <th>Cantidad Recibida</th>
+                                                        <th>Cantidad Enviada</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
-                                `;
-                                $("#lista-recepcion").innerHTML += nuevoItem;
-                            });
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    $("#lista-recepcion").innerHTML += nuevoItem;
 
-                            document.querySelectorAll(".show-more-click").forEach(btn => {
-                                btn.addEventListener("click", () => {
-                                    const idrecepcion = btn.getAttribute("data-idrecepcion");
-                                    const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
-                                    const cardBody = btn.parentNode.parentNode;
-                                    if (detallesContainer.style.display === 'none') {
-                                        detalles(idrecepcion, detallesContainer);
-                                        cardBody.classList.add('expanded');
-                                    } else {
-                                        detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
-                                        cardBody.classList.remove('expanded');
-                                    }
-                                });
-                            });
+                });
 
+                document.querySelectorAll(".show-more-click").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const idrecepcion = btn.getAttribute("data-idrecepcion");
+                        const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
+                        const cardBody = btn.parentNode.parentNode;
+                        if (detallesContainer.style.display === 'none') {
+                            detalles(idrecepcion, detallesContainer);
+                            cardBody.classList.add('expanded');
+                        } else {
+                            detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
+                            cardBody.classList.remove('expanded');
                         }
-                    })
-                    .catch(e => {
-                        console.error(e)
                     });
+                });
             }
 
             function detalles(idrecepcion, detallesContainer) {
@@ -368,11 +334,75 @@
                     });
             }
 
-            completo();
+            function updatePagination() {
+                const paginationItems = document.querySelectorAll(".pagination-item");
+                paginationItems.forEach(item => item.style.display = "none");
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if ($(`#item-${i}`)) {
+                        $(`#item-${i}`).style.display = "flex";
+                    } else {
+                        const newItem = document.createElement("div");
+                        newItem.classList.add("pagination-item");
+                        newItem.id = `item-${i}`;
+                        newItem.dataset.page = i;
+                        newItem.innerText = i;
+                        newItem.addEventListener("click", () => changePage(i));
+                        $(".pagination").insertBefore(newItem, $("#next"));
+                    }
+                }
+
+                updateArrows();
+            }
+
+            function changePage(page) {
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderPage(page);
+                updateArrows();
+            }
+
+            function updateArrows() {
+                if (currentPage === 1) {
+                    $("#prev").classList.add("disabled");
+                } else {
+                    $("#prev").classList.remove("disabled");
+                }
+
+                if (currentPage === totalPages) {
+                    $("#next").classList.add("disabled");
+                } else {
+                    $("#next").classList.remove("disabled");
+                }
+
+                document.querySelectorAll(".pagination-item").forEach(item => {
+                    item.classList.remove("active");
+                    if (parseInt(item.dataset.page) === currentPage) {
+                        item.classList.add("active");
+                    }
+                });
+            }
+
+            $("#prev").addEventListener("click", () => {
+                if (currentPage > 1) changePage(currentPage - 1);
+            });
+
+            $("#next").addEventListener("click", () => {
+                if (currentPage < totalPages) changePage(currentPage + 1);
+            });
+
+            document.querySelectorAll('.pagination-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    changePage(parseInt(item.dataset.page));
+                });
+            });
 
             $("#btnBuscar").addEventListener("click", () => {
-                listar(); // Llamar a la función listar() cuando se haga clic en el botón
+                currentPage = 1;
+                listar();
             });
+
+            completo();
 
         });
     </script>
