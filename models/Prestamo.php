@@ -80,4 +80,41 @@ class Prestamo extends Conexion
             die($e->getMessage());
           }
     }
+    
+    public function listarHistorial()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_prestamos_total()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    
+    public function listarHistorialDet($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_prestamos_det(?)");
+            $consulta->execute(array($datos['idprestamo']));
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    public function listarHistorialFecha($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_fecha_pres(?, ?)");
+            $consulta->execute(
+                array(
+                    $datos['fechainicio'],
+                    $datos['fechafin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

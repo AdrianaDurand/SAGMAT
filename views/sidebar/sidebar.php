@@ -34,8 +34,8 @@ $accesos = [
         "Recepciones" => ["Registrar", "Historial"],
         "Recursos" => ["Inventario"],
         "Solicitudes" => ["Registrar"],
-        "Prestamos" => ["Registrar"],
-        "Devoluciones" => ["Registrar"],
+        "Prestamos" => ["Registrar", "Historial"],
+        "Devoluciones" => ["Registrar", "Historial"],
         "Mantenimientos" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
@@ -43,8 +43,8 @@ $accesos = [
         "Recepciones" => ["Registrar"],
         "Recursos" => ["Inventario"],
         "Solicitudes" => ["Registrar"],
-        "Prestamos" => ["Registrar"],
-        "Devoluciones" => ["Registrar"],
+        "Prestamos" => ["Registrar", "Historial"],
+        "Devoluciones" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
     "CIST" => [

@@ -33,5 +33,22 @@ if (isset($_POST['operacion'])) {
         case 'eliminar':
             $prestamo->eliminar(["idsolicitud" => $_POST["idsolicitud"]]);
         break;
+        case 'listarHistorial':
+            echo json_encode($prestamo->listarHistorial());
+        break;
+        case 'listarHistorialDet':
+            $datosEnviar = [
+                "idprestamo" => $_POST['idprestamo']
+            ];
+            echo json_encode($prestamo->listarHistorialDet($datosEnviar));
+        break;
+        case 'listarHistorialFecha':
+            $datosEnviar = [
+                "fechainicio" => $_POST['fechainicio'],
+                "fechafin" => $_POST['fechafin']
+            ];
+            echo json_encode($prestamo->listarHistorialFecha($datosEnviar));
+        break;
+        
     }
 }

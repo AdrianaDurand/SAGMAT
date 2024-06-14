@@ -140,19 +140,22 @@ ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL
 CREATE TABLE solicitudes
 (
     idsolicitud                     INT                 AUTO_INCREMENT PRIMARY KEY,
-    idsolicita                         INT                 NOT NULL, -- FK
-    -- idtipo                            INT                 NOT NULL, -- FK
-    idubicaciondocente                INT                 NOT NULL, -- FK
-    -- idejemplar                        INT                 NOT NULL,
-    horainicio                        TIME                 NOT NULL,
-    horafin                            TIME                NULL,
-    -- cantidad                         SMALLINT             NOT NULL,
-    fechasolicitud                    DATE                 NOT NULL,
-    estado                            INT                 NOT NULL DEFAULT 0,
-    create_at                 DATETIME            DEFAULT NOW(),
-    update_at                DATETIME            NULL,
-    inactive_at                DATETIME             NULL,
+    idsolicita                      INT                 NOT NULL, -- FK
+    -- idusuario						INT					NULL,
+    -- idtipo                       INT                 NOT NULL, -- FK
+    idubicaciondocente              INT                 NOT NULL, -- FK
+    -- idejemplar                   INT                 NOT NULL,
+    horainicio                      TIME                 NOT NULL,
+    horafin                         TIME                NULL,
+    -- cantidad                     SMALLINT             NOT NULL,
+    fechasolicitud                  DATE                 NOT NULL,
+    estado                          INT                 NOT NULL DEFAULT 0,
+    create_at                       DATETIME            DEFAULT NOW(),
+    update_at                       DATETIME            NULL,
+    inactive_at                     DATETIME             NULL,
     CONSTRAINT fk_idsolicita_sl        FOREIGN KEY (idsolicita) REFERENCES usuarios (idusuario),
+    -- CAMPO AGREGADO
+    -- CONSTRAINT fk_idusuario_sl		   FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario),
     -- CONSTRAINT fk_idtipo_sl          FOREIGN KEY (idtipo) REFERENCES tipos (idtipo),
     CONSTRAINT fk_idubicaciondocente_sl FOREIGN KEY (idubicaciondocente) REFERENCES ubicaciones (idubicacion)
 )ENGINE = INNODB;
@@ -212,7 +215,6 @@ CREATE TABLE stock
 CREATE TABLE prestamos
 (
 	idprestamo 						INT 				AUTO_INCREMENT PRIMARY KEY,
-    idstock 						INT 				NOT NULL, -- FK
     iddetallesolicitud 					INT 				NOT NULL, -- FK
     idatiende 						INT 				NOT NULL, -- FK
     estadoentrega					VARCHAR(30)			NULL,
@@ -220,10 +222,10 @@ CREATE TABLE prestamos
 	update_at				DATETIME			NULL,
 	inactive_at				DATETIME	 		NULL,
     CONSTRAINT fk_iddetallesolicitud_pr	FOREIGN KEY (iddetallesolicitud) REFERENCES detsolicitudes (iddetallesolicitud),
-    CONSTRAINT fk_idstock_pr		FOREIGN KEY (idstock) REFERENCES stock (idstock),
     CONSTRAINT fk_idatiende_pr 		FOREIGN KEY (idatiende) REFERENCES usuarios (idusuario)
 )ENGINE = INNODB;
 
+SELECT * FROM prestamos;
 -- FALTA INGRESAR DATOS A ESTA TABLA
 
 -- 12°
@@ -299,6 +301,7 @@ CREATE TABLE devoluciones
     idprestamo                 INT               NOT NULL,
     observacion             VARCHAR(300)         NULL,
     estadodevolucion         VARCHAR(30)         NOT NULL,
+    -- estado					VARCHAR(20)			NOT NULL DEFAULT 'REGISTRO HECHO',	
     create_at                 DATETIME           DEFAULT NOW(),
     update_at                DATETIME            NULL,
     inactive_at                DATETIME          NULL,

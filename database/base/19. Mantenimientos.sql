@@ -124,9 +124,9 @@ BEGIN
     ORDER BY
         m.fechainicio DESC;
 END $$
-
-
 CALL spu_listar_mantenimiento_fecha('2024-06-03', '2024-06-13');
+
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_actualizar_estado(

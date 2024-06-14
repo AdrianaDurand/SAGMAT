@@ -36,7 +36,44 @@ class Devolucion extends Conexion{
         } catch (Exception $e) {
             die($e->getMessage());
         }
-    }    
+    }
+    
+    public function listarHistorial()
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_devoluciones_total()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    
+    public function listarHistorialDet($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_devolucion_det(?)");
+            $consulta->execute(array($datos['iddevolucion']));
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    public function listarHistorialFecha($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL sp_historial_devoluciones_fecha(?, ?)");
+            $consulta->execute(
+                array(
+                    $datos['fechainicio'],
+                    $datos['fechafin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
     
 }

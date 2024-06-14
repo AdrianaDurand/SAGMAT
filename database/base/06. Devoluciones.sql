@@ -46,10 +46,11 @@ CALL spu_listar_devoluciones();
 SELECt * FROM prestamos;
 SELECT * FROM devoluciones;
 SELECT * FROM detsolicitudes;
+SELECt * FROm solicitudes;
 SELECt * FROM ejemplares;
 SELECT * FROM stock;
 
-CALL RegistrarDevolucion(12, 'Todo OK', 0);
+CALL RegistrarDevolucion(1, 'Todo OK', 0);
 
 DELIMITER $$
 CREATE PROCEDURE RegistrarDevolucion(

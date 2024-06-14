@@ -1,7 +1,9 @@
 USE SAGMAT;
 
-SELECT * FROM solicitudes;
+SELECT * FROM detsolicitudes;
 
+SELECT * FROM roles;
+SELECT * FROM usuarios;
 
 DELIMITER $$
 CREATE PROCEDURE spu_listar_calendar(
@@ -132,7 +134,8 @@ CREATE PROCEDURE listar_tipos(IN _idtipo INT)
 BEGIN
      SELECT 
         e.idejemplar,
-        CONCAT(e.nro_equipo, ' - ', r.descripcion) AS descripcion_equipo
+        CONCAT(e.nro_equipo, ' - ', r.descripcion) AS descripcion_equipo,
+        e.estado
     FROM 
         ejemplares e
         INNER JOIN detrecepciones dtr ON e.iddetallerecepcion = dtr.iddetallerecepcion
@@ -140,9 +143,10 @@ BEGIN
         INNER JOIN tipos t ON r.idtipo = t.idtipo
         INNER JOIN marcas m ON r.idmarca = m.idmarca
     WHERE 
-        t.idtipo = _idtipo
-        AND e.estado = 0;
+        t.idtipo = _idtipo;
 END $$
-CALL listar_tipos(2);
- 
+CALL listar_tipos(1);
+
+
+SELECt * FROm ejemplares; 
         

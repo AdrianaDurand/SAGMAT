@@ -75,7 +75,6 @@ BEGIN
     ORDER BY
         b.fechabaja DESC;
 END $$
-
 CALL spu_listas_bajas_fecha('2024-06-26', '2024-06-29');
 
 SELECT * FROM recursos;
