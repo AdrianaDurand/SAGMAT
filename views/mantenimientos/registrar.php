@@ -114,15 +114,14 @@
 
                 </div>
                 <!-- End of Main Content -->
+                <div class="pagination">
+                    <div class="pagination-arrow" id="prev">&laquo;</div>
+                    <div class="pagination-item" id="item-1" data-page="1">1</div>
+                    <div class="pagination-item" id="item-2" data-page="2">2</div>
+                    <div class="pagination-item" id="item-3" data-page="3">3</div>
+                    <div class="pagination-arrow" id="next">&raquo;</div>
+                </div>
             </div>
-        </div>
-
-        <div class="pagination">
-            <div class="pagination-arrow" id="prev">&laquo;</div>
-            <div class="pagination-item" id="item-1" data-page="1">1</div>
-            <div class="pagination-item" id="item-2" data-page="2">2</div>
-            <div class="pagination-item" id="item-3" data-page="3">3</div>
-            <div class="pagination-arrow" id="next">&raquo;</div>
         </div>
 
         <!-- End of Content Wrapper -->
@@ -224,55 +223,11 @@
         const myModal = new bootstrap.Modal(document.getElementById("modalAgregar"));
         const cerrar = new bootstrap.Modal(document.getElementById("modalEliminar"));
 
-
+        const itemsPerPage = 8; // Número de elementos por página
         let currentPage = 1;
-    let totalPages = 3;
+        let totalPages = 1;
 
-    // Función para cambiar la página
-    function changePage(page) {
-      currentPage = page;
-      updatePagination();
-    }
 
-    // actualizar la paginación
-    function updatePagination() {
-      //desactivar todas las cajas
-      document.querySelectorAll('.pagination-item').forEach(item => item.classList.remove('active'));
-
-      // activar la caja actual
-      document.querySelector(`#item-${currentPage}`).classList.add('active');
-
-      // desactivar/activar flechas según la página actual
-      document.getElementById('prev').classList.toggle('disabled', currentPage === 1);
-      document.getElementById('next').classList.toggle('disabled', currentPage === totalPages);
-
-      // deshabilitar o habilitar las flechas según la página actual
-      document.getElementById('prev').style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
-      document.getElementById('next').style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
-    }
-
-    //agregar eventos a las flechas
-    document.getElementById('prev').addEventListener('click', () => {
-      if (currentPage > 1) {
-        changePage(currentPage - 1);
-      }
-    });
-
-    document.getElementById('next').addEventListener('click', () => {
-      if (currentPage < totalPages) {
-        changePage(currentPage + 1);
-      }
-    });
-
-    // Agregar eventos a las cajas
-    document.querySelectorAll('.pagination-item').forEach(item => {
-      item.addEventListener('click', () => {
-        changePage(parseInt(item.dataset.page));
-      });
-    });
-
-    // Inicializar la paginación
-    updatePagination();
 
         function getTipos() {
 
@@ -324,25 +279,41 @@
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     dataObtenida = datos
+                    totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                     if (dataObtenida.length == 0) {
                         $("#lista-mantenimientos").innerHTML = `<p>No se encontraron mantenimientos</p>`;
                     } else {
                         $("#lista-mantenimientos").innerHTML = ``;
-                        dataObtenida.forEach(element => {
-                            //Evaluar si tiene una fotografía
-                            const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
+                        renderPage(currentPage);
 
-                            let estadoClass = '';
-                            if (element.estado === 'Necesita mantenimiento') {
-                                estadoClass = 'badge-warning'; // clase para el estado 'Necesita mantenimiento'
-                            } else if (element.estado === 'Disponible') {
-                                estadoClass = 'badge-success'; // clase para el estado 'Disponible'
-                            }
 
-                            //Renderizado
-                            const nuevoItem = `
 
-                                <div class="d-flex justify-content-center">
+                    }
+                    updatePagination();
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
+
+
+        function renderPage(page) {
+            $("#lista-mantenimientos").innerHTML = ``;
+            let start = (page - 1) * itemsPerPage;
+            let end = start + itemsPerPage;
+            let dataToRender = dataObtenida.slice(start, end);
+            dataToRender.forEach(element => {
+                //Evaluar si tiene una fotografía
+                const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
+
+                let estadoClass = '';
+                if (element.estado === 'Necesita mantenimiento') {
+                    estadoClass = 'badge-warning'; // clase para el estado 'Necesita mantenimiento'
+                } else if (element.estado === 'Disponible') {
+                    estadoClass = 'badge-success'; // clase para el estado 'Disponible'
+                }
+                const nuevoItem = `
+                 <div class="d-flex justify-content-center">
                                     <div class="card mb-3" style="max-width: 900px;">
                                         <div class="row g-0">
                                             <div class="col-md-4">
@@ -363,36 +334,96 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <br>
                                         </div>
                                     </div>
                                 </div>
-                                    
-                                    `;
-                            $("#lista-mantenimientos").innerHTML += nuevoItem;
-                        });
+                    
+                    `;
+                $("#lista-mantenimientos").innerHTML += nuevoItem;
 
-                        document.querySelectorAll(".btn-outline-primary").forEach(btn => {
-                            btn.addEventListener("click", (event) => {
-                                const idejemplar = event.target.getAttribute("data-idejemplar");
-                                $("#guardar").onclick = () => registrar(idejemplar);
-                            });
-                        });
 
-                        document.querySelectorAll(".btn-outline-danger").forEach(btn => {
-                            btn.addEventListener("click", (event) => {
-                                const idejemplar = event.target.getAttribute("data-idejemplar");
-                                $("#enviar").onclick = () => dardebaja(idejemplar);
-                            });
-                        });
-                    }
-
-                })
-                .catch(e => {
-                    console.error(e)
+                document.querySelectorAll(".btn-outline-primary").forEach(btn => {
+                    btn.addEventListener("click", (event) => {
+                        const idejemplar = event.target.getAttribute("data-idejemplar");
+                        $("#guardar").onclick = () => registrar(idejemplar);
+                    });
                 });
+
+                document.querySelectorAll(".btn-outline-danger").forEach(btn => {
+                    btn.addEventListener("click", (event) => {
+                        const idejemplar = event.target.getAttribute("data-idejemplar");
+                        $("#enviar").onclick = () => dardebaja(idejemplar);
+                    });
+                });
+
+            });
+
+
         }
 
+        function updatePagination() {
+            const paginationItems = document.querySelectorAll(".pagination-item");
+            paginationItems.forEach(item => item.style.display = "none");
 
+            for (let i = 1; i <= totalPages; i++) {
+                if ($(`#item-${i}`)) {
+                    $(`#item-${i}`).style.display = "flex";
+                } else {
+                    const newItem = document.createElement("div");
+                    newItem.classList.add("pagination-item");
+                    newItem.id = `item-${i}`;
+                    newItem.dataset.page = i;
+                    newItem.innerText = i;
+                    newItem.addEventListener("click", () => changePage(i));
+                    $(".pagination").insertBefore(newItem, $("#next"));
+                }
+            }
+
+            updateArrows();
+        }
+
+        function changePage(page) {
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderPage(page);
+            updateArrows();
+        }
+
+        function updateArrows() {
+            if (currentPage === 1) {
+                $("#prev").classList.add("disabled");
+            } else {
+                $("#prev").classList.remove("disabled");
+            }
+
+            if (currentPage === totalPages) {
+                $("#next").classList.add("disabled");
+            } else {
+                $("#next").classList.remove("disabled");
+            }
+
+            document.querySelectorAll(".pagination-item").forEach(item => {
+                item.classList.remove("active");
+                if (parseInt(item.dataset.page) === currentPage) {
+                    item.classList.add("active");
+                }
+            });
+        }
+
+        $("#prev").addEventListener("click", () => {
+            if (currentPage > 1) changePage(currentPage - 1);
+        });
+
+        $("#next").addEventListener("click", () => {
+            if (currentPage < totalPages) changePage(currentPage + 1);
+        });
+
+        document.querySelectorAll('.pagination-item').forEach(item => {
+            item.addEventListener('click', () => {
+                changePage(parseInt(item.dataset.page));
+            });
+        });
 
 
         function registrar(idejemplar) {
@@ -496,12 +527,11 @@
 
 
 
-
-
         getTipos();
 
         listar();
         $("#tipos").addEventListener("change", function() {
+            currentPage = 1;
             listar();
 
         });

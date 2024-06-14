@@ -41,6 +41,53 @@
         .dropdown-toggle::after {
             display: none !important;
         }
+
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            /* Borde redondeado */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+
+        .pagination-item.active {
+            color: #2c7be5;
+            font-weight: bold;
+        }
+
+        .pagination-arrow {
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            /* Borde redondeado */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-arrow.disabled {
+            color: #808080;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -123,8 +170,16 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Contenedor de paginación -->
+                            <div class="pagination">
+                                <div class="pagination-arrow" id="prev">&laquo;</div>
+                                <div class="pagination-item" id="item-1" data-page="1">1</div>
+                                <div class="pagination-item" id="item-2" data-page="2">2</div>
+                                <div class="pagination-item" id="item-3" data-page="3">3</div>
+                                <div class="pagination-arrow" id="next">&raquo;</div>
+                            </div>
                         </div>
+
                     </div>
                     <!-- End of Main Content -->
                 </div>
@@ -135,10 +190,11 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-
-
-
                 const tabla = document.querySelector("#tabla-mantenimiento tbody");
+
+                const itemsPerPage = 8; // Número de elementos por página
+                let currentPage = 1;
+                let totalPages = 1;
 
                 function $(id) {
                     return document.querySelector(id);
@@ -188,7 +244,9 @@
                                     `;
                                     tabla.innerHTML += nuevafila;
                                     numFila++;
+                                    renderPage(currentPage);
                                 });
+                                updatePagination();
                             }
                         })
                         .catch(e => {
@@ -213,15 +271,35 @@
                             let numFila = 1;
                             const tabla = $("#tabla-mantenimiento tbody");
                             tabla.innerHTML = '';
-
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                             if (datosRecibidos.length === 0) {
                                 tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
                             } else {
                                 datosRecibidos.forEach(registro => {
                                     let nuevafila = ``;
-                                    // Enviar los valores obtenidos en celdas <td></td>
-                                    nuevafila = `
-                                        <tr>
+
+                                    tabla.innerHTML += nuevafila;
+                                    numFila++;
+                                    renderPage(currentPage);
+
+                                });
+                            }
+                            updatePagination();
+
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+
+                function renderPage(page) {
+                    $("#lista-recepcion").innerHTML = ``;
+                    let start = (page - 1) * itemsPerPage;
+                    let end = start + itemsPerPage;
+                    let dataToRender = dataObtenida.slice(start, end);
+                    dataToRender.forEach(element => {
+                        const nuevoItem = `
+                    <tr>
                                             <td>${numFila}</td>
                                             <td>${registro.nro_equipo}</td>
                                             <td>${registro.fechainicio}</td>
@@ -238,18 +316,12 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    `;
-                                    tabla.innerHTML += nuevafila;
-                                    numFila++;
-                                });
-                            }
-                        })
-                        .catch(e => {
-                            console.error(e);
-                        });
+                    `;
+                        $("#lista-recepcion").innerHTML += nuevoItem;
+
+                    });
+
                 }
-
-
 
                 tabla.addEventListener("click", function(event) {
                     const target = event.target;
@@ -285,8 +357,73 @@
 
                 todo();
 
+                function updatePagination() {
+                    const paginationItems = document.querySelectorAll(".pagination-item");
+                    paginationItems.forEach(item => item.style.display = "none");
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        if ($(`#item-${i}`)) {
+                            $(`#item-${i}`).style.display = "flex";
+                        } else {
+                            const newItem = document.createElement("div");
+                            newItem.classList.add("pagination-item");
+                            newItem.id = `item-${i}`;
+                            newItem.dataset.page = i;
+                            newItem.innerText = i;
+                            newItem.addEventListener("click", () => changePage(i));
+                            $(".pagination").insertBefore(newItem, $("#next"));
+                        }
+                    }
+
+                    updateArrows();
+                }
+
+                function changePage(page) {
+                    if (page < 1 || page > totalPages) return;
+                    currentPage = page;
+                    renderPage(page);
+                    updateArrows();
+                }
+
+                function updateArrows() {
+                    if (currentPage === 1) {
+                        $("#prev").classList.add("disabled");
+                    } else {
+                        $("#prev").classList.remove("disabled");
+                    }
+
+                    if (currentPage === totalPages) {
+                        $("#next").classList.add("disabled");
+                    } else {
+                        $("#next").classList.remove("disabled");
+                    }
+
+                    document.querySelectorAll(".pagination-item").forEach(item => {
+                        item.classList.remove("active");
+                        if (parseInt(item.dataset.page) === currentPage) {
+                            item.classList.add("active");
+                        }
+                    });
+                }
+
+                $("#prev").addEventListener("click", () => {
+                    if (currentPage > 1) changePage(currentPage - 1);
+                });
+
+                $("#next").addEventListener("click", () => {
+                    if (currentPage < totalPages) changePage(currentPage + 1);
+                });
+
+                document.querySelectorAll('.pagination-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        changePage(parseInt(item.dataset.page));
+                    });
+                });
+
                 $("#btnBuscar").addEventListener("click", () => {
+                    currentPage = 1;
                     listar(); // Llamar a la función listar() cuando se haga clic en el botón
+                    
                 });
 
 
