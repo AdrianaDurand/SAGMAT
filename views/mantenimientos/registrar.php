@@ -253,7 +253,6 @@
         }
 
 
-
         function $(id) {
             return document.querySelector(id);
         }
@@ -526,15 +525,18 @@
         }
 
         modales.forEach(modal => {
-            modal.addEventListener('hidden.bs.modal', function () {
-                if (modal.hasAttribute('data-bs-reset-form')) {
-                    const form = modal.querySelector('form');
-                    if (form) {
-                        form.reset();
-                    }
+            modal.addEventListener('hidden.bs.modal', () => {
+                const form = modal.querySelector('form');
+                if (form && modal.hasAttribute('data-bs-reset-form')) {
+                    form.reset(); 
+                    form.querySelectorAll(':invalid').forEach(field => {
+                        field.classList.remove('is-invalid'); 
+                    });
+                    form.classList.remove('was-validated'); 
                 }
             });
         });
+
 
         getTipos();
 
