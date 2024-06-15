@@ -564,21 +564,34 @@
                 }
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
-                    if (idRecepcionGlobal) {
-                        añadirDetallesRecepcion(idRecepcionGlobal);
-                        idRecepcionGlobal = null;
-                    } else {
-                        añadirRecepcion();
-                    }
-                    formRecepcion.reset();
-
+                    Swal.fire({
+                        title: '¿Quieres guardar los cambios?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, guardar',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (idRecepcionGlobal) {
+                                añadirDetallesRecepcion(idRecepcionGlobal);
+                                idRecepcionGlobal = null;
+                            } else {
+                                añadirRecepcion();
+                            }
+                            formRecepcion.reset();
+                            Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
+                        }
+                    });
                 } else {
                     Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
                 }
             });
 
 
-           
+
+
         });
     </script>
 

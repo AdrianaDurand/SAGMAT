@@ -129,6 +129,7 @@
                                 <span class="input-group-text">Hasta</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
                                 <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
+                                <button id="btnListar" class="btn btn-outline-success">Listar</button>
                             </div>
 
                         </div>
@@ -261,6 +262,18 @@
                         });
                 }
 
+                function validateDateRange(startDate, endDate) {
+                    if (!startDate || !endDate) {
+                        alert("Por favor, seleccione un rango de fechas.");
+                        return false;
+                    }
+                    if (endDate < startDate) {
+                        alert("Por favor, ingrese un rango de fecha válido.");
+                        return false;
+                    }
+                    return true;
+                }
+
                 /*tabla.addEventListener("click", function(event) {
                     const target = event.target;
                     if (target.classList.contains('imprimir')) {
@@ -369,8 +382,20 @@
                 listar();
 
                 $("#btnBuscar").addEventListener("click", () => {
+                    const startDate = $("#fecha_inicio").value;
+                    const endDate = $("#fecha_fin").value;
+
+                    if (validateDateRange(startDate, endDate)) {
+                        currentPage = 1;
+                        fecha();
+                    }
+                });
+
+                $("#btnListar").addEventListener("click", () => {
+
                     currentPage = 1;
-                    fecha(); // Llamar a la función listar() cuando se haga clic en el botón
+                    listar();
+
                 });
 
             });
