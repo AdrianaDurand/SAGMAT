@@ -263,32 +263,32 @@
                     let end = start + itemsPerPage;
 
                     let dataToRender = dataObtenida.slice(start, end);
-                    numFila = (page - 1) * itemsPerPage + 1; 
+                    numFila = (page - 1) * itemsPerPage + 1;
                     dataToRender.forEach(registro => {
                         const nuevoItem = `
-                                        <tr>
-                                            <td>${numFila}</td>
-                                            <td>${registro.nro_equipo}</td>
-                                            <td>${registro.fechainicio}</td>
-                                            <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
-                                            <td>  
-                                                <div class="dropdown">
-                                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <img src="../../img/puntitos.svg">
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                        <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
-                                                        <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                    `;
+                            <tr>
+                                    <td>${numFila}</td>
+                                    <td>${registro.nro_equipo}</td>
+                                    <td>${registro.fechainicio}</td>
+                                    <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
+                                    <td>  
+                                        <div class="dropdown">
+                                            <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <img src="../../img/puntitos.svg">
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                ${registro.estado !== 'Completado' ? `<a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>` : ''}
+                                                <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
                         $("#tabla-mantenimiento tbody").innerHTML += nuevoItem;
                         numFila++;
                     });
-
                 }
+
 
 
                 tabla.addEventListener("click", function(event) {
