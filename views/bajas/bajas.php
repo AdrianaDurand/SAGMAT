@@ -41,6 +41,53 @@
         .dropdown-toggle::after {
             display: none !important;
         }
+
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            /* Borde redondeado */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+
+        .pagination-item.active {
+            color: #2c7be5;
+            font-weight: bold;
+        }
+
+        .pagination-arrow {
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            /* Borde redondeado */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-arrow.disabled {
+            color: #808080;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -87,6 +134,11 @@
                         </div>
                     </div>
 
+                    <div class="col-md-12">
+                        <div class="row" id="lista-baja"></div>
+                    </div>
+
+
                     <div class="d-flex justify-content-center">
 
 
@@ -124,7 +176,14 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Contenedor de paginación -->
+                            <div class="pagination">
+                                <div class="pagination-arrow" id="prev">&laquo;</div>
+                                <div class="pagination-item" id="item-1" data-page="1">1</div>
+                                <div class="pagination-item" id="item-2" data-page="2">2</div>
+                                <div class="pagination-item" id="item-3" data-page="3">3</div>
+                                <div class="pagination-arrow" id="next">&raquo;</div>
+                            </div>
                         </div>
                     </div>
                     <!-- End of Main Content -->
@@ -134,6 +193,11 @@
         </div>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
+
+                const itemsPerPage = 8; // Número de elementos por página
+                let currentPage = 1;
+                let totalPages = 1;
+
                 const tabla = document.querySelector("#tabla-baja tbody");
 
                 function $(id) {
@@ -154,48 +218,21 @@
                         })
                         .then(respuesta => respuesta.json())
                         .then(datosRecibidos => {
+                            dataObtenida = datosRecibidos
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                             // Recorrer cada fila del arreglo
                             if (datosRecibidos.length === 0) {
                                 $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
                             } else {
-                                let numFila = 1;
-                                $("#tabla-baja tbody").innerHTML = '';
-                                datosRecibidos.forEach(registro => {
-                                    let nuevafila = ``;
-                                    // Enviar los valores obtenidos en celdas <td></td>
-                                    nuevafila = `
-                                        <tr>
-                                            <td>${numFila}</td>
-                                            <td>${registro.encargado}</td>
-                                            <td>${registro.descripcion}</td>
-                                            <td>${registro.nro_equipo}</td>
-                                            <td>${registro.fechabaja}</td>
-                                            <td>  
-                                            <div class="dropdown">
-                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <img src="../../img/puntitos.svg">
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    `;
-                                    $("#tabla-baja tbody").innerHTML += nuevafila;
-                                    numFila++;
-                                });
+                                $("#lista-baja").innerHTML = ``;
+                                renderPage(currentPage);
                             }
-
+                            updatePagination();
                         })
                         .catch(e => {
                             console.error(e);
                         });
                 }
-
-                $("#btnBuscar").addEventListener("click", () => {
-                    fecha(); // Llamar a la función listar() cuando se haga clic en el botón
-                });
 
                 function listar() {
                     // Preparar los parametros a enviar
@@ -208,39 +245,16 @@
                         })
                         .then(respuesta => respuesta.json())
                         .then(datosRecibidos => {
+                            dataObtenida = datosRecibidos
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                             // Recorrer cada fila del arreglo
                             if (datosRecibidos.length === 0) {
                                 $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
                             } else {
-                                let numFila = 1;
-                                $("#tabla-baja tbody").innerHTML = '';
-                                datosRecibidos.forEach(registro => {
-                                    let nuevafila = ``;
-                                    // Enviar los valores obtenidos en celdas <td></td>
-                                    nuevafila = `
-                                        <tr>
-                                            <td>${numFila}</td>
-                                            <td>${registro.encargado}</td>
-                                            <td>${registro.descripcion}</td>
-                                            <td>${registro.nro_equipo}</td>
-                                            <td>${registro.fechabaja}</td>
-                                            <td>  
-                                            <div class="dropdown">
-                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <img src="../../img/puntitos.svg">
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        </tr>
-                                    `;
-                                    $("#tabla-baja tbody").innerHTML += nuevafila;
-                                    numFila++;
-                                });
-
+                                $("#lista-baja").innerHTML = ``;
+                                renderPage(currentPage);
                             }
+                            updatePagination();
                         })
                         .catch(e => {
                             console.error(e);
@@ -255,8 +269,109 @@
                     }
                 })*/
 
+                function renderPage(page) {
+                    $("#tabla-baja tbody").innerHTML = ``;
+                    let start = (page - 1) * itemsPerPage;
+                    let end = start + itemsPerPage;
+
+                    let dataToRender = dataObtenida.slice(start, end);
+                    numFila = (page - 1) * itemsPerPage + 1;
+                    dataToRender.forEach(registro => {
+                        const nuevoItem = `
+                                        <tr>
+                                            <td>${numFila}</td>
+                                            <td>${registro.encargado}</td>
+                                            <td>${registro.descripcion}</td>
+                                            <td>${registro.nro_equipo}</td>
+                                            <td>${registro.fechabaja}</td>
+                                            <td>  
+                                            <div class="dropdown">
+                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <img src="../../img/puntitos.svg">
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                    `;
+                        $("#tabla-baja tbody").innerHTML += nuevoItem;
+                        numFila++;
+                    });
+
+                }
+
+                function updatePagination() {
+                    const paginationItems = document.querySelectorAll(".pagination-item");
+                    paginationItems.forEach(item => item.style.display = "none");
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        if ($(`#item-${i}`)) {
+                            $(`#item-${i}`).style.display = "flex";
+                        } else {
+                            const newItem = document.createElement("div");
+                            newItem.classList.add("pagination-item");
+                            newItem.id = `item-${i}`;
+                            newItem.dataset.page = i;
+                            newItem.innerText = i;
+                            newItem.addEventListener("click", () => changePage(i));
+                            $(".pagination").insertBefore(newItem, $("#next"));
+                        }
+                    }
+
+                    updateArrows();
+                }
+
+                function changePage(page) {
+                    if (page < 1 || page > totalPages) return;
+                    currentPage = page;
+                    renderPage(page);
+                    updateArrows();
+                }
+
+                function updateArrows() {
+                    if (currentPage === 1) {
+                        $("#prev").classList.add("disabled");
+                    } else {
+                        $("#prev").classList.remove("disabled");
+                    }
+
+                    if (currentPage === totalPages) {
+                        $("#next").classList.add("disabled");
+                    } else {
+                        $("#next").classList.remove("disabled");
+                    }
+
+                    document.querySelectorAll(".pagination-item").forEach(item => {
+                        item.classList.remove("active");
+                        if (parseInt(item.dataset.page) === currentPage) {
+                            item.classList.add("active");
+                        }
+                    });
+                }
+
+                $("#prev").addEventListener("click", () => {
+                    if (currentPage > 1) changePage(currentPage - 1);
+                });
+
+                $("#next").addEventListener("click", () => {
+                    if (currentPage < totalPages) changePage(currentPage + 1);
+                });
+
+                document.querySelectorAll('.pagination-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        changePage(parseInt(item.dataset.page));
+                    });
+                });
+
 
                 listar();
+
+                $("#btnBuscar").addEventListener("click", () => {
+                    currentPage = 1;
+                    fecha(); // Llamar a la función listar() cuando se haga clic en el botón
+                });
 
             });
         </script>

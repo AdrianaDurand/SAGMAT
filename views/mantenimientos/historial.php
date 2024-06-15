@@ -190,11 +190,12 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-                const tabla = document.querySelector("#tabla-mantenimiento tbody");
 
                 const itemsPerPage = 8; // Número de elementos por página
                 let currentPage = 1;
                 let totalPages = 1;
+
+                const tabla = document.querySelector("#tabla-mantenimiento tbody");
 
                 function $(id) {
                     return document.querySelector(id);
@@ -205,49 +206,22 @@
                     // Preparar los parametros a enviar
                     const parametros = new FormData();
                     parametros.append("operacion", "historial");
-
                     fetch(`../../controllers/mantenimiento.controller.php`, {
                             method: 'POST',
                             body: parametros
                         })
                         .then(respuesta => respuesta.json())
                         .then(datosRecibidos => {
-                            // Recorrer cada fila del arreglo
-                            let numFila = 1;
-                            const tabla = $("#tabla-mantenimiento tbody");
-                            tabla.innerHTML = '';
+                            dataObtenida = datosRecibidos
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
 
                             if (datosRecibidos.length === 0) {
                                 tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
                             } else {
-                                datosRecibidos.forEach(registro => {
-                                    let nuevafila = ``;
-                                    // Enviar los valores obtenidos en celdas <td></td>
-                                    nuevafila = `
-                                        <tr>
-                                            <td>${numFila}</td>
-                                            <td>${registro.nro_equipo}</td>
-                                            <td>${registro.fechainicio}</td>
-                                            <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
-                                            <td>  
-                                                <div class="dropdown">
-                                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <img src="../../img/puntitos.svg">
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                        <a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>
-                                                        <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    `;
-                                    tabla.innerHTML += nuevafila;
-                                    numFila++;
-                                    renderPage(currentPage);
-                                });
-                                updatePagination();
+                                $("#lista-recepcion").innerHTML = ``;
+                                renderPage(currentPage);
                             }
+                            updatePagination();
                         })
                         .catch(e => {
                             console.error(e);
@@ -267,25 +241,16 @@
                         })
                         .then(respuesta => respuesta.json())
                         .then(datosRecibidos => {
-                            // Recorrer cada fila del arreglo
-                            let numFila = 1;
-                            const tabla = $("#tabla-mantenimiento tbody");
-                            tabla.innerHTML = '';
+                            dataObtenida = datosRecibidos
                             totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+
                             if (datosRecibidos.length === 0) {
                                 tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
                             } else {
-                                datosRecibidos.forEach(registro => {
-                                    let nuevafila = ``;
-
-                                    tabla.innerHTML += nuevafila;
-                                    numFila++;
-                                    renderPage(currentPage);
-
-                                });
+                                $("#lista-recepcion").innerHTML = ``;
+                                renderPage(currentPage);
                             }
                             updatePagination();
-
                         })
                         .catch(e => {
                             console.error(e);
@@ -293,13 +258,15 @@
                 }
 
                 function renderPage(page) {
-                    $("#lista-recepcion").innerHTML = ``;
+                    $("#tabla-mantenimiento tbody").innerHTML = ``;
                     let start = (page - 1) * itemsPerPage;
                     let end = start + itemsPerPage;
+
                     let dataToRender = dataObtenida.slice(start, end);
-                    dataToRender.forEach(element => {
+                    numFila = (page - 1) * itemsPerPage + 1; 
+                    dataToRender.forEach(registro => {
                         const nuevoItem = `
-                    <tr>
+                                        <tr>
                                             <td>${numFila}</td>
                                             <td>${registro.nro_equipo}</td>
                                             <td>${registro.fechainicio}</td>
@@ -317,11 +284,12 @@
                                             </td>
                                         </tr>
                     `;
-                        $("#lista-recepcion").innerHTML += nuevoItem;
-
+                        $("#tabla-mantenimiento tbody").innerHTML += nuevoItem;
+                        numFila++;
                     });
 
                 }
+
 
                 tabla.addEventListener("click", function(event) {
                     const target = event.target;
@@ -332,7 +300,6 @@
                         const parametros = new FormData();
                         parametros.append("operacion", "actualizar");
                         parametros.append("idmantenimiento", idmantenimiento);
-
                         fetch(`../../controllers/mantenimiento.controller.php`, {
                                 method: 'POST',
                                 body: parametros
@@ -341,10 +308,7 @@
                             .then(datosRecibidos => {
                                 console.log(datosRecibidos)
                                 alert("Actualizado")
-
-
-                                listar();
-
+                                todo();
                             })
                             .catch(e => {
                                 console.error(e);
@@ -423,7 +387,6 @@
                 $("#btnBuscar").addEventListener("click", () => {
                     currentPage = 1;
                     listar(); // Llamar a la función listar() cuando se haga clic en el botón
-                    
                 });
 
 

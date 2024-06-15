@@ -128,7 +128,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,7 +165,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -222,11 +222,11 @@
     document.addEventListener("DOMContentLoaded", () => {
         const myModal = new bootstrap.Modal(document.getElementById("modalAgregar"));
         const cerrar = new bootstrap.Modal(document.getElementById("modalEliminar"));
+        const modales = document.querySelectorAll('.modal');
 
         const itemsPerPage = 8; // Número de elementos por página
         let currentPage = 1;
         let totalPages = 1;
-
 
 
         function getTipos() {
@@ -525,7 +525,16 @@
                 });
         }
 
-
+        modales.forEach(modal => {
+            modal.addEventListener('hidden.bs.modal', function () {
+                if (modal.hasAttribute('data-bs-reset-form')) {
+                    const form = modal.querySelector('form');
+                    if (form) {
+                        form.reset();
+                    }
+                }
+            });
+        });
 
         getTipos();
 
