@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../vendor/autoload.php";
+require_once "../../../vendor/autoload.php";
 
 use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
@@ -13,10 +13,10 @@ try {
     ob_start();
     include "./reports_styles.html";
 
-    require_once '../../models/Recepcion.php';
-    $mantenimiento = new Mantenimiento();
-    $idmantenimiento = $_GET["idrecepcion"];
-    $resultado = $mantenimiento->buscar(['idrecepcion' => $idrecepcion]);
+    require_once '../../../models/Recepcion.php';
+    $recepcion = new Recepcion();
+    $idrecepcion = $_GET["idrecepcion"];
+    $resultado = $recepcion->reporte(['idrecepcion' => $idrecepcion]);
 
 
     include "./reportLots_pdf_content.php";

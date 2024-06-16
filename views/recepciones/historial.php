@@ -173,6 +173,7 @@
             const itemsPerPage = 8; // Número de elementos por página
             let currentPage = 1;
             let totalPages = 1;
+            const tabla = document.querySelector("#tabla-recepcion tbody");
 
             function $(id) {
                 return document.querySelector(id);
@@ -271,6 +272,7 @@
                                                 <tbody></tbody>
                                             </table>
                                         </div>
+                                        <button type="button" class="btn btn-warning imprimir" data-idrecepcion="${element.idrecepcion}">Generar PDF</button>
                                     </div>
                                 </div>
                             </div>
@@ -296,6 +298,14 @@
                     });
                 });
             }
+
+            document.addEventListener("click", function(event) {
+                const target = event.target;
+                if (target.classList.contains('imprimir')) {
+                    const idrecepcion = target.getAttribute('data-idrecepcion');
+                    window.open(`../reportes/recepciones/reporte.php?idrecepcion=${idrecepcion}`, '_blank');
+                }
+            });
 
             function detalles(idrecepcion, detallesContainer) {
                 const parametros = new FormData();
