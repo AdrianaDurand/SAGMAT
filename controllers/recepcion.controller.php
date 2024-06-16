@@ -45,5 +45,13 @@ if(isset($_POST['operacion'])){
             echo json_encode($recepcion->listarCompleto());
         break;
 
+        case 'reporte':
+            $datosEnviar = [
+                "idrecepcion"          => $_POST['idrecepcion']
+            ];
+            echo json_encode($recepcion->reporte($datosEnviar));
+            
+        break;
+
     }
 }

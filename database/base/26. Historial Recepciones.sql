@@ -60,6 +60,28 @@ BEGIN
         almacenes alm ON rec.idalmacen = alm.idalmacen;
 END $$
 
+DELIMITER $$
+CREATE PROCEDURE spu_reporte_detalle(
+    IN _idrecepcion INT
+)
+BEGIN
+    SELECT 
+		dr.iddetallerecepcion,
+        r.descripcion,
+        e.nro_serie,
+        e.nro_equipo,
+        e.estado_equipo
+    FROM 
+        ejemplares e
+    INNER JOIN 
+        detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+    INNER JOIN 
+        recursos r ON dr.idrecurso = r.idrecurso
+    WHERE 
+        dr.idrecepcion = _idrecepcion;
+END $$
+call spu_reporte_detalle(1);
+
 CALL spu_listado_historial_todo();
 SELECT *  FROM recepciones;
 SELECT * FROM detrecepciones;
