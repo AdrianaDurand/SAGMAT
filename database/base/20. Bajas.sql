@@ -77,6 +77,20 @@ BEGIN
 END $$
 CALL spu_listas_bajas_fecha('2024-06-26', '2024-06-29');
 
+use sagmat;
+
+DELIMITER $$
+CREATE PROCEDURE spu_listar_reporte_bajas(
+	IN _idbaja INT
+)
+BEGIN
+SELECT idgaleria,
+	rutafoto
+    FROM galerias
+    WHERE idbaja = _idbaja;
+END $$
+
+CALL spu_listar_reporte_bajas(1);
 SELECT * FROM recursos;
 SELECT * FROM personas;
 

@@ -274,14 +274,6 @@
                     return true;
                 }
 
-                /*tabla.addEventListener("click", function(event) {
-                    const target = event.target;
-                    if (target.classList.contains('imprimir')) {
-                        idbaja = target.getAttribute('data-idbaja');
-                        window.open(`../reportes/reporte.php?idbaja=${idbaja}`, '_blank');
-                    }
-                })*/
-
                 function renderPage(page) {
                     $("#tabla-baja tbody").innerHTML = ``;
                     let start = (page - 1) * itemsPerPage;
@@ -291,29 +283,38 @@
                     numFila = (page - 1) * itemsPerPage + 1;
                     dataToRender.forEach(registro => {
                         const nuevoItem = `
-                                        <tr>
-                                            <td>${numFila}</td>
-                                            <td>${registro.encargado}</td>
-                                            <td>${registro.descripcion}</td>
-                                            <td>${registro.nro_equipo}</td>
-                                            <td>${registro.fechabaja}</td>
-                                            <td>  
-                                            <div class="dropdown">
-                                                <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <img src="../../img/puntitos.svg">
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                                    <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        </tr>
-                    `;
+                            <tr>
+                                <td>${numFila}</td>
+                                <td>${registro.encargado}</td>
+                                <td>${registro.descripcion}</td>
+                                <td>${registro.nro_equipo}</td>
+                                <td>${registro.fechabaja}</td>
+                                <td>  
+                                <div class="dropdown">
+                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="../../img/puntitos.svg">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
+                                        <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
+                                    </div>
+                                </div>
+                            </td>
+                            </tr>
+                        `;
                         $("#tabla-baja tbody").innerHTML += nuevoItem;
                         numFila++;
                     });
 
                 }
+
+                document.addEventListener("click", function(event) {
+                    const target = event.target;
+                    if (target.classList.contains('imprimir')) {
+                        const idbaja = target.getAttribute('data-idbaja');
+                        window.open(`../reportes/bajas/reporte.php?idbaja=${idbaja}`, '_blank');
+                    }
+                });
+
 
                 function updatePagination() {
                     const paginationItems = document.querySelectorAll(".pagination-item");
