@@ -92,90 +92,85 @@
                 }
 
                 function actualizarUI() {
-                    // Obtener el selector de docentes y la lista de devoluciones
-                    const selectorDocentes = document.getElementById('selector-docentes');
-                    const listaDevoluciones = document.getElementById('lista-devoluciones');
-                    // Limpiar el selector de docentes y la lista de devoluciones antes de agregar nuevos elementos
-                    selectorDocentes.innerHTML = '<option value="">Seleccione un docente</option>';
-                    listaDevoluciones.innerHTML = '';
-                    // Agrupar las devoluciones por nombre_solicitante y luego por tipo_recurso
-                    const devolucionesPorDocente = datosPrestamos.reduce((acc, devolucion) => {
-                        const docente = devolucion.nombre_solicitante;
-                        if (!acc[docente]) {
-                            acc[docente] = {};
-                        }
-                        if (!acc[docente][devolucion.tipo_recurso]) {
-                            acc[docente][devolucion.tipo_recurso] = [];
-                        }
-                        acc[docente][devolucion.tipo_recurso].push(devolucion);
-                        return acc;
-                    }, {});
-                    // Llenar el selector de docentes
-                    Object.keys(devolucionesPorDocente).forEach(docente => {
-                        const option = document.createElement('option');
-                        option.value = docente;
-                        option.textContent = docente;
-                        selectorDocentes.appendChild(option);
-                    });
-                    // Evento de cambio en el selector de docentes
-                    selectorDocentes.addEventListener('change', (event) => {
-                        const selectedDocente = event.target.value;
-                        // Limpiar la lista de devoluciones antes de agregar nuevos elementos
-                        listaDevoluciones.innerHTML = '';
+    // Obtener el selector de docentes y la lista de devoluciones
+    const selectorDocentes = document.getElementById('selector-docentes');
+    const listaDevoluciones = document.getElementById('lista-devoluciones');
+    // Limpiar el selector de docentes y la lista de devoluciones antes de agregar nuevos elementos
+    selectorDocentes.innerHTML = '<option value="">Seleccione un docente</option>';
+    listaDevoluciones.innerHTML = '';
+    // Agrupar las devoluciones por nombre_solicitante y luego por tipo_recurso
+    const devolucionesPorDocente = datosPrestamos.reduce((acc, devolucion) => {
+        const docente = devolucion.nombre_solicitante;
+        if (!acc[docente]) {
+            acc[docente] = {};
+        }
+        if (!acc[docente][devolucion.tipo_recurso]) {
+            acc[docente][devolucion.tipo_recurso] = [];
+        }
+        acc[docente][devolucion.tipo_recurso].push(devolucion);
+        return acc;
+    }, {});
+    // Llenar el selector de docentes
+    Object.keys(devolucionesPorDocente).forEach(docente => {
+        const option = document.createElement('option');
+        option.value = docente;
+        option.textContent = docente;
+        selectorDocentes.appendChild(option);
+    });
+    // Evento de cambio en el selector de docentes
+    selectorDocentes.addEventListener('change', (event) => {
+        const selectedDocente = event.target.value;
+        // Limpiar la lista de devoluciones antes de agregar nuevos elementos
+        listaDevoluciones.innerHTML = '';
 
-                        if (selectedDocente) {
-                            const devoluciones = devolucionesPorDocente[selectedDocente];
-                            // Crear elementos <li> para cada tipo de recurso del docente seleccionado
-                            Object.keys(devoluciones).forEach(tipoRecurso => {
-                                const total = devoluciones[tipoRecurso].length;
-                                const li = document.createElement('li');
-                                li.classList.add('list-group-item', 'border-0', 'p-4', 'mb-2', 'mt-3', 'bg-gray-100', 'border-radius-lg');
+        if (selectedDocente) {
+            const devoluciones = devolucionesPorDocente[selectedDocente];
+            // Crear elementos <li> para cada tipo de recurso del docente seleccionado
+            Object.keys(devoluciones).forEach(tipoRecurso => {
+                const total = devoluciones[tipoRecurso].length;
+                const li = document.createElement('li');
+                li.classList.add('list-group-item', 'border-0', 'p-4', 'mb-2', 'mt-3', 'bg-gray-100', 'border-radius-lg');
 
-                                // Crear la estructura del contenido de cada elemento <li>
-                                li.innerHTML = `
-                                    <div>
-                                        <h6 class="text-sm cursor-pointer">${tipoRecurso} (${total})</h6>
-                                        <div class="details" style="display: none;">
-                                            ${devoluciones[tipoRecurso].map(devolucion => `
-                                                <div class="border p-2 mb-2 d-flex justify-content-between align-items-center">
-                                                    <span class="text-s">Número de Equipo: <span class="text-dark font-weight-bold ms-sm-2">${devolucion.numero_equipo}</span></span>
-                                                    <div class="row">
-                                                        <div class="col-md-6 text-end">
-                                                            <input type="text" class="form-control observaciones">
-                                                        </div>
-                                                        <div class="col-md-6 text-end">
-                                                            <select class="form-select w-auto estadodevolucion">
-                                                                <option value="0">Bueno</option>
-                                                                <option value="2">Mantenimiento</option>
-                                                                <!-- Aquí se agregarán las opciones de observaciones -->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            `).join('')}
-                                            <div class="ms-auto text-end">
-                                                <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#"><i class="fas fa-plus" aria-hidden="true"></i> Aceptar devolución</a>
-                                            </div>
+                // Crear la estructura del contenido de cada elemento <li>
+                li.innerHTML = `
+                    <div>
+                        <h6 class="text-sm cursor-pointer">${tipoRecurso} (${total})</h6>
+                        <div class="details" style="display: none;">
+                            ${devoluciones[tipoRecurso].map(devolucion => `
+                                <div class="border p-2 mb-2 d-flex justify-content-between align-items-center">
+                                    <span class="text-s">Número de Equipo: <span class="text-dark font-weight-bold ms-sm-2">${devolucion.numero_equipo}</span></span>
+                                    <div class="row">
+                                        <div class="col-md-6 text-end">
+                                            <input type="text" class="form-control observaciones">
+                                        </div>
+                                        <div class="col-md-6 text-end">
+                                            <select class="form-select w-auto estadodevolucion">
+                                                <option value="0">Bueno</option>
+                                                <option value="2">Mantenimiento</option>
+                                                <!-- Aquí se agregarán las opciones de observaciones -->
+                                            </select>
                                         </div>
                                     </div>
-                                `;
-                                // Agregar un evento click para mostrar/ocultar los detalles de la devolución
-                                li.querySelector('h6').addEventListener('click', () => {
-                                    const details = li.querySelector('.details');
-                                    details.style.display = details.style.display === 'none' ? 'block' : 'none';
-                                });
+                                </div>
+                            `).join('')}
+                            <div class="ms-auto text-end">
+                                <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#"><i class="fas fa-plus" aria-hidden="true"></i> Aceptar devolución</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Agregar un evento click para mostrar/ocultar los detalles de la devolución
+                li.querySelector('h6').addEventListener('click', () => {
+                    const details = li.querySelector('.details');
+                    details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                });
 
-                                // Asociar cada número de equipo con su ID de préstamo y mostrarlo en la consola
-                                devoluciones[tipoRecurso].forEach(devolucion => {
-                                    console.log(`Número de Equipo: ${devolucion.numero_equipo}, ID de Préstamo: ${devolucion.idprestamo}`);
-                                });
-
-                                // Agregar el elemento <li> a la lista de devoluciones
-                                listaDevoluciones.appendChild(li);
-                            });
-                        }
-                    });
-                }
+                // Agregar el elemento <li> a la lista de devoluciones
+                listaDevoluciones.appendChild(li);
+            });
+        }
+    });
+}
 
                 function registrar(obj){
                     const parametros = new FormData();
@@ -198,29 +193,35 @@
                     });
                 }
 
-                document.getElementById('lista-devoluciones').addEventListener("click", (e) => {    
-                    if (e.target.classList.contains("edit-button")) {
-                        let option = $("#selector-docentes").value;
-                        let nuevosDatos = datosPrestamos.filter(dato => dato.nombre_solicitante == option);
-                        let observaciones = document.querySelectorAll(".observaciones");
-                        let arrayObservaciones = Array.from(observaciones);
-                        let estadosSelect = document.querySelectorAll(".estadodevolucion");
-                        let arrayEstados = Array.from(estadosSelect);
-                        let datosEnviar = [];
-                        nuevosDatos.forEach((dato, index) => {
-                            let idprestamoVal = dato.idprestamo;
-                            let observacionVal = arrayObservaciones[index].value;
-                            let estadoVal = arrayEstados[index].value;
-                            datosEnviar.push({idprestamo: idprestamoVal, observacion: observacionVal, estado: estadoVal});
-                        });
-                        console.log(datosEnviar);
+                function filtrarDocentesRegistrados(docenteRegistrado) {
+    // Filtrar los datosPrestamos para eliminar los registros del docente registrado
+    datosPrestamos = datosPrestamos.filter(devolucion => devolucion.nombre_solicitante !== docenteRegistrado);
+    // Volver a actualizar la interfaz
+    actualizarUI();
+}
 
-                        Promise.all(datosEnviar.map(dato => registrar(dato)))
-                        .then(() => {
-                            actualizarUI();
-                        });
-                    }
-                });
+document.getElementById('lista-devoluciones').addEventListener("click", (e) => {    
+    if (e.target.classList.contains("edit-button")) {
+        let option = $("#selector-docentes").value;
+        let nuevosDatos = datosPrestamos.filter(dato => dato.nombre_solicitante == option);
+        let observaciones = document.querySelectorAll(".observaciones");
+        let arrayObservaciones = Array.from(observaciones);
+        let estadosSelect = document.querySelectorAll(".estadodevolucion");
+        let arrayEstados = Array.from(estadosSelect);
+        let datosEnviar = [];
+        nuevosDatos.forEach((dato, index) => {
+            let idprestamoVal = dato.idprestamo;
+            let observacionVal = arrayObservaciones[index].value;
+            let estadoVal = arrayEstados[index].value;
+            datosEnviar.push({idprestamo: idprestamoVal, observacion: observacionVal, estado: estadoVal});
+        });
+
+        Promise.all(datosEnviar.map(dato => registrar(dato)))
+        .then(() => {
+            filtrarDocentesRegistrados(option); // Después de registrar, filtrar el docente registrado
+        });
+    }
+});
 
                 // Llamar a la función listar cuando el DOM esté completamente cargado
                 listar();

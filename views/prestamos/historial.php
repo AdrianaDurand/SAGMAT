@@ -171,29 +171,7 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
           console.log(datos);  // Ver los datos en la consola
           if (datos.length > 0) {
             const detalle = datos[0];
-            let horarioAMPM = '';
-
-            if (detalle.horario.includes('-')) {
-              const [inicio, fin] = detalle.horario.split(' - ');
-              const [horaInicio, minutosInicio] = inicio.split(':');
-              const [horaFin, minutosFin] = fin.split(':');
-
-              const horaInicioEntera = parseInt(horaInicio);
-              const horaFinEntera = parseInt(horaFin);
-              const ampmInicio = horaInicioEntera >= 12 ? 'PM' : 'AM';
-              const ampmFin = horaFinEntera >= 12 ? 'PM' : 'AM';
-              const horaInicio12 = horaInicioEntera % 12 || 12;
-              const horaFin12 = horaFinEntera % 12 || 12;
-
-              horarioAMPM = `${horaInicio12}:${minutosInicio} ${ampmInicio} - ${horaFin12}:${minutosFin} ${ampmFin}`;
-            } else {
-              // Si no hay un rango, simplemente convierte el horario directamente
-              const [hora, minutos] = detalle.horario.split(':');
-              const horaEntera = parseInt(hora);
-              const ampm = horaEntera >= 12 ? 'PM' : 'AM';
-              const hora12 = horaEntera % 12 || 12;
-              horarioAMPM = `${hora12}:${minutos} ${ampm}`;
-            }
+           
 
             detailedCard.querySelector('.card-body').innerHTML = `
               <h3 class="card-title">Detalles Adicionales</h3>
@@ -201,7 +179,7 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
                 <div class="col-md-8">
                   <p><strong>Ubicación:</strong> ${detalle.nombre}</p>
                   <p><strong>Equipo:</strong> ${detalle.equipo}</p>
-                  <p><strong>Horario:</strong> ${horarioAMPM}</p> <!-- Mostrar el horario en formato AM/PM -->
+                  <p><strong>Horario:</strong> ${detalle.horario}</p> <!-- Mostrar el horario en formato AM/PM -->
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                   <img src="../../imgRecursos/${detalle.fotografia}" class="img-fluid detailed-card-img" style="max-width: 150px;" alt="Fotografía del equipo">
@@ -234,7 +212,7 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
         .then(datos => {
           let dataObtenida = datos;
           if (dataObtenida.length === 0) {
-            document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron recepciones</p>`;
+            document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron préstamos</p>`;
           } else {
             document.getElementById("lista-devolucion").innerHTML = ``;
             dataObtenida.forEach(element => {

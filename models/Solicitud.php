@@ -41,22 +41,84 @@ class Solicitud extends Conexion
             die($e->getMessage());
         }
     }
+    public function listarTiposFiltro($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL listar_equipos_disponibles(?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos['idtipo'],
+                    $datos['horainicio'],
+                    $datos['horafin']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
     public function registar($datos = []){
         try {
-            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_solicitudes_registrar(?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idsolicita'],
                     $datos['idubicaciondocente'],
                     // $datos['cantidad'],
                     $datos['horainicio'],
-                    $datos['horafin'],
-                    $datos['fechasolicitud']
+                    $datos['horafin']
+                    //$datos['fechasolicitud']
                 )
             );
             return $consulta->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function registrando($datos = []){
+        try {
+            $consulta = $this->conexion->prepare("CALL registrar_solicitud(?,?,?,?,?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos['idsolicita'],
+                    $datos['idubicaciondocente'],
+                    $datos['horainicio'],
+                    $datos['horafin'],
+                    $datos['idtipo'],
+                    $datos['idejemplar'],
+                    $datos['cantidad']
+                    //$datos['fechasolicitud']
+                )
+            );
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function registrarDetalleSolicitud($datos = []){
+
+        try{
+
+            $consulta = $this->conexion->prepare("CALL registrar_detalle_solicitud(?,?,?,?,?,?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos["idsolicitud"],
+                    $datos["idsolicita"],
+                    $datos["idubicaciondocente"],
+                    $datos["horainicio"],
+                    $datos["horafin"],
+                    $datos["idtipo"],
+                    $datos["idejemplar"],
+                    $datos["cantidad"]
+                )
+            );
+
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
             die($e->getMessage());
         }
     }

@@ -133,6 +133,8 @@ CREATE TABLE recursos
 ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}';
 
 
+
+SELECT * FROM solicitudes;
 -- 9°
 -- *********************************************************************
 -- 						TABLA SOLICITUDES
@@ -145,10 +147,10 @@ CREATE TABLE solicitudes
     -- idtipo                       INT                 NOT NULL, -- FK
     idubicaciondocente              INT                 NOT NULL, -- FK
     -- idejemplar                   INT                 NOT NULL,
-    horainicio                      TIME                 NOT NULL,
-    horafin                         TIME                NULL,
+    horainicio                      DATETIME                 NOT NULL,
+    horafin                         DATETIME                NULL,
     -- cantidad                     SMALLINT             NOT NULL,
-    fechasolicitud                  DATE                 NOT NULL,
+    -- fechasolicitud                  DATE                 NOT NULL,
     estado                          INT                 NOT NULL DEFAULT 0,
     create_at                       DATETIME            DEFAULT NOW(),
     update_at                       DATETIME            NULL,

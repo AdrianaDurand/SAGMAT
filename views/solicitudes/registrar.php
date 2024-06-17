@@ -95,12 +95,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <label for="horainicio" class="form-label">Hora Inicio:</label>
-                      <input type="time" class="form-control" id="horainicio">
+                      <input type="datetime-local" class="form-control" id="horainicio" >
                       <div class="invalid-feedback">Por favor, ingrese una hora de inicio.</div>
                     </div>
+                    
                     <div class="col-md-6">
                       <label for="horafin" class="form-label">Hora Fin:</label>
-                      <input type="time" class="form-control" id="horafin">
+                      <input type="datetime-local" class="form-control" id="horafin">
                       <div class="invalid-feedback">Por favor, ingrese una hora de fin</div>
                     </div>
                   </div>
@@ -176,10 +177,20 @@
         cantidadInput.value = 0; // Inicializar la cantidad en 0
 
         document.querySelector("#idtipo").addEventListener('change', function() {
-          var idTipoSeleccionado = this.value; // Obtener el valor del tipo seleccionado
-          limpiarOpciones('#idejemplar');
-          listarTipos(idTipoSeleccionado); // Llamar a la función para cargar los N° Equipos
-        });
+  var idTipoSeleccionado = this.value;
+  var horainicio = document.getElementById('horainicio').value;
+  var horafin = document.getElementById('horafin').value;
+
+  // Validar que horainicio y horafin no estén vacíos
+  if (!horainicio || !horafin) {
+    alert('Por favor, ingrese las horas de inicio y fin.');
+    return;
+  }
+
+  // Llamar a la función para listar los ejemplares
+  listarEjemplares(idTipoSeleccionado, horainicio, horafin);
+});
+
 
         document.getElementById('btnTabla').addEventListener('click', function() {
           agregarRecurso();
@@ -211,6 +222,7 @@
 
           // Agregar el recurso a la tabla
           var newRow = document.createElement('tr');
+          newRow.classList.add("fila-equipos");
           newRow.innerHTML = `<td>${tipo}</td><td>${numeroEquipo}</td><td><button type="button" class="btn btn-outline-danger btnEliminar">Eliminar</button></td>`;
           document.querySelector('#tablaRecursos tbody').appendChild(newRow);
 
@@ -300,41 +312,52 @@
         }
 
         function calendario(datos) {
-          console.log('Datos recibidos del servidor:', datos);
-          var calendarEl = document.getElementById('calendar');
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            locale: 'es',
-            selectable: true,
-            headerToolbar: {
-              right: 'prev,next today',
-              center: 'title',
-              left: 'dayGridMonth, timeGridWeek, timeGridDay,miBoton'
-            },
-            eventSources: [{
-              events: datos.map(evento => ({
+    console.log('Datos recibidos del servidor:', datos);
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        selectable: true,
+        headerToolbar: {
+            right: 'prev,next today',
+            center: 'title',
+            left: 'dayGridMonth, timeGridWeek, timeGridDay,miBoton'
+        },
+        eventSources: [{
+            events: datos.map(evento => ({
                 id: evento.idsolicitud.toString(),
                 title: evento.tipo,
                 start: evento.fechasolicitud,
-              })),
-              color: "green",
-              textColor: "white"
-            }],
-            dateClick: function(info) {
-              var fechaActual = new Date().setHours(0, 0, 0, 0);
-              var fechaSeleccionada = new Date(info.date).setHours(0, 0, 0, 0);
+            })),
+            color: "green",
+            textColor: "white"
+        }],
+        dateClick: function(info) {
+            var fechaActual = new Date().setHours(0, 0, 0, 0);
+            var fechaSeleccionada = new Date(info.date).setHours(0, 0, 0, 0);
 
-              if (fechaSeleccionada < fechaActual) {
+            if (fechaSeleccionada < fechaActual) {
                 alert("No es posible reservar un equipo en fechas anteriores.");
-              } else {
+            } else {
+                var ahora = new Date();
+                var horas = ahora.getHours().toString().padStart(2, '0');
+                var minutos = ahora.getMinutes().toString().padStart(2, '0');
+  
+                var horaActual = `${horas}:${minutos}`;
+                
                 modalregistro.show();
-                document.getElementById('fechasolicitud').value = info.dateStr;
-              }
-            },
-            // Ocultar sábado y domingo
-            hiddenDays: [0, 6] // Domingo (0) y Sábado (6)
-          });
-          calendar.render();
-        }
+                document.getElementById('horainicio').value = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+                document.getElementById('horainicio').min = `${info.dateStr}T00:00`; // Actualizar el valor del campo horainicio con la hora actual
+                document.getElementById('horainicio').max = `${info.dateStr}T23:59`; // Actualizar el valor del campo horainicio con la hora actual
+                document.getElementById('horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+                document.getElementById('horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+            }
+        },
+        // Ocultar sábado y domingo
+        hiddenDays: [0, 6] // Domingo (0) y Sábado (6)
+    });
+    calendar.render();
+}
+
 
 
         function listar_cronogramas() {
@@ -355,40 +378,65 @@
             });
         }
 
-        function listarTipos(idTipo) {
-          const parametros = new FormData();
-          parametros.append("operacion", "listarTipos");
-          parametros.append("idtipo", idTipo);
+        function listarEjemplares(idTipo, horainicio, horafin) {
+            const parametros = new FormData();
+            parametros.append("operacion", "listarTiposFiltro");
+            parametros.append("idtipo", idTipo);
+            parametros.append("horainicio", horainicio);
+            parametros.append("horafin", horafin);
 
-          fetch(`../../controllers/solicitud.controller.php`, {
-              method: "POST",
-              body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-              datos.forEach(element => {
-                const tagOption = document.createElement("option");
-                tagOption.innerText = element.descripcion_equipo;
-                tagOption.value = element.idejemplar;
-                document.querySelector("#idejemplar").appendChild(tagOption);
+            fetch(`../../controllers/solicitud.controller.php`, {
+                method: "POST",
+                body: parametros
+              })
+              .then(respuesta => respuesta.json())
+              .then(datos => {
+                limpiarOpciones('#idejemplar'); // Limpiar opciones previas
+                datos.forEach(element => {
+                  const tagOption = document.createElement("option");
+                  tagOption.innerText = element.descripcion_equipo;
+                  tagOption.value = element.idejemplar;
+                  document.querySelector("#idejemplar").appendChild(tagOption);
+                });
+              })
+              .catch(e => {
+                console.error(e);
               });
-            })
-            .catch(e => {
-              console.error(e);
-            });
-        }
+          }
+
 
         function limpiarOpciones(selector) {
           const selectElement = document.querySelector(selector);
+          selectElement.innerHTML = "";
           selectElement.innerHTML = '<option value="">Seleccione:</option>';
         }
 
         document.getElementById("btnFinalizar").addEventListener("click", function() {
-          registrarSolicitudes();
+
+          let equipos = document.querySelectorAll(".fila-equipos");
+
+          if(equipos.length > 0){
+
+            if($("#horainicio").value >= $("#horafin").value){
+              alert("las fechas son iguales o tienen un orden incorrecto")
+              
+            }else{
+              registrarSolicitudes();
+
+            }
+
+          }else{
+            alert("registra un detalle")
+          }
         });
 
 
         function registrarSolicitudes() {
+
+           // Obtener los valores de horainicio y horafin
+          const horainicio = $('#horainicio').value.replace("T", " ").concat(":00");
+          const horafin = $('#horafin').value.replace("T", " ").concat(":00");
+          
           if (parseInt(cantidadInput.value) === 0) {
             cantidadInput.value = 1;
           }
@@ -397,9 +445,8 @@
           parametros.append("operacion", "registrar");
           parametros.append("idsolicita", <?php echo $idusuario ?>);
           parametros.append("idubicaciondocente", $('#idubicaciondocente').value);
-          parametros.append("horainicio", $('#horainicio').value);
-          parametros.append("horafin", $('#horafin').value);
-          parametros.append("fechasolicitud", $('#fechasolicitud').value);
+          parametros.append("horainicio", horainicio);
+          parametros.append("horafin",horafin);
 
           fetch(`../../controllers/solicitud.controller.php`, {
               method: "POST",
@@ -409,42 +456,127 @@
             .then(datos => {
               if (datos.idsolicitud > 0) {
                 console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
-                registroDetalle(datos.idsolicitud); // Llamar a registroDetalle aquí
-                // Cerrar el modal después de registrar todo
+
+                let idsolicitud = datos.idsolicitud;
+
+                let counter = 0;
+
+                equiposAgregados.forEach(dato => {
+
+                  dato["idsolicitud"] = idsolicitud
+                  
+                  counter +=  registroDetalle(dato); // Llamar a registroDetalle aquí
+                });
+
+                alert("detalles registrados: ",counter);
+             
                 modalregistro.hide();
+                limpiarFormularios();
+                listar_cronogramas();
               }
+            })
+            .catch(e => {
+              console.error(e);
+              alert("registros solapados")
+            });
+        }
+
+        function limpiarFormularios() {
+        document.getElementById('form-cronograma').reset();
+        document.getElementById('form-detalle').reset();
+        document.getElementById('tablaRecursos').querySelector('tbody').innerHTML = '';
+        cantidadInput.value = 0;
+        equiposAgregados = [];
+    }
+
+// Función para validar el formulario del cronograma
+function validarFormularioCronograma() {
+    var formCronograma = document.getElementById('form-cronograma');
+    if (formCronograma.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      formCronograma.classList.add('was-validated');
+      return false;
+    }
+    formCronograma.classList.add('was-validated');
+    return true;
+  }
+
+  // Función para validar el formulario de detalle
+  function validarFormularioDetalle() {
+
+    
+    var formDetalle = document.getElementById('form-detalle');
+    if (formDetalle.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      formDetalle.classList.add('was-validated');
+      return false;
+    }
+    formDetalle.classList.add('was-validated');
+    return true;
+  }
+
+  // Evento click para el botón "Finalizar" que valida ambos formularios
+  document.getElementById('btnFinalizar').addEventListener('click', function(e) {
+
+    e.preventDefault();
+    
+    
+    // Validar ambos formularios
+    var formularioCronogramaValido = validarFormularioCronograma();
+    var formularioDetalleValido = validarFormularioDetalle();
+
+    // Verificar si ambos formularios son válidos
+    if (formularioCronogramaValido && formularioDetalleValido) {
+      registrarSolicitudes(); // Llama a la función para enviar los datos de ambos formularios
+    }
+  });
+        function registroDetalle(dato) {
+          const parametros = new FormData();
+          parametros.append("operacion", "registrarDetalle");
+          parametros.append("idsolicitud", dato.idsolicitud);
+          parametros.append("idtipo", dato.idTipo);
+          parametros.append("idejemplar", dato.idEjemplar);
+          parametros.append("cantidad", 1); // Registrar un equipo a la vez
+
+          fetch(`../../controllers/detsolicitudes.controller.php`, {
+              method: "POST",
+              body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              if (datos.filasAfect) {
+
+                return datos.filasAfect;
+              }
+              
             })
             .catch(e => {
               console.error(e);
             });
         }
 
-        function registroDetalle(idSolicitud) {
-          equiposAgregados.forEach(equipo => {
-            const parametros = new FormData();
-            parametros.append("operacion", "registrarDetalle");
-            parametros.append("idsolicitud", idSolicitud);
-            parametros.append("idtipo", equipo.idTipo);
-            parametros.append("idejemplar", equipo.idEjemplar);
-            parametros.append("cantidad", 1); // Registrar un equipo a la vez
+        
 
-            fetch(`../../controllers/detsolicitudes.controller.php`, {
-                method: "POST",
-                body: parametros
-              })
-              .then(respuesta => respuesta.json())
-              .then(datos => {
-                if (datos.iddetallesolicitud > 0) {
-                  console.log(`Detalle de Solicitud registrado con ID: ${datos.iddetallesolicitud}`);
-                }
-              })
-              .catch(e => {
-                console.error(e);
-              });
-          });
-        }
+        document.getElementById('horainicio').addEventListener('change', function(e) {
 
-        gettypes();
+          let fechavalor = e.target.value;
+          console.log(fechavalor)
+          limpiarSelector('#idtipo');
+
+          document.getElementById('horafin').min = fechavalor;
+          document.getElementById('horafin').value = fechavalor;
+    });
+
+    document.getElementById('horafin').addEventListener('change', function() {
+        limpiarSelector('#idtipo');
+    });
+
+    function limpiarSelector(selector) {
+        document.querySelector(selector).value = ''; // Limpiar el valor seleccionado
+    }
+        gettypes(); // este obtiene los tipossupongo no?yes y cuales son tus inputs?
         getLocation();
         listar_cronogramas();
       });

@@ -1,10 +1,3 @@
--- HISTORIAL DEVOLUCIONES
-SELECT * FROM devoluciones;
-SELECT * FROM prestamos; -- => que persona atiende, 
-SELECT * FROM solicitudes;
-SELECT * FROM detsolicitudes; -- Que idtipo es (recurso), que docente solicito, y que ejemplar es
-SELECT * FROM prestamos;
-
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devoluciones_total()
 BEGIN
@@ -49,7 +42,6 @@ BEGIN
 		tipos t ON r.idtipo = t.idtipo;	
 END $$
 CALL sp_historial_devoluciones_total();
-
 
 CALL sp_historial_devolucion_det(1);
 DELIMITER $$
@@ -99,11 +91,11 @@ BEGIN
 END $$
 
 
-CALL sp_historial_devoluciones_fecha('2024-06-10', '2024-06-11');
+CALL sp_historial_devoluciones_fecha('2024-06-09', '2024-06-09');
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devoluciones_fecha(
-	IN _fechainicio DATE, 
-    IN _fechafin DATE
+	IN _fechainicio DATETIME, 
+    IN _fechafin DATETIME
 )
 BEGIN
 	SELECT DISTINCT
