@@ -74,10 +74,12 @@ CREATE TABLE usuarios
     idpersona					INT		 			NOT NULL,
     idrol						INT		 			NOT NULL,
 	claveacceso					VARCHAR(100) 		NOT NULL,
+    create_at				DATETIME 		NOT NULL DEFAULT (NOW()),
+    update_at				DATE			NULL,
+    inactive_at				DATE			NULL,
 	CONSTRAINT fk_idpersona 	FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
 )ENGINE = INNODB;
-
 
 
 -- 6°

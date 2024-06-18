@@ -47,4 +47,15 @@ class Persona extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function listar(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_listar_personal()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }

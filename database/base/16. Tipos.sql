@@ -70,6 +70,7 @@ BEGIN
     SELECT @@last_insert_id 'idtipo';
 END $$
 
+USE SAGMAT;
 select * from tipos;
 /*DELIMITER $$
 CREATE PROCEDURE spu_listar_por_tipo(IN _idtipo 	INT)

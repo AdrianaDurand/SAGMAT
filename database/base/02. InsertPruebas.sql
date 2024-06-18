@@ -63,9 +63,9 @@ INSERT INTO marcas (marca) VALUES
 
     
 DROP TABLE tipos;
-ALTER TABLE negocios AUTO_INCREMENT 1;
+ALTER TABLE usuarios AUTO_INCREMENT 1;
 -- Volver a activar la restricción de clave externa
-SET foreign_key_checks = 0;
+SET foreign_key_checks = 1;
 -- ----------------------------------------------------------------------------------------
 -- ------------------------------   TIPO RECURSOS    --------------------------------------
 -- ----------------------------------------------------------------------------------------
@@ -166,10 +166,7 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) V
 -- ----------------------------------------------------------------------------------------
 SELECT * FROM usuarios;
 INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
-	(1,1,'NSC'),
-	(2, 2,'NSC'), 
-    (3, 3,'NSC'),
-    (4, 4, 'NSC');
+	(1,1,'NSC');
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------    UBICACIONES    --------------------------------------
@@ -252,7 +249,7 @@ DROP TABLE detrecepciones;
 DELETE FROM personas;
 
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('no asignado', 'Personal', 'DNI', '00000000', '000000000', 'Personal no asignado'),  -- 
+    ('Cruz Chunga', 'Santos Modesta', 'DNI', '21799231', '964489039', 'santos_c2@hotmail.com'),  -- 
     ('Durand', 'Adriana', 'DNI', '74129177', '946989939', 'adrianadurand@gmail.com'),  -- ADMINISTRADOR
 	('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
