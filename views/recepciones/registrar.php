@@ -132,6 +132,7 @@
                                                     <option value="Boleta">Boleta</option>
                                                     <option value="Factura">Factura</option>
                                                     <option value="Guía R.">Guía R.</option>
+                                                    <option value="Guía R.">Pecosa</option>
                                                 </select>
                                                 <div class="invalid-feedback">Por favor, seleccione un tipo de documento.</div>
                                             </div>

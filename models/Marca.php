@@ -71,6 +71,21 @@ class Marca extends Conexion{
         }
     }
 
+    public function registrar($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_registrar_marca(?)");
+            $consulta->execute(
+                array(
+                    $datos['marca']
+                )
+            );
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
 }
 
 ?>

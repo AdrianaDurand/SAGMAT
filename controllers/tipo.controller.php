@@ -40,6 +40,14 @@ if (isset($_POST['operacion'])){
             echo json_encode($tipo->listarportipo($datosEnviar));
         break;
 
+        case 'registrar':
+            $datosEnviar = [
+                "tipo"      => $_POST['tipo'],
+                "acronimo"  => $_POST['acronimo']
+            ];
+            echo json_encode($tipo->registrar($datosEnviar));
+        break;
+
     }
 }
 

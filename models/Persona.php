@@ -27,4 +27,24 @@ class Persona extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function registrar($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_registrar_persona(?,?,?,?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos['apellidos'],
+                    $datos['nombres'],
+                    $datos['tipodoc'],
+                    $datos['numerodoc'],
+                    $datos['telefono'],
+                    $datos['email']
+                )
+            );
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

@@ -1,18 +1,21 @@
 <?php
 require_once 'Conexion.php';
 
-class Usuario extends Conexion {
-  
-  private $conexion; 
+class Usuario extends Conexion
+{
+
+  private $conexion;
   private $pdo;
 
-   public function __CONSTRUCT(){
+  public function __CONSTRUCT()
+  {
     $this->conexion = parent::getConexion();
     $this->pdo = parent::getConexion();
-   }
+  }
 
-   public function login($datos =  [] ){
-    try{
+  public function login($datos =  [])
+  {
+    try {
       $consulta = $this->pdo->prepare("CALL spu_usuarios_login(?)");
       $consulta->execute(
         array(
@@ -20,11 +23,25 @@ class Usuario extends Conexion {
         )
       );
       return $consulta->fetch(PDO::FETCH_ASSOC);
-    }
-    catch(Exception $e){
+    } catch (Exception $e) {
       die($e->getMessage());
     }
-   }
+  }
 
-
+  public function registrar($datos = [])
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_registrar_usuario(?,?,?)");
+      $consulta->execute(
+        array(
+          $datos['idpersona'],
+          $datos['idrol'],
+          $datos['claveacceso']
+        )
+      );
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

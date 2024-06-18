@@ -47,7 +47,9 @@ BEGIN
 		JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
 		JOIN usuarios u ON b.idusuario = u.idusuario
 		JOIN personas p ON u.idpersona = p.idpersona
-	WHERE e.estado = '4';
+	WHERE e.estado = '4'
+    ORDER BY 
+        b.fechabaja DESC;
 END $$
 
 

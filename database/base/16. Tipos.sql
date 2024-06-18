@@ -59,7 +59,18 @@ BEGIN
 END $$
 CALL spu_listar_tipo_marca(17);
 
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_tipo(
+	IN _tipo VARCHAR(60),
+    IN _acronimo VARCHAR(10)
+)
+BEGIN
+	INSERT INTO tipos(tipo, acronimo)
+    VALUES(_tipo, _acronimo);
+    SELECT @@last_insert_id 'idtipo';
+END $$
 
+select * from tipos;
 /*DELIMITER $$
 CREATE PROCEDURE spu_listar_por_tipo(IN _idtipo 	INT)
 BEGIN

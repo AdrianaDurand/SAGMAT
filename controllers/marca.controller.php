@@ -30,6 +30,13 @@ if (isset($_POST['operacion'])){
             ];
             echo json_encode($marca->marcaytipo($datosEnviar));
         break;
+
+        case 'registrar':
+            $datosEnviar = [
+                "marca"      => $_POST['marca']
+            ];
+            echo json_encode($marca->registrar($datosEnviar));
+        break;
         
     }
 }

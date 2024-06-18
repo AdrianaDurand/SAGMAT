@@ -18,7 +18,8 @@ BEGIN
     INNER JOIN
         almacenes alm ON rec.idalmacen = alm.idalmacen
     WHERE
-        rec.fechayhorarecepcion BETWEEN _fecha_inicio AND _fecha_fin;
+        rec.fechayhorarecepcion BETWEEN _fecha_inicio AND _fecha_fin
+	ORDER BY rec.fechayhorarecepcion DESC; 
 END $$
 
 
@@ -57,7 +58,8 @@ BEGIN
     FROM
         recepciones rec
     INNER JOIN
-        almacenes alm ON rec.idalmacen = alm.idalmacen;
+        almacenes alm ON rec.idalmacen = alm.idalmacen
+	ORDER BY rec.fechayhorarecepcion DESC;
 END $$
 
 DELIMITER $$

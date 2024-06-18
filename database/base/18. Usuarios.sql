@@ -18,5 +18,25 @@ BEGIN
     WHERE
         p.numerodoc = _numerodoc;  -- Filtrar por numerodoc
 END $$
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_usuario(
+    IN _idpersona INT,
+    IN _idrol INT,
+    IN _claveacceso VARCHAR(100)
+)
+BEGIN
+    INSERT INTO usuarios (idpersona, idrol, claveacceso)
+    VALUES (_idpersona, _idrol, _claveacceso);
+    
+    SELECT @@last_insert_id 'idusuario';
+END $$
+
+CALL spu_registrar_usuario(7,4, '$2y$10$srVoggtUq/0Vta0iJI/nWeaa4sMvKHv3RwWCmuO6CJvqU.rtJtuHi');
+SELECT * FROM personas;
+SELECT * FROM usuarios;
+SELECT * FROM roles;
+use sagmat;
 CALL spu_usuarios_login(78901029);
 

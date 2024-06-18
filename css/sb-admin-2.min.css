@@ -11750,8 +11750,9 @@ a:focus {
     }
 
     .sidebar .nav-item .nav-link span {
-        font-size: .85rem;
-        display: inline
+        font-size: 15px;
+        display: inline;
+        font-weight: bold;
     }
 
     .sidebar .nav-item .nav-link[data-toggle=collapse]::after {

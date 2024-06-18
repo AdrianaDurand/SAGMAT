@@ -1,4 +1,12 @@
-
+DELIMITER $$
+CREATE PROCEDURE spu_registrar_marca(
+    IN _marca VARCHAR(50)
+)
+BEGIN
+	INSERT INTO marcas(marca)
+    VALUES(_marca);
+    SELECT @@last_insert_id 'idmarca';
+END $$
 
 
 DELIMITER $$

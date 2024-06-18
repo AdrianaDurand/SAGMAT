@@ -85,4 +85,20 @@ class Tipo extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function registrar($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_registrar_tipo(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['tipo'],
+                    $datos['acronimo']
+                )
+            );
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }
