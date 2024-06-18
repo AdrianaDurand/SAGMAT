@@ -16,6 +16,7 @@
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
       <link rel="stylesheet" href="./style.css">
       <title>Solicitudes</title>
+      
     </head>
     <body>
       <div id="wrapper">
@@ -273,7 +274,11 @@
               right: 'prev,next today',
               center: 'title',
               left: 'dayGridMonth, timeGridWeek, timeGridDay,miBoton'
+              
             },
+            dayMaxEventRows: 4, // Máximo de filas de eventos por día (ajustar según tus necesidades)
+            eventDisplay: 'block', // Mostrar eventos como bloques para un diseño más compacto
+            contentHeight: 'auto',
             eventSources: [{
               events: datos.map(evento => ({
                 id: evento.idsolicitud.toString(),

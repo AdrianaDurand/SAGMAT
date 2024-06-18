@@ -45,12 +45,124 @@ body{
 .list-group-item-action {
   cursor: pointer;
 }
-
+/* Estilo para el contenedor del calendario */
 #calendar {
-  max-width: 990px;
-  margin: 0 auto;
-  padding: 40px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el título del calendario */
+.fc-toolbar-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #333333;
+  margin-top: 10px;
+}
+
+/* Estilo para los días de la semana en el encabezado */
+.fc-col-header-cell-cushion {
+  font-weight: bold;
+  color: #666666; /* Color más suave */
+  font-size: 14px;
+}
+
+/* Estilo para los números de los días */
+.fc-daygrid-day-number {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
+
+/* Estilo para el día actual */
+.fc-day-today .fc-daygrid-day-number {
+  background-color: #3498db; /* Azul más suave */
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 8px;
+}
+
+/* Estilo para los eventos */
+.fc-event-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 8px;
+
+  border-radius: 4px;
+}
+
+/* Estilo para el contenedor de eventos */
+.fc-daygrid-event-harness {
+  margin-top: 5px;
+}
+
+/* Estilo para los botones de navegación */
+.fc-prev-button, .fc-next-button, .fc-today-button {
+  background-color: #3498db; /* Azul más suave */
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 0 5px;
+}
+
+.fc-prev-button:hover, .fc-next-button:hover, .fc-today-button:hover {
+  background-color: #2980b9; /* Azul más oscuro al hacer hover */
+}
+
+/* Estilo para el botón de hoy */
+.fc-today-button {
+  float: none;
+}
+
+/* Estilo para la celda del día */
+.fc-daygrid-day {
+  padding: 10px;
+}
+
+/* Estilo para el fondo de la celda del día */
+/* .fc-daygrid-day-bg {
+  background-color: #000000; /* Gris más suave */
+ */
+
+/* Estilo para el borde de la celda del día */
+.fc-daygrid-day-frame {
+  border: 1px solid #e0e0e0; /* Borde más suave */
+  border-radius: 4px;
+}
+
+/* Estilo para los días pasados */
+.fc-day-past .fc-daygrid-day-number {
+  color: #dfdfdf; /* Gris más suave para días pasados */
+}
+
+/* Estilo para los días futuros */
+.fc-day-future .fc-daygrid-day-number {
+  color: #505050; /* Gris más oscuro para días futuros */
+}
+
+/* Estilo para el borde de la celda seleccionada */
+.fc-highlight {
+  background-color: #3498db; /* Azul más suave */
+  opacity: 0.3;
+}
+
+/* Estilo para el borde del evento seleccionado */
+.fc-event-selected .fc-event-main {
+  background-color: #27ae60; /* Verde más suave */
+  border-color: #27ae60;
+}
+
+
+
+.fc-toolbar-title {
+  font-size: 28px; /* Tamaño más grande del título */
+  font-weight: bold;
+  color: #333; /* Color del título */
+  text-align: center; /* Centrar el título */
+  margin-top: 20px; /* Espacio arriba del título para separarlo del calendario */
 }
