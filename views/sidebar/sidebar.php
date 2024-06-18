@@ -22,7 +22,8 @@ if (isset($_SESSION["apellidos"]) && isset($_SESSION["nombres"]) && isset($_SESS
 $iconos = [
     "Recepciones" => "fa-hand-holding",
     "Recursos" => "fa-computer",
-    "Usuarios" => "fa-computer",
+    "Usuarios" => "fa-users",
+    "Configuraciones" => "fa-gears",
     "Solicitudes" => "fa-id-card",
     "Prestamos" => "fa-file-arrow-up",
     "Devoluciones" => "fa-file-arrow-down",
@@ -32,9 +33,10 @@ $iconos = [
 
 $accesos = [
     "ADMINISTRADOR" => [
+        "Configuraciones" => ["Gestionar"],
+        "Usuarios" => ["Registrar"],
         "Recepciones" => ["Registrar", "Historial"],
         "Recursos" => ["Inventario"],
-        "Usuarios" => ["Registrar"],
         "Solicitudes" => ["Registrar"],
         "Prestamos" => ["Registrar", "Historial"],
         "Devoluciones" => ["Registrar", "Historial"],
