@@ -79,7 +79,7 @@ CALL sp_historial_fecha_pres('2024-06-11','2024-06-18');
 CALL sp_historial_prestamos_total();
 DELIMITER $$
 CREATE PROCEDURE sp_historial_prestamos_total()   BEGIN
-	SELECT
+	SELECT DISTINCT
         pr.idprestamo,
         d.iddetallesolicitud,
         CONCAT(p.nombres, ' ', p.apellidos) AS docente,

@@ -172,14 +172,29 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
           if (datos.length > 0) {
             const detalle = datos[0];
            
+   // Extraer el rango de horas de la cadena
+   const horarioCompleto = detalle.horario; // Ejemplo: "2024-06-17 15:14:00 - 2024-06-17 17:14:00"
+            const [inicioCompleto, finCompleto] = horarioCompleto.split(' - '); // Extrae ["2024-06-17 15:14:00", "2024-06-17 17:14:00"]
 
+            // Función para extraer la hora y convertir a formato AM/PM
+            const formatoHora = (fechaHoraStr) => {
+                const timePart = fechaHoraStr.split(' ')[1]; // Extrae "15:14:00"
+                const [hours, minutes] = timePart.split(':');
+                const date = new Date();
+                date.setHours(hours);
+                date.setMinutes(minutes);
+                return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true });
+            };
+
+            const horarioInicio = formatoHora(inicioCompleto);
+            const horarioFin = formatoHora(finCompleto);
             detailedCard.querySelector('.card-body').innerHTML = `
               <h3 class="card-title">Detalles Adicionales</h3>
               <div class="row">
                 <div class="col-md-8">
                   <p><strong>Ubicación:</strong> ${detalle.nombre}</p>
                   <p><strong>Equipo:</strong> ${detalle.equipo}</p>
-                  <p><strong>Horario:</strong> ${detalle.horario}</p> <!-- Mostrar el horario en formato AM/PM -->
+                  <p><strong>Horario:</strong> ${horarioInicio} - ${horarioFin}</p> <!-- Mostrar el horario en formato AM/PM -->
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                   <img src="../../imgRecursos/${detalle.fotografia}" class="img-fluid detailed-card-img" style="max-width: 150px;" alt="Fotografía del equipo">

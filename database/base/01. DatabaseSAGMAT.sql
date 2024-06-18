@@ -74,12 +74,10 @@ CREATE TABLE usuarios
     idpersona					INT		 			NOT NULL,
     idrol						INT		 			NOT NULL,
 	claveacceso					VARCHAR(100) 		NOT NULL,
-    create_at				DATETIME 		NOT NULL DEFAULT (NOW()),
-    update_at				DATE			NULL,
-    inactive_at				DATE			NULL,
 	CONSTRAINT fk_idpersona 	FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
 )ENGINE = INNODB;
+
 
 
 -- 6°
@@ -305,13 +303,15 @@ CREATE TABLE devoluciones
     idprestamo                 INT               NOT NULL,
     observacion             VARCHAR(300)         NULL,
     estadodevolucion         VARCHAR(30)         NOT NULL,
-    -- estado					VARCHAR(20)			NOT NULL DEFAULT 'REGISTRO HECHO',	
+    estado					CHAR(1)			NOT NULL DEFAULT 5,	
     create_at                 DATETIME           DEFAULT NOW(),
     update_at                DATETIME            NULL,
     inactive_at                DATETIME          NULL,
     CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
+ALTER TABLE devoluciones ADD estado CHAR(1) NOT NULL DEFAULT 5;
 
+SELECT * FROM devoluciones;
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS
 -- 17°
 -- *********************************************************************

@@ -26,6 +26,31 @@ body{
   background-color: black;
   border: none;
 }
-h3,h5{
+/* h3,h5{
   color: rgb(0, 91, 228);
+} */
+
+.xd {
+  width: 100%;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+
+.input-filled {
+  border: 1px solid green !important;
+}
+
+.list-group-item-action {
+  cursor: pointer;
+}
+
+#calendar {
+  max-width: 990px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }

@@ -15,7 +15,11 @@ if(isset($_POST['operacion'])){
             echo json_encode($devolucion->registrar($datosEnviar));
         break;
         case 'listar':
-            echo json_encode($devolucion->listar());
+            $datosEnviar = [
+                "fechainicio" => $_POST['fechainicio'],
+                "fechafin" => $_POST['fechafin']
+            ];
+            echo json_encode($devolucion->listar($datosEnviar));
         break;
         case 'listarHistorial':
             echo json_encode($devolucion->listarHistorial());

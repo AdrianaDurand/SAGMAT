@@ -47,6 +47,17 @@
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
+        <section>
+            <div class="container">
+            <div class="col-md-12 text-center">
+                <div class="m-4">
+                  <h2 class="fw-bolder d-inline-block">
+                    <img src="../../images/icons/prestamo.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> PRÉSTAMOS
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </section>
             <div class="container mt-3">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
@@ -84,13 +95,13 @@
             </div>
         </div>
         <!-- End of Content Wrapper -->
-        <!-- MODAL VISOR -->
-        <div class="modal fade" id="modal-visor" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <!-- MODAL VISOR -->    
+        <div class="modal fade" id="modal-visor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalTitleId">Visor de detalles</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" id="cerrar" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
@@ -114,7 +125,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const myModalVisor = new bootstrap.Modal(document.getElementById('modal-visor'));
-
+           
+            document.getElementById('cerrar').addEventListener('click', function() {
+                myModalVisor.hide()        
+            });
             let idprestamo = -1;
 
             function $(id) {

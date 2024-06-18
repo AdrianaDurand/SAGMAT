@@ -27,11 +27,16 @@ class Devolucion extends Conexion{
     }
 
     // FUNCION PARA LISTAR
-    public function listar()
+    public function listar($datos =[])
     {
         try {
-            $consulta = $this->conexion->prepare("CALL spu_listar_devoluciones()");
-            $consulta->execute();
+            $consulta = $this->conexion->prepare("CALL spu_listar_devoluciones(?,?)");
+            $consulta->execute(
+                array(
+                    $datos['fechainicio'],
+                    $datos['fechafin']
+                )
+            );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());

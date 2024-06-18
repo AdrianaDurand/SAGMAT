@@ -1,6 +1,46 @@
 USE sagmat;
-
 DELIMITER $$
+CREATE PROCEDURE spu_listar_devoluciones(IN _fechainicio DATE, IN _fechafin DATE)
+BEGIN
+	SELECT DISTINCT
+		pr.idprestamo,
+		pr.iddetallesolicitud,
+		tp.tipo AS tipo_recurso,
+		ej.nro_equipo AS numero_equipo,
+		ds.cantidad,
+		sol.horainicio,
+		sol.horafin,
+		pr.create_at,
+		CONCAT(per.nombres, ' ', per.apellidos) AS nombre_solicitante,
+		ej.estado AS estado_ejemplar,
+		sol.estado AS estado_solicitud,
+		ds.estado AS estado_detsolicitu
+	FROM
+		prestamos pr
+	INNER JOIN
+		detsolicitudes ds ON pr.iddetallesolicitud = ds.iddetallesolicitud
+	INNER JOIN
+		ejemplares ej ON ds.idejemplar = ej.idejemplar
+	INNER JOIN
+		solicitudes sol ON ds.idsolicitud = sol.idsolicitud
+	INNER JOIN
+		usuarios usr ON sol.idsolicita = usr.idusuario
+	INNER JOIN
+		personas per ON usr.idpersona = per.idpersona
+	INNER JOIN
+		recursos rec ON ds.idtipo = rec.idtipo
+	INNER JOIN
+		tipos tp ON rec.idtipo = tp.idtipo
+	LEFT JOIN
+		devoluciones dev ON pr.idprestamo = dev.idprestamo
+	WHERE
+		DATE(sol.horainicio) BETWEEN _fechainicio AND _fechafin
+		AND sol.estado = 1
+		AND ds.estado = 1
+		AND (dev.estado IS NULL OR dev.estado IN (5));
+END $$
+CALL spu_listar_devoluciones('2024-06-15', '2024-06-20');
+/*DELIMITER $$
 CREATE PROCEDURE spu_listar_devoluciones()
 BEGIN
 	SELECT DISTINCT
@@ -9,7 +49,7 @@ BEGIN
 		tp.tipo AS tipo_recurso,
 		ej.nro_equipo AS numero_equipo,
         ds.cantidad,
-        DATE(sol.horainicio),
+        sol.horainicio,
         pr.create_at,
 		CONCAT(per.nombres, ' ', per.apellidos) AS nombre_solicitante,
         ej.estado AS estado_ejemplar,
@@ -31,9 +71,12 @@ BEGIN
 		recursos rec ON ds.idtipo = rec.idtipo
 	INNER JOIN
 		tipos tp ON rec.idtipo = tp.idtipo
+	LEFT JOIN
+    devoluciones dev ON pr.idprestamo = dev.idprestamo
 	WHERE
-		sol.estado = 1 AND ds.estado = 1;
-END $$
+		sol.estado = 1 AND ds.estado = 1
+        AND dev.estado = 5;
+END $$*/
 CALL spu_listar_devoluciones();
 
 
