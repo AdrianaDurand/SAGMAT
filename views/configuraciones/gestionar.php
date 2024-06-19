@@ -26,6 +26,14 @@
         max-height: 400px;
         overflow-y: auto;
     }
+
+    .caja {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
 </style>
 
 <body>
@@ -46,7 +54,7 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="m-4">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">
                                             <img src="../../images/icons/bajas.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Gestiones
                                         </h2>
@@ -56,10 +64,10 @@
                         </div>
 
                         <div class="card mb-3">
-                            <div class="card-body">
+                            <div class="card-body caja">
                                 <div class="row flex-between-center">
                                     <div class="col-md">
-                                        <h5 class="mb-2 mb-md-0">Gestionar</h5>
+                                        <h5 class="mb-2 mb-md-0">Adicionar</h5>
                                     </div>
                                     <div class="col-auto">
                                         <button class="btn btn-primary me-2" data-bs-target="#modalTipo" data-bs-toggle="modal" role="button">Agregar Tipo</button>
@@ -147,10 +155,10 @@
 
                                                 <colgroup>
                                                     <col width="5%"> <!-- ID -->
-                                                    <col width="25%"> <!-- Solicitante-->
-                                                    <col width="25%"> <!-- Fecha de Solicitud -->
-                                                    <col width="25%"> <!-- Fecha de Solicitud -->
-                                                    <col width="25%"> <!-- Fecha de Solicitud -->
+                                                    <col width="25%"> <!-- Docente-->
+                                                    <col width="20%"> <!-- Documento -->
+                                                    <col width="15%"> <!-- Rol-->
+                                                    <col width="35%"> <!-- Acciones -->
                                                 </colgroup>
 
                                                 <thead>
@@ -243,6 +251,7 @@
             document.addEventListener("DOMContentLoaded", function() {
                 const myModal = new bootstrap.Modal(document.getElementById("modalTipo"));
                 const cerrarMarca = new bootstrap.Modal(document.getElementById("modalMarca"));
+                const tabla = document.querySelector("#tabla-usuario tbody");
 
                 function $(id) {
                     return document.querySelector(id);
@@ -315,6 +324,8 @@
                         .then(datos => {
                             let numFila = 1;
                             datos.forEach(element => {
+
+                                const activo = element.inactive_at === null;
                                 const nuevoItem = `
                                 <tr>
                                     <td>${numFila}</td>
@@ -322,7 +333,14 @@
                                     <td>${element.numerodoc}</td>
                                     <td>${element.rol}</td>
                                     <td>
-                                        <button data-idusuario="${element.idusuario}" class='btn btn-warning btn-sm eliminar' type='button'>Inhabilitar</button>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input activar-radio" type="radio" data-idusuario="${element.idusuario}" value="option1">
+                                            <label class="form-check-label ${activo ? 'text-success' : 'text-muted'}">Activado</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input desactivar-radio" type="radio" data-idusuario="${element.idusuario}" value="option2">
+                                            <label class="form-check-label ${!activo ? 'text-warning' : 'text-muted'}">Desactivado</label>
+                                        </div>
                                     </td>
                                 </tr>
                             `;
@@ -334,6 +352,53 @@
                             console.error(e);
                         });
                 }
+
+                tabla.addEventListener("click", function(event) {
+                    const target = event.target;
+                    if (target.classList.contains('desactivar-radio')) {
+                        // Obtener el idusuario del botón clickeado
+                        idusuario = target.getAttribute('data-idusuario');
+
+                        // Obtener datos del cliente por su idusuario
+                        const parametros = new FormData();
+                        parametros.append("operacion", "inactive");
+                        parametros.append("idusuario", idusuario);
+
+                        fetch(`../../controllers/usuario.controller.php`, {
+                                method: 'POST',
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.json())
+                            .then(datosRecibidos => {
+                                console.log(datosRecibidos);
+                                alert("Desactivado");
+                            })
+                            .catch(e => {
+                                console.error(e);
+                            });
+                    } else if (target.classList.contains('activar-radio')) {
+                        // Obtener el idusuario del botón clickeado
+                        idusuario = target.getAttribute('data-idusuario');
+
+                        // Obtener datos del cliente por su idusuario
+                        const parametros = new FormData();
+                        parametros.append("operacion", "active");
+                        parametros.append("idusuario", idusuario);
+
+                        fetch(`../../controllers/usuario.controller.php`, {
+                                method: 'POST',
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.json())
+                            .then(datosRecibidos => {
+                                console.log(datosRecibidos);
+                                alert("Activado");
+                            })
+                            .catch(e => {
+                                console.error(e);
+                            });
+                    }
+                });
 
 
 

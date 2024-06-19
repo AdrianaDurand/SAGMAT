@@ -49,6 +49,13 @@ if (isset($_POST['operacion'])) {
             ];
             echo json_encode($prestamo->listarHistorialFecha($datosEnviar));
         break;
+
+        case 'traerdatos':
+            $datosEnviar = [
+                "idsolicitud" => $_POST['idsolicitud']
+            ];
+            echo json_encode($prestamo->traerdatos($datosEnviar));
+        break;
         
     }
 }

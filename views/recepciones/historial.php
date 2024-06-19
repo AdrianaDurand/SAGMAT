@@ -102,6 +102,14 @@
             color: #808080;
             cursor: not-allowed;
         }
+
+        .caja {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -114,7 +122,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="mt-3">
+            <div class="">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -123,7 +131,7 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="m-4">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">
                                             <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de Recepciones
                                         </h2>
@@ -137,7 +145,7 @@
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <!-- Input de rango de fecha -->
-                                <div class="input-group mb-3">
+                                <div class="input-group mb-3 caja">
                                     <span class="input-group-text">Desde</span>
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
                                     <span class="input-group-text">Hasta</span>

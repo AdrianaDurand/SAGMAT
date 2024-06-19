@@ -79,18 +79,17 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="mt-2">
+            <div class="">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
 
-
                         <!-- Page Content -->
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="m-4">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">
                                             <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> MANTENIMIENTO DE EQUIPOS TECNOLÓGICOS
                                         </h2>
@@ -101,7 +100,7 @@
 
                     </div>
 
-                    <div class="col-md-6 mt-3">
+                    <div class="col-md-6 mt-2">
                         <label for="" class="form-label">Seleccione un tipo:</label>
                         <select name="tipos" id="tipos" class="form-select">
                             <option value="-1">Mostrar todas</option>
@@ -312,32 +311,31 @@
                     estadoClass = 'badge-success'; // clase para el estado 'Disponible'
                 }
                 const nuevoItem = `
-                 <div class="d-flex justify-content-center">
-                                    <div class="card mb-3" style="max-width: 900px;">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="card-body">
-                                                    <span class="badge ${estadoClass} card-title">${element.estado}</span>
-                                                    <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
-                                                    <p class="card-text"><small class="text-muted">${element.create_at}</small></p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 d-flex align-items-center">
-                                                <div class="card-body">
-                                                    <div class="d-grid gap-2">
-                                                        <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
-                                                        <button data-bs-target="#modalEliminar" data-bs-toggle="modal" class="btn btn-outline-danger" data-idejemplar="${element.idejemplar}">Dar de baja</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <br>
+                    <div class="d-flex justify-content-center mt-2">
+                        <div class="card mb-3" style="max-width: 900px;">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card-body">
+                                        <span class="badge ${estadoClass} card-title">${element.estado}</span>
+                                        <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
+                                        <p class="card-text"><small class="text-muted">${element.create_at}</small></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
+                                            <button data-bs-target="#modalEliminar" data-bs-toggle="modal" class="btn btn-outline-danger" data-idejemplar="${element.idejemplar}">Dar de baja</button>
                                         </div>
                                     </div>
                                 </div>
-                    
+                                <br>
+                            </div>
+                        </div>
+                    </div>
                     `;
                 $("#lista-mantenimientos").innerHTML += nuevoItem;
 

@@ -77,7 +77,8 @@ CREATE TABLE usuarios
 	CONSTRAINT fk_idpersona 	FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
 )ENGINE = INNODB;
-
+ALTER TABLE usuarios
+MODIFY COLUMN inactive_at DATETIME;
 
 
 -- 6°

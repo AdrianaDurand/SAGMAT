@@ -22,6 +22,10 @@
     <title>SB Admin 2 - Blank</title>
 
     <style>
+        .xd {
+            width: 100%;
+        }
+
         .show-more-click {
             background-color: transparent;
             border: none;
@@ -30,6 +34,24 @@
             font-size: 14px;
             margin: 6px 0 20px;
             padding: 0;
+        }
+
+        .card {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+        }
+
+        .caja {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -43,7 +65,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="xd mt-3">
+            <div class="xd">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -52,7 +74,7 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="m-4">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">
                                             <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> INVENTARIO
                                         </h2>
@@ -61,7 +83,7 @@
                             </div>
 
                             <!-- ZONA CONTAINER -->
-                            <div class="container mt-3">
+                            <div class="xd mt-3 caja">
                                 <!-- Filtro -->
                                 <div class="row mb-3">
                                     <div class="col-6">

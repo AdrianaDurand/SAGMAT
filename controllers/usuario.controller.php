@@ -22,7 +22,7 @@ if (isset($_POST['operacion'])) {
 
       if ($registro == false) {
         $_SESSION["status"] = false;
-        $statusLogin["mensaje"] = "El usuario no existe";
+        $statusLogin["mensaje"] = "El usuario no existe o se encuentra inhabilitado";
       } else {
 
         $claveencriptada = $registro["claveacceso"];
@@ -74,6 +74,22 @@ if (isset($_POST['operacion'])) {
         echo json_encode($usuario->registrar($datosEnviar));
   
         break;
+
+        case 'inactive':
+          $datosEnviar = [
+            "idusuario"      => $_POST['idusuario']
+          ];
+          echo json_encode($usuario->inactive($datosEnviar));
+    
+          break;
+
+          case 'active':
+            $datosEnviar = [
+              "idusuario"      => $_POST['idusuario']
+            ];
+            echo json_encode($usuario->active($datosEnviar));
+      
+            break;
   }
 }
 

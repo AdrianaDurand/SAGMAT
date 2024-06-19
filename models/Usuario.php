@@ -44,4 +44,34 @@ class Usuario extends Conexion
       die($e->getMessage());
     }
   }
+
+  public function inactive($datos = [])
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_inactive_usuario(?)");
+      $consulta->execute(
+        array(
+          $datos['idusuario']
+        )
+      );
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function active($datos = [])
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_active_usuario(?)");
+      $consulta->execute(
+        array(
+          $datos['idusuario']
+        )
+      );
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

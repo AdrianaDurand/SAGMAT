@@ -16,7 +16,8 @@ BEGIN
     INNER JOIN personas p ON p.idpersona = u.idpersona
     INNER JOIN roles r ON r.idrol = u.idrol
     WHERE
-        p.numerodoc = _numerodoc;  -- Filtrar por numerodoc
+        p.numerodoc = _numerodoc  -- Filtrar por numerodoc
+        AND u.inactive_at IS NULL;
 END $$
 
 
