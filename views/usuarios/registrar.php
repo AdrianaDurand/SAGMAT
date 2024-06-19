@@ -39,7 +39,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="xd mt-3">
+            <div class="xd">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -48,7 +48,7 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="m-4">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">
                                             <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Usuarios
                                         </h2>
