@@ -416,6 +416,7 @@
                         .then(datos => {
                             alert("Registrado");
                             $("#form-tipo").reset();
+                            getTipos();
                             myModal.hide();
 
                         })
@@ -437,6 +438,7 @@
                         .then(datos => {
                             alert("Registrado");
                             $("#form-marca").reset();
+                            getMarcas();
                             cerrarMarca.hide();
 
                         })
