@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimientos</title>
+    <title>SAGMAT</title>
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
 
     <!-- Custom CSS -->
 
-    <link rel="icon" type="../../images/icons" href="../../images/icons/ajustes.png" />
+    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
     <style>
         .prueba {
@@ -119,7 +119,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de mantenimiento
+                                            <img src="../../images/icons/historial.png" alt="Imagen de Mantenimientos Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> HISTORIAL DE MANTENIMIENTOS
                                         </h2>
                                     </div>
                                 </div>

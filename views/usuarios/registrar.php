@@ -5,8 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>SAGMAT</title>
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,8 +20,9 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
+    <!-- ICON -->
+    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
-    <title>Recepciones</title>
 
     <style>
         .xd {
@@ -50,7 +50,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Usuarios
+                                            <img src="../../images/icons/new.png" alt="Imagen de Nuevo Usuario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> REGISTRAR NUEVOS USUARIOS
                                         </h2>
                                     </div>
                                 </div>

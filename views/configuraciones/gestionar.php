@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimientos</title>
+    <title>SAGMAT</title>
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
 
     <!-- Custom CSS -->
 
-    <link rel="icon" type="../../images/icons" href="../../images/icons/ajustes.png" />
+    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
 
 </head>
@@ -56,7 +56,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/bajas.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Gestiones
+                                            <img src="../../images/icons/panel.png" alt="Imagen de Panel" style="height: 2em; width: 2em; margin-right: 0.5em;"> GESTIONES
                                         </h2>
                                     </div>
                                 </div>
@@ -70,8 +70,8 @@
                                         <h5 class="mb-2 mb-md-0">Adicionar</h5>
                                     </div>
                                     <div class="col-auto">
-                                        <button class="btn btn-primary me-2" data-bs-target="#modalTipo" data-bs-toggle="modal" role="button">Agregar Tipo</button>
-                                        <button class="btn btn-primary me-2" data-bs-target="#modalMarca" data-bs-toggle="modal" role="button">Agregar Marca</button>
+                                        <button class="btn m-2" style="background-color: #FAD7A0; color: black" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);" data-bs-target="#modalTipo" data-bs-toggle="modal" role="button">Agregar Tipo</button>
+                                        <button class="btn m-2" style="background-color: #A3E4D7; color:black" data-bs-target="#modalMarca" data-bs-toggle="modal" role="button">Agregar Marca</button>
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
                         <div class="modal fade" id="modalTipo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div class="modal-header" style="background-color: #FAD7A0">
                                         <h5 class="modal-title" id="modalTitle">Agregar Tipo</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
@@ -206,7 +206,7 @@
                                             </div>
                                         </form>
                                         <div class="modal-footer mt-5">
-                                            <button type="button" class="btn btn-success editar" id="enviarTipo">Guardar</button>
+                                            <button type="button" class="btn btn-primary editar" id="enviarTipo">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -216,7 +216,7 @@
                         <div class="modal fade" id="modalMarca" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div class="modal-header" style="background-color: #A3E4D7">
                                         <h5 class="modal-title" id="modalTitle">Agregar Marca</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
@@ -229,7 +229,7 @@
                                             </div>
                                         </form>
                                         <div class="modal-footer mt-5">
-                                            <button type="button" class="btn btn-success editar" id="enviarMarca">Guardar</button>
+                                            <button type="button" class="btn btn-primary editar" id="enviarMarca">Guardar</button>
                                         </div>
                                     </div>
                                 </div>

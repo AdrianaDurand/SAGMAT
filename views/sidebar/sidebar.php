@@ -103,20 +103,22 @@ function reemplazarCadena($string)
         <!-- Sidebar -->
         <ul class="navbar-nav azulazo sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <!-- <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-10">
+                    <i class="fa-solid fa-house-laptop"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">SAGMAT<sup></sup></div>
-            </a>
+            </a>-->
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
+            <?php if ($rolUsuario === "ADMINISTRADOR") : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard/dashboard.php">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Dashboard</span></a>
+                </li>
+            <?php endif; ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
             <!-- Heading -->

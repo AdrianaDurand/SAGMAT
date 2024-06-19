@@ -53,13 +53,13 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 				<form id="form-login" class="login100-form validate-form">
 					<div class="wrap-input100 validate-input m-b-26" data-validate="Ingrese su nombre de usuario">
 						<span class="label-input100">Usuario</span>
-						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su contraseña">
+						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su usuario">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
 						<span class="label-input100">Contraseña</span>
-						<input id="clave_acceso" class="input100" type="password" name="clave_acceso" placeholder="Enter password">
+						<input id="clave_acceso" class="input100" type="password" name="clave_acceso" placeholder="Ingrese su contraseña">
 						<span class="focus-input100"></span>
 					</div>
 
