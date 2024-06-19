@@ -17,6 +17,7 @@
     <tr class="warning">
       <th>#</th>
       <th>Fecha de Inicio</th>
+      <th>Fecha de Fin</th>
       <th>Usuario</th>
       <th>Ejemplar</th>
       <th>Comentarios</th>
@@ -32,6 +33,7 @@
         <tr>
           <td>{$index}</td>
           <td>{$registro['fechainicio']}</td>
+          <td>{$registro['fechafin']}</td>
           <td>{$registro['idusuario']}</td>
           <td>{$registro['idejemplar']}</td>
           <td>{$registro['comentarios']}</td>
