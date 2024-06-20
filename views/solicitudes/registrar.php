@@ -45,8 +45,8 @@
         <div class="modal fade" id="modal-cronograma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
-              <div class="modal-header bg-primary lg">
-                <h1 class="modal-title fs-5 text-center text-white" id="titulo-modalC"></h1>
+              <div class="modal-header bg-success lg">
+                <h1 class="modal-title fs-5 text-center text-white">Registrar solicitud</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -123,7 +123,7 @@
               </div>
               <div class="modal-footer d-flex justify-content-between">
                 <input type="hidden" id="fechasolicitud" name="fechasolicitud">
-                <button type="button" class="btn btn-outline-danger flex-fill" id="btnAgregar"><i class="fi-sr-eye"></i>Cancelar</button>
+                <button type="button" class="btn btn-outline-danger flex-fill" id="btnCancelar"><i class="fi-sr-eye"></i>Cancelar</button>
                 <button type="button" class="btn btn-outline-success flex-fill" id="btnFinalizar"><i class="fi-sr-eye"></i>Finalizar</button>
               </div>
             </div>
@@ -243,6 +243,20 @@
 
         var modalregistro = new bootstrap.Modal($('#modal-cronograma'));
 
+        function resetFormularios() {
+          // Selecciona todos los formularios dentro del modal
+          const forms = document.querySelectorAll('#modal-cronograma form');
+
+          // Recorre cada formulario y reinícialo
+          forms.forEach(form => {
+            form.reset(); // Resetea el formulario
+            form.classList.remove('was-validated'); // Elimina las clases de validación
+          });
+
+          // Reinicia cualquier campo específico, por ejemplo, la cantidad
+          document.getElementById('cantidad').value = '0';
+        }
+
         function gettypes() {
           const parametros = new FormData();
           parametros.append("operacion", "listar");
@@ -295,7 +309,8 @@
             selectable: true,
             headerToolbar: {
               right: 'prev,next today',
-              center: 'title'
+              center: 'title',
+              left: 'dayGridMonth, timeGridWeek, timeGridDay,miBoton'
             },
             dayMaxEventRows: 4, // Máximo de filas de eventos por día (ajustar según tus necesidades)
             eventDisplay: 'block', // Mostrar eventos como bloques para un diseño más compacto
@@ -310,6 +325,7 @@
               textColor: "white"
             }],
             dateClick: function(info) {
+              resetFormularios();
               var fechaActual = new Date().setHours(0, 0, 0, 0);
               var fechaSeleccionada = new Date(info.date).setHours(0, 0, 0, 0);
 
@@ -339,19 +355,20 @@
         function getColorEvento(evento) {
           var inicio = new Date(evento.fechasolicitud);
           var hoy = new Date();
+          hoy.setHours(0, 0, 0, 0); // Establecer la hora de hoy a medianoche
 
           // Comparar si el evento es del día actual
-          if (inicio.setHours(0, 0, 0, 0) === hoy.setHours(0, 0, 0, 0)) {
-            return 'green'; // Verde para eventos del día actual
+          if (inicio.setHours(0, 0, 0, 0) === hoy.getTime()) {
+            return '#28a745'; // Verde para eventos del día actual
           }
 
           // Comparar si el evento es pasado a la fecha actual
-          if (inicio < hoy.setHours(0, 0, 0, 0)) {
-            return 'yellow'; // Amarillo para eventos pasados a la fecha actual
+          if (inicio < hoy) {
+            return '#ffc107'; // Amarillo para eventos pasados a la fecha actual
           }
 
           // Otros casos (semanas o meses)
-          return 'blue'; // Azul para eventos de semanas o meses
+          return '#007bff'; // Azul para eventos de semanas o meses
         }
 
 
@@ -492,6 +509,10 @@
 
 
         // Función para validar todos los campos antes de registrar
+
+        $("#btnCancelar").addEventListener("click", function() {
+          modalregistro.hide();
+        });
 
 
         // Evento click del botón Finalizar
