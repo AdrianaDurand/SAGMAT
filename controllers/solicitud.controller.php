@@ -69,6 +69,17 @@ if (isset($_POST['operacion'])){
 
             echo json_encode($solicitud->registrarDetalleSolicitud($datosEnviar));
             break;
+        case "eliminar":
+            $solicitud->eliminar(["idsolicitud" => $_POST["idsolicitud"]]);
+        break;
+
+        case "eliminarDetalle":
+            $solicitud->eliminarDetSolicitudes(["iddetallesolicitud" => $_POST["iddetallesolicitud"]]);
+        break;
+
+        case "listarDetalle":
+            echo json_encode($solicitud->listarDetSolicitudes());
+        break;
 
     }
 }

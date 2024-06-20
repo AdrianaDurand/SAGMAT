@@ -140,3 +140,5 @@ BEGIN
 	WHERE 
 		DATE(d.create_at) BETWEEN _fechainicio AND _fechafin;
 END $$
+
+SELECT * FROM ejemplares;

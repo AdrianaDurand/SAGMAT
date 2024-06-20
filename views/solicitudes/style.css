@@ -48,7 +48,7 @@ body{
 /* Estilo para el contenedor del calendario */
 #calendar {
   max-width: 900px;
-  margin: 40px auto;
+  margin: 3px auto;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 10px;
@@ -78,13 +78,6 @@ body{
   color: #333333;
 }
 
-/* Estilo para el día actual */
-.fc-day-today .fc-daygrid-day-number {
-  background-color: #3498db; /* Azul más suave */
-  color: #ffffff;
-  border-radius: 50%;
-  padding: 8px;
-}
 
 /* Estilo para los eventos */
 .fc-event-title {
@@ -158,6 +151,20 @@ body{
 }
 
 
+.fc-event-green {
+  background-color: green;
+  border-color: green;
+}
+
+.fc-event-yellow {
+  background-color: yellow;
+  border-color: yellow;
+}
+
+.fc-event-blue {
+  background-color: blue;
+  border-color: blue;
+}
 
 .fc-toolbar-title {
   font-size: 28px; /* Tamaño más grande del título */

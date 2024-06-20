@@ -29,4 +29,30 @@ class DetSolicitudes extends Conexion
             die($e->getMessage());
         }
     }
+
+    public function eliminarDetSolicitudes($datos = []){
+        try{
+          $consulta = $this->conexion->prepare("call spu_detsolicitudes_eliminar(?)");
+          $consulta->execute(
+            array(
+              $datos['iddetallesolicitud']
+            )
+          );
+        }
+        catch(Exception $e){
+          die($e->getMessage());
+        }
+    }
+
+     // FUNCION PARA LISTAR
+     public function listarDetSolicitudes()
+     {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_detsolicitudes()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+     }
 }

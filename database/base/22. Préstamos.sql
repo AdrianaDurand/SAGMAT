@@ -23,6 +23,7 @@ BEGIN
 END$$
 
 -- LISTADO DE LOS DETALLES DE LOS PRESTAMOS SOLICITADOS
+CALL sp_listado_detsoli(3);
 DELIMITER $$
 CREATE PROCEDURE sp_listado_detsoli(IN _idsolicitud INT)
 BEGIN

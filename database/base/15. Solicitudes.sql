@@ -1,10 +1,5 @@
 USE SAGMAT;
 
-SELECT * FROM detsolicitudes;
-
-SELECT * FROM roles;
-SELECT * FROM usuarios;
-
 DELIMITER $$
 CREATE PROCEDURE spu_listar_calendar(
     IN _idsolicita INT
@@ -12,7 +7,7 @@ CREATE PROCEDURE spu_listar_calendar(
 BEGIN
     SELECT 
     s.idsolicitud,
-    t.tipo,
+    concat(t.tipo, ' ', e.nro_equipo) AS equipo,
     t.acronimo,
     s.horafin,
    --  s.fechasolicitud,
@@ -28,10 +23,8 @@ BEGIN
 	INNER JOIN ejemplares e ON ds.idejemplar = e.idejemplar
 	WHERE s.idsolicita = _idsolicita;
 END $$
-CALL spu_listar_calendar(1);
-SELECT * FROM solicitudes;
+CALL spu_listar_calendar(51);
 
-CALL spu_solicitudes_registrar(1,1, '2024-06-17 23:45:00', '2024-06-18 01:50:00')
 -- REGISTRO DE SOLICITUD
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
@@ -48,11 +41,9 @@ BEGIN
     (_idsolicita, _idubicaciondocente, _horainicio, _horafin);
     SELECT @@last_insert_id 'idsolicitud';
 END $$
-
-SELECt * FROM detsolicitudes;
-SELECt * FROM solicitudes;
-
 CALL spu_solicitudes_registrar(1,1, '2024-07-05 09:58:00', '2024-07-11 10:15:00')
+
+-- REGISTRAR DETALLE DE LAS SOLICITUDES
 CALL spu_detallesolicitudes_registrar(2, 1, 3,1);
 DELIMITER $$
 CREATE PROCEDURE spu_detallesolicitudes_registrar(
@@ -101,9 +92,6 @@ BEGIN
         SELECT LAST_INSERT_ID() AS iddetallesolicitud;
     END IF;
 END $$
-
-DELIMITER ;
-
 
 
 
@@ -206,8 +194,9 @@ BEGIN
     WHERE 
         t.idtipo = _idtipo;
 END $$
-CALL listar_tipos(1);
+CALL listar_tipos(2);
         
+selecT * from TIPOS;
 
 -- adicional 2.0
 DELIMITER $$
@@ -242,6 +231,7 @@ BEGIN
                     OR (s.horainicio BETWEEN _horainicio AND _horafin)
                     OR (s.horafin BETWEEN _horainicio AND _horafin)
                 )
+                AND ds.inactive_at IS NULL
                 -- Validación adicional por hora
                 -- AND TIME(_horainicio) < TIME(s.horafin)
                 -- AND TIME(_horafin) > TIME(s.horainicio)
@@ -259,8 +249,10 @@ select * from personas
 
 select * from prestamos;
 SELECt * FROM ejemplares;
+select * from RECURSOS;
 SELECT * FROM detsolicitudes;
 SELECT * FROM solicitudes;
+UPDATE solicitudes SET inactive_at = NULL;
 
 
 

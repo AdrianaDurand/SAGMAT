@@ -23,7 +23,7 @@
                 <div class="col-md-12 text-center header-container mb-2">
                   <div class="m-2">
                     <h2 class="fw-bolder d-inline-block">
-                      <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em;"> Historial de Préstamos
+                      <img src="../../images/icons/prestamo1.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em;"> Historial de Préstamos
                     </h2>
                   </div>
                 </div>
