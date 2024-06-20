@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="es">
 
   <head>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-md-6">
                       <label for="horafin" class="form-label">Hora Fin:</label>
-                      <input type="datetime-local" class="form-control" id="horafin" min="2024-06-26T17:54" required>
+                      <input type="datetime-local" class="form-control" id="horafin" min="2024-06-26T17:54">
                       <div class="invalid-feedback">Por favor, ingrese una hora de fin</div>
                     </div>
                   </div>
@@ -140,9 +140,6 @@
         function $(id) {
           return document.querySelector(id)
         };
-
-        let recursosAgregados = false;
-
         var cantidadInput = document.getElementById('cantidad');
         var equiposAgregados = []; // Lista para almacenar equipos añadidos
         cantidadInput.value = 0; // Inicializar la cantidad en 0
@@ -187,9 +184,7 @@
           }
 
           // Aumentar la cantidad
-          var cantidadInput = document.getElementById('cantidad');
           cantidadInput.value = parseInt(cantidadInput.value) + 1;
-
           // Agregar el recurso a la tabla
           var newRow = document.createElement('tr');
           newRow.classList.add("fila-equipos");
@@ -204,41 +199,31 @@
             idEjemplar: idEjemplar
           });
 
-          recursosAgregados = true; // Marcar que se ha agregado un recurso
-
           // Limpiar los campos de selección
           document.getElementById('idtipo').value = '';
           document.getElementById('idejemplar').innerHTML = '<option value="">Seleccione:</option>';
-
-          // Remover la clase de validación del formulario de detalle
-          document.getElementById("form-detalle").classList.remove('was-validated');
 
           // Agregar evento de clic para eliminar
           newRow.querySelector('.btnEliminar').addEventListener('click', function() {
             eliminarRecurso(this);
           });
+
+          // Validar el formulario de detalle después de agregar el recurso
+          validarFormularioDetalle();
         }
 
 
         function eliminarRecurso(button) {
-          var row = button.parentNode.parentNode;
-          var tipo = row.children[0].innerText;
-          var numeroEquipo = row.children[1].innerText;
-
-          // Remover del array de equipos agregados
-          equiposAgregados = equiposAgregados.filter(function(equipo) {
-            return !(equipo.tipo === tipo && equipo.numeroEquipo === numeroEquipo);
-          });
-
-          // Remover la fila de la tabla
-          row.remove();
-
-          // Disminuir la cantidad
-          var cantidadInput = document.getElementById('cantidad');
+          var row = button.closest('tr');
+          var numeroEquipo = row.querySelector('td:nth-child(2)').innerText;
+          // Reducir la cantidad
           cantidadInput.value = parseInt(cantidadInput.value) - 1;
-
-          // Actualizar la variable recursosAgregados
-          recursosAgregados = equiposAgregados.length > 0;
+          // Eliminar de la lista de equipos agregados
+          equiposAgregados = equiposAgregados.filter(function(equipo) {
+            return equipo.numeroEquipo !== numeroEquipo;
+          });
+          // Eliminar la fila de la tabla
+          row.remove();
         }
 
         var modalregistro = new bootstrap.Modal($('#modal-cronograma'));
@@ -469,57 +454,96 @@
           equiposAgregados = [];
         }
 
+        function validarFormularioCronograma() {
+          var formCronograma = document.getElementById('form-cronograma');
+          var inputs = formCronograma.querySelectorAll('input, select');
+          var formularioValido = true;
 
-        function validarFormulario(formulario, esDetalle) {
-          if (esDetalle && recursosAgregados) {
-            return true; // Si se han agregado recursos, omitir la validación del formulario de detalle
+          inputs.forEach(function(input) {
+            if (!input.checkValidity()) {
+              input.classList.add('is-invalid');
+              formularioValido = false;
+            } else {
+              input.classList.remove('is-invalid');
+              input.classList.add('is-valid'); // Opcional: añadir clase is-valid si el campo es válido
+            }
+          });
+
+          // Validar específicamente el campo horafin
+          var horafinInput = document.getElementById('horafin');
+          if (horafinInput.value.trim() === '') {
+            horafinInput.classList.add('is-invalid');
+            formularioValido = false;
+          } else {
+            horafinInput.classList.remove('is-invalid');
+            horafinInput.classList.add('is-valid'); // Opcional: añadir clase is-valid si el campo es válido
           }
-          if (formulario.checkValidity() === false) {
-            formulario.classList.add('was-validated');
+
+          formCronograma.classList.add('was-validated');
+
+          return formularioValido;
+        }
+
+        document.getElementById('horafin').addEventListener('change', function() {
+          validarFormularioCronograma();
+        });
+
+
+
+        // Función para validar el formulario de detalle
+        // Función para validar el formulario de detalle
+        function validarFormularioDetalle() {
+          var formDetalle = document.getElementById('form-detalle');
+          if (equiposAgregados.length === 0) {
+            formDetalle.classList.add('was-validated');
             return false;
           }
-          formulario.classList.remove('was-validated');
+          formDetalle.classList.add('was-validated');
           return true;
         }
 
 
 
-
-        // Función para validar el formulario de detalle
-        // Función para validar el formulario de detalle
-
-
-
-
         // Función para validar todos los campos antes de registrar
+        function validarCampos() {
+          var formCronogramaValido = validarFormularioCronograma();
+          var formDetalleValido = validarFormularioDetalle();
 
+          if (!formCronogramaValido || !formDetalleValido || equiposAgregados.length === 0) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Por favor complete todos los campos correctamente y asegúrese de haber agregado al menos un equipo.',
+            });
+            return false;
+          }
+
+          return true;
+        }
 
         // Evento click del botón Finalizar
         document.getElementById('btnFinalizar').addEventListener('click', function(e) {
           e.preventDefault();
 
-          const formCronograma = document.getElementById("form-cronograma");
-          const formDetalle = document.getElementById("form-detalle");
-
-          if (validarFormulario(formCronograma, false) && validarFormulario(formDetalle, true)) {
-            // Mostrar SweetAlert para confirmar el registro
-            Swal.fire({
-              title: '¿Está seguro?',
-              text: "¿Desea registrar la solicitud?",
-              icon: 'question',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Sí, registrar',
-              cancelButtonText: 'Cancelar'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                registrarSolicitudes(); // Llamar a la función para registrar la solicitud
-              }
-            });
-          } else {
-            Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
+          if (!validarCampos()) {
+            return;
           }
+
+          // Mostrar SweetAlert para confirmar el registro
+          Swal.fire({
+            title: '¿Está seguro?',
+            text: "¿Desea registrar la solicitud?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, registrar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              registrarSolicitudes(); // Llamar a la función para registrar la solicitud
+            }
+          });
         });
 
 
