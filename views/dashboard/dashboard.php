@@ -55,6 +55,12 @@
                                             <img src="../../images/icons/char.png" alt="Imagen de Dashboard" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Dashboard
                                         </h2>
                                     </div>
+                                    <div class="card">
+                                        <h5 class="card-header"><i class="fa-solid fa-chart-simple"></i> Equipos Solicitados</h5>
+                                        <div class="card-body" style="height: 300px;">
+                                        <canvas id="grafico-barras"></canvas>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -71,8 +77,43 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+    <!-- CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const contexto  = document.querySelector("#grafico-barras");
+        let grafico; //Variable, que puede cambiar durante la ejecución
+      // Obtiene los datos que requiere el ChartJS
+      function getData(){
+        const parametros = new FormData();
+        parametros.append("operacion", "resumen");
 
-
+        fetch(`../../controllers/solicitud.controller.php`,{
+          method: "POST",
+          body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          //console.log(datos.map(valor => valor.categoria))
+          renderChart(datos);
+        })
+        .catch(e=>{
+          console.error(e)
+        })
+      }
+      function renderChart(data){ 
+        grafico   = new Chart(contexto, {
+          type: 'pie',
+          data: {
+            labels: ['Total Solicitudes'],
+            datasets: [{
+              label: "Total",
+              data: data.map(valor => valor.total)
+            }]
+          }
+        });
+      }
+      getData()
+    </script>
 
 </body>
 

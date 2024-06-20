@@ -37,5 +37,13 @@ if(isset($_POST['operacion'])){
             ];
             echo json_encode($devolucion->listarHistorialFecha($datosEnviar));
         break;
+
+        case 'reporte':
+            $datosEnviar = [
+                "iddevolucion"          => $_POST['iddevolucion']
+            ];
+            echo json_encode($devolucion->reporte($datosEnviar));
+            
+        break;
     }
 }

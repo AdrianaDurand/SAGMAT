@@ -14,6 +14,9 @@ if (isset($_POST['operacion'])){
             ];
             echo json_encode($solicitud->listar($datosEnviar));
         break;
+        case 'resumen':
+            echo json_encode($solicitud->resumen());
+        break;
         case 'listarTipos':
             $datosEnviar = [
                 "idtipo" => $_POST['idtipo'] 

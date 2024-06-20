@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,30 +97,30 @@
       }
 
       function listarFecha() {
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
 
-  console.log(`Fechas seleccionadas: Desde ${startDate} Hasta ${endDate}`);  // Log de las fechas seleccionadas
+        console.log(`Fechas seleccionadas: Desde ${startDate} Hasta ${endDate}`); // Log de las fechas seleccionadas
 
-  const parametros = new FormData();
-  parametros.append("operacion", "listarHistorialFecha");
-  parametros.append("fechainicio", startDate);
-  parametros.append("fechafin", endDate);
+        const parametros = new FormData();
+        parametros.append("operacion", "listarHistorialFecha");
+        parametros.append("fechainicio", startDate);
+        parametros.append("fechafin", endDate);
 
-  fetch(`../../controllers/prestamo.controller.php`, {
-    method: "POST",
-    body: parametros
-  })
-  .then(respuesta => respuesta.json())
-  .then(datos => {
-    console.log(`Datos obtenidos:`, datos);  // Log de los datos obtenidos del servidor
-    let dataObtenida = datos;
-    if (dataObtenida.length === 0) {
-      document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron recepciones en el rango de fechas seleccionado.</p>`;
-    } else {
-      document.getElementById("lista-devolucion").innerHTML = ``;
-      dataObtenida.forEach(element => {
-        const nuevoItem = `
+        fetch(`../../controllers/prestamo.controller.php`, {
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            console.log(`Datos obtenidos:`, datos); // Log de los datos obtenidos del servidor
+            let dataObtenida = datos;
+            if (dataObtenida.length === 0) {
+              document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron recepciones en el rango de fechas seleccionado.</p>`;
+            } else {
+              document.getElementById("lista-devolucion").innerHTML = ``;
+              dataObtenida.forEach(element => {
+                const nuevoItem = `
           <div class="d-flex justify-content-center mb-3">
             <div class="col-md-8">
               <div class="card">
@@ -145,17 +146,17 @@
             </div>
           </div>
         `;
-        document.getElementById("lista-devolucion").innerHTML += nuevoItem;
-      });
-      setupCardListeners();
-    }
-  })
-  .catch(e => {
-    console.error(e);
-  });
-}
+                document.getElementById("lista-devolucion").innerHTML += nuevoItem;
+              });
+              setupCardListeners();
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
 
-document.getElementById("searchButton").addEventListener("click", listarFecha);
+      document.getElementById("searchButton").addEventListener("click", listarFecha);
 
       function fetchDetails(idprestamo, detailedCard) {
         const parametros = new FormData();
@@ -163,56 +164,61 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
         parametros.append('idprestamo', idprestamo);
 
         fetch(`../../controllers/prestamo.controller.php`, {
-          method: "POST",
-          body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-          console.log(datos);  // Ver los datos en la consola
-          if (datos.length > 0) {
-            const detalle = datos[0];
-           
-   // Extraer el rango de horas de la cadena
-   const horarioCompleto = detalle.horario; // Ejemplo: "2024-06-17 15:14:00 - 2024-06-17 17:14:00"
-            const [inicioCompleto, finCompleto] = horarioCompleto.split(' - '); // Extrae ["2024-06-17 15:14:00", "2024-06-17 17:14:00"]
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            console.log(datos); // Ver los datos en la consola
+            if (datos.length > 0) {
+              const detalle = datos[0];
 
-            // Función para extraer la hora y convertir a formato AM/PM
-            const formatoHora = (fechaHoraStr) => {
+              // Extraer el rango de horas de la cadena
+              const horarioCompleto = detalle.horario; // Ejemplo: "2024-06-17 15:14:00 - 2024-06-17 17:14:00"
+              const [inicioCompleto, finCompleto] = horarioCompleto.split(' - '); // Extrae ["2024-06-17 15:14:00", "2024-06-17 17:14:00"]
+
+              // Función para extraer la hora y convertir a formato AM/PM
+              const formatoHora = (fechaHoraStr) => {
                 const timePart = fechaHoraStr.split(' ')[1]; // Extrae "15:14:00"
                 const [hours, minutes] = timePart.split(':');
                 const date = new Date();
                 date.setHours(hours);
                 date.setMinutes(minutes);
-                return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: true });
-            };
+                return date.toLocaleTimeString('es-ES', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true
+                });
+              };
 
-            const horarioInicio = formatoHora(inicioCompleto);
-            const horarioFin = formatoHora(finCompleto);
-            detailedCard.querySelector('.card-body').innerHTML = `
-              <h3 class="card-title">Detalles Adicionales</h3>
-              <div class="row">
-                <div class="col-md-8">
-                  <p><strong>Ubicación:</strong> ${detalle.nombre}</p>
-                  <p><strong>Equipo:</strong> ${detalle.equipo}</p>
-                  <p><strong>Horario:</strong> ${horarioInicio} - ${horarioFin}</p> <!-- Mostrar el horario en formato AM/PM -->
+              const horarioInicio = formatoHora(inicioCompleto);
+              const horarioFin = formatoHora(finCompleto);
+              detailedCard.querySelector('.card-body').innerHTML = `
+                <h3 class="card-title">Detalles Adicionales</h3>
+                <div class="row">
+                  <div class="col-md-8">
+                    <p><strong>Ubicación:</strong> ${detalle.nombre}</p>
+                    <p><strong>Equipo:</strong> ${detalle.equipo}</p>
+                    <p><strong>Horario:</strong> ${horarioInicio} - ${horarioFin}</p>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <img src="../../imgRecursos/${detalle.fotografia}" class="img-fluid detailed-card-img mb-3" style="max-width: 150px;" alt="Fotografía del equipo">
+                    <button type="button" class="btn btn-warning imprimir" data-idprestamo="${detalle.idprestamo}">Generar PDF</button>
+                  </div>
                 </div>
-                <div class="col-md-4 d-flex align-items-center">
-                  <img src="../../imgRecursos/${detalle.fotografia}" class="img-fluid detailed-card-img" style="max-width: 150px;" alt="Fotografía del equipo">
-                </div>
-              </div>
-              <i class="bi bi-arrow-left return-icon mt-3"></i>
-            `;
-          } else {
-            detailedCard.querySelector('.card-body').innerHTML = `
+                <i class="bi bi-arrow-left return-icon mt-3"></i>
+              `;
+            } else {
+              detailedCard.querySelector('.card-body').innerHTML = `
               <p>No se encontraron detalles adicionales para este préstamo.</p>
               <i class="bi bi-arrow-left return-icon mt-3"></i>
             `;
-          }
-          setupCardListeners();
-        })
-        .catch(e => {
-          console.error(e);
-        });
+            }
+            setupCardListeners();
+          })
+          .catch(e => {
+            console.error(e);
+          });
       }
 
       function completo() {
@@ -220,18 +226,18 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
         parametros.append("operacion", "listarHistorial");
 
         fetch(`../../controllers/prestamo.controller.php`, {
-          method: "POST",
-          body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-          let dataObtenida = datos;
-          if (dataObtenida.length === 0) {
-            document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron préstamos</p>`;
-          } else {
-            document.getElementById("lista-devolucion").innerHTML = ``;
-            dataObtenida.forEach(element => {
-              const nuevoItem = `
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            let dataObtenida = datos;
+            if (dataObtenida.length === 0) {
+              document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron préstamos</p>`;
+            } else {
+              document.getElementById("lista-devolucion").innerHTML = ``;
+              dataObtenida.forEach(element => {
+                const nuevoItem = `
                 <div class="d-flex justify-content-center mb-3">
                   <div class="col-md-8">
                     <div class="card">
@@ -257,19 +263,27 @@ document.getElementById("searchButton").addEventListener("click", listarFecha);
                   </div>
                 </div>
               `;
-              document.getElementById("lista-devolucion").innerHTML += nuevoItem;
-            });
-            setupCardListeners();
-          }
-        })
-        .catch(e => {
-          console.error(e);
-        });
+                document.getElementById("lista-devolucion").innerHTML += nuevoItem;
+              });
+              setupCardListeners();
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
       }
 
       document.getElementById("searchButton").addEventListener("click", listarFecha);
       completo();
+      document.addEventListener("click", function(event) {
+        const target = event.target;
+          if (target.classList.contains('imprimir')) {
+            const idprestamo = target.getAttribute('data-idprestamo');
+            window.open(`../reportes/prestamos/reporte.php?idprestamo=${idprestamo}`, '_blank');
+          }
+      });
     });
   </script>
 </body>
+
 </html>

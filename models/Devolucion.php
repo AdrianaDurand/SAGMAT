@@ -80,5 +80,18 @@ class Devolucion extends Conexion{
         }
     }
 
-    
+    public function reporte($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_reporte_devolucion(?)");
+            $consulta->execute(
+                array(
+                    $datos['iddevolucion']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

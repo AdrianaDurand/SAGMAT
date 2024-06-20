@@ -7,21 +7,22 @@ CREATE PROCEDURE spu_listar_calendar(
 BEGIN
     SELECT 
     s.idsolicitud,
-    concat(t.tipo, ' ', e.nro_equipo) AS equipo,
+    t.tipo,
     t.acronimo,
     s.horafin,
+    concat(t.tipo, ' ', e.nro_equipo) AS equipo,
    --  s.fechasolicitud,
     u.nombre,
     u.numero,
     e.nro_equipo,
     DATE(s.horainicio) as fechasolicitud,
     ds.idejemplar
-	FROM detsolicitudes ds
-	INNER JOIN tipos t ON ds.idtipo = t.idtipo
-	INNER JOIN solicitudes s ON ds.idsolicitud = s.idsolicitud
-	INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
-	INNER JOIN ejemplares e ON ds.idejemplar = e.idejemplar
-	WHERE s.idsolicita = _idsolicita;
+    FROM detsolicitudes ds
+    INNER JOIN tipos t ON ds.idtipo = t.idtipo
+    INNER JOIN solicitudes s ON ds.idsolicitud = s.idsolicitud
+    INNER JOIN ubicaciones u ON s.idubicaciondocente = u.idubicacion
+    INNER JOIN ejemplares e ON ds.idejemplar = e.idejemplar
+    WHERE s.idsolicita = _idsolicita;
 END $$
 CALL spu_listar_calendar(51);
 
@@ -244,66 +245,10 @@ END $$
 CALL listar_equipos_disponibles1(1, '2024-06-20 03:45:00','2024-06-21 03:45:00');
 CALL listar_equipos_disponibles(1, '2024-06-17 22:49:31', '2024-06-19 22:55:00');
 
-
-select * from personas	
-
-select * from prestamos;
-SELECt * FROM ejemplares;
-select * from RECURSOS;
-SELECT * FROM detsolicitudes;
-SELECT * FROM solicitudes;
-UPDATE solicitudes SET inactive_at = NULL;
-
-
-
--- adicional
-/*DELIMITER $$
-CREATE PROCEDURE listar_equipos_disponibles(
-    IN _idtipo INT,
-    IN _horainicio DATETIME,
-    IN _horafin DATETIME
-)
+DELIMITER $$
+CREATE PROCEDURE spu_solicitudes_total_resumen()
 BEGIN
-    -- Obtener los ejemplares del tipo especificado que no están en uso en el intervalo dado
-    SELECT 
-        e.idejemplar,
-        CONCAT(e.nro_equipo, ' - ', r.descripcion) AS descripcion_equipo,
-        e.estado
-    FROM 
-        ejemplares e
-        INNER JOIN detrecepciones dtr ON e.iddetallerecepcion = dtr.iddetallerecepcion
-        INNER JOIN recursos r ON dtr.idrecurso = r.idrecurso
-        INNER JOIN tipos t ON r.idtipo = t.idtipo
-        LEFT JOIN (
-            SELECT ds.idejemplar
-            FROM solicitudes s
-            INNER JOIN detsolicitudes ds ON s.idsolicitud = ds.idsolicitud
-            WHERE 
-                (
-                    s.estado = 0 -- Considerar todas las solicitudes en proceso o confirmadas
-                    OR s.estado = 1
-                )
-                AND (
-                    (_horainicio BETWEEN s.horainicio AND s.horafin)
-                    OR (_horafin BETWEEN s.horainicio AND s.horafin)
-                    OR (s.horainicio BETWEEN _horainicio AND _horafin)
-                    OR (s.horafin BETWEEN _horainicio AND _horafin)
-                )
-        ) AS reservados ON e.idejemplar = reservados.idejemplar
-    WHERE 
-        t.idtipo = _idtipo
-        AND reservados.idejemplar IS NULL; -- Excluir ejemplares reservados
-
-END $$*/
-
-
-SELECt * from detsolicitudes;
-SELECt * from solicitudes;
-select * from ejemplares;
-select * from devoluciones;
-CALL listar_equipos_disponibles(1, '2024-06-17 11:47:00', '2024-06-18 11:47:00');
-
-CALL listar_equipos_disponibles1(1, '2024-06-20 03:45:00','2024-06-21 03:45:00');
-
-SELECT * FROM detsolicitudes;
-SELECT * FROM solicitudes;
+SELECT
+	COUNT(*) 'total'
+		FROM solicitudes;
+END $$

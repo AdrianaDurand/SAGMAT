@@ -132,4 +132,20 @@ class Prestamo extends Conexion
             die($e->getMessage());
         }
     }
+
+
+    public function reporte($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_reporte_prestamo(?)");
+            $consulta->execute(
+                array(
+                    $datos['idprestamo']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

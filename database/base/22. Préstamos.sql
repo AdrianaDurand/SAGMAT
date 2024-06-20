@@ -53,10 +53,15 @@ BEGIN
 		ds.idsolicitud = _idsolicitud AND ds.estado = 0;
 END$$
 
--- REGISTRO DEL PRÉSTAMO
+SELECT * FROM stock;
 
-delimiter $$
-CREATE PROCEDURE registrar_prestamo1 (IN p_iddetallesolicitud INT, IN p_idatiende INT)   BEGIN
+SELECT * FROM detsolicitudes
+
+
+
+-- REGISTRO DEL PRÉSTAMO
+DELIMITER $$
+CREATE PROCEDURE registrar_prestamo1(IN p_iddetallesolicitud INT, IN p_idatiende INT)   BEGIN
     DECLARE v_idsolicitud INT;
     DECLARE v_stock_actual INT;
     DECLARE v_cantidad_solicitada INT;
@@ -136,8 +141,6 @@ CREATE PROCEDURE registrar_prestamo1 (IN p_iddetallesolicitud INT, IN p_idatiend
     -- Cerrar el cursor
     CLOSE cur_detalles;
 END$$
-
-
 
 -- ELIMINACION DE DET SOLICITUDES Y SOLICITUDES
 DELIMITER $$

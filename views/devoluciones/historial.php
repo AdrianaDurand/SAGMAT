@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,49 +57,50 @@
         }
     </style>
 </head>
+
 <body>
-<div id="wrapper">
-    <?php require_once '../../views/sidebar/sidebar.php'; ?>
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div class="mt-1">
-            <div id="content">
-                <div class="container-fluid">
-                    <div class="flex-grow-1 p-3 p-md-4 pt-2">
-                        <div class="container">
-                            <div class="col-md-12 text-center header-container mb-2">
-                                <div class="m-2">
-                                    <h2 class="fw-bolder d-inline-block">
-                                        <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos"
-                                             style="height: 2em; width: 2em;"> Historial de Devolucciones
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-md-8">
-                                    <div class="date-picker-container">
-                                        <div class="input-group mb-1 mt-1">
-                                            <span class="input-group-text" id="basic-addon1">Desde</span>
-                                            <input type="datetime-local" class="form-control" id="startDate">
-                                            <span class="input-group-text" id="basic-addon2">Hasta</span>
-                                            <input type="datetime-local" class="form-control" id="endDate">
-                                            <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
-                                        </div>
+    <div id="wrapper">
+        <?php require_once '../../views/sidebar/sidebar.php'; ?>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div class="mt-1">
+                <div id="content">
+                    <div class="container-fluid">
+                        <div class="flex-grow-1 p-3 p-md-4 pt-2">
+                            <div class="container">
+                                <div class="col-md-12 text-center header-container mb-2">
+                                    <div class="m-2">
+                                        <h2 class="fw-bolder d-inline-block">
+                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em;"> Historial de Devolucciones
+                                        </h2>
                                     </div>
                                 </div>
                             </div>
-                            <br>
-                            <div class="col-md-12">
-                                <div class="row" id="lista-devoluciones"></div>
-                            </div>
-                            <!-- Contenedor de paginación -->
-                            <div class="pagination">
-                                <div class="pagination-arrow" id="prev">&laquo;</div>
-                                <div class="pagination-item" id="item-1" data-page="1">1</div>
-                                <div class="pagination-item" id="item-2" data-page="2">2</div>
-                                <div class="pagination-item" id="item-3" data-page="3">3</div>
-                                <div class="pagination-arrow" id="next">&raquo;</div>
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-8">
+                                        <div class="date-picker-container">
+                                            <div class="input-group mb-1 mt-1">
+                                                <span class="input-group-text" id="basic-addon1">Desde</span>
+                                                <input type="date" class="form-control" id="startDate">
+                                                <span class="input-group-text" id="basic-addon2">Hasta</span>
+                                                <input type="date" class="form-control" id="endDate">
+                                                <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-md-12">
+                                    <div class="row" id="lista-devoluciones"></div>
+                                </div>
+                                <!-- Contenedor de paginación -->
+                                <div class="pagination">
+                                    <div class="pagination-arrow" id="prev">&laquo;</div>
+                                    <div class="pagination-item" id="item-1" data-page="1">1</div>
+                                    <div class="pagination-item" id="item-2" data-page="2">2</div>
+                                    <div class="pagination-item" id="item-3" data-page="3">3</div>
+                                    <div class="pagination-arrow" id="next">&raquo;</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -106,171 +108,171 @@
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const itemsPerPage = 2; // Número de elementos por página
-        let currentPage = 1;
-        let totalPages = 1;
-        let dataObtenida = []; // Variable global para almacenar los datos obtenidos
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const itemsPerPage = 2; // Número de elementos por página
+            let currentPage = 1;
+            let totalPages = 1;
+            let dataObtenida = []; // Variable global para almacenar los datos obtenidos
 
-        function $(id) {
-            return document.querySelector(id);
-        }
-
-        function setupCardListeners() {
-          var showMoreIcons = document.querySelectorAll(".show-more-icon");
-          var returnIcons = document.querySelectorAll(".return-icon");
-
-          showMoreIcons.forEach(function(icon) {
-            icon.addEventListener("click", function() {
-              var originalCard = this.closest('.card');
-              var detailedCard = originalCard.nextElementSibling;
-              var idprestamo = this.getAttribute('data-idprestamo');
-
-              fetchDetails(idprestamo, detailedCard);
-
-              originalCard.classList.add('card-expand');
-              setTimeout(function() {
-                originalCard.style.display = "none";
-                detailedCard.style.display = "block";
-                detailedCard.classList.add('card-expand');
-              }, 300);
-            });
-          });
-
-          returnIcons.forEach(function(icon) {
-            icon.addEventListener("click", function() {
-              var detailedCard = this.closest('.card');
-              var originalCard = detailedCard.previousElementSibling;
-
-              detailedCard.classList.remove('card-expand');
-              setTimeout(function() {
-                detailedCard.style.display = "none";
-                originalCard.style.display = "block";
-                originalCard.classList.remove('card-expand');
-              }, 300);
-            });
-          });
-        }
-        function updatePagination() {
-            const paginationItems = document.querySelectorAll(".pagination-item");
-            paginationItems.forEach(item => item.style.display = "none");
-
-            for (let i = 1; i <= totalPages; i++) {
-                if ($(`#item-${i}`)) {
-                    $(`#item-${i}`).style.display = "flex";
-                } else {
-                    const newItem = document.createElement("div");
-                    newItem.classList.add("pagination-item");
-                    newItem.id = `item-${i}`;
-                    newItem.dataset.page = i;
-                    newItem.innerText = i;
-                    newItem.addEventListener("click", () => changePage(i));
-                    $(".pagination").insertBefore(newItem, $("#next"));
-                }
+            function $(id) {
+                return document.querySelector(id);
             }
 
-            updateArrows();
-        }
+            function setupCardListeners() {
+                var showMoreIcons = document.querySelectorAll(".show-more-icon");
+                var returnIcons = document.querySelectorAll(".return-icon");
 
-        function changePage(page) {
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderPage(page);
-            updateArrows();
-        }
+                showMoreIcons.forEach(function(icon) {
+                    icon.addEventListener("click", function() {
+                        var originalCard = this.closest('.card');
+                        var detailedCard = originalCard.nextElementSibling;
+                        var idprestamo = this.getAttribute('data-idprestamo');
 
-        function updateArrows() {
-            if (currentPage === 1) {
-                $("#prev").classList.add("disabled");
-            } else {
-                $("#prev").classList.remove("disabled");
-            }
+                        fetchDetails(idprestamo, detailedCard);
 
-            if (currentPage === totalPages) {
-                $("#next").classList.add("disabled");
-            } else {
-                $("#next").classList.remove("disabled");
-            }
-
-            document.querySelectorAll(".pagination-item").forEach(item => {
-                item.classList.remove("active");
-                if (parseInt(item.dataset.page) === currentPage) {
-                    item.classList.add("active");
-                }
-            });
-        }
-
-        $("#prev").addEventListener("click", () => {
-            if (currentPage > 1) changePage(currentPage - 1);
-        });
-
-        $("#next").addEventListener("click", () => {
-            if (currentPage < totalPages) changePage(currentPage + 1);
-        });
-
-        document.querySelectorAll('.pagination-item').forEach(item => {
-            item.addEventListener('click', () => {
-                changePage(parseInt(item.dataset.page));
-            });
-        });
-
-        function listarFecha() {
-            const startDate = document.getElementById("startDate").value;
-            const endDate = document.getElementById("endDate").value;
-
-            if (endDate < startDate) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error en las fechas',
-                    text: 'La fecha de fin debe ser mayor o igual que la fecha de inicio.',
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'Entendido'
+                        originalCard.classList.add('card-expand');
+                        setTimeout(function() {
+                            originalCard.style.display = "none";
+                            detailedCard.style.display = "block";
+                            detailedCard.classList.add('card-expand');
+                        }, 300);
+                    });
                 });
-                return;
+
+                returnIcons.forEach(function(icon) {
+                    icon.addEventListener("click", function() {
+                        var detailedCard = this.closest('.card');
+                        var originalCard = detailedCard.previousElementSibling;
+
+                        detailedCard.classList.remove('card-expand');
+                        setTimeout(function() {
+                            detailedCard.style.display = "none";
+                            originalCard.style.display = "block";
+                            originalCard.classList.remove('card-expand');
+                        }, 300);
+                    });
+                });
             }
 
-            const parametros = new FormData();
-            parametros.append("operacion", "listarHistorialFecha");
-            parametros.append("fechainicio", startDate);
-            parametros.append("fechafin", endDate);
+            function updatePagination() {
+                const paginationItems = document.querySelectorAll(".pagination-item");
+                paginationItems.forEach(item => item.style.display = "none");
 
-            fetch(`../../controllers/devolucion.controller.php`, {
-                method: "POST",
-                body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                console.log(`Datos obtenidos:`, datos);
-                dataObtenida = datos; // Asigna los datos obtenidos a la variable global
-                if (dataObtenida.length === 0) {
-                    document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron recepciones en el rango de fechas seleccionado.</p>`;
-                } else {
-                    totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                    renderPage(1);
-                    updatePagination();
+                for (let i = 1; i <= totalPages; i++) {
+                    if ($(`#item-${i}`)) {
+                        $(`#item-${i}`).style.display = "flex";
+                    } else {
+                        const newItem = document.createElement("div");
+                        newItem.classList.add("pagination-item");
+                        newItem.id = `item-${i}`;
+                        newItem.dataset.page = i;
+                        newItem.innerText = i;
+                        newItem.addEventListener("click", () => changePage(i));
+                        $(".pagination").insertBefore(newItem, $("#next"));
+                    }
                 }
-            })
-            .catch(e => {
-                console.error(e);
+
+                updateArrows();
+            }
+
+            function changePage(page) {
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderPage(page);
+                updateArrows();
+            }
+
+            function updateArrows() {
+                if (currentPage === 1) {
+                    $("#prev").classList.add("disabled");
+                } else {
+                    $("#prev").classList.remove("disabled");
+                }
+
+                if (currentPage === totalPages) {
+                    $("#next").classList.add("disabled");
+                } else {
+                    $("#next").classList.remove("disabled");
+                }
+
+                document.querySelectorAll(".pagination-item").forEach(item => {
+                    item.classList.remove("active");
+                    if (parseInt(item.dataset.page) === currentPage) {
+                        item.classList.add("active");
+                    }
+                });
+            }
+
+            $("#prev").addEventListener("click", () => {
+                if (currentPage > 1) changePage(currentPage - 1);
             });
-        }
 
-        document.getElementById("searchButton").addEventListener("click", listarFecha);
+            $("#next").addEventListener("click", () => {
+                if (currentPage < totalPages) changePage(currentPage + 1);
+            });
 
-        function renderPage(page) {
-            $("#lista-devoluciones").innerHTML = ``;
-            let start = (page - 1) * itemsPerPage;
-            let end = start + itemsPerPage;
-            let dataToRender = dataObtenida.slice(start, end);
-            dataToRender.forEach(element => {
-                const nuevoItem = `
+            document.querySelectorAll('.pagination-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    changePage(parseInt(item.dataset.page));
+                });
+            });
+
+            function listarFecha() {
+                const startDate = document.getElementById("startDate").value;
+                const endDate = document.getElementById("endDate").value;
+
+                if (endDate < startDate) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en las fechas',
+                        text: 'La fecha de fin debe ser mayor o igual que la fecha de inicio.',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                    });
+                    return;
+                }
+
+                const parametros = new FormData();
+                parametros.append("operacion", "listarHistorialFecha");
+                parametros.append("fechainicio", startDate);
+                parametros.append("fechafin", endDate);
+
+                fetch(`../../controllers/devolucion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        console.log(`Datos obtenidos:`, datos);
+                        dataObtenida = datos; // Asigna los datos obtenidos a la variable global
+                        if (dataObtenida.length === 0) {
+                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones en el rango de fechas seleccionado.</p>`;
+                        } else {
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+                            renderPage(1);
+                            updatePagination();
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
+
+            document.getElementById("searchButton").addEventListener("click", listarFecha);
+
+            function renderPage(page) {
+                $("#lista-devoluciones").innerHTML = ``;
+                let start = (page - 1) * itemsPerPage;
+                let end = start + itemsPerPage;
+                let dataToRender = dataObtenida.slice(start, end);
+                dataToRender.forEach(element => {
+                    const nuevoItem = `
                     <div class="d-flex justify-content-center mb-3">
                         <div class="col-md-8">
                             <div class="card">
@@ -296,77 +298,99 @@
                         </div>
                     </div>
                 `;
-                $("#lista-devoluciones").innerHTML += nuevoItem;
-            });
+                    $("#lista-devoluciones").innerHTML += nuevoItem;
+                });
 
-            setupCardListeners();
-        }
-
-        function fetchDetails(iddevolucion, detailedCard) {
-            const parametros = new FormData();
-            parametros.append('operacion', 'listarHistorialDet');
-            parametros.append('iddevolucion', iddevolucion);
-
-            fetch(`../../controllers/devolucion.controller.php`, {
-                method: "POST",
-                body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                console.log(datos);
-                if (datos.length > 0) {
-                    const detalle = datos[0];
-
-                    detailedCard.querySelector('.card-body').innerHTML = `
-                        <h3 class="card-title">Detalles Adicionales</h3>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <p><strong>Personal que atendió devolución:</strong> ${detalle.atendido_nombres}</p>
-                                <p><strong>Observación:</strong> ${detalle.observacion}</p>
-                                <p><strong>Estado:</strong> ${detalle.estado_equipo}</p>
-                            </div>
-                        </div>
-                        <i class="bi bi-arrow-left return-icon mt-3"></i>
-                    `;
-                } else {
-                    detailedCard.querySelector('.card-body').innerHTML = `
-                        <p>No se encontraron detalles adicionales para esta devolución.</p>
-                        <i class="bi bi-arrow-left return-icon mt-3"></i>
-                    `;
-                }
                 setupCardListeners();
-            })
-            .catch(e => {
-                console.error(e);
-            });
-        }
+            }
 
-        function completo() {
-            const parametros = new FormData();
-            parametros.append("operacion", "listarHistorial");
+            function fetchDetails(iddevolucion, detailedCard) {
+                const parametros = new FormData();
+                parametros.append('operacion', 'listarHistorialDet');
+                parametros.append('iddevolucion', iddevolucion);
 
-            fetch(`../../controllers/devolucion.controller.php`, {
-                method: "POST",
-                body: parametros
-            })
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                dataObtenida = datos;
-                if (dataObtenida.length === 0) {
-                    document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
-                } else {
-                    totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                    renderPage(1);
-                    updatePagination();
+                fetch(`../../controllers/devolucion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        console.log(datos);
+                        if (datos.length > 0) {
+                            const detalle = datos[0];
+
+                            // Objeto para mapear los estados a los textos correspondientes
+                            const estadoTextos = {
+                                '0': 'Bueno',
+                                '2': 'Mantenimiento',
+                                // Puedes añadir más estados según sea necesario
+                            };
+
+                            // Determinar el texto del estado usando el objeto de mapeo
+                            const estadoTexto = estadoTextos[detalle.estadodevolucion] || 'Desconocido';
+
+                            detailedCard.querySelector('.card-body').innerHTML = `
+                <h3 class="card-title">Detalles Adicionales</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p><strong>Personal que atendió devolución:</strong> ${detalle.atendido_nombres}</p>
+                        <p><strong>Observación:</strong> ${detalle.observacion}</p>
+                        <p><strong>Estado:</strong> ${estadoTexto}</p>
+                    </div>
+                </div>
+                <div class="mt-1 text-end">
+                    <button type="button" class="btn btn-warning imprimir" data-iddevolucion="${iddevolucion}">Generar PDF</button>
+                </div>
+                <i class="bi bi-arrow-left return-icon mt-3"></i>
+            `;
+                        } else {
+                            detailedCard.querySelector('.card-body').innerHTML = `
+                <p>No se encontraron detalles adicionales para esta devolución.</p>
+                <i class="bi bi-arrow-left return-icon mt-3"></i>
+            `;
+                        }
+                        setupCardListeners();
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
+
+
+            function completo() {
+                const parametros = new FormData();
+                parametros.append("operacion", "listarHistorial");
+
+                fetch(`../../controllers/devolucion.controller.php`, {
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+                        dataObtenida = datos;
+                        if (dataObtenida.length === 0) {
+                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                        } else {
+                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+                            renderPage(1);
+                            updatePagination();
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
+
+            completo();
+            document.addEventListener("click", function(event) {
+                const target = event.target;
+                if (target.classList.contains('imprimir')) {
+                    const iddevolucion = target.getAttribute('data-iddevolucion');
+                    window.open(`../reportes/devoluciones/reporte.php?iddevolucion=${iddevolucion}`, '_blank');
                 }
-            })
-            .catch(e => {
-                console.error(e);
             });
-        }
-
-        completo();
-    });
-</script>
+        });
+    </script>
 </body>
+
 </html>

@@ -49,23 +49,15 @@ CREATE PROCEDURE sp_historial_devolucion_det(_iddevolucion INT)
 BEGIN
 	SELECT DISTINCT
 		d.iddevolucion,
-		pr.idprestamo,
-		ds.iddetallesolicitud,
-		s.idsolicitud,
-		usol.idusuario,
-		psol.idpersona,
 		CONCAT(psol.nombres, ' ', psol.apellidos) AS solicitante_nombres,
-		uat.idusuario,
-		pat.idpersona,
 		CONCAT(pat.nombres, ' ', pat.apellidos) AS atendido_nombres,
 		e.idejemplar,
 		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
-		e.estado_equipo,
-		d.observacion,
 		d.estadodevolucion,
+		d.observacion,
 		d.create_at
 	FROM 
-    devoluciones d
+		devoluciones d
 	INNER JOIN 
 		prestamos pr ON d.idprestamo = pr.idprestamo
 	INNER JOIN 
@@ -86,34 +78,25 @@ BEGIN
 		recursos r ON e.iddetallerecepcion = r.idrecurso
 	INNER JOIN 
 		tipos t ON r.idtipo = t.idtipo
-	WHERE 
-		d.iddevolucion = _iddevolucion;
+		AND d.iddevolucion = _iddevolucion;
 END $$
 
 
-CALL sp_historial_devoluciones_fecha('2024-06-09', '2024-06-09');
+CALL sp_historial_devoluciones_fecha('2024-06-19', '2024-06-21');
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devoluciones_fecha(
-	IN _fechainicio DATETIME, 
-    IN _fechafin DATETIME
+	IN _fechainicio DATE, 
+    IN _fechafin DATE
 )
 BEGIN
 	SELECT DISTINCT
 		d.iddevolucion,
-		pr.idprestamo,
-		ds.iddetallesolicitud,
-		s.idsolicitud,
-		usol.idusuario,
-		psol.idpersona,
 		CONCAT(psol.nombres, ' ', psol.apellidos) AS solicitante_nombres,
-		uat.idusuario,
-		pat.idpersona,
 		CONCAT(pat.nombres, ' ', pat.apellidos) AS atendido_nombres,
 		e.idejemplar,
 		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
-		e.estado_equipo,
-		d.observacion,
 		d.estadodevolucion,
+		d.observacion,
 		d.create_at
 	FROM 
 		devoluciones d
@@ -142,3 +125,46 @@ BEGIN
 END $$
 
 SELECT * FROM ejemplares;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_reporte_devolucion( IN _iddevolucion INT)
+BEGIN
+	SELECT DISTINCT
+    d.iddevolucion,
+    CONCAT(psol.nombres, ' ', psol.apellidos) AS solicitante_nombres,
+    CONCAT(pat.nombres, ' ', pat.apellidos) AS atendido_nombres,
+    CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
+    d.observacion,
+    CASE 
+        WHEN d.estadodevolucion = '0' THEN 'Bueno'
+        WHEN d.estadodevolucion = '2' THEN 'Mantenimiento'
+        ELSE d.estadodevolucion
+    END AS estado_devolucion,
+    DATE(d.create_at) AS fecha
+FROM 
+    devoluciones d
+INNER JOIN 
+    prestamos pr ON d.idprestamo = pr.idprestamo
+INNER JOIN 
+    detsolicitudes ds ON pr.iddetallesolicitud = ds.iddetallesolicitud
+INNER JOIN 
+    solicitudes s ON ds.idsolicitud = s.idsolicitud
+INNER JOIN 
+    usuarios usol ON s.idsolicita = usol.idusuario
+INNER JOIN 
+    personas psol ON usol.idpersona = psol.idpersona
+INNER JOIN 
+    usuarios uat ON pr.idatiende = uat.idusuario
+INNER JOIN 
+    personas pat ON uat.idpersona = pat.idpersona
+INNER JOIN 
+    ejemplares e ON ds.idejemplar = e.idejemplar
+INNER JOIN 
+    recursos r ON e.iddetallerecepcion = r.idrecurso
+INNER JOIN 
+    tipos t ON r.idtipo = t.idtipo
+    WHERE
+    d.iddevolucion = _iddevolucion;
+    
+END $$

@@ -77,8 +77,7 @@ CREATE TABLE usuarios
 	CONSTRAINT fk_idpersona 	FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
 	CONSTRAINT fk_idrol 		FOREIGN KEY (idrol) 	REFERENCES roles (idrol)
 )ENGINE = INNODB;
-ALTER TABLE usuarios
-MODIFY COLUMN inactive_at DATETIME;
+
 
 
 -- 6°
@@ -304,13 +303,12 @@ CREATE TABLE devoluciones
     idprestamo                 INT               NOT NULL,
     observacion             VARCHAR(300)         NULL,
     estadodevolucion         VARCHAR(30)         NOT NULL,
-    estado					CHAR(1)			NOT NULL DEFAULT 5,	
     create_at                 DATETIME           DEFAULT NOW(),
     update_at                DATETIME            NULL,
     inactive_at                DATETIME          NULL,
     CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
-ALTER TABLE devoluciones ADD estado CHAR(1) NOT NULL DEFAULT 5;
+
 
 SELECT * FROM devoluciones;
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS
@@ -361,3 +359,9 @@ CREATE TABLE galerias
 	rutafoto				VARCHAR(100) 	NULL,
 	CONSTRAINT fk_idbaja_glr     FOREIGN KEY (idbaja) REFERENCES bajas (idbaja)
 )ENGINE = INNODB;
+
+SELECT * from marcas;
+select * from solicitudes;
+SELECt * from tipos;
+SELECT * from recursos;
+select * from ejemplares;

@@ -56,6 +56,14 @@ if (isset($_POST['operacion'])) {
             ];
             echo json_encode($prestamo->traerdatos($datosEnviar));
         break;
+
+        case 'reporte':
+            $datosEnviar = [
+                "idprestamo"          => $_POST['idprestamo']
+            ];
+            echo json_encode($prestamo->reporte($datosEnviar));
+            
+        break;
         
     }
 }
