@@ -210,6 +210,13 @@
                     return document.querySelector(id);
                 }
 
+                const fechaInicio = document.getElementById('fecha_inicio');
+                const fechaFin = document.getElementById('fecha_fin');
+
+                fechaInicio.addEventListener('change', function() {
+                    fechaFin.min = this.value;
+                });
+
 
                 function todo() {
                     // Preparar los parametros a enviar

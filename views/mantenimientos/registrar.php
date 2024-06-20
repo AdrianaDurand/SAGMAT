@@ -13,9 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
-
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <style>
         .pagination {
             display: flex;
@@ -130,7 +131,7 @@
     <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
+                <div class="modal-header" style="background-color: #D4E6F1; color: black">
                     <h5 class="modal-title text-white" id="modalTitle">Detalles</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -140,7 +141,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="fechainicio"><strong>Fecha de inicio:</strong></label>
-                                <input type="datetime-local" class="form-control border" id="fechainicio" required>
+                                <input type="datetime-local" class="form-control border" id="fechainicio" required min="<?php echo date('Y-m-d\TH:i'); ?>">
                                 <div class="invalid-feedback">Por favor, ingrese una fecha de inicio.</div>
                             </div>
                             <div class="col-md-6">
@@ -167,7 +168,7 @@
     <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-danger">
+                <div class="modal-header" style="background-color: #F5B7B1; color: black">
                     <h5 class="modal-title text-white" id="modalTitle">Baja de un equipo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -176,7 +177,7 @@
 
                         <div class="col-md-12">
                             <label for="fechabaja"><strong>Fecha Baja:</strong></label>
-                            <input type="date" class="form-control border" id="fechabaja" required>
+                            <input type="date" class="form-control border" id="fechabaja" required  min="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">Por favor, ingrese una fecha.</div>
                         </div>
 
@@ -216,6 +217,7 @@
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -227,6 +229,12 @@
         let currentPage = 1;
         let totalPages = 1;
 
+        const fechainicio = document.getElementById('fechainicio');
+        const fechafin = document.getElementById('fechafin');
+
+        fechainicio.addEventListener('change', function() {
+            fechafin.min = this.value;
+        });
 
         function getTipos() {
 
@@ -424,36 +432,55 @@
 
 
         function registrar(idejemplar) {
-
             const formMantenimiento = $("#form-mantenimiento");
 
             if (!validarFormulario(formMantenimiento)) {
                 return;
             }
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idusuario", <?php echo $idusuario ?>);
-            parametros.append("idejemplar", idejemplar);
-            parametros.append("fechainicio", $("#fechainicio").value);
-            parametros.append("fechafin", $("#fechafin").value);
-            parametros.append("comentarios", $("#comentarios").value);
 
+            // Mostrar SweetAlert para confirmar la acción
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: "¿Está seguro de que desea guardar los cambios?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // El usuario ha confirmado, proceder con el registro
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("idusuario", <?php echo $idusuario ?>);
+                    parametros.append("idejemplar", idejemplar);
+                    parametros.append("fechainicio", $("#fechainicio").value);
+                    parametros.append("fechafin", $("#fechafin").value);
+                    parametros.append("comentarios", $("#comentarios").value);
 
-            fetch(`../../controllers/mantenimiento.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-
-                    alert(`Mantenimiento exitoso`);
-                    $("#form-mantenimiento").reset();
-                    myModal.hide();
-                    listar();
-                })
-                .catch(e => {
-                    console.error(e)
-                });
+                    fetch(`../../controllers/mantenimiento.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            $("#form-mantenimiento").reset();
+                            myModal.hide();
+                            listar();
+                            Swal.fire({
+                                title: 'Guardado',
+                                text: 'El mantenimiento del recurso tecnológico ha sido registrado.',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+            });
         }
 
 
@@ -463,36 +490,51 @@
             if (!validarFormulario(formBaja)) {
                 return;
             }
-            const parametros = new FormData();
-            parametros.append("operacion", "registrar");
-            parametros.append("idusuario", <?php echo $idusuario ?>);
-            parametros.append("idejemplar", idejemplar);
-            parametros.append("fechabaja", $("#fechabaja").value);
-            parametros.append("motivo", $("#motivo").value);
-            parametros.append("comentarios", $("#comentarios-baja").value);
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: "¿Está seguro de que desea guardar los cambios?",
+                icon: 'question',
+                showCancelButton: true,
+                timer: 1500,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("idusuario", <?php echo $idusuario ?>);
+                    parametros.append("idejemplar", idejemplar);
+                    parametros.append("fechabaja", $("#fechabaja").value);
+                    parametros.append("motivo", $("#motivo").value);
+                    parametros.append("comentarios", $("#comentarios-baja").value);
 
-
-            fetch(`../../controllers/baja.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-
-                    if (datos.idbaja > 0) {
-                        alert(`Detalle registrado con el ID: ${datos.idbaja}`);
-                        insertGaleria(datos.idbaja);
-                        $("#form-baja").reset();
-                        cerrar.hide();
-
-                    }
-
-
-                    listar();
-                })
-                .catch(e => {
-                    console.error(e)
-                });
+                    fetch(`../../controllers/baja.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (datos.idbaja > 0) {
+                                insertGaleria(datos.idbaja);
+                                $("#form-baja").reset();
+                                cerrar.hide();
+                                Swal.fire({
+                                    title: 'Guardado',
+                                    text: 'La baja de un recurso tecnológico a sido registrado.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                            listar();
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+            });
         }
 
 

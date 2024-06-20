@@ -133,7 +133,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/historial.png" alt="Imagen de Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> HISTORIAL DE RECEPCIONES
+                                            <img src="../../images/icons/historico.png" alt="Imagen de Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> HISTORIAL DE RECEPCIONES
                                         </h2>
                                     </div>
                                 </div>

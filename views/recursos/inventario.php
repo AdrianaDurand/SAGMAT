@@ -77,7 +77,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> INVENTARIO
+                                            <img src="../../images/icons/almacen.png" alt="Imagen de Inventario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> INVENTARIO
                                         </h2>
                                     </div>
                                 </div>
