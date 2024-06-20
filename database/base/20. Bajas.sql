@@ -86,11 +86,38 @@ CREATE PROCEDURE spu_listar_reporte_bajas(
 	IN _idbaja INT
 )
 BEGIN
-SELECT idgaleria,
+	SELECT idgaleria,
 	rutafoto
     FROM galerias
     WHERE idbaja = _idbaja;
 END $$
+
+
+DELIMITER $$
+CREATE PROCEDURE listado_reporte_baja(
+    IN _idbaja INT
+)
+BEGIN
+    SELECT CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
+           b.idbaja,
+           b.idusuario,
+           b.fechabaja,
+           b.motivo,
+           r.idrecurso AS idrecurso,
+           e.nro_equipo,
+           r.descripcion
+    FROM bajas b
+    INNER JOIN ejemplares e ON b.idejemplar = e.idejemplar
+    INNER JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
+    INNER JOIN usuarios u ON b.idusuario = u.idusuario
+    INNER JOIN personas p ON u.idpersona = p.idpersona
+    WHERE b.idbaja = _idbaja;
+END $$
+CALL listado_reporte_baja(1);
+SELECT * FROM bajas;
+
+
+
 
 CALL spu_listar_reporte_bajas(1);
 SELECT * FROM recursos;

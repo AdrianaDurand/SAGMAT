@@ -156,11 +156,19 @@ CREATE PROCEDURE listado_por_id(
 	IN _idmantenimiento CHAR(1)
 )
 BEGIN
-    SELECT *
-    FROM mantenimientos
-    WHERE idmantenimiento = _idmantenimiento;
+    SELECT m.idmantenimiento,
+           CONCAT(p.nombres, ' ', p.apellidos) AS nombre_apellidos,
+           e.nro_equipo,
+           m.fechafin,
+           m.fechainicio,
+           comentarios
+    FROM mantenimientos m
+    INNER JOIN usuarios u ON m.idusuario = u.idusuario
+    INNER JOIN personas p ON u.idpersona = p.idpersona
+    INNER JOIN ejemplares e ON m.idejemplar = e.idejemplar
+    WHERE m.idmantenimiento = _idmantenimiento;
 END $$
-
+SELECT * FROM mantenimientos;
 CALL listado_por_id(2);
 
 

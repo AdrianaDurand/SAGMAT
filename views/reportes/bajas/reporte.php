@@ -17,6 +17,8 @@ try {
     $baja = new Baja();
     $idbaja = $_GET["idbaja"];
     $resultado = $baja->reporte(['idbaja' => $idbaja]);
+    $informacion = $baja->informacion(['idbaja' => $idbaja]);
+
 
 
     include "./reportLots_pdf_content.php";

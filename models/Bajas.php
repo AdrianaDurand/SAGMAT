@@ -105,5 +105,20 @@ class Baja extends Conexion
         }
     }
 
+    public function informacion($datos = [])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL listado_reporte_baja(?)");
+            $consulta->execute(
+                array(
+                    $datos['idbaja']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
     
 }

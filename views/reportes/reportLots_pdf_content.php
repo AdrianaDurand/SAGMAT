@@ -18,8 +18,8 @@
       <th>#</th>
       <th>Fecha de Inicio</th>
       <th>Fecha de Fin</th>
-      <th>Usuario</th>
-      <th>Ejemplar</th>
+      <th>Encargado</th>
+      <th>Recurso</th>
       <th>Comentarios</th>
     </tr>
   </thead>
@@ -34,8 +34,8 @@
           <td>{$index}</td>
           <td>{$registro['fechainicio']}</td>
           <td>{$registro['fechafin']}</td>
-          <td>{$registro['idusuario']}</td>
-          <td>{$registro['idejemplar']}</td>
+          <td>{$registro['nombre_apellidos']}</td>
+          <td>{$registro['nro_equipo']}</td>
           <td>{$registro['comentarios']}</td>
         </tr>
       ";

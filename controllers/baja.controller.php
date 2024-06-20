@@ -70,5 +70,13 @@ if (isset($_POST['operacion'])) {
                 echo json_encode($baja->reporte($datosEnviar));
                 
             break;
+
+            case 'informacion':
+                $datosEnviar = [
+                    "idbaja"          => $_POST['idbaja']
+                ];
+                echo json_encode($baja->informacion($datosEnviar));
+                
+            break;
     }
 }
