@@ -68,8 +68,8 @@ SELECT * FROM ejemplares;
 SELECT  * FROM detsolicitudes;
 SELECT * FROM prestamos;
 SELECT * FROM recursos;
+SELECT * FROM tipos;
 
-use sagmat;
 
 
 

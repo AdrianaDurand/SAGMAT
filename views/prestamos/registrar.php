@@ -21,6 +21,18 @@
 </head>
 
 <style>
+    .caja {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
+
+    .prueba {
+        background-color: #d9e7fa;
+    }
+
     .show-more-click {
         background-color: transparent;
         border: none;
@@ -55,7 +67,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> REGISTRO DE MANTENIMIENTOS
+                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> REGISTRO DE PRÉSTAMOS
                                         </h2>
                                     </div>
                                 </div>
@@ -66,13 +78,11 @@
 
                     <div class="container mt-3">
                         <div class="card card-outline card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Préstamos</h3>
-                            </div>
-                            <div class="card-body">
+
+                            <div class="card-body caja">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table-hover" id="lista-prestamos">
+                                        <table class="table table-lg  " id="lista-prestamos">
                                             <colgroup>
                                                 <col width="5%">
                                                 <col width="8%">
@@ -81,7 +91,7 @@
                                                 <col width="10%">
                                                 <col width="10%">
                                             </colgroup>
-                                            <thead class="table-secondary table-bordered text-center">
+                                            <thead class="table prueba text-center">
                                                 <tr>
                                                     <th>N°</th>
                                                     <th>Solicitante</th>

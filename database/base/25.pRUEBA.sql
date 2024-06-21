@@ -29,7 +29,7 @@ ALTER TABLE tipos AUTO_INCREMENT 1;
 ALTER TABLE recursos AUTO_INCREMENT 1;
 ALTER TABLE stock AUTO_INCREMENT 1;
 use sagmat;
-SET foreign_key_checks = 1;
+SET foreign_key_checks = 0;
 
 UPDATE stock
 SET stock = 0;

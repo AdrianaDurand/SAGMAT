@@ -15,14 +15,16 @@ AS
 		t.tipo,
 		t.idtipo,
 		m.idmarca,
-		m.marca 
+		m.marca,
+        s.stock
 	FROM 
 		recursos r
 	INNER JOIN 
 		tipos t ON r.idtipo = t.idtipo
 	INNER JOIN 
 		marcas m ON r.idmarca = m.idmarca
-        LIMIT 12;
+	INNER JOIN 
+		stock s ON r.idrecurso = s.idrecurso;
         
 
 
@@ -48,4 +50,5 @@ CALL spu_listar_por_tipo_y_marca(-1,8);
 call spu_listar_por_tipo(24);
 
 
-
+select * from stock;
+select * from recursos;
