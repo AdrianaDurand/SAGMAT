@@ -38,7 +38,7 @@
         }
     </style>
 </head>
-
+<button data-bs-target="#modal-visor" data-bs-toggle="modal" class="dropdown-item view" data-idprestamo='${element.idddetalle}' data-idsolicitud='${element.idSolicitud}' href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle</button>
 <body>
     <!-- Page Wrapper -->
     <div id="wrapper">

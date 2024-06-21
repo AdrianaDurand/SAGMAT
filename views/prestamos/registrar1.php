@@ -161,7 +161,7 @@
                                     Acción
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="triggerId">
-                                        <button data-bs-target="#modal-visor" data-bs-toggle="modal" class="dropdown-item view" data-idprestamo='${element.idddetalle}' data-idsolicitud='${element.idSolicitud}' href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle</button>
+                                        <a class="dropdown-item view" data-idprestamo='${element.idddetalle}' data-idsolicitud='${element.idSolicitud}' href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle</a>
                                         <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>                                              
                                     </div>
                                 </div>

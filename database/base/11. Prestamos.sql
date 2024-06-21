@@ -6,21 +6,21 @@ DELIMITER $$
 CREATE PROCEDURE spu_listado_solic()
 BEGIN
 	SELECT 
-		s.idsolicitud,
-		CONCAT(p.nombres, ' ', p.apellidos) AS docente,
-		u.nombre AS ubicacion,
-		s.fechasolicitud,
-		CONCAT(s.horainicio, ' - ', s.horafin) AS horario
-	FROM 
-		solicitudes s
-	JOIN 
-		usuarios us ON s.idsolicita = us.idusuario
-	JOIN 
-		personas p ON us.idpersona = p.idpersona
-	JOIN 
-		ubicaciones u ON s.idubicaciondocente = u.idubicacion
-	WHERE 
-		s.estado = 0;
+        s.idsolicitud,
+        CONCAT(p.nombres, ' ', p.apellidos) AS docente,
+        u.nombre AS ubicacion,
+        s.create_at AS fechasolicitud,  -- Ajuste aquí
+        CONCAT(s.horainicio, ' - ', s.horafin) AS horario
+    FROM 
+        solicitudes s
+    JOIN 
+        usuarios us ON s.idsolicita = us.idusuario
+    JOIN 
+        personas p ON us.idpersona = p.idpersona
+    JOIN 
+        ubicaciones u ON s.idubicaciondocente = u.idubicacion
+    WHERE 
+        s.estado = 0;
 END $$
 CALL spu_listado_solic();
 
@@ -62,10 +62,18 @@ SELECT * FROM solicitudes;
 
 -- REGISTRO DE PRESTAMO
 SELECT * FROM stock;
+SELECT * FROM recepciones;
+SELECT * FROM detrecepciones;
+SELECT * FROM ejemplares;
 SELECT  * FROM detsolicitudes;
 SELECT * FROM prestamos;
+SELECT * FROM recursos;
 
-DELIMITER //
+use sagmat;
+
+
+
+DELIMITER $$
 CREATE PROCEDURE registrar_prestamo1(
     IN p_iddetallesolicitud INT,
     IN p_idatiende INT
@@ -76,11 +84,12 @@ BEGIN
     DECLARE v_cantidad_solicitada INT;
     DECLARE v_iddetallesolicitud INT; 
     DECLARE v_idrecurso INT;
+    DECLARE v_idejemplar INT;
     DECLARE done INT DEFAULT FALSE;
     
     -- Cursor para obtener todos los detalles de solicitud asociados al mismo idsolicitud
     DECLARE cur_detalles CURSOR FOR 
-        SELECT ds.iddetallesolicitud, ds.idejemplar, ds.cantidad
+        SELECT ds.iddetallesolicitud, ds.idtipo, ds.cantidad, ds.idejemplar
         FROM detsolicitudes ds
         WHERE ds.idsolicitud = (
             SELECT idsolicitud
@@ -108,11 +117,11 @@ BEGIN
     UPDATE detsolicitudes
     SET estado = 1
     WHERE idsolicitud = v_idsolicitud;
-
+    
     -- Iniciar la iteración sobre los detalles de solicitud
     detalle_loop: LOOP
         -- Leer el próximo registro del cursor
-        FETCH cur_detalles INTO v_iddetallesolicitud, v_idrecurso, v_cantidad_solicitada;
+        FETCH cur_detalles INTO v_iddetallesolicitud, v_idrecurso, v_cantidad_solicitada, v_idejemplar;
 
         -- Salir del bucle si no hay más detalles de solicitud
         IF done THEN
@@ -130,6 +139,11 @@ BEGIN
             INSERT INTO prestamos (iddetallesolicitud, idatiende, create_at)
             VALUES (v_iddetallesolicitud, p_idatiende, NOW());
 
+            -- Actualizar el estado del ejemplar a 1 (prestado)
+            UPDATE ejemplares
+            SET estado = 1
+            WHERE idejemplar = v_idejemplar;
+
             -- Actualizar el stock
             UPDATE stock
             SET stock = v_stock_actual - v_cantidad_solicitada
@@ -143,8 +157,7 @@ BEGIN
 
     -- Cerrar el cursor
     CLOSE cur_detalles;
-END//
-DELIMITER ;
+END $$
 
 
 

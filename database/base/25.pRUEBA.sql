@@ -30,3 +30,6 @@ ALTER TABLE recursos AUTO_INCREMENT 1;
 ALTER TABLE stock AUTO_INCREMENT 1;
 use sagmat;
 SET foreign_key_checks = 1;
+
+UPDATE stock
+SET stock = 0;

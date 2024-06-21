@@ -131,8 +131,8 @@
     <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #D4E6F1; color: black">
-                    <h5 class="modal-title text-white" id="modalTitle">Detalles</h5>
+                <div class="modal-header" style="background-color: #D4E6F1;">
+                    <h5 class="modal-title text-black" id="modalTitle">Detalles</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalMessage">
@@ -168,8 +168,8 @@
     <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-reset-form="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #F5B7B1; color: black">
-                    <h5 class="modal-title text-white" id="modalTitle">Baja de un equipo</h5>
+                <div class="modal-header" style="background-color: #F5B7B1;">
+                    <h5 class="modal-title text-black" id="modalTitle">Baja de un equipo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalMessage">
