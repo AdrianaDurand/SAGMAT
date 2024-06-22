@@ -445,34 +445,41 @@
             })
             .then(respuesta => respuesta.json())
             .then(datos => {
-              if (datos.idsolicitud > 0) {
-                console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
-                let idsolicitud = datos.idsolicitud;
-                let counter = 0;
-                equiposAgregados.forEach(dato => {
-                  dato["idsolicitud"] = idsolicitud
-                  counter += registroDetalle(dato); // Llamar a registroDetalle aquí
-                });
-                // Mostrar SweetAlert informando que la solicitud ha sido registrada
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Solicitud registrada',
-                  showConfirmButton: false, // Oculta el botón de confirmación
-                  timer: 1500 // Tiempo en milisegundos después del cual se cerrará automáticamente
-                });
 
-                // Realizar otras acciones después de mostrar SweetAlert
-                setTimeout(() => {
-                  modalregistro.hide();
-                  limpiarFormularios();
-                  listar_cronogramas();
-                }, 1500); // Igualando el tiempo para mantener la sincronización
+              console.log(datos)
+              if(datos.response == 0){
+                alert("registros solapados")
+                
+              }else{
 
+                if (datos.idsolicitud > 0) {
+                  console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
+                  let idsolicitud = datos.idsolicitud;
+                  let counter = 0;
+                  equiposAgregados.forEach(dato => {
+                    dato["idsolicitud"] = idsolicitud
+                    counter += registroDetalle(dato); // Llamar a registroDetalle aquí
+                  });
+                  // Mostrar SweetAlert informando que la solicitud ha sido registrada
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Solicitud registrada',
+                    showConfirmButton: false, // Oculta el botón de confirmación
+                    timer: 1500 // Tiempo en milisegundos después del cual se cerrará automáticamente
+                  });
+  
+                  // Realizar otras acciones después de mostrar SweetAlert
+                  setTimeout(() => {
+                    modalregistro.hide();
+                    limpiarFormularios();
+                    listar_cronogramas();
+                  }, 1500); // Igualando el tiempo para mantener la sincronización
+  
+                }
               }
             })
             .catch(e => {
               console.error(e);
-              alert("registros solapados")
             });
         }
 

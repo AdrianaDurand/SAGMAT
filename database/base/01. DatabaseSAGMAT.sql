@@ -133,7 +133,6 @@ CREATE TABLE recursos
 ALTER TABLE recursos MODIFY     datasheets                         JSON NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}';
 
 
-
 SELECT * FROM solicitudes;
 -- 9°
 -- *********************************************************************
@@ -308,9 +307,8 @@ CREATE TABLE devoluciones
     inactive_at                DATETIME          NULL,
     CONSTRAINT fk_idprestamo_dev FOREIGN KEY (idprestamo) REFERENCES prestamos (idprestamo)
 ) ENGINE = INNODB;
+ALTER TABLE devoluciones ADD estado CHAR(1) NOT NULL DEFAULT 5;
 
-
-SELECT * FROM devoluciones;
 -- FALTA CREAR ESTAS DOS TABLAS - HAY DUDAS
 -- 17°
 -- *********************************************************************

@@ -204,8 +204,8 @@
                             <td>
                                 <div class="dropdown">
                                     <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
-                                        
                                     </button>
+                                    
                                 </div>
                             </td>
                                 </tr>

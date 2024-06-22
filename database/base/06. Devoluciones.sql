@@ -7,14 +7,13 @@ BEGIN
 		pr.iddetallesolicitud,
 		tp.tipo AS tipo_recurso,
 		ej.nro_equipo AS numero_equipo,
-		ds.cantidad,
-		sol.horainicio,
-		sol.horafin,
-		pr.create_at,
+        ds.cantidad,
+        sol.horainicio,
+        pr.create_at,
 		CONCAT(per.nombres, ' ', per.apellidos) AS nombre_solicitante,
-		ej.estado AS estado_ejemplar,
-		sol.estado AS estado_solicitud,
-		ds.estado AS estado_detsolicitu
+        ej.estado AS estado_ejemplar,
+        sol.estado AS estado_solicitud,
+        ds.estado AS estado_detsolicitu
 	FROM
 		prestamos pr
 	INNER JOIN
@@ -27,19 +26,18 @@ BEGIN
 		usuarios usr ON sol.idsolicita = usr.idusuario
 	INNER JOIN
 		personas per ON usr.idpersona = per.idpersona
-	INNER JOIN
+	JOIN
 		recursos rec ON ds.idtipo = rec.idtipo
 	INNER JOIN
 		tipos tp ON rec.idtipo = tp.idtipo
 	LEFT JOIN
-		devoluciones dev ON pr.idprestamo = dev.idprestamo
+    devoluciones dev ON pr.idprestamo = dev.idprestamo
 	WHERE
 		DATE(sol.horainicio) BETWEEN _fechainicio AND _fechafin
-		AND sol.estado = 1
-		AND ds.estado = 1
-		AND (dev.estado IS NULL OR dev.estado IN (5));
+		AND sol.estado = 1 AND ds.estado = 1;
+       -- AND dev.estado != 5;
 END $$
-CALL spu_listar_devoluciones('2024-06-15', '2024-06-20');
+CALL spu_listar_devoluciones('2024-06-18', '2024-06-24');
 /*DELIMITER $$
 CREATE PROCEDURE spu_listar_devoluciones()
 BEGIN
@@ -148,3 +146,5 @@ BEGIN
     CLOSE cur;
 END $$
 
+
+SELECT * FROM DEVOLUCIONES;

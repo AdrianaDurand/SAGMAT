@@ -33,3 +33,5 @@ SET foreign_key_checks = 0;
 
 UPDATE stock
 SET stock = 0;
+
+

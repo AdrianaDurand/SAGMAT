@@ -2,10 +2,10 @@
 -- --------------------------  Lista de TIPO RECURSO  / MARCA  ----------------------------
 -- ----------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE PROCEDURE spu_listartipos()
+create PROCEDURE spu_listartipos()
 BEGIN
 	SELECT *
-    FROM tipos;
+    FROM tipos ORDER BY idtipo ASC;
 END $$
 
 -- ----------------------------------------------------------------------------------------

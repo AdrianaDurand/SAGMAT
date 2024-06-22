@@ -16,6 +16,7 @@ BEGIN
     u.numero,
     e.nro_equipo,
     DATE(s.horainicio) as fechasolicitud,
+    e.idejemplar,
     ds.idejemplar
     FROM detsolicitudes ds
     INNER JOIN tipos t ON ds.idtipo = t.idtipo
@@ -24,23 +25,43 @@ BEGIN
     INNER JOIN ejemplares e ON ds.idejemplar = e.idejemplar
     WHERE s.idsolicita = _idsolicita;
 END $$
-CALL spu_listar_calendar(51);
+CALL spu_listar_calendar(1);
 
 -- REGISTRO DE SOLICITUD
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_registrar(
     IN _idsolicita             INT,
-    -- IN _idtipo                INT,
     IN _idubicaciondocente     INT,
-    -- IN _cantidad 	           INT,
-    IN _horainicio            DATETIME,
+    IN _horainicio             DATETIME,
     IN _horafin                DATETIME
-    -- IN _fechasolicitud         DATE
 )
 BEGIN
-    INSERT INTO solicitudes (idsolicita, idubicaciondocente, horainicio, horafin) VALUES
-    (_idsolicita, _idubicaciondocente, _horainicio, _horafin);
-    SELECT @@last_insert_id 'idsolicitud';
+    DECLARE solapamientos INT;
+
+    -- Verificar si existe solapamiento de horarios para el mismo ejemplar en la misma ubicación
+    SELECT COUNT(*)
+    INTO solapamientos
+    FROM solicitudes s
+    WHERE s.idubicaciondocente = _idubicaciondocente
+        AND (
+            (_horainicio BETWEEN s.horainicio AND s.horafin)
+            OR (_horafin BETWEEN s.horainicio AND s.horafin)
+            OR (s.horainicio BETWEEN _horainicio AND _horafin)
+            OR (s.horafin BETWEEN _horainicio AND _horafin)
+        );
+
+    -- Si solapamientos es mayor a cero, no se permite el registro
+    IF solapamientos > 0 THEN
+        /*SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No se puede registrar la solicitud porque hay solapamiento de horarios en la misma ubicación.';*/
+        SELECT 0 AS response;
+    ELSE
+        -- No hay solapamiento, se procede con el registro de la solicitud
+        INSERT INTO solicitudes (idsolicita, idubicaciondocente, horainicio, horafin, create_at)
+        VALUES (_idsolicita, _idubicaciondocente, _horainicio, _horafin, NOW());
+
+        SELECT LAST_INSERT_ID() AS idsolicitud;
+    END IF;
 END $$
 CALL spu_solicitudes_registrar(1,1, '2024-07-05 09:58:00', '2024-07-11 10:15:00')
 
@@ -197,16 +218,11 @@ BEGIN
 END $$
 CALL listar_tipos(2);
         
-selecT * from TIPOS;
+
 
 -- adicional 2.0
 DELIMITER $$
-CREATE PROCEDURE listar_equipos_disponibles(
-    IN _idtipo INT,
-    IN _horainicio DATETIME,
-    IN _horafin DATETIME
-)
-BEGIN
+CREATE PROCEDURE `listar_equipos_disponibles` (IN `_idtipo` INT, IN `_horainicio` DATETIME, IN `_horafin` DATETIME)   BEGIN
     -- Obtener los ejemplares del tipo especificado que no están en uso en el intervalo dado
     SELECT 
         e.idejemplar,
@@ -232,7 +248,6 @@ BEGIN
                     OR (s.horainicio BETWEEN _horainicio AND _horafin)
                     OR (s.horafin BETWEEN _horainicio AND _horafin)
                 )
-                AND ds.inactive_at IS NULL
                 -- Validación adicional por hora
                 -- AND TIME(_horainicio) < TIME(s.horafin)
                 -- AND TIME(_horafin) > TIME(s.horainicio)
@@ -241,7 +256,8 @@ BEGIN
         t.idtipo = _idtipo
         AND reservados.idejemplar IS NULL -- Excluir ejemplares reservados
 		AND e.estado != 2;
-END $$
+END$$
+
 CALL listar_equipos_disponibles1(1, '2024-06-20 03:45:00','2024-06-21 03:45:00');
 CALL listar_equipos_disponibles(1, '2024-06-17 22:49:31', '2024-06-19 22:55:00');
 

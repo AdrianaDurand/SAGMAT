@@ -1,6 +1,7 @@
 USE SAGMAT;
 
 -- LISTADO DE LOS PRÉSTAMOS POR APROBAR
+call spu_listado_solic();
 DELIMITER $$
 CREATE PROCEDURE spu_listado_solic()
 BEGIN
@@ -23,7 +24,9 @@ BEGIN
 END$$
 
 -- LISTADO DE LOS DETALLES DE LOS PRESTAMOS SOLICITADOS
-CALL sp_listado_detsoli(3);
+SELECT * FROM DETSOLICITUDES;
+
+CALL sp_listado_detsoli(1);
 DELIMITER $$
 CREATE PROCEDURE sp_listado_detsoli(IN _idsolicitud INT)
 BEGIN
@@ -32,7 +35,7 @@ BEGIN
 		ds.idsolicitud,
 		t.tipo AS tipo,
 		e.nro_equipo,
-		ds.cantidad DIV total_registros.cantidad_total AS cantidad_por_registro
+		ds.cantidad AS cantidad_por_registro
 	FROM 
 		detsolicitudes ds
 	JOIN 
@@ -54,15 +57,19 @@ BEGIN
 END$$
 
 SELECT * FROM stock;
+select * from recursos;
+SELECT * FROM SOLICITUDES;
+SELECT * FROM DETSOLICITUDES;
+SELECT * FROM ejemplares;
+SELECT * FROM PRESTAMOS;
 
-SELECT * FROM detsolicitudes
+CALL registrar_prestamo1(1, 1);
 
 
-
--- REGISTRO DEL PRÉSTAMO
+-- ofi 1.0
 DELIMITER $$
 CREATE PROCEDURE registrar_prestamo1(IN p_iddetallesolicitud INT, IN p_idatiende INT)   BEGIN
-    DECLARE v_idsolicitud INT;
+     DECLARE v_idsolicitud INT;
     DECLARE v_stock_actual INT;
     DECLARE v_cantidad_solicitada INT;
     DECLARE v_iddetallesolicitud INT; 
@@ -141,6 +148,7 @@ CREATE PROCEDURE registrar_prestamo1(IN p_iddetallesolicitud INT, IN p_idatiende
     -- Cerrar el cursor
     CLOSE cur_detalles;
 END$$
+select * from detsolicitudes;
 
 -- ELIMINACION DE DET SOLICITUDES Y SOLICITUDES
 DELIMITER $$

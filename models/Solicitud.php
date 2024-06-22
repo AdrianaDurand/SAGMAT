@@ -32,7 +32,7 @@ class Solicitud extends Conexion
         try {
             $consulta = $this->conexion->prepare("CALL spu_solicitudes_total_resumen()");
             $consulta->execute(
-
+          
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

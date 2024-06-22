@@ -114,7 +114,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const itemsPerPage = 2; // Número de elementos por página
             let currentPage = 1;
             let totalPages = 1;
@@ -128,8 +128,8 @@
                 var showMoreIcons = document.querySelectorAll(".show-more-icon");
                 var returnIcons = document.querySelectorAll(".return-icon");
 
-                showMoreIcons.forEach(function(icon) {
-                    icon.addEventListener("click", function() {
+                showMoreIcons.forEach(function (icon) {
+                    icon.addEventListener("click", function () {
                         var originalCard = this.closest('.card');
                         var detailedCard = originalCard.nextElementSibling;
                         var idprestamo = this.getAttribute('data-idprestamo');
@@ -137,7 +137,7 @@
                         fetchDetails(idprestamo, detailedCard);
 
                         originalCard.classList.add('card-expand');
-                        setTimeout(function() {
+                        setTimeout(function () {
                             originalCard.style.display = "none";
                             detailedCard.style.display = "block";
                             detailedCard.classList.add('card-expand');
@@ -145,13 +145,13 @@
                     });
                 });
 
-                returnIcons.forEach(function(icon) {
-                    icon.addEventListener("click", function() {
+                returnIcons.forEach(function (icon) {
+                    icon.addEventListener("click", function () {
                         var detailedCard = this.closest('.card');
                         var originalCard = detailedCard.previousElementSibling;
 
                         detailedCard.classList.remove('card-expand');
-                        setTimeout(function() {
+                        setTimeout(function () {
                             detailedCard.style.display = "none";
                             originalCard.style.display = "block";
                             originalCard.classList.remove('card-expand');
@@ -244,9 +244,9 @@
                 parametros.append("fechafin", endDate);
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
+                    method: "POST",
+                    body: parametros
+                })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         console.log(`Datos obtenidos:`, datos);
@@ -310,9 +310,9 @@
                 parametros.append('iddevolucion', iddevolucion);
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
+                    method: "POST",
+                    body: parametros
+                })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         console.log(datos);
@@ -330,24 +330,24 @@
                             const estadoTexto = estadoTextos[detalle.estadodevolucion] || 'Desconocido';
 
                             detailedCard.querySelector('.card-body').innerHTML = `
-                <h3 class="card-title">Detalles Adicionales</h3>
-                <div class="row">
-                    <div class="col-md-8">
-                        <p><strong>Personal que atendió devolución:</strong> ${detalle.atendido_nombres}</p>
-                        <p><strong>Observación:</strong> ${detalle.observacion}</p>
-                        <p><strong>Estado:</strong> ${estadoTexto}</p>
-                    </div>
-                </div>
-                <div class="mt-1 text-end">
-                    <button type="button" class="btn btn-warning imprimir" data-iddevolucion="${iddevolucion}">Generar PDF</button>
-                </div>
-                <i class="bi bi-arrow-left return-icon mt-3"></i>
-            `;
+                                <h3 class="card-title">Detalles Adicionales</h3>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <p><strong>Personal que atendió devolución:</strong> ${detalle.atendido_nombres}</p>
+                                        <p><strong>Observación:</strong> ${detalle.observacion}</p>
+                                        <p><strong>Estado:</strong> ${estadoTexto}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-1 text-end">
+                                    <button type="button" class="btn btn-warning imprimir" data-iddevolucion="${iddevolucion}">Generar PDF</button>
+                                </div>
+                                <i class="bi bi-arrow-left return-icon mt-3"></i>
+                            `;
                         } else {
                             detailedCard.querySelector('.card-body').innerHTML = `
-                <p>No se encontraron detalles adicionales para esta devolución.</p>
-                <i class="bi bi-arrow-left return-icon mt-3"></i>
-            `;
+                                <p>No se encontraron detalles adicionales para esta devolución.</p>
+                                <i class="bi bi-arrow-left return-icon mt-3"></i>
+                            `;
                         }
                         setupCardListeners();
                     })
@@ -356,15 +356,14 @@
                     });
             }
 
-
             function completo() {
                 const parametros = new FormData();
                 parametros.append("operacion", "listarHistorial");
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
+                    method: "POST",
+                    body: parametros
+                })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         dataObtenida = datos;
@@ -382,7 +381,7 @@
             }
 
             completo();
-            document.addEventListener("click", function(event) {
+            document.addEventListener("click", function (event) {
                 const target = event.target;
                 if (target.classList.contains('imprimir')) {
                     const iddevolucion = target.getAttribute('data-iddevolucion');
