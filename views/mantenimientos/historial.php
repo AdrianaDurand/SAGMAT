@@ -101,7 +101,7 @@
 
 <body>
 
-    <div id="wrapper">
+    <div id="">
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
         <!-- End of Sidebar -->

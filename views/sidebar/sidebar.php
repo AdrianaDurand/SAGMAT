@@ -94,6 +94,22 @@ function reemplazarCadena($string)
             background-color: #1F3AE6;
             background-size: cover;
         }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        #content-wrapper {
+            margin-left: 250px;
+        }
+        
+       
+        
+       
+
     </style>
 </head>
 
