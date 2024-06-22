@@ -186,7 +186,7 @@ function reemplazarCadena($string)
     </div>
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <a class="scroll-to-top rounded" href="#page-top" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
         <i class="fas fa-angle-up"></i>
     </a>
     <!-- Bootstrap core JavaScript-->

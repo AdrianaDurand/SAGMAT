@@ -70,7 +70,7 @@
 
 <body>
 
-    <div id="">
+    <div id="" >
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
         <!-- End of Sidebar -->
@@ -141,7 +141,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="fechainicio"><strong>Fecha de inicio:</strong></label>
-                                <input type="datetime-local" class="form-control border" id="fechainicio" required min="<?php echo date('Y-m-d\TH:i'); ?>">
+                                <input type="datetime-local" class="form-control border" id="fechainicio" required>
                                 <div class="invalid-feedback">Por favor, ingrese una fecha de inicio.</div>
                             </div>
                             <div class="col-md-6">
@@ -150,6 +150,7 @@
                                 <div class="invalid-feedback">Por favor, ingrese una fecha de fin.</div>
                             </div>
                         </div>
+
 
                         <div class="col-md-12">
                             <label for="comentarios" class="form-label">Comentarios:</label>
@@ -177,7 +178,7 @@
 
                         <div class="col-md-12">
                             <label for="fechabaja"><strong>Fecha Baja:</strong></label>
-                            <input type="date" class="form-control border" id="fechabaja" required  min="<?php echo date('Y-m-d'); ?>">
+                            <input type="date" class="form-control border" id="fechabaja" required min="<?php echo date('Y-m-d'); ?>">
                             <div class="invalid-feedback">Por favor, ingrese una fecha.</div>
                         </div>
 
@@ -232,8 +233,25 @@
         const fechainicio = document.getElementById('fechainicio');
         const fechafin = document.getElementById('fechafin');
 
-        fechainicio.addEventListener('change', function() {
-            fechafin.min = this.value;
+        // Set minimum date and time for fechainicio to now
+        const now = new Date().toISOString().slice(0, 16);
+        fechainicio.min = now;
+
+        fechainicio.addEventListener('change', () => {
+            // Set minimum date and time for fechafin to the selected fechainicio
+            fechafin.min = fechainicio.value;
+
+            // Clear fechafin value if it's not valid
+            if (fechafin.value && fechafin.value <= fechainicio.value) {
+                fechafin.value = '';
+            }
+        });
+
+        fechafin.addEventListener('change', () => {
+            // Clear fechafin value if it's not valid
+            if (fechafin.value <= fechainicio.value) {
+                fechafin.value = '';
+            }
         });
 
         function getTipos() {
@@ -568,11 +586,11 @@
             modal.addEventListener('hidden.bs.modal', () => {
                 const form = modal.querySelector('form');
                 if (form && modal.hasAttribute('data-bs-reset-form')) {
-                    form.reset(); 
+                    form.reset();
                     form.querySelectorAll(':invalid').forEach(field => {
-                        field.classList.remove('is-invalid'); 
+                        field.classList.remove('is-invalid');
                     });
-                    form.classList.remove('was-validated'); 
+                    form.classList.remove('was-validated');
                 }
             });
         });
