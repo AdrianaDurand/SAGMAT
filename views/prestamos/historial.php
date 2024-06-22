@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <div id="wrapper">
+  <div id="">
     <?php require_once '../../views/sidebar/sidebar.php'; ?>
     <div id="content-wrapper" class="d-flex flex-column">
       <div class="mt-1">
