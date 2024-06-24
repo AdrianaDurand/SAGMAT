@@ -42,6 +42,20 @@ class Devolucion extends Conexion{
             die($e->getMessage());
         }
     }
+    public function listarPrestamo($datos =[])
+    {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_listar_devoluciones_pr(?)");
+            $consulta->execute(
+                array(
+                    $datos['idsolicitud']
+                )
+            );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
     
     public function listarHistorial()
     {

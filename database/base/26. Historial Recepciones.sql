@@ -43,7 +43,7 @@ WHERE
     dr.idrecepcion = _idrecepcion;
 END $$
 CALL spu_historial_detalle(2);
-CALL spu_listar_porfecha('2024-06-03', '2024-06-04');
+CALL spu_listar_porfecha('2024-06-18', '2024-06-24');
 
 DELIMITER $$
 CREATE PROCEDURE spu_listado_historial_todo()

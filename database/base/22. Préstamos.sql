@@ -68,85 +68,71 @@ CALL registrar_prestamo1(1, 1);
 
 -- ofi 1.0
 DELIMITER $$
-CREATE PROCEDURE registrar_prestamo1(IN p_iddetallesolicitud INT, IN p_idatiende INT)   BEGIN
-     DECLARE v_idsolicitud INT;
-    DECLARE v_stock_actual INT;
-    DECLARE v_cantidad_solicitada INT;
-    DECLARE v_iddetallesolicitud INT; 
-    DECLARE v_idrecurso INT;
+CREATE PROCEDURE `registrar_prestamo1` (IN `p_iddetallesolicituds` VARCHAR(255), IN `p_idatiende` INT)   BEGIN
+    DECLARE v_iddetallesolicitud INT;
+    DECLARE v_idsolicitud INT;
     DECLARE v_idejemplar INT;
-    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_iddetallerecepcion INT;
+    DECLARE v_idrecurso INT;
+    DECLARE v_cantidad SMALLINT;
+    DECLARE v_pos INT DEFAULT 1;
+    DECLARE v_next_pos INT;
+    DECLARE v_length INT;
+
+    SET v_length = CHAR_LENGTH(p_iddetallesolicituds);
     
-    -- Cursor para obtener todos los detalles de solicitud asociados al mismo idsolicitud
-    DECLARE cur_detalles CURSOR FOR 
-        SELECT ds.iddetallesolicitud, ds.idtipo, ds.cantidad, ds.idejemplar
-        FROM detsolicitudes ds
-        WHERE ds.idsolicitud = (
-            SELECT idsolicitud
-            FROM detsolicitudes
-            WHERE iddetallesolicitud = p_iddetallesolicitud
-        );
-
-    -- Declaraciones necesarias para manejar el cursor
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    -- Abrir el cursor
-    OPEN cur_detalles;
-
-    -- Obtener el idsolicitud asociado al iddetallesolicitud
-    SELECT idsolicitud INTO v_idsolicitud
-    FROM detsolicitudes
-    WHERE iddetallesolicitud = p_iddetallesolicitud;
-
-    -- Cambiar el estado de todas las solicitudes asociadas al idsolicitud a 1 (prestado)
-    UPDATE solicitudes
-    SET estado = 1
-    WHERE idsolicitud = v_idsolicitud;
-
-    -- Cambiar el estado de todos los detalles de solicitud asociados al idsolicitud a 1 (prestado)
-    UPDATE detsolicitudes
-    SET estado = 1
-    WHERE idsolicitud = v_idsolicitud;
-    
-    -- Iniciar la iteración sobre los detalles de solicitud
-    detalle_loop: LOOP
-        -- Leer el próximo registro del cursor
-        FETCH cur_detalles INTO v_iddetallesolicitud, v_idrecurso, v_cantidad_solicitada, v_idejemplar;
-
-        -- Salir del bucle si no hay más detalles de solicitud
-        IF done THEN
-            LEAVE detalle_loop;
+    WHILE v_pos <= v_length DO
+        SET v_next_pos = LOCATE(',', p_iddetallesolicituds, v_pos);
+        IF v_next_pos = 0 THEN
+            SET v_next_pos = v_length + 1;
         END IF;
+        SET v_iddetallesolicitud = SUBSTRING(p_iddetallesolicituds, v_pos, v_next_pos - v_pos);
 
-        -- Obtener el stock actual del recurso (ejemplar)
-        SELECT stock INTO v_stock_actual
-        FROM stock
+        -- Insertar el préstamo en la tabla prestamos
+        INSERT INTO prestamos (iddetallesolicitud, idatiende, estadoentrega)
+        VALUES (v_iddetallesolicitud, p_idatiende, 'Pendiente');
+
+        -- Obtener los datos necesarios del detalle de la solicitud
+        SELECT idsolicitud, idejemplar, cantidad
+        INTO v_idsolicitud, v_idejemplar, v_cantidad
+        FROM detsolicitudes
+        WHERE iddetallesolicitud = v_iddetallesolicitud;
+
+        -- Actualizar el estado del ejemplar a 1
+        UPDATE ejemplares
+        SET estado = '1'
+        WHERE idejemplar = v_idejemplar;
+
+        -- Actualizar el estado del detalle de la solicitud a 1
+        UPDATE detsolicitudes
+        SET estado = 1
+        WHERE iddetallesolicitud = v_iddetallesolicitud;
+
+        -- Actualizar el estado de la solicitud a 1
+        UPDATE solicitudes
+        SET estado = 1
+        WHERE idsolicitud = v_idsolicitud;
+
+        -- Obtener el iddetallerecepcion del ejemplar
+        SELECT iddetallerecepcion
+        INTO v_iddetallerecepcion
+        FROM ejemplares
+        WHERE idejemplar = v_idejemplar;
+
+        -- Obtener el idrecurso del detalle de recepción
+        SELECT idrecurso
+        INTO v_idrecurso
+        FROM detrecepciones
+        WHERE iddetallerecepcion = v_iddetallerecepcion;
+
+        -- Reducir el stock del recurso según la cantidad en el detalle de la solicitud
+        UPDATE stock
+        SET stock = stock - v_cantidad
         WHERE idrecurso = v_idrecurso;
 
-        -- Verificar si hay suficiente stock para el préstamo
-        IF v_stock_actual >= v_cantidad_solicitada THEN
-            -- Registrar el préstamo
-            INSERT INTO prestamos (iddetallesolicitud, idatiende, create_at)
-            VALUES (v_iddetallesolicitud, p_idatiende, NOW());
+        SET v_pos = v_next_pos + 1;
+    END WHILE;
 
-            -- Actualizar el estado del ejemplar a 1 (prestado)
-            UPDATE ejemplares
-            SET estado = 1
-            WHERE idejemplar = v_idejemplar;
-
-            -- Actualizar el stock
-            UPDATE stock
-            SET stock = v_stock_actual - v_cantidad_solicitada
-            WHERE idrecurso = v_idrecurso;
-
-            SELECT 'Préstamo registrado exitosamente.' AS Message;
-        ELSE
-            SELECT 'No hay suficiente stock para realizar el préstamo.' AS Error;
-        END IF;
-    END LOOP detalle_loop;
-
-    -- Cerrar el cursor
-    CLOSE cur_detalles;
 END$$
 select * from detsolicitudes;
 

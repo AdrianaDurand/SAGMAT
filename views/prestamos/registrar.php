@@ -186,47 +186,77 @@
             parametros.append("operacion", "listar");
 
             fetch(`../../controllers/prestamo.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-                    let numFila = 1;
-                    $("#lista-prestamos tbody").innerHTML = '';
-                    datos.forEach(element => {
-                        let nuevaFila = `
-                            <tr>
-                            <td>${element.idsolicitud}</td>
-                            <td>${element.docente}</td>
-                            <td>${element.ubicacion}</td>
-                            <td>${element.fechasolicitud}</td>
-                            <td>${element.horario}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
-                                    </button>
-                                    
-                                </div>
-                            </td>
-                                </tr>
+                method: "POST",
+                body: parametros
+            })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                let numFila = 1;
+                $("#lista-prestamos tbody").innerHTML = '';
+                datos.forEach(element => {
+                    let nuevaFila = `
+                    <tr>
+                        <td>${element.idsolicitud}</td>
+                        <td>${element.docente}</td>
+                        <td>${element.ubicacion}</td>
+                        <td>${element.fechasolicitud}</td>
+                        <td>${element.horario}</td>
+                        <td>
+                            
+                            <div class="dropdown">
+                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
+                                </button>
+                                <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
+                            </div>
+                        </td>
+                    </tr>
                                 `;
-                        $("#lista-prestamos tbody").innerHTML += nuevaFila;
-                        numFila++;
-                    });
-                    document.querySelectorAll('.dropdown-item.view').forEach(button => {
-                        button.addEventListener('click', function() {
-                            const idsolicitud = this.getAttribute('data-idsolicitud');
-                            detalle(idsolicitud);
-                        });
-                    });
-
-                })
-                .catch(e => {
-                    console.error(e)
+                    $("#lista-prestamos tbody").innerHTML += nuevaFila;
+                    numFila++;
                 });
+                document.querySelectorAll('.dropdown-item.view').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const idsolicitud = this.getAttribute('data-idsolicitud');
+                        detalle(idsolicitud);
+                    });
+                });
+            })
+            .catch(e => {
+                console.error(e)
+            });
         }
 
+        // Controlador de eventos para los enlaces de "Ver detalle"
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('eliminar')) {
+                event.preventDefault();
+                const fila = event.target.closest('tr'); // Obtener la fila más cercana
+                if (fila) {
+                    const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
+                    if (confirm("¿Está seguro de eliminar la solicitud?")) {
+                        let parametros = new FormData();
+                        parametros.append("operacion", "eliminar");
+                        parametros.append("idsolicitud", idsolicitud);
 
+                        fetch(`../../controllers/prestamo.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.text())
+                        .then(datos => {
+                            if (datos.trim() == "") {
+                                listar();
+                            }
+                        })
+                        .catch(e => {
+                            console.error(e)
+                        })
+                    }
+                } else {
+                    console.error("No se encontró la fila de la tabla.");
+                }
+            }
+        });
         let listaIdDetalles = [];
 
         function detalle(idsolicitud) {

@@ -43,7 +43,7 @@ BEGIN
 END $$
 CALL sp_historial_devoluciones_total();
 
-CALL sp_historial_devolucion_det();
+CALL sp_historial_devolucion_det(1);
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devolucion_det(_iddevolucion INT)
 BEGIN

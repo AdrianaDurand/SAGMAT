@@ -338,11 +338,11 @@
                 var horaActual = `${horas}:${minutos}`;
 
                 modalregistro.show();
-                document.getElementById('horainicio').value = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
-                document.getElementById('horainicio').min = `${info.dateStr}T00:00`; // Actualizar el valor del campo horainicio con la hora actual
-                document.getElementById('horainicio').max = `${info.dateStr}T23:59`; // Actualizar el valor del campo horainicio con la hora actual
-                document.getElementById('horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
-                document.getElementById('horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+                $('#horainicio').value = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+                $('#horainicio').min = `${info.dateStr}T00:00`; // Actualizar el valor del campo horainicio con la hora actual
+                $('#horainicio').max = `${info.dateStr}T23:59`; // Actualizar el valor del campo horainicio con la hora actual
+                $('#horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
+                $('#horafin').min = `${info.dateStr}T${horaActual}`; // Actualizar el valor del campo horainicio con la hora actual
               }
             },
             // Ocultar sábado y domingo

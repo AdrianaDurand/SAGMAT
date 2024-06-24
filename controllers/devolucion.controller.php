@@ -21,6 +21,12 @@ if(isset($_POST['operacion'])){
             ];
             echo json_encode($devolucion->listar($datosEnviar));
         break;
+        case 'listarPrestamo':
+            $datosEnviar = [
+                "idsolicitud" => $_POST['idsolicitud']
+            ];
+            echo json_encode($devolucion->listarPrestamo($datosEnviar));
+        break;
         case 'listarHistorial':
             echo json_encode($devolucion->listarHistorial());
         break;

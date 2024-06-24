@@ -342,7 +342,7 @@
                 console.log("ID del personal seleccionado:", idPersonalSeleccionado);
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
-                parametros.append("idusuario", <?php echo $idusuario ?>);
+                // parametros.append("idusuario", <?php echo $idusuario ?>);
                 parametros.append("idpersonal", idPersonalSeleccionado);
                 parametros.append("idalmacen", $("#idalmacen").value);
                 parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
