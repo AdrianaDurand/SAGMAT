@@ -471,7 +471,6 @@
                     // El usuario ha confirmado, proceder con el registro
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
-                    parametros.append("idusuario", <?php echo $idusuario ?>);
                     parametros.append("idejemplar", idejemplar);
                     parametros.append("fechainicio", $("#fechainicio").value);
                     parametros.append("fechafin", $("#fechafin").value);
@@ -522,7 +521,6 @@
                 if (result.isConfirmed) {
                     const parametros = new FormData();
                     parametros.append("operacion", "registrar");
-                    parametros.append("idusuario", <?php echo $idusuario ?>);
                     parametros.append("idejemplar", idejemplar);
                     parametros.append("fechabaja", $("#fechabaja").value);
                     parametros.append("motivo", $("#motivo").value);

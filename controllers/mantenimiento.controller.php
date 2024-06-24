@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once '../models/Mantenimiento.php';
 
 if (isset($_POST['operacion'])){
@@ -13,7 +13,7 @@ if (isset($_POST['operacion'])){
 
         case 'registrar':
             $datosEnviar = [
-                "idusuario"     => $_POST['idusuario'],
+                "idusuario"     => $_SESSION['idusuario'],
                 "idejemplar"    => $_POST['idejemplar'],
                 "fechainicio"   => $_POST['fechainicio'],
                 "fechafin"      => $_POST['fechafin'],

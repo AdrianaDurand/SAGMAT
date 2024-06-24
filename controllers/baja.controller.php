@@ -1,4 +1,5 @@
 <?php
+session_start();
 date_default_timezone_set("America/Lima");
 require_once '../models/Bajas.php';
 
@@ -14,7 +15,7 @@ if (isset($_POST['operacion'])) {
 
         case 'registrar':
             $datosEnviar = [
-                "idusuario"     => $_POST['idusuario'],
+                "idusuario"     => $_SESSION['idusuario'],
                 "idejemplar"    => $_POST['idejemplar'],
                 "fechabaja"     => $_POST['fechabaja'],
                 "motivo"        => $_POST['motivo'],
