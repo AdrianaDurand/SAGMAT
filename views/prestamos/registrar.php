@@ -131,27 +131,27 @@
                 </div>
                 <div class="modal-body">
                     <div class="container mt-3">
-                      
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table text-center" id="tabla-detalles">
-                                            <colgroup>
-                                                <col width="10%">
-                                                <col width="45%">
-                                                <col width="45%">
-                                            </colgroup>
-                                            <thead class="table-warning">
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Tipo</th>
-                                                    <th>N° Equipo</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="">
-                                            </tbody>
-                                        </table>
-                                    </div> <!-- FIN DEL COL-MD-12 -->
-                                </div> <!-- FIN DEL ROW -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table text-center" id="tabla-detalles">
+                                    <colgroup>
+                                        <col width="10%">
+                                        <col width="45%">
+                                        <col width="45%">
+                                    </colgroup>
+                                    <thead class="table-warning">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tipo</th>
+                                            <th>N° Equipo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="">
+                                    </tbody>
+                                </table>
+                            </div> <!-- FIN DEL COL-MD-12 -->
+                        </div> <!-- FIN DEL ROW -->
                     </div>
                 </div>
 
@@ -172,176 +172,181 @@
 <script src="../../javascript/sweetalert.js"></script>
 
 <script>
-   document.addEventListener("DOMContentLoaded", () => {
-    const cerrar = new bootstrap.Modal(document.getElementById("modalAgregar"));
+    document.addEventListener("DOMContentLoaded", () => {
+        const cerrar = new bootstrap.Modal(document.getElementById("modalAgregar"));
 
-    function $(id) {
-        return document.querySelector(id);
-    }
+        const tabla = document.querySelector("#lista-prestamos tbody");
 
-    function listar() {
-        const parametros = new FormData();
-        parametros.append("operacion", "listar");
-
-        fetch(`../../controllers/prestamo.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            let numFila = 1;
-            $("#lista-prestamos tbody").innerHTML = '';
-            datos.forEach(element => {
-                let nuevaFila = `
-                <tr>
-                    <td>${element.idsolicitud}</td>
-                    <td>${element.docente}</td>
-                    <td>${element.ubicacion}</td>
-                    <td>${element.fechasolicitud}</td>
-                    <td>${element.horario}</td>
-                    <td>
-                        
-                        <div class="dropdown">
-                            <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
-                            </button>
-                            <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
-                        </div>
-                    </td>
-                </tr>
-                            `;
-                $("#lista-prestamos tbody").innerHTML += nuevaFila;
-                numFila++;
-            });
-            document.querySelectorAll('.dropdown-item.view').forEach(button => {
-                button.addEventListener('click', function() {
-                    const idsolicitud = this.getAttribute('data-idsolicitud');
-                    detalle(idsolicitud);
-                });
-            });
-        })
-        .catch(e => {
-            console.error(e)
-        });
-    }
-
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('eliminar')) {
-            event.preventDefault();
-            const fila = event.target.closest('tr'); // Obtener la fila más cercana
-            if (fila) {
-                const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
-                if (confirm("¿Está seguro de eliminar la solicitud?")) {
-                    let parametros = new FormData();
-                    parametros.append("operacion", "eliminar");
-                    parametros.append("idsolicitud", idsolicitud);
-
-                    fetch(`../../controllers/prestamo.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.text())
-                    .then(datos => {
-                        if (datos.trim() == "") {
-                            listar();
-                        }
-                    })
-                    .catch(e => {
-                        console.error(e)
-                    })
-                }
-            } else {
-                console.error("No se encontró la fila de la tabla.");
-            }
+        function $(id) {
+            return document.querySelector(id);
         }
-    });
 
-    let listaIdDetalles = [];
+        function listar() {
+            const parametros = new FormData();
+            parametros.append("operacion", "listar");
 
-    function detalle(idsolicitud) {
-        const parametros = new FormData();
-        parametros.append("operacion", "listarDet");
-        parametros.append("idsolicitud", idsolicitud);
+            fetch(`../../controllers/prestamo.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    let numFila = 1;
+                    if (datos.length === 0) {
+                        tabla.innerHTML = `<tr><td colspan="6">No se encontraron solicitudes</td></tr>`;
+                    } else {
+                        $("#lista-prestamos tbody").innerHTML = '';
+                        datos.forEach(element => {
+                            let nuevaFila = `
+                                    <tr>
+                                        <td>${element.idsolicitud}</td>
+                                        <td>${element.docente}</td>
+                                        <td>${element.ubicacion}</td>
+                                        <td>${element.fechasolicitud}</td>
+                                        <td>${element.horario}</td>
+                                        <td>
+                                            
+                                            <div class="dropdown">
+                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
+                                                </button>
+                                                <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
+                                            </div>
+                                        </td>
+                                    </tr>
+                            `;
+                            $("#lista-prestamos tbody").innerHTML += nuevaFila;
+                            numFila++;
+                        });
+                    }
+                    document.querySelectorAll('.dropdown-item.view').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const idsolicitud = this.getAttribute('data-idsolicitud');
+                            detalle(idsolicitud);
+                        });
+                    });
+                })
+                .catch(e => {
+                    console.error(e)
+                });
+        }
 
-        fetch(`../../controllers/prestamo.controller.php`, {
-            method: "POST",
-            body: parametros
-        })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            $("#tabla-detalles tbody").innerHTML = ''; // Clear the table before adding new details
-            listaIdDetalles = []; // Clear the list before adding new details
-            datos.forEach(registro => {
-                const nuevoItem = `
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('eliminar')) {
+                event.preventDefault();
+                const fila = event.target.closest('tr'); // Obtener la fila más cercana
+                if (fila) {
+                    const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
+                    if (confirm("¿Está seguro de eliminar la solicitud?")) {
+                        let parametros = new FormData();
+                        parametros.append("operacion", "eliminar");
+                        parametros.append("idsolicitud", idsolicitud);
+
+                        fetch(`../../controllers/prestamo.controller.php`, {
+                                method: "POST",
+                                body: parametros
+                            })
+                            .then(respuesta => respuesta.text())
+                            .then(datos => {
+                                if (datos.trim() == "") {
+                                    listar();
+                                }
+                            })
+                            .catch(e => {
+                                console.error(e)
+                            })
+                    }
+                } else {
+                    console.error("No se encontró la fila de la tabla.");
+                }
+            }
+        });
+
+        let listaIdDetalles = [];
+
+        function detalle(idsolicitud) {
+            const parametros = new FormData();
+            parametros.append("operacion", "listarDet");
+            parametros.append("idsolicitud", idsolicitud);
+
+            fetch(`../../controllers/prestamo.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    $("#tabla-detalles tbody").innerHTML = ''; // Clear the table before adding new details
+                    listaIdDetalles = []; // Clear the list before adding new details
+                    datos.forEach(registro => {
+                        const nuevoItem = `
                     <tr>
                         <td>${registro.iddetallesolicitud}</td>
                         <td>${registro.tipo}</td>
                         <td>${registro.nro_equipo}</td>
                     </tr>
                 `;
-                $("#tabla-detalles tbody").innerHTML += nuevoItem;
-                listaIdDetalles.push(registro.iddetallesolicitud);
-            });
-        })
-        .catch(error => {
-            console.error("Error al obtener detalles de la solicitud:", error);
-        });
-    }
-
-    function registrar(listaIdDetalles) {
-        Swal.fire({
-            title: '¿Está seguro de registrar el préstamo?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, registrar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                console.log("Registrando con listaIdDetalles:", listaIdDetalles);
-                const parametros = new FormData();
-                parametros.append("operacion", "registrar");
-                parametros.append("iddetallesolicitud", listaIdDetalles);
-                parametros.append("idatiende", <?php echo $idusuario; ?>);
-
-                fetch(`../../controllers/prestamo.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.text())
-                .then(datos => {
-                    cerrar.hide();
-                    listar();
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Préstamo registrado con éxito',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        
-                        $("#tabla-detalles tbody").innerHTML = ''; // Clear details table
-                        listaIdDetalles = []; // Reset the details list
+                        $("#tabla-detalles tbody").innerHTML += nuevoItem;
+                        listaIdDetalles.push(registro.iddetallesolicitud);
                     });
                 })
-                .catch(e => {
-                    console.error(e);
+                .catch(error => {
+                    console.error("Error al obtener detalles de la solicitud:", error);
                 });
-            }
+        }
+
+        function registrar(listaIdDetalles) {
+            Swal.fire({
+                title: '¿Está seguro de registrar el préstamo?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, registrar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("Registrando con listaIdDetalles:", listaIdDetalles);
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("iddetallesolicitud", listaIdDetalles);
+                    parametros.append("idatiende", <?php echo $idusuario; ?>);
+
+                    fetch(`../../controllers/prestamo.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.text())
+                        .then(datos => {
+                            cerrar.hide();
+                            listar();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Préstamo registrado con éxito',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+
+                                $("#tabla-detalles tbody").innerHTML = ''; // Clear details table
+                                listaIdDetalles = []; // Reset the details list
+                            });
+                        })
+                        .catch(e => {
+                            console.error(e);
+                        });
+                }
+            });
+        }
+
+        $("#btnEnviar").addEventListener("click", function() {
+            registrar(listaIdDetalles);
         });
-    }
 
-    $("#btnEnviar").addEventListener("click", function() {
-        registrar(listaIdDetalles);
+        // Clear modal content on close
+        document.getElementById('modalAgregar').addEventListener('hidden.bs.modal', function() {
+            $("#tabla-detalles tbody").innerHTML = ''; // Clear details table
+            listaIdDetalles = []; // Reset the details list
+        });
+
+        listar();
     });
-
-    // Clear modal content on close
-    document.getElementById('modalAgregar').addEventListener('hidden.bs.modal', function () {
-        $("#tabla-detalles tbody").innerHTML = ''; // Clear details table
-        listaIdDetalles = []; // Reset the details list
-    });
-
-    listar();
-});
-
 </script>
 
 
