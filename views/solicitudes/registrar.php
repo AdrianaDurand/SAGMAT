@@ -447,10 +447,13 @@
             .then(datos => {
 
               console.log(datos)
-              if(datos.response == 0){
-                alert("registros solapados")
-                
-              }else{
+              if (datos.response == 0) {
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'Por favor, eliga otra ubicación y hora para registrar la solicitud',
+                });
+
+              } else {
 
                 if (datos.idsolicitud > 0) {
                   console.log(`Solicitud registrada con ID: ${datos.idsolicitud}`);
@@ -467,14 +470,14 @@
                     showConfirmButton: false, // Oculta el botón de confirmación
                     timer: 1500 // Tiempo en milisegundos después del cual se cerrará automáticamente
                   });
-  
+
                   // Realizar otras acciones después de mostrar SweetAlert
                   setTimeout(() => {
                     modalregistro.hide();
                     limpiarFormularios();
                     listar_cronogramas();
                   }, 1500); // Igualando el tiempo para mantener la sincronización
-  
+
                 }
               }
             })
@@ -580,6 +583,21 @@
         function limpiarSelector(selector) {
           document.querySelector(selector).value = ''; // Limpiar el valor seleccionado
         }
+
+        //     function validarHoras() {
+        //     var horainicio = new Date(document.getElementById('horainicio').value);
+        //     var horafin = new Date(document.getElementById('horafin').value);
+
+        //     if (horafin <= horainicio) {
+        //         alert('La hora de fin debe ser mayor que la hora de inicio.');
+        //         document.getElementById('horafin').value = ''; // Limpiar campo horafin si no es válido
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // document.getElementById('horainicio').addEventListener('change', validarHoras);
+        // document.getElementById('horafin').addEventListener('change', validarHoras);
         gettypes();
         getLocation();
         listar_cronogramas();
