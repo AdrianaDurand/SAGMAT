@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -113,6 +114,7 @@
         margin-top: 10px;
     }
 </style>
+
 <body>
     <div id="">
         <!-- Sidebar -->
@@ -160,23 +162,23 @@
             const searchButton = document.getElementById('searchButton');
             const listaRecepcion = document.getElementById('lista-recepcion');
             let datosPrestamos;
-           
+
             searchButton.addEventListener('click', () => {
                 listar();
             });
 
             function getToday() {
-        let date = new Date();
-        let day = date.getDate().toString().padStart(2, '0');
-        let month = (date.getMonth() + 1).toString().padStart(2, '0');
-        let year = date.getFullYear().toString();
+                let date = new Date();
+                let day = date.getDate().toString().padStart(2, '0');
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let year = date.getFullYear().toString();
 
-        let today = `${year}-${month}-${day}`;
+                let today = `${year}-${month}-${day}`;
 
-        document.getElementById("startDate").value = today;
-        document.getElementById("endDate").value = today;
-        listar();
-    }
+                document.getElementById("startDate").value = today;
+                document.getElementById("endDate").value = today;
+                listar();
+            }
 
             function listar() {
                 const startDate = document.getElementById('startDate').value;
@@ -189,18 +191,18 @@
                     parametros.append("fechafin", endDate);
 
                     fetch(`../../controllers/devolucion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        console.log('Datos recibidos:', datos);
-                        datosPrestamos = datos;
-                        actualizarUI();
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener las devoluciones:', error);
-                    });
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            console.log('Datos recibidos:', datos);
+                            datosPrestamos = datos;
+                            actualizarUI();
+                        })
+                        .catch(error => {
+                            console.error('Error al obtener las devoluciones:', error);
+                        });
                 } else {
                     Swal.fire({
                         icon: 'warning',
@@ -213,62 +215,54 @@
             function actualizarUI() {
                 listaRecepcion.innerHTML = '';
 
-                datosPrestamos.forEach(devolucion => {
-                    const card = document.createElement('div');
-                    card.classList.add('col-md-8', 'mb-4');
+                if (datosPrestamos.length === 0) {
+                    document.getElementById("lista-recepcion").innerHTML = `<p>No se encontraron devoluciones pendientes por registrar</p>`;
+        } else {
+            datosPrestamos.forEach(devolucion => {
+                const card = document.createElement('div');
+                card.classList.add('col-md-8', 'mb-4');
 
-                    card.innerHTML = `
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h3 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h3>
-                                        <p class="card-text"><small class="text-muted">${devolucion.horainicio}</small></p>
-                                    </div>
-                                    <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                        <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
-                                    </div>
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h3>
+                                    <p class="card-text"><small class="text-muted">${devolucion.horainicio}</small></p>
                                 </div>
-                                <div class="detalles-container mt-3" style="display: none;">
-                                    <div class="table-responsive">
-                                        <table class="table table-lg text-center">
-                                            <colgroup>
-                                                <col width="5%">
-                                                <col width="25%">
-                                                <col width="25%">
-                                                <col width="25%">
-                                            </colgroup>
-                                            <thead>
-                                                <tr class="table prueba">
-                                                    <th>N°</th>
-                                                    <th>Recurso</th>
-                                                    <th>Observación</th>
-                                                    <th>Estado</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
-                                        </table>
-                                    </div>
-                                    <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idprestamo="${devolucion.idsolicitud}"><i class="fas fa-plus" aria-hidden="true" data-idprestamo="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
+                                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                    <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
                                 </div>
                             </div>
+                            <div class="detalles-container mt-3" style="display: none;">
+                                <div class="table-responsive">
+                                    <table class="table table-lg text-center">
+                                        <colgroup>
+                                            <col width="5%">
+                                            <col width="25%">
+                                            <col width="25%">
+                                            <col width="25%">
+                                        </colgroup>
+                                        <thead>
+                                            <tr class="table prueba">
+                                                <th>N°</th>
+                                                <th>Recurso</th>
+                                                <th>Observación</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
+                                    </table>
+                                </div>
+                                <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idprestamo="${devolucion.idsolicitud}"><i class="fas fa-plus" aria-hidden="true" data-idprestamo="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
+                            </div>
                         </div>
-                    `;
-                    
-                    listaRecepcion.appendChild(card);
-                });
+                    </div>
+                `;
 
-                document.querySelectorAll(".show-more-click").forEach(btn => {
-                    btn.addEventListener("click", (event) => {
-                        const idprestamo = btn.getAttribute("data-idprestamo"); //¿?
-                        const detallesContainer = btn.closest('.card-body').querySelector(".detalles-container");
-                        if (detallesContainer.style.display === 'none') {
-                            detalles(idprestamo, detallesContainer);
-                        } else {
-                            detallesContainer.style.display = 'none';
-                        }
-                    });
-                });
+                listaRecepcion.appendChild(card);
+            });
+        }
 
                 document.querySelectorAll(".edit-button").forEach(btn => {
                     btn.addEventListener("click", (event) => {
@@ -276,10 +270,10 @@
 
                         //aqui 
                         const detallesContainer = btn.closest('.card-body').querySelector(".detalles-container");
-                        
+
                         const coleccion = detallesContainer.querySelectorAll(".registro");
-                        
-                        coleccion.forEach((element, index) => {                            
+
+                        coleccion.forEach((element, index) => {
                             // const idprestamo = btn.getAttribute("data-idprestamo");
                             const idprestamo = element.dataset.idprestamo;
                             const observacion = element.querySelector('.observacion').value;
@@ -290,8 +284,17 @@
                                 observacion: observacion,
                                 estado: estado
                             };
-                            console.log(devolucionData)
-                            registrar(devolucionData);
+                            Swal.fire({
+                                title: '¿Está seguro de registrar la devolución?',
+                                showCancelButton: true,
+                                confirmButtonText: 'Sí, registrar',
+                                cancelButtonText: 'Cancelar',
+                                icon: 'question'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    registrar(devolucionData);
+                                }
+                            });
                         });
                     });
                 });
@@ -342,35 +345,39 @@
                     });
             }
 
-            function registrar(obj){ 
+            function registrar(obj) {
                 const parametros = new FormData();
                 parametros.append('operacion', 'registrar');
                 parametros.append('idprestamo', obj.idprestamo);
                 parametros.append('observacion', obj.observacion);
                 parametros.append('estadodevolucion', obj.estado);
                 return fetch(`../../controllers/devolucion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
-                .then(respuesta => respuesta.json())
-                .then(datos => {
-              
-                    console.log(`Devolución registrada`);
-                    // Eliminar el préstamo registrado de datosPrestamos
-                    datosPrestamos = datosPrestamos.filter(dato => dato.idprestamo !== obj.idprestamo);
-                })
-                .catch(e => {
-                    console.error(e);
-                });
+                        method: "POST",
+                        body: parametros
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+
+                        console.log(`Devolución registrada`);
+                        // Eliminar el préstamo registrado de datosPrestamos
+                        // datosPrestamos = datosPrestamos.filter(dato => dato.idprestamo !== obj.idprestamo);
+                        // Eliminar el card del DOM
+                        const cardEliminar = listaRecepcion.querySelector(`[data-idprestamo="${obj.idprestamo}"]`).closest('.col-md-8');
+                        cardEliminar.remove();
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
             }
             document.querySelector("#startDate").addEventListener('change', function() {
-                    listar();
-                 });
-                document.querySelector("#endDate").addEventListener('change', function() {
-                    listar();
-                 });
+                listar();
+            });
+            document.querySelector("#endDate").addEventListener('change', function() {
+                listar();
+            });
             getToday();
         });
     </script>
 </body>
+
 </html>
