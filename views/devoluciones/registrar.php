@@ -160,22 +160,23 @@
             const searchButton = document.getElementById('searchButton');
             const listaRecepcion = document.getElementById('lista-recepcion');
             let datosPrestamos;
-            let arrayId = []; // Nombre del array
+           
             searchButton.addEventListener('click', () => {
                 listar();
             });
 
-            function getToday(){
-                let date = new Date();
-                let day = date.getDate().toString().padStart(2,'0');
-                let month = (date.getMonth() + 1).toString().padStart(2,'0');
-                let year = date.getFullYear().toString();
+            function getToday() {
+        let date = new Date();
+        let day = date.getDate().toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let year = date.getFullYear().toString();
 
-                let today = `${year}-${month}-${day}`;
+        let today = `${year}-${month}-${day}`;
 
-                $("#startDate").value = today;
-                $("#endDate").value = today;
-            }
+        document.getElementById("startDate").value = today;
+        document.getElementById("endDate").value = today;
+        listar();
+    }
 
             function listar() {
                 const startDate = document.getElementById('startDate').value;
@@ -259,7 +260,7 @@
 
                 document.querySelectorAll(".show-more-click").forEach(btn => {
                     btn.addEventListener("click", (event) => {
-                        const idprestamo = btn.getAttribute("data-idprestamo");
+                        const idprestamo = btn.getAttribute("data-idprestamo"); //¿?
                         const detallesContainer = btn.closest('.card-body').querySelector(".detalles-container");
                         if (detallesContainer.style.display === 'none') {
                             detalles(idprestamo, detallesContainer);
@@ -272,13 +273,15 @@
                 document.querySelectorAll(".edit-button").forEach(btn => {
                     btn.addEventListener("click", (event) => {
                         event.preventDefault();
+
+                        //aqui 
                         const detallesContainer = btn.closest('.card-body').querySelector(".detalles-container");
                         
-                        const coleccion = document.querySelectorAll(".registro");
+                        const coleccion = detallesContainer.querySelectorAll(".registro");
                         
                         coleccion.forEach((element, index) => {                            
                             // const idprestamo = btn.getAttribute("data-idprestamo");
-                            const idprestamo = arrayId[index];
+                            const idprestamo = element.dataset.idprestamo;
                             const observacion = element.querySelector('.observacion').value;
                             const estado = element.querySelector('.form-select').value;
                             // Objeto con los datos de la devolución
@@ -314,9 +317,9 @@
                         // Recorrer cada fila del arreglo
                         let numFila = 1;
                         datosRecibidos.forEach(registro => {
-                            arrayId.push(registro.idprestamo);
+
                             let nuevafila = `
-                                <tr class="registro">
+                                <tr class="registro" data-idprestamo="${registro.idprestamo}">
                                     <td>${numFila}</td>
                                     <td>${registro.tipo_recurso}</td>
                                     <td>
@@ -360,7 +363,12 @@
                     console.error(e);
                 });
             }
-
+            document.querySelector("#startDate").addEventListener('change', function() {
+                    listar();
+                 });
+                document.querySelector("#endDate").addEventListener('change', function() {
+                    listar();
+                 });
             getToday();
         });
     </script>

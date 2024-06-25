@@ -506,17 +506,6 @@
           return true;
         }
 
-
-
-
-        // Función para validar el formulario de detalle
-        // Función para validar el formulario de detalle
-
-
-
-
-        // Función para validar todos los campos antes de registrar
-
         $("#btnCancelar").addEventListener("click", function() {
           modalregistro.hide();
         });
