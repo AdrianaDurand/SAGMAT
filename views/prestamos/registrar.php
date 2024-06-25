@@ -9,6 +9,8 @@
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -124,42 +126,37 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">Visor de detalles</h5>
+                    <h5 class="modal-title" id="modalTitleId">Detalles</h5>
                     <button type="button" class="btn-close" id="cerrar" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container mt-3">
-                        <div class="card card-outline card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Detalles</h3>
-                            </div>
-                            <div class="card-body">
+                      
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <table class="table-hover" id="tabla-detalles">
+                                        <table class="table text-center" id="tabla-detalles">
                                             <colgroup>
-                                                <col width="8%">
-                                                <col width="12%">
+                                                <col width="10%">
+                                                <col width="45%">
+                                                <col width="45%">
                                             </colgroup>
-                                            <thead class="table-secondary table-bordered text-center">
+                                            <thead class="table-warning">
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Tipo</th>
                                                     <th>N° Equipo</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="text-center">
+                                            <tbody class="">
                                             </tbody>
                                         </table>
                                     </div> <!-- FIN DEL COL-MD-12 -->
                                 </div> <!-- FIN DEL ROW -->
-                            </div> <!-- FIN DEL CARD - BODY -->
-                        </div> <!-- FIN DEL CARD -->
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" id="btnEnviar" class="btn btn-success">Registrar Préstamo</button>
+                    <button type="button" id="btnEnviar" class="btn btn-success"><i class="bi bi-floppy"></i> Registrar Préstamo</button>
                 </div>
             </div>
         </div>
@@ -311,14 +308,16 @@
                 })
                 .then(respuesta => respuesta.text())
                 .then(datos => {
+                    cerrar.hide();
                     listar();
+                    
                     Swal.fire({
                         icon: 'success',
                         title: 'Préstamo registrado con éxito',
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        cerrar.hide();
+                        
                         $("#tabla-detalles tbody").innerHTML = ''; // Clear details table
                         listaIdDetalles = []; // Reset the details list
                     });
