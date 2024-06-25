@@ -4,10 +4,9 @@
 
 <h4 class="tc lg mt-5">FOTOS RELACIONADAS</h4>
 
-
 <table class="table mt-5">
   <colgroup>
-  <col style="width: 5%;"> <!-- # -->
+    <col style="width: 5%;"> <!-- # -->
     <col style="width: 20%;" class="tc"><!-- Fecha de Inicio -->
     <col style="width: 25%;" class="tc"><!-- Fecha de Fin -->
     <col style="width: 20%;" class="tc"> <!-- Usuario -->
@@ -26,7 +25,7 @@
   </thead>
   <tbody>
     <?php
-    // Se asume que $resultado contiene los datos a mostrar y que está definido previamente.
+    // Se asume que $informacion contiene los datos a mostrar y está definido previamente.
     $index = 1; // Para contar las filas
 
     foreach ($informacion as $registro) {
@@ -41,20 +40,18 @@
         </tr>
       ";
       $index++; // Incrementar el contador de filas
-    } // Fin foreach
+    }
     ?>
   </tbody>
 </table>
 
-<div class="photos mt-5">
+<div class="mt-5 centrado">
   <?php
   foreach ($resultado as $registro) {
     $rutafoto = htmlspecialchars($registro['rutafoto']);
-    $rutaCompleta = "../../../imgGaleria/" . $rutafoto; // Ajusta el path según la estructura de tu proyecto
+    $rutaCompleta = "../../../imgGaleria/" . $rutafoto; 
     echo "
-      <div class='photo'>
-        <img src='$rutaCompleta' alt='Foto' style='max-width: 250px; height: auto;'>
-      </div>
+        <img src='$rutaCompleta' alt='Foto' style='width: 180px; height: 180px; margin-right: 10px;'>
     ";
   }
   ?>

@@ -19,6 +19,8 @@ try {
     $resultado = $baja->reporte(['idbaja' => $idbaja]);
     $informacion = $baja->informacion(['idbaja' => $idbaja]);
 
+    
+
 
 
     include "./reportLots_pdf_content.php";
@@ -35,3 +37,4 @@ try {
     $formatter = new ExceptionFormatter($e);
     echo $formatter->getHtmlMessage();
 }
+?>
