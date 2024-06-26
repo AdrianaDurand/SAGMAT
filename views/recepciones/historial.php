@@ -31,15 +31,6 @@
             text-align: center;
         }
 
-        .show-more-click {
-            background-color: transparent;
-            border: none;
-            color: #3483fa;
-            cursor: pointer;
-            margin: 6px 0 20px;
-            padding: 0;
-        }
-
         .dropdown-toggle::after {
             display: none !important;
         }
@@ -50,7 +41,7 @@
             transition: box-shadow 0.3s ease;
         }
 
-        
+
 
         .detalles-container {
             margin-top: 10px;
@@ -108,6 +99,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 10px;
         }
+
+        .none {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -144,12 +144,16 @@
                             <div class="col-md-8">
                                 <!-- Input de rango de fecha -->
                                 <div class="input-group mb-3 caja">
-                                    <span class="input-group-text">Desde</span>
+                                    <span class="input-group-text" style="height: 38px;">Desde</span>
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
-                                    <span class="input-group-text">Hasta</span>
+                                    <span class="input-group-text" style="height: 38px;">Hasta</span>
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                    <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-                                    <button id="btnListar" class="btn btn-outline-success"><i class="bi bi-list"></i></button>
+                                    <button id="btnBuscar" class="btn btn-primary" style="height: 38px;">Buscar</button>
+
+                                    <div style="margin-left: 25px;"></div>
+                                    <button id="btnListar" class="none" style="font-size: 1.4em;">
+                                        <strong><i class="bi bi-list-ul"></i></strong>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -180,6 +184,25 @@
             let currentPage = 1;
             let totalPages = 1;
             const tabla = document.querySelector("#tabla-recepcion tbody");
+
+
+            const fechainicio = document.getElementById('fecha_inicio');
+            const fechafin = document.getElementById('fecha_fin');
+
+            fechainicio.addEventListener('change', () => {
+                fechafin.min = fechainicio.value;
+
+                if (fechafin.value && fechafin.value <= fechainicio.value) {
+                    fechafin.value = '';
+                }
+            });
+
+            fechafin.addEventListener('change', () => {
+                if (fechafin.value <= fechainicio.value) {
+                    fechafin.value = '';
+                }
+            });
+
 
             function $(id) {
                 return document.querySelector(id);

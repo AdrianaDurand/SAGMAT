@@ -94,6 +94,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 10px;
         }
+
+        .none {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -130,12 +139,17 @@
                         <div class="col-md-8">
                             <!-- Input de rango de fecha -->
                             <div class="input-group mb-3 caja">
-                                <span class="input-group-text">Desde</span>
+                                <span class="input-group-text" style="height: 38px;">Desde</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
-                                <span class="input-group-text">Hasta</span>
+                                <span class="input-group-text" style="height: 38px;">Hasta</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
-                                <button id="btnListar" class="btn btn-outline-success">Listar</button>
+                                <button id="btnBuscar" class="btn btn-outline-success" style="height: 38px;">Buscar</button>
+
+                                <div style="margin-left: 25px;"></div>
+                                <button id="btnListar" class="none" style="font-size: 1.4em;">
+                                    <strong><i class="bi bi-list-ul"></i></strong>
+                                </button>
+                               
                             </div>
 
                         </div>
