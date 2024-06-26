@@ -61,7 +61,7 @@
                       <div class="invalid-feedback">Por favor, seleccione una ubicación.</div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row mt-2"> 
                     <div class="col-md-6">
                       <label for="horainicio" class="form-label">Hora Inicio:</label>
                       <input type="datetime-local" class="form-control" id="horainicio">
@@ -75,7 +75,7 @@
                   </div>
                 </form>
                 <form action="" id="form-detalle" class="needs-validation" novalidate>
-                  <div class="row">
+                  <div class="row mt-2">
                     <div class="col-md-4">
                       <label for="idtipo" class="form-label">Tipo de recurso:</label>
                       <select name="" id="idtipo" class="form-select" required>
@@ -115,7 +115,7 @@
                   <div class="row">
                     <div class="col-md-2 text-center mt-3">
                       <div style="margin-bottom: 10px;">
-                        <button type="button" id="btnTabla" class="btn btn-outline-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="bi bi-plus-lg"></i> Agregar</button>
+                        <button type="button" id="btnTabla" class="btn btn-success" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);"><i class="fa-solid fa-plus"></i> Agregar</button>
                       </div>
                     </div>
                   </div>
@@ -124,7 +124,7 @@
               <div class="modal-footer d-flex justify-content-between">
                 <input type="hidden" id="fechasolicitud" name="fechasolicitud">
                 <button type="button" class="btn btn-outline-danger flex-fill" id="btnCancelar"><i class="fi-sr-eye"></i>Cancelar</button>
-                <button type="button" class="btn btn-outline-success flex-fill" id="btnFinalizar"><i class="fi-sr-eye"></i>Finalizar</button>
+                <button type="button" class="btn btn-outline-success flex-fill" id="btnFinalizar"><i class="fa-solid fa-check"></i> Agendar</button>
               </div>
             </div>
           </div>
@@ -132,9 +132,10 @@
       </div>
       <!-- End of Content Wrapper -->
     </div>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <!-- <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="../../javascript/sweetalert.js"></script>
+    <script src="../../errors/cdncalendar.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         function $(id) {

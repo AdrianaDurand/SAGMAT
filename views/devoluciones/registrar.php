@@ -215,54 +215,62 @@
             function actualizarUI() {
                 listaRecepcion.innerHTML = '';
 
-                if (datosPrestamos.length === 0) {
-                    document.getElementById("lista-recepcion").innerHTML = `<p>No se encontraron devoluciones pendientes por registrar</p>`;
-        } else {
-            datosPrestamos.forEach(devolucion => {
-                const card = document.createElement('div');
-                card.classList.add('col-md-8', 'mb-4');
+                datosPrestamos.forEach(devolucion => {
+                    const card = document.createElement('div');
+                    card.classList.add('col-md-8', 'mb-4');
 
-                card.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h3 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h3>
-                                    <p class="card-text"><small class="text-muted">${devolucion.horainicio}</small></p>
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h3>
+                                        <p class="card-text"><small class="text-muted">${devolucion.horainicio}</small></p>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                        <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                    <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
+                                <div class="detalles-container mt-3" style="display: none;">
+                                    <div class="table-responsive">
+                                        <table class="table table-lg text-center">
+                                            <colgroup>
+                                                <col width="5%">
+                                                <col width="25%">
+                                                <col width="25%">
+                                                <col width="25%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr class="table prueba">
+                                                    <th>N°</th>
+                                                    <th>Recurso</th>
+                                                    <th>Observación</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
+                                        </table>
+                                    </div>
+                                    <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idprestamo="${devolucion.idsolicitud}"><i class="fas fa-plus" aria-hidden="true" data-idprestamo="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
                                 </div>
-                            </div>
-                            <div class="detalles-container mt-3" style="display: none;">
-                                <div class="table-responsive">
-                                    <table class="table table-lg text-center">
-                                        <colgroup>
-                                            <col width="5%">
-                                            <col width="25%">
-                                            <col width="25%">
-                                            <col width="25%">
-                                        </colgroup>
-                                        <thead>
-                                            <tr class="table prueba">
-                                                <th>N°</th>
-                                                <th>Recurso</th>
-                                                <th>Observación</th>
-                                                <th>Estado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
-                                    </table>
-                                </div>
-                                <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idprestamo="${devolucion.idsolicitud}"><i class="fas fa-plus" aria-hidden="true" data-idprestamo="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
-                listaRecepcion.appendChild(card);
-            });
-        }
+                    listaRecepcion.appendChild(card);
+                });
+
+                document.querySelectorAll(".show-more-click").forEach(btn => {
+                    btn.addEventListener("click", (event) => {
+                        const idprestamo = btn.getAttribute("data-idprestamo"); //¿?
+                        const detallesContainer = btn.closest('.card-body').querySelector(".detalles-container");
+                        if (detallesContainer.style.display === 'none') {
+                            detalles(idprestamo, detallesContainer);
+                        } else {
+                            detallesContainer.style.display = 'none';
+                        }
+                    });
+                });
 
                 document.querySelectorAll(".edit-button").forEach(btn => {
                     btn.addEventListener("click", (event) => {

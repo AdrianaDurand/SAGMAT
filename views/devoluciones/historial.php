@@ -255,7 +255,7 @@
                             document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones en el rango de fechas seleccionado.</p>`;
                         } else {
                             totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                            renderPage(1);
+                            renderPage(currentPage);
                             updatePagination();
                         }
                     })
@@ -371,7 +371,7 @@
                             document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
                         } else {
                             totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                            renderPage(1);
+                            renderPage(currentPage);
                             updatePagination();
                         }
                     })
