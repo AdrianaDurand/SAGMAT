@@ -90,7 +90,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> REGISTRAR RECEPCIONES
+                                            <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Registrar Recepciones
                                         </h2>
                                     </div>
                                 </div>
@@ -98,7 +98,6 @@
 
                             <!-- Formulario de RECEPCIÓN -->
                             <div class="card">
-                                <h5 class="card-header">Registrar Recepciones</h5>
                                 <div class="card-body">
                                     <form id="form-recepcion" class="needs-validation" novalidate>
                                         <div class="row mb-3">

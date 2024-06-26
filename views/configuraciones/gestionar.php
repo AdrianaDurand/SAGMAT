@@ -34,6 +34,15 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin-top: 10px;
     }
+
+    .prueba {
+        background-color: #d9e7fa;
+    }
+
+    .strong-gray {
+        background-color: #6c757d;
+        /* Este es un ejemplo de color plomo fuerte */
+    }
 </style>
 
 <body>
@@ -56,34 +65,32 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/panel.png" alt="Imagen de Panel" style="height: 2em; width: 2em; margin-right: 0.5em;"> GESTIONES
+                                            <img src="../../images/icons/panel.png" alt="Imagen de Panel" style="height: 2em; width: 2em; margin-right: 0.5em;"> Gestiones
                                         </h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card mb-3">
-                            <div class="card-body caja">
-                                <div class="row flex-between-center">
-                                    <div class="col-md">
-                                        <h5 class="mb-2 mb-md-0">Adicionar</h5>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button class="btn m-2" style="background-color: #FAD7A0; color: black" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);" data-bs-target="#modalTipo" data-bs-toggle="modal" role="button">Agregar Tipo</button>
-                                        <button class="btn m-2" style="background-color: #A3E4D7; color:black" data-bs-target="#modalMarca" data-bs-toggle="modal" role="button">Agregar Marca</button>
-                                    </div>
-                                </div>
+
+
+                        <div class="row flex-between-center mb-3">
+
+                            <div class="col-auto">
+                                <button class="btn m-2" style="background-color: #FAD7A0; color: black" box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);" data-bs-target="#modalTipo" data-bs-toggle="modal" role="button">Agregar Tipo</button>
+                                <button class="btn m-2" style="background-color: #A3E4D7; color:black" data-bs-target="#modalMarca" data-bs-toggle="modal" role="button">Agregar Marca</button>
                             </div>
                         </div>
 
 
 
+
+
                         <div class="row g-0">
                             <div class="col-lg-6 pe-lg-2">
-                                <div class="card mb-3">
-                                    <div class="card-header bg-body-tertiary">
-                                        <h6 class="mb-0">Tipos</h6>
+                                <div class="card mb-3 ">
+                                    <div class="card-header bg-body-tertiary ">
+                                        <h6 class="mb-0 font-weight-bold">Tipos</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -114,7 +121,7 @@
                             <div class="col-lg-6 pe-lg-2">
                                 <div class="card mb-3">
                                     <div class="card-header bg-body-tertiary">
-                                        <h6 class="mb-0">Marcas</h6>
+                                        <h6 class="mb-0 font-weight-bold">Marcas</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -147,7 +154,7 @@
                             <div class="col-lg-12 pe-lg-2">
                                 <div class="card mb-3">
                                     <div class="card-header bg-body-tertiary">
-                                        <h6 class="mb-0">Usuarios</h6>
+                                        <h6 class="mb-0 font-weight-bold">Usuarios</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -199,7 +206,7 @@
                                                 <input type="text" class="form-control border" id="tipo" required>
                                                 <div class="invalid-feedback">Por favor, ingrese una fecha.</div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 mt-2">
                                                 <label for=""><strong>Acrónimo:</strong></label>
                                                 <input type="text" class="form-control border" id="acronimo" required>
                                                 <div class="invalid-feedback">Por favor, ingrese el motivo para dar de baja este equipo.</div>

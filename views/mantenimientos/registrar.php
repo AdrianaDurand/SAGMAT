@@ -63,6 +63,8 @@
             color: #808080;
             cursor: not-allowed;
         }
+
+        
     </style>
 
 
@@ -92,7 +94,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> REGISTRO DE MANTENIMIENTOS
+                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Mantenimientos
                                         </h2>
                                     </div>
                                 </div>
@@ -152,7 +154,7 @@
                         </div>
 
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <label for="comentarios" class="form-label">Comentarios:</label>
                             <textarea class="form-control" id="comentarios" rows="4"></textarea>
                         </div>
@@ -182,13 +184,13 @@
                             <div class="invalid-feedback">Por favor, ingrese una fecha.</div>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <label for="motivo"><strong>Motivo:</strong></label>
                             <input type="text" class="form-control border" id="motivo" required>
                             <div class="invalid-feedback">Por favor, ingrese el motivo para dar de baja este equipo.</div>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <label for="comentarios-baja" class="form-label">Comentario del Encargado:</label>
                             <textarea class="form-control" id="comentarios-baja" rows="4"></textarea>
                         </div>
@@ -196,7 +198,7 @@
 
                     <form action="" autocomplete="off" id="form-galeria" enctype="multipart/form-data">
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <label for="rutafoto"><strong>Fotos:</strong></label>
                             <input type="file" class="form-control border" id="rutafoto" name="rutafoto[]" multiple>
                         </div>
@@ -338,7 +340,7 @@
                 }
                 const nuevoItem = `
                     <div class="d-flex justify-content-center mt-2">
-                        <div class="card mb-3" style="max-width: 900px;">
+                        <div class="card mb-3 caja" style="max-width: 900px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">

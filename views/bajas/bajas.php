@@ -117,7 +117,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/bajas.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> EQUIPOS DADOS DE BAJA
+                                            <img src="../../images/icons/bajas.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Equipos dado de baja
                                         </h2>
                                     </div>
                                 </div>
@@ -151,37 +151,33 @@
 
 
                         <div class="container-fluid mt-4">
-                            <div class="card">
-                                <div class="card-body">
 
-                                    <div class="table-responsive mt-3">
-                                        <table class="table table-lg  text-center" id="tabla-baja">
+                            <div class="table-responsive mt-3">
+                                <table class="table table-lg  text-center" id="tabla-baja">
 
-                                            <colgroup>
-                                                <col width="5%"> <!-- ID -->
-                                                <col width="20%"> <!-- Encargado-->
-                                                <col width="20%"> <!-- Descripción-->
-                                                <col width="15%"> <!-- N° Equipo -->
-                                                <col width="20%"> <!-- Fecha de Baja-->
-                                                <col width="20%"> <!-- Acciones -->
-                                            </colgroup>
+                                    <colgroup>
+                                        <col width="5%"> <!-- ID -->
+                                        <col width="20%"> <!-- Encargado-->
+                                        <col width="20%"> <!-- Descripción-->
+                                        <col width="15%"> <!-- N° Equipo -->
+                                        <col width="20%"> <!-- Fecha de Baja-->
+                                        <col width="20%"> <!-- Acciones -->
+                                    </colgroup>
 
-                                            <thead>
-                                                <tr class="table prueba">
-                                                    <th>N°</th>
-                                                    <th>Encargado</th>
-                                                    <th>Descripción</th>
-                                                    <th>N° Equipo</th>
-                                                    <th>Fecha de Baja</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                    <thead>
+                                        <tr class="table prueba">
+                                            <th>N°</th>
+                                            <th>Encargado</th>
+                                            <th>Descripción</th>
+                                            <th>N° Equipo</th>
+                                            <th>Fecha de Baja</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                             <!-- Contenedor de paginación -->
                             <div class="pagination">

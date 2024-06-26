@@ -28,6 +28,12 @@
         .xd {
             width: 100%;
         }
+
+        .aver {
+            justify-content: center;
+            align-items: center;
+            width: 900px;
+        }
     </style>
 </head>
 
@@ -50,34 +56,32 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/new.png" alt="Imagen de Nuevo Usuario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> REGISTRAR NUEVOS USUARIOS
+                                            <img src="../../images/icons/new.png" alt="Imagen de Nuevo Usuario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Registrar Usuarios
                                         </h2>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Formulario de RECEPCIÓN -->
-                            <div class="card">
-                                <h5 class="card-header">Personal</h5>
-                                <div class="card-body">
+                            <div class="mt-5 d-flex justify-content-center">
+                                <div class="aver">
                                     <form id="form-persona" class="needs-validation" novalidate>
                                         <div class="row mb-3">
                                             <div class="col-md-6 mb-3">
                                                 <label for="apellidos" class="form-label"><strong>Apellidos</strong></label>
                                                 <input type="text" class="form-control border" id="apellidos" required>
-                                                <div class="invalid-feedback">Por favor, ingrese sus apellidos.</div>
+                                                <div class="invalid-feedback">Por favor, ingrese los apellidos.</div>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="nombres" class="form-label"><strong>Nombres</strong></label>
                                                 <input type="text" class="form-control border" id="nombres" required>
-                                                <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
+                                                <div class="invalid-feedback">Por favor, ingrese los nombres.</div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="tipodoc"><strong>Tipo de Documento:</strong></label>
                                                 <select id="tipodoc" class="form-select" required>
-                                                    <option value="">Seleccione:</option>
                                                     <option value="DNI">DNI</option>
                                                     <option value="CE">CARNET DE EXTRANJERIA</option>
                                                 </select>
@@ -93,7 +97,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="telefono" class="form-label"><strong>Teléfono</strong></label>
                                                 <input type="text" class="form-control border" id="telefono" required>
-                                                <div class="invalid-feedback">Por favor, ingrese su número de teléfono.</div>
+                                                <div class="invalid-feedback">Por favor, ingrese un número de teléfono.</div>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="email" class="form-label"><strong>Email</strong></label>
@@ -114,25 +118,28 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <div class="d-flex">
-                                        <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" id="btnFinalizar" class="btn btn-outline-success btn-sm"><i class="bi bi-floppy-fill"></i> Guardar</button>
                                     </div>
                                 </div>
                             </div>
-                            <br>
-
-
-
 
                         </div>
 
 
+
+
+
+
                     </div>
-                    <!-- End of Main Content -->
+
+
                 </div>
+                <!-- End of Main Content -->
             </div>
         </div>
-        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Content Wrapper -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>

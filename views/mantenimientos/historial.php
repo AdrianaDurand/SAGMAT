@@ -119,7 +119,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/historial.png" alt="Imagen de Mantenimientos Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> HISTORIAL DE MANTENIMIENTOS
+                                            <img src="../../images/icons/historial.png" alt="Imagen de Mantenimientos Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de mantenimientos
                                         </h2>
                                     </div>
                                 </div>
@@ -150,8 +150,6 @@
                     <div class="d-flex justify-content-center">
 
                         <div class="container-fluid mt-4">
-                            <div class="card">
-                                <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-lg  text-center" id="tabla-mantenimiento">
 
@@ -177,8 +175,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                            </div>
                             <!-- Contenedor de paginación -->
                             <div class="pagination">
                                 <div class="pagination-arrow" id="prev">&laquo;</div>
