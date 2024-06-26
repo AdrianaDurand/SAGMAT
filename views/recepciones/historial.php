@@ -100,6 +100,15 @@
             margin-top: 10px;
         }
 
+        .show-more-click {
+            background-color: transparent;
+            border: none;
+            color: #3483fa;
+            cursor: pointer;
+            margin: 6px 0 20px;
+            padding: 0;
+        }
+
         .none {
             border: none;
             outline: none;
@@ -148,7 +157,7 @@
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
                                     <span class="input-group-text" style="height: 38px;">Hasta</span>
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                    <button id="btnBuscar" class="btn btn-primary" style="height: 38px;">Buscar</button>
+                                    <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
 
                                     <div style="margin-left: 25px;"></div>
                                     <button id="btnListar" class="none" style="font-size: 1.4em;">

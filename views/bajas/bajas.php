@@ -143,7 +143,7 @@
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
                                 <span class="input-group-text" style="height: 38px;">Hasta</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                <button id="btnBuscar" class="btn btn-outline-success" style="height: 38px;">Buscar</button>
+                                <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
 
                                 <div style="margin-left: 25px;"></div>
                                 <button id="btnListar" class="none" style="font-size: 1.4em;">
