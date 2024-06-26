@@ -42,8 +42,9 @@
         cursor: pointer;
     }
 
-    .eliminarp{border:0px; background:url(../../img/delete.svg) no-repeat center center; width:15px; padding:15px 10px; background-size:12px;}
-    
+    .eliminarp{border:0px; background:url(../../img/delete.svg) no-repeat center center; width:15px; padding:15px 15px; background-size:15px;}
+    .eyep{border:0px; background:url(../../img/eye.svg) no-repeat center center; width:28px; padding:28px 28px; background-size:28px;}
+
 </style>
 
 <body>
@@ -86,12 +87,12 @@
                                     <div class="col-md-12">
                                         <table class="table table-lg  " id="lista-prestamos">
                                             <colgroup>
-                                                <col width="5%">
-                                                <col width="8%">
-                                                <col width="12%">
+                                                <col width="2%">
+                                                <col width="15%">
+                                                <col width="20%">
+                                                <col width="15%">
                                                 <col width="10%">
-                                                <col width="10%">
-                                                <col width="10%">
+                                                <col width="2%">
                                             </colgroup>
                                             <thead class="table prueba text-center">
                                                 <tr>
@@ -205,11 +206,9 @@
                                         <td>
                                             
                                             <div class="dropdown" style="display: flex;">
-                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#" style="background-color: transparent;">
-                                                    <i class="fa-solid fa-eye" style="color: #74c0fc; margin-right: 2px;"></i>
+                                                <button data-bs-target="#modalAgregar"  style="height: 30px;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#" style="background-color: transparent;">
                                                 </button>
-                                                <button class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" style="background-color: transparent;" type="button">
-                                                    
+                                                <button  style="width: 30px;" class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" style="background-color: transparent;" type="button">
                                                 </button>  
                                             </div>
                                         </td>
