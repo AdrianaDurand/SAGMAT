@@ -133,7 +133,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/historico.png" alt="Imagen de Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> HISTORIAL DE RECEPCIONES
+                                            <img src="../../images/icons/historico.png" alt="Imagen de Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de recepciones
                                         </h2>
                                     </div>
                                 </div>
@@ -150,8 +150,8 @@
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
                                     <span class="input-group-text">Hasta</span>
                                     <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                    <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
-                                    <button id="btnListar" class="btn btn-outline-success">Listar</button>
+                                    <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+                                    <button id="btnListar" class="btn btn-outline-success"><i class="bi bi-list"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -253,8 +253,11 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
-                                            <h4 class="card-title">${element.areas}</h4>
-                                            <p class="card-text"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
+                                            <h6 class="card-title">${element.areas}</h6>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-clock me-2"></i>
+                                                <p class="card-text mb-0"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
+                                            </div>
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end align-items-center">
                                             <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>

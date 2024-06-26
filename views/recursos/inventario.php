@@ -39,13 +39,10 @@
 
         .card {
             border: 1px solid rgba(0, 0, 0, 0.125);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            transition: box-shadow 0.3s ease;
+            border-radius: 35px;
         }
 
-        .card:hover {
-            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
-        }
+
 
         .caja {
             background-color: #fff;
@@ -77,14 +74,14 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/almacen.png" alt="Imagen de Inventario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> INVENTARIO
+                                            <img src="../../images/icons/almacen.png" alt="Imagen de Inventario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Inventario
                                         </h2>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- ZONA CONTAINER -->
-                            <div class="xd mt-3 caja">
+                            <div class="xd mt-3">
                                 <!-- Filtro -->
                                 <div class="row mb-3">
                                     <div class="col-6">
@@ -221,7 +218,7 @@
                                     <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
                                         <div class="card-body">
                                             <h4 class="card-title text-dark" style="text-align:center; font-size:20px">${element.modelo}</h4>
-                                            <hr>
+                                            <hr class="" style="border-top: 1px solid #000;">
                                             <p class="card-text">Stock: <strong>${element.stock}</strong></p>
                                         </div>
                                         <!-- Botón movido y alineado a la derecha -->
