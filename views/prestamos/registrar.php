@@ -43,6 +43,8 @@
         margin: 6px 0 20px;
         padding: 0;
     }
+
+    
 </style>
 
 <body>
@@ -69,7 +71,7 @@
                                 <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> REGISTRO DE PRÉSTAMOS
+                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Registro de Préstamos
                                         </h2>
                                     </div>
                                 </div>
@@ -79,9 +81,8 @@
                     </div>
 
                     <div class="container mt-3">
-                        <div class="card card-outline card-primary">
 
-                            <div class="card-body caja">
+                          
                                 <div class="row">
                                     <div class="col-md-12">
                                         <table class="table table-lg  " id="lista-prestamos">
@@ -97,7 +98,7 @@
                                                 <tr>
                                                     <th>N°</th>
                                                     <th>Solicitante</th>
-                                                    <th>Ubicación</th>
+                                                    <th>Área</th>
                                                     <th>Fecha de Solicitud</th>
                                                     <th>Horario</th>
                                                     <th>Acciones</th>
@@ -108,8 +109,6 @@
                                         </table>
                                     </div> <!-- FIN DEL COL-MD-12 -->
                                 </div> <!-- FIN DEL ROW -->
-                            </div> <!-- FIN DEL CARD - BODY -->
-                        </div> <!-- FIN DEL CARD -->
                     </div>
 
                 </div>
