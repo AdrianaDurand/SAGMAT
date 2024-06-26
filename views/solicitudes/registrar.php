@@ -32,7 +32,7 @@
             <div class="col-md-12 text-center">
               <div class="mt-1">
                 <h2 class="fw-bolder d-inline-block">
-                  <img src="../../images/icons/solicitudes.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> SOLICITUDES
+                  <img src="../../images/icons/solicitudes.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Solicitudes
                 </h2>
               </div>
             </div>
@@ -54,7 +54,7 @@
                 <form action="" autocomplete="off" id="form-cronograma" class="needs-validation" novalidate>
                   <div class="row">
                     <div class="col-md-12">
-                      <label for="idubicaciondocente" class="form-label">Ubicación:</label>
+                      <label for="idubicaciondocente" class="form-label">Salón:</label>
                       <select name="" id="idubicaciondocente" class="form-select" required>
                         <option value="">Seleccione:</option>
                       </select>
