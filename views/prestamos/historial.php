@@ -41,6 +41,24 @@
       transition: box-shadow 0.3s ease;
     }
 
+    .show-more-icon {
+      background-color: transparent;
+      border: none;
+      color: #3483fa;
+      cursor: pointer;
+      margin: 6px 0 20px;
+      padding: 0;
+    }
+
+    .return-icon{
+      background-color: transparent;
+      border: none;
+      color: #3483fa;
+      cursor: pointer;
+      margin: 6px 0 20px;
+      padding: 0;
+    }
+
 
 
     .detalles-container {
@@ -148,7 +166,7 @@
                   <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="startDate">
                   <span class="input-group-text" style="height: 38px;">Hasta</span>
                   <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="endDate">
-                  <button id="btnBuscar" class="btn btn-primary" style="height: 38px;">Buscar</button>
+                  <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
 
                   <div style="margin-left: 25px;"></div>
                   <button id="btnListar" class="none" style="font-size: 1.4em;">
