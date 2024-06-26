@@ -49,7 +49,7 @@
 
 <body>
 
-    <div id="">
+    <div id="wrapper">
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
         <!-- End of Sidebar -->
@@ -205,10 +205,13 @@
                                         <td>${element.horario}</td>
                                         <td>
                                             
-                                            <div class="dropdown">
-                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view"  data-idsolicitud='${element.idsolicitud}'  href="#"><i class="fa-solid fa-eye" style="color: #74c0fc;"></i> Ver detalle
+                                            <div class="dropdown" style="display: flex;">
+                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#">
+                                                    <i class="fa-solid fa-eye" style="color: #74c0fc; margin-right: 2px;"></i>
                                                 </button>
-                                                <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button"><i class="fa-solid fa-trash" style="color: #f60909;"></i> Eliminar</button>  
+                                                <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button">
+                                                    <i class="fa-solid fa-trash" style="color: #f60909; margin-right: 2px;"></i>
+                                                </button>  
                                             </div>
                                         </td>
                                     </tr>
