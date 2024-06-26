@@ -302,9 +302,11 @@
                         if (detallesContainer.style.display === 'none') {
                             detalles(idrecepcion, detallesContainer);
                             cardBody.classList.add('expanded');
+                            btn.innerHTML = 'Ocultar <i class="bi bi-arrow-up-short"></i>';
                         } else {
                             detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
                             cardBody.classList.remove('expanded');
+                            btn.innerHTML = 'Ver detalles <i class="bi bi-arrow-down-short"></i>';
                         }
                     });
                 });
