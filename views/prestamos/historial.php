@@ -4,13 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Préstamos</title>
+  <title>SAGMAT</title>
+
+  <!-- Bootstrap CSS v5.2.1 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Font Awesome icons (free version) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="icon" type="../../images/icons" href="../../images/icons/ajustes.png" />
-  <link rel="stylesheet" href="../prestamos/estilos.css">
+
+  <!-- Custom CSS -->
+
+  <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+
   <style>
+    .xd {
+      width: 100%;
+    }
+
+    .prueba {
+      background-color: #d9e7fa;
+    }
+
+    table {
+      text-align: center;
+    }
+
+    .dropdown-toggle::after {
+      display: none !important;
+    }
+
+    .card {
+      border: 2px solid rgba(0, 0, 0, 0.125);
+      box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
+      transition: box-shadow 0.3s ease;
+    }
+
+
+
+    .detalles-container {
+      margin-top: 10px;
+    }
+
     /* Estilos para la paginación */
     .pagination {
       display: flex;
@@ -55,70 +91,101 @@
       color: #808080;
       cursor: not-allowed;
     }
+
+    .caja {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+    }
+
+    .none {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+    }
   </style>
 </head>
 
 <body>
-<div id="wrapper">
+
+  <div id="wrapper">
+    <!-- Sidebar -->
     <?php require_once '../../views/sidebar/sidebar.php'; ?>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-      <div class="mt-1">
+      <div class="">
+        <!-- Main Content -->
         <div id="content">
+          <!-- Begin Page Content -->
           <div class="container-fluid">
-            <div class="flex-grow-1 p-3 p-md-4 pt-2">
+            <!-- Page Content -->
+            <div class="flex-grow-1 p-3 p-md-4 pt-4">
               <div class="container">
-                <div class="col-md-12 text-center header-container mb-2">
-                  <div class="m-2">
+                <div class="col-md-12 text-center">
+                  <div class="">
                     <h2 class="fw-bolder d-inline-block">
-                      <img src="../../images/icons/prestamo1.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em;"> Historial de Préstamos
+                      <img src="../../images/icons/historico.png" alt="Imagen de Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de recepciones
                     </h2>
                   </div>
                 </div>
               </div>
-              <div class="container">
-                <div class="row justify-content-center">
-                  <div class="col-md-8">
-                    <div class="date-picker-container">
-                      <div class="input-group mb-1 mt-1">
-                        <span class="input-group-text" id="basic-addon1">Desde</span>
-                        <input type="date" class="form-control" id="startDate">
-                        <span class="input-group-text" id="basic-addon2">Hasta</span>
-                        <input type="date" class="form-control" id="endDate">
-                        <button class="btn btn-outline-primary" type="button" id="searchButton">Buscar</button>
-                        <button id="btnListar" class="btn btn-outline-success">Listar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br>
-                <div class="col-md-12">
-                  <div class="row" id="lista-devolucion"></div>
-                </div>
-                <!-- Contenedor de paginación -->
-                <div class="pagination">
-                  <div class="pagination-arrow" id="prev">&laquo;</div>
-                  <div class="pagination-item" id="item-1" data-page="1">1</div>
-                  <div class="pagination-item" id="item-2" data-page="2">2</div>
-                  <div class="pagination-item" id="item-3" data-page="3">3</div>
-                  <div class="pagination-arrow" id="next">&raquo;</div>
+            </div>
+          </div>
+
+          <div class="xd">
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <!-- Input de rango de fecha -->
+                <div class="input-group mb-3 caja">
+                  <span class="input-group-text" style="height: 38px;">Desde</span>
+                  <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="startDate">
+                  <span class="input-group-text" style="height: 38px;">Hasta</span>
+                  <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="endDate">
+                  <button id="btnBuscar" class="btn btn-primary" style="height: 38px;">Buscar</button>
+
+                  <div style="margin-left: 25px;"></div>
+                  <button id="btnListar" class="none" style="font-size: 1.4em;">
+                    <strong><i class="bi bi-list-ul"></i></strong>
+                  </button>
                 </div>
               </div>
             </div>
+
+            <div class="col-md-12">
+              <div class="row" id="lista-devolucion"></div>
+            </div>
+
+            <div class="pagination">
+              <div class="pagination-arrow" id="prev">&laquo;</div>
+              <div class="pagination-item" id="item-1" data-page="1">1</div>
+              <div class="pagination-item" id="item-2" data-page="2">2</div>
+              <div class="pagination-item" id="item-3" data-page="3">3</div>
+              <div class="pagination-arrow" id="next">&raquo;</div>
+            </div>
+
+
+
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const itemsPerPage = 2; // Número de elementos por página
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const itemsPerPage = 5; // Número de elementos por página
       let currentPage = 1;
       let totalPages = 1;
       let dataObtenida = []; // Variable global para almacenar los datos obtenidos
+
 
       function $(id) {
         return document.querySelector(id);
@@ -160,75 +227,36 @@
         });
       }
 
-      function updatePagination() {
-        const paginationItems = document.querySelectorAll(".pagination-item");
-        paginationItems.forEach(item => item.style.display = "none");
+      function completo() {
+        const parametros = new FormData();
+        parametros.append("operacion", "listarHistorial");
 
-        for (let i = 1; i <= totalPages; i++) {
-          if ($(`#item-${i}`)) {
-            $(`#item-${i}`).style.display = "flex";
-          } else {
-            const newItem = document.createElement("div");
-            newItem.classList.add("pagination-item");
-            newItem.id = `item-${i}`;
-            newItem.dataset.page = i;
-            newItem.innerText = i;
-            newItem.addEventListener("click", () => changePage(i));
-            $(".pagination").insertBefore(newItem, $("#next"));
-          }
-        }
+        fetch(`../../controllers/prestamo.controller.php`, {
+            method: "POST",
+            body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+            dataObtenida = datos;
+            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
 
-        updateArrows();
+            if (datos.length === 0) {
+              document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron devoluciones</p>`;
+            } else {
+              $("#lista-devolucion").innerHTML = ``;
+              renderPage(currentPage);;
+            }
+
+            updatePagination();
+          })
+          .catch(e => {
+            console.error(e);
+          });
       }
-
-      function changePage(page) {
-        if (page < 1 || page > totalPages) return;
-        currentPage = page;
-        renderPage(page);
-        updateArrows();
-      }
-
-      function updateArrows() {
-        if (currentPage === 1) {
-          $("#prev").classList.add("disabled");
-        } else {
-          $("#prev").classList.remove("disabled");
-        }
-
-        if (currentPage === totalPages) {
-          $("#next").classList.add("disabled");
-        } else {
-          $("#next").classList.remove("disabled");
-        }
-
-        document.querySelectorAll(".pagination-item").forEach(item => {
-          item.classList.remove("active");
-          if (parseInt(item.dataset.page) === currentPage) {
-            item.classList.add("active");
-          }
-        });
-      }
-
-      $("#prev").addEventListener("click", () => {
-        if (currentPage > 1) changePage(currentPage - 1);
-      });
-
-      $("#next").addEventListener("click", () => {
-        if (currentPage < totalPages) changePage(currentPage + 1);
-      });
-
-      document.querySelectorAll('.pagination-item').forEach(item => {
-        item.addEventListener('click', () => {
-          changePage(parseInt(item.dataset.page));
-        });
-      });
 
       function listarFecha() {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
-
-        console.log(`Fechas seleccionadas: Desde ${startDate} Hasta ${endDate}`); // Log de las fechas seleccionadas
-
 
         const parametros = new FormData();
         parametros.append("operacion", "listarHistorialFecha");
@@ -244,11 +272,9 @@
             console.log(`Datos obtenidos:`, datos);
             dataObtenida = datos;
             totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-            
+
             if (datos.length === 0) {
               document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron devoluciones</p>`;
-              // Ocultar la paginación cuando no hay resultados
-              document.querySelector(".pagination").style.display = "none";
             } else {
               $("#lista-devolucion").innerHTML = ``;
               renderPage(currentPage);;
@@ -260,8 +286,6 @@
           });
       }
 
-      document.getElementById("searchButton").addEventListener("click", listarFecha);
-
       function renderPage(page) {
         $("#lista-devolucion").innerHTML = ``;
         let start = (page - 1) * itemsPerPage;
@@ -270,34 +294,34 @@
         dataToRender.forEach(element => {
           console.log(dataToRender)
           const nuevoItem = `
-          <div class="d-flex justify-content-center mb-3">
-            <div class="col-md-8">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-10">
-                      <h3 class="card-title">${element.equipo}</h3>
-                      <h4 class="card-title">Docente: ${element.docente}</h4>
-                      <p class="card-text"><small class="text-muted">Fecha Solicitud: ${element.fechasolicitud}</small></p>
-                    </div>
-                    <div class="col-md-2 d-flex justify-content-end align-items-center">
-                      <i class="bi bi-chevron-right show-more-icon" data-idprestamo="${element.idprestamo}"></i>
-                    </div>
+              <div class="d-flex justify-content-center mb-3">
+                  <div class="col-md-8">
+                  <div class="card">
+                      <div class="card-body">
+                      <div class="row">
+                          <div class="col-md-10">
+                          <h3 class="card-title">${element.equipo}</h3>
+                          <h4 class="card-title">Docente: ${element.docente}</h4>
+                          <p class="card-text"><small class="text-muted">Fecha Solicitud: ${element.fechasolicitud}</small></p>
+                          </div>
+                          <div class="col-md-2 d-flex justify-content-end align-items-center">
+                          <i class="bi bi-chevron-right show-more-icon" data-idprestamo="${element.idprestamo}"></i>
+                          </div>
+                      </div>
+                      </div>
                   </div>
-                </div>
+                  <div class="card" id="detailedCard" style="display: none;">
+                      <div class="card-body">
+                      <div class="card-text"></div>
+                      <i class="bi bi-arrow-left return-icon mt-3"></i>
+                      </div>
+                  </div>
+                  </div>
               </div>
-              <div class="card" id="detailedCard" style="display: none;">
-                <div class="card-body">
-                  <div class="card-text"></div>
-                  <i class="bi bi-arrow-left return-icon mt-3"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-                document.getElementById("lista-devolucion").innerHTML += nuevoItem;
-              });
-              setupCardListeners();
+              `;
+          document.getElementById("lista-devolucion").innerHTML += nuevoItem;
+        });
+        setupCardListeners();
       }
 
       function fetchDetails(idprestamo, detailedCard) {
@@ -363,34 +387,6 @@
           });
       }
 
-      function completo() {
-        const parametros = new FormData();
-        parametros.append("operacion", "listarHistorial");
-
-        fetch(`../../controllers/prestamo.controller.php`, {
-            method: "POST",
-            body: parametros
-          })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-            dataObtenida = datos;
-            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-            
-            if (datos.length === 0) {
-              document.getElementById("lista-devolucion").innerHTML = `<p>No se encontraron devoluciones</p>`;
-              // Ocultar la paginación cuando no hay resultados
-              document.querySelector(".pagination").style.display = "none";
-            } else {
-              $("#lista-devolucion").innerHTML = ``;
-              renderPage(currentPage);;
-            }
-            updatePagination();
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      }
-
       document.addEventListener("click", function(event) {
         const target = event.target;
         if (target.classList.contains('imprimir')) {
@@ -399,15 +395,93 @@
         }
       });
 
-      $("#btnListar").addEventListener("click", () => {
+      function updatePagination() {
+        const paginationItems = document.querySelectorAll(".pagination-item");
+        paginationItems.forEach(item => item.style.display = "none");
 
+        for (let i = 1; i <= totalPages; i++) {
+          if ($(`#item-${i}`)) {
+            $(`#item-${i}`).style.display = "flex";
+          } else {
+            const newItem = document.createElement("div");
+            newItem.classList.add("pagination-item");
+            newItem.id = `item-${i}`;
+            newItem.dataset.page = i;
+            newItem.innerText = i;
+            newItem.addEventListener("click", () => changePage(i));
+            $(".pagination").insertBefore(newItem, $("#next"));
+          }
+        }
+
+        updateArrows();
+      }
+
+      function changePage(page) {
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderPage(page);
+        updateArrows();
+      }
+
+      function updateArrows() {
+        if (currentPage === 1) {
+          $("#prev").classList.add("disabled");
+        } else {
+          $("#prev").classList.remove("disabled");
+        }
+
+        if (currentPage === totalPages) {
+          $("#next").classList.add("disabled");
+        } else {
+          $("#next").classList.remove("disabled");
+        }
+
+        document.querySelectorAll(".pagination-item").forEach(item => {
+          item.classList.remove("active");
+          if (parseInt(item.dataset.page) === currentPage) {
+            item.classList.add("active");
+          }
+        });
+      }
+
+
+
+      $("#prev").addEventListener("click", () => {
+        if (currentPage > 1) changePage(currentPage - 1);
+      });
+
+      $("#next").addEventListener("click", () => {
+        if (currentPage < totalPages) changePage(currentPage + 1);
+      });
+
+      document.querySelectorAll('.pagination-item').forEach(item => {
+        item.addEventListener('click', () => {
+          changePage(parseInt(item.dataset.page));
+        });
+      });
+
+
+
+
+
+      $("#btnBuscar").addEventListener("click", () => {
+        currentPage = 1;
+        listarFecha();
+
+      });
+
+      $("#btnListar").addEventListener("click", () => {
         currentPage = 1;
         completo();
+      });
 
-        });
+
+
       completo();
+
     });
   </script>
+
 </body>
 
 </html>

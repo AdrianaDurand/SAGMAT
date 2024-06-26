@@ -40,10 +40,9 @@
         border: none;
         color: #3483fa;
         cursor: pointer;
-        margin: 6px 0 20px;
-        padding: 0;
     }
 
+    .eliminarp{border:0px; background:url(../../img/delete.svg) no-repeat center center; width:15px; padding:15px 10px; background-size:12px;}
     
 </style>
 
@@ -206,11 +205,11 @@
                                         <td>
                                             
                                             <div class="dropdown" style="display: flex;">
-                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#">
+                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#" style="background-color: transparent;">
                                                     <i class="fa-solid fa-eye" style="color: #74c0fc; margin-right: 2px;"></i>
                                                 </button>
-                                                <button class="dropdown-item eliminar" data-idprestamo="${element.idsolicitud}" type="button">
-                                                    <i class="fa-solid fa-trash" style="color: #f60909; margin-right: 2px;"></i>
+                                                <button class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" style="background-color: transparent;" type="button">
+                                                    
                                                 </button>  
                                             </div>
                                         </td>
