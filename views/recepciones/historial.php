@@ -45,14 +45,12 @@
         }
 
         .card {
-            border: 1px solid rgba(0, 0, 0, 0.125);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border: 2px solid rgba(0, 0, 0, 0.125);
+            box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
             transition: box-shadow 0.3s ease;
         }
 
-        .card:hover {
-            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
-        }
+        
 
         .detalles-container {
             margin-top: 10px;

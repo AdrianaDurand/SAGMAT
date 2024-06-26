@@ -47,7 +47,7 @@
 
 <body>
 
-    <div id="">
+    <div id="wrapper">
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
         <!-- End of Sidebar -->
