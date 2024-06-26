@@ -169,7 +169,7 @@
                   <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
 
                   <div style="margin-left: 25px;"></div>
-                  <button id="btnListar" class="none" style="font-size: 1.4em;">
+                  <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
                     <strong><i class="bi bi-list-ul"></i></strong>
                   </button>
                 </div>
