@@ -136,9 +136,9 @@
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
                                 <span class="input-group-text">Hasta</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                <button id="btnBuscar" class="btn btn-outline-success">Buscar</button>
-                                <button id="btnListar" class="btn btn-outline-success">Listar</button>
-                            </div>
+                                <button id="btnBuscar" class="btn btn-primary">Buscar</button>
+                                <button id="btnListar" class="btn btn-outline-success"><i class="bi bi-list"></i></button>
+                                </div>
 
                         </div>
                     </div>
