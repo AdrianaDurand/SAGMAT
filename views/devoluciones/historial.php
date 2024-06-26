@@ -84,7 +84,8 @@
                                                 <input type="date" class="form-control" id="startDate">
                                                 <span class="input-group-text" id="basic-addon2">Hasta</span>
                                                 <input type="date" class="form-control" id="endDate">
-                                                <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+                                                <button class="btn btn-outline-primary" type="button" id="searchButton">Buscar</button>
+                                                <button id="btnListar" class="btn btn-outline-success">Listar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -250,14 +251,18 @@
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         console.log(`Datos obtenidos:`, datos);
-                        dataObtenida = datos; // Asigna los datos obtenidos a la variable global
-                        if (dataObtenida.length === 0) {
-                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones en el rango de fechas seleccionado.</p>`;
+                        dataObtenida = datos;
+                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+                        
+                        if (datos.length === 0) {
+                        document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                        // Ocultar la paginación cuando no hay resultados
+                        document.querySelector(".pagination").style.display = "none";
                         } else {
-                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                            renderPage(currentPage);
-                            updatePagination();
+                        $("#lista-devoluciones").innerHTML = ``;
+                        renderPage(currentPage);;
                         }
+                        updatePagination();
                     })
                     .catch(e => {
                         console.error(e);
@@ -367,13 +372,17 @@
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         dataObtenida = datos;
-                        if (dataObtenida.length === 0) {
-                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
+                        
+                        if (datos.length === 0) {
+                        document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                        // Ocultar la paginación cuando no hay resultados
+                        document.querySelector(".pagination").style.display = "none";
                         } else {
-                            totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                            renderPage(currentPage);
-                            updatePagination();
+                        $("#lista-devoluciones").innerHTML = ``;
+                        renderPage(currentPage);;
                         }
+                        updatePagination();
                     })
                     .catch(e => {
                         console.error(e);
@@ -387,6 +396,12 @@
                     const iddevolucion = target.getAttribute('data-iddevolucion');
                     window.open(`../reportes/devoluciones/reporte.php?iddevolucion=${iddevolucion}`, '_blank');
                 }
+            });
+            $("#btnListar").addEventListener("click", () => {
+
+                currentPage = 1;
+                completo();
+
             });
         });
     </script>
