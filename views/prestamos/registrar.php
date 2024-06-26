@@ -206,9 +206,9 @@
                                         <td>
                                             
                                             <div class="dropdown" style="display: flex;">
-                                                <button data-bs-target="#modalAgregar"  style="height: 30px;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#" style="background-color: transparent;">
+                                                <button data-bs-target="#modalAgregar"  style="height: 30px; background-color: transparent;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#">
                                                 </button>
-                                                <button  style="width: 30px;" class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" style="background-color: transparent;" type="button">
+                                                <button  style="width: 30px; background-color: transparent;" class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" type="button">
                                                 </button>  
                                             </div>
                                         </td>
