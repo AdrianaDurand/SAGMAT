@@ -28,16 +28,6 @@
         }
 
 
-
-        .show-more-click {
-            background-color: transparent;
-            border: none;
-            color: #3483fa;
-            cursor: pointer;
-            margin: 6px 0 20px;
-            padding: 0;
-        }
-
         .dropdown-toggle::after {
             display: none !important;
         }
@@ -96,6 +86,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 10px;
         }
+
+        .none{
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -132,15 +131,19 @@
                         <div class="col-md-8">
                             <!-- Input de rango de fecha -->
                             <div class="input-group mb-3 caja">
-                                <span class="input-group-text">Desde</span>
+                                <span class="input-group-text" style="height: 38px;">Desde</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
-                                <span class="input-group-text">Hasta</span>
+                                <span class="input-group-text" style="height: 38px;">Hasta</span>
                                 <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                <button id="btnBuscar" class="btn btn-primary">Buscar</button>
-                                <button id="btnListar" class="btn btn-outline-success"><i class="bi bi-list"></i></button>
-                                </div>
+                                <button id="btnBuscar" class="btn btn-outline-success" style="height: 38px;">Buscar</button>
 
+                                <div style="margin-left: 25px;"></div>
+                                <button id="btnListar" class="none" style="font-size: 1.4em;">
+                                    <strong><i class="bi bi-list-ul"></i></strong>
+                                </button>
+                            </div>
                         </div>
+
                     </div>
 
                     <div class="col-md-12">
@@ -150,31 +153,31 @@
                     <div class="d-flex justify-content-center">
 
                         <div class="container-fluid mt-4">
-                                    <div class="table-responsive">
-                                        <table class="table table-lg  text-center" id="tabla-mantenimiento">
+                            <div class="table-responsive">
+                                <table class="table table-lg  text-center" id="tabla-mantenimiento">
 
-                                            <colgroup>
-                                                <col width="5%"> <!-- ID -->
-                                                <col width="25%"> <!-- Solicitante-->
-                                                <col width="25%"> <!-- Fecha de Solicitud -->
-                                                <col width="25%"> <!-- Fecha de Préstamo -->
-                                                <col width="20%"> <!-- Acciones -->
-                                            </colgroup>
+                                    <colgroup>
+                                        <col width="5%"> <!-- ID -->
+                                        <col width="25%"> <!-- Solicitante-->
+                                        <col width="25%"> <!-- Fecha de Solicitud -->
+                                        <col width="25%"> <!-- Fecha de Préstamo -->
+                                        <col width="20%"> <!-- Acciones -->
+                                    </colgroup>
 
-                                            <thead>
-                                                <tr class="table prueba">
-                                                    <th>N°</th>
-                                                    <th>Suministro</th>
-                                                    <th>Fecha de Mantenimiento</th>
-                                                    <th>Status</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                    <thead>
+                                        <tr class="table prueba">
+                                            <th>N°</th>
+                                            <th>Suministro</th>
+                                            <th>Fecha de Mantenimiento</th>
+                                            <th>Status</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    </tbody>
+                                </table>
+                            </div>
                             <!-- Contenedor de paginación -->
                             <div class="pagination">
                                 <div class="pagination-arrow" id="prev">&laquo;</div>
