@@ -84,7 +84,8 @@
                         <input type="date" class="form-control" id="startDate">
                         <span class="input-group-text" id="basic-addon2">Hasta</span>
                         <input type="date" class="form-control" id="endDate">
-                        <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+                        <button class="btn btn-outline-primary" type="button" id="searchButton">Buscar</button>
+                        <button id="btnListar" class="btn btn-outline-success">Listar</button>
                       </div>
                     </div>
                   </div>
@@ -95,12 +96,12 @@
                 </div>
                 <!-- Contenedor de paginación -->
                 <div class="pagination">
-                                    <div class="pagination-arrow" id="prev">&laquo;</div>
-                                    <div class="pagination-item" id="item-1" data-page="1">1</div>
-                                    <div class="pagination-item" id="item-2" data-page="2">2</div>
-                                    <div class="pagination-item" id="item-3" data-page="3">3</div>
-                                    <div class="pagination-arrow" id="next">&raquo;</div>
-                                </div>
+                  <div class="pagination-arrow" id="prev">&laquo;</div>
+                  <div class="pagination-item" id="item-1" data-page="1">1</div>
+                  <div class="pagination-item" id="item-2" data-page="2">2</div>
+                  <div class="pagination-item" id="item-3" data-page="3">3</div>
+                  <div class="pagination-arrow" id="next">&raquo;</div>
+                </div>
               </div>
             </div>
           </div>
@@ -397,6 +398,13 @@
           window.open(`../reportes/prestamos/reporte.php?idprestamo=${idprestamo}`, '_blank');
         }
       });
+
+      $("#btnListar").addEventListener("click", () => {
+
+        currentPage = 1;
+        completo();
+
+        });
       completo();
     });
   </script>
