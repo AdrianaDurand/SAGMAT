@@ -270,7 +270,7 @@
           .catch(e => {
             console.error(e);
           });
-      }
+        }
 
       function listarFecha() {
         const startDate = document.getElementById("startDate").value;
@@ -461,7 +461,6 @@
           }
         });
       }
-
 
 
       $("#prev").addEventListener("click", () => {
