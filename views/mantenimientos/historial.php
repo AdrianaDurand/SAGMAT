@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
-
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
     <style>
@@ -96,7 +95,7 @@
             padding: 0;
         }
 
-        .none{
+        .none {
             border: none;
             outline: none;
             cursor: pointer;
@@ -106,15 +105,19 @@
         }
 
         .custom-tooltip {
-    display: none;
-    position: absolute;
-    background-color: #333;
-    color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    z-index: 1000;
-}
+            display: none;
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            z-index: 1000;
+        }
+
+        .imprimir{border:0px; background:url(../../img/imprimir.svg) no-repeat center center; width:20px; padding:20px 20px; background-size:20px;}
+        .completado{border:0px; background:url(../../img/completado.svg) no-repeat center center; width:25px; padding:25px 25px; background-size:25px;}
+
     </style>
 </head>
 
@@ -307,14 +310,10 @@
                                 <td>${registro.fechainicio}</td>
                                 <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
                                 <td>  
-                                    <div class="dropdown">
-                                        <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <img src="../../img/puntitos.svg">
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                            ${registro.estado !== 'Completado' ? `<a class="dropdown-item actualizar-estado" data-idmantenimiento="${registro.idmantenimiento}">Actualizar Estado</a>` : ''}
-                                            <a class="dropdown-item imprimir" data-idmantenimiento="${registro.idmantenimiento}">Imprimir</a>
-                                        </div>
+                                <div style="display: flex; justify-content: center;  gap: 20px;">
+                                        ${registro.estado !== 'Completado' ? `
+                                        <button class="actualizar-estado completado" data-idmantenimiento="${registro.idmantenimiento}" style="background-color: transparent; border: none;"></button>` : ''}
+                                        <button class="imprimir" data-idmantenimiento="${registro.idmantenimiento}" style="background-color: transparent; border: none;"></button>
                                     </div>
                                 </td>
                             </tr>

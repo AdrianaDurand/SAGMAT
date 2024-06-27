@@ -103,6 +103,9 @@
             padding: 0;
             margin: 0;
         }
+
+        .imprimir{border:0px; background:url(../../img/imprimir.svg) no-repeat center center; width:20px; padding:20px 20px; background-size:20px;}
+
     </style>
 </head>
 
@@ -172,10 +175,10 @@
                                     <colgroup>
                                         <col width="5%"> <!-- ID -->
                                         <col width="20%"> <!-- Encargado-->
-                                        <col width="20%"> <!-- Descripción-->
+                                        <col width="25%"> <!-- Descripción-->
                                         <col width="15%"> <!-- N° Equipo -->
                                         <col width="20%"> <!-- Fecha de Baja-->
-                                        <col width="20%"> <!-- Acciones -->
+                                        <col width="10%"> <!-- Acciones -->
                                     </colgroup>
 
                                     <thead>
@@ -306,13 +309,8 @@
                                 <td>${registro.nro_equipo}</td>
                                 <td>${registro.fechabaja}</td>
                                 <td>  
-                                <div class="dropdown">
-                                    <button class="show-more-click dropdown-toggle" type="button" id="dropdownMenuButton-${numFila}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="../../img/puntitos.svg">
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${numFila}">
-                                        <a class="dropdown-item imprimir" data-idbaja="${registro.idbaja}">Imprimir</a>
-                                    </div>
+                                <div style="display: flex; justify-content: center;">
+                                            <button class="imprimir" data-idbaja="${registro.idbaja}" style="background-color: transparent; border: none;"></button>
                                 </div>
                             </td>
                             </tr>
