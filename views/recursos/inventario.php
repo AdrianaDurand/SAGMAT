@@ -211,17 +211,16 @@
 
                                 //Renderizado
                                 const nuevoItem = `
-                                <div class="col-md-3">
+                                  <div class="col-md-3">
                                     <div class="card mt-5" style="background-color: #F7F9FD;">
-                                    <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title" style="height: 200px; object-fit: cover;">
+                                        <img class="card-img-top" src='../../imgRecursos/${rutaImagen}' alt="Title">
                                         <div class="card-body">
                                             <h4 class="card-title text-dark" style="text-align:center; font-size:20px">${element.modelo}</h4>
-                                            <hr class="" style="border-top: 1px solid #000;">
+                                            <hr style="border-top: 1px solid #000;">
                                             <p class="card-text">Stock: <strong>${element.stock}</strong></p>
                                         </div>
-                                        <!-- Botón movido y alineado a la derecha -->
                                         <div class="card-body d-flex justify-content-end">
-                                        <button class="show-more-click" data-bs-target="#modalAgregar" data-bs-toggle="modal" data-idrecurso=${element.idrecurso} onclick="mostrarDatasheets(this)">Ver características</button>
+                                            <button class="show-more-click" data-bs-target="#modalAgregar" data-bs-toggle="modal" data-idrecurso=${element.idrecurso} onclick="mostrarDatasheets(this)">Ver características</button>
                                         </div>
                                     </div>
                                 </div>
