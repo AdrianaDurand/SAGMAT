@@ -126,9 +126,7 @@
                 <div class="container">
                     <div class="col-md-12 text-center">
                         <div class="m-4">
-                            <h2 class="fw-bolder d-inline-block">
-                                <img src="../../images/icons/devoucion.png" alt="Imagen de Sectores" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> DEVOLUCIONES
-                            </h2>
+                            <h2 class="fw-bolder d-inline-block">Devoluciones</h2>
                         </div>
                     </div>
                     <div class="row justify-content-center">

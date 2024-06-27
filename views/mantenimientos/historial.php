@@ -140,9 +140,7 @@
                             <div class="container">
                                 <div class="col-md-12 text-center">
                                     <div class="">
-                                        <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/historial.png" alt="Imagen de Mantenimientos Historial" style="height: 2em; width: 2em; margin-right: 0.5em;"> Historial de mantenimientos
-                                        </h2>
+                                        <h2 class="fw-bolder d-inline-block">Historial de mantenimientos</h2>
                                     </div>
                                 </div>
                             </div>

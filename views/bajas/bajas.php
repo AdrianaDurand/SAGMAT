@@ -128,9 +128,7 @@
                             <div class="container">
                                 <div class="col-md-12 text-center">
                                     <div class="">
-                                        <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/bajas.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em; margin-right: 0.5em;"> Equipos dado de baja
-                                        </h2>
+                                        <h2 class="fw-bolder d-inline-block">Equipos dado de baja</h2>
                                     </div>
                                 </div>
                             </div>

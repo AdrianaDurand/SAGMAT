@@ -55,9 +55,7 @@
                             <div class="container">
                                 <div class="col-md-12 text-center">
                                     <div class="">
-                                        <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/new.png" alt="Imagen de Nuevo Usuario" style="height: 2.5em; width: 2.5em; margin-right: 0.5em;"> Registrar Usuarios
-                                        </h2>
+                                        <h2 class="fw-bolder d-inline-block">Registrar Usuarios</h2>
                                     </div>
                                 </div>
                             </div>

@@ -69,9 +69,7 @@
                             <div class="container">
                                 <div class="col-md-12 text-center header-container mb-2">
                                     <div class="m-2">
-                                        <h2 class="fw-bolder d-inline-block">
-                                            <img src="../../images/icons/ajustes.png" alt="Imagen de Mantenimientos" style="height: 2em; width: 2em;"> Historial de Devolucciones
-                                        </h2>
+                                        <h2 class="fw-bolder d-inline-block">Historial de Devolucciones</h2>
                                     </div>
                                 </div>
                             </div>
