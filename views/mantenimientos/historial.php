@@ -253,6 +253,7 @@
 
                             if (datosRecibidos.length === 0) {
                                 tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
+                                document.querySelector('.pagination').style.display = 'none';
                             } else {
                                 $("#lista-recepcion").innerHTML = ``;
                                 renderPage(currentPage);
@@ -282,6 +283,7 @@
 
                             if (datosRecibidos.length === 0) {
                                 tabla.innerHTML = `<tr><td colspan="5">No se encontraron datos en la tabla</td></tr>`;
+                                document.querySelector('.pagination').style.display = 'none';
                             } else {
                                 $("#lista-recepcion").innerHTML = ``;
                                 renderPage(currentPage);

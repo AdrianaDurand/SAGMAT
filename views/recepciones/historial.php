@@ -229,6 +229,7 @@
                         totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                         if (dataObtenida.length == 0) {
                             $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
+                            document.querySelector('.pagination').style.display = 'none';
                         } else {
                             $("#lista-recepcion").innerHTML = ``;
                             renderPage(currentPage);
@@ -256,6 +257,7 @@
                         totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                         if (dataObtenida.length == 0) {
                             $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
+                            document.querySelector('.pagination').style.display = 'none';
                         } else {
                             $("#lista-recepcion").innerHTML = ``;
                             renderPage(currentPage);

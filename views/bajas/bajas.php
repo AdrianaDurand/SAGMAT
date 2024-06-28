@@ -241,6 +241,7 @@
                             // Recorrer cada fila del arreglo
                             if (datosRecibidos.length === 0) {
                                 $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
+                                document.querySelector('.pagination').style.display = 'none';
                             } else {
                                 $("#lista-baja").innerHTML = ``;
                                 renderPage(currentPage);
@@ -268,6 +269,7 @@
                             // Recorrer cada fila del arreglo
                             if (datosRecibidos.length === 0) {
                                 $("#tabla-baja tbody").innerHTML = '<tr><td colspan="6">No hay datos para mostrar</td></tr>';
+                                document.querySelector('.pagination').style.display = 'none';
                             } else {
                                 $("#lista-baja").innerHTML = ``;
                                 renderPage(currentPage);

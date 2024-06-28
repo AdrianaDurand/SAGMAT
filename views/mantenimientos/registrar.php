@@ -233,15 +233,12 @@
         const fechainicio = document.getElementById('fechainicio');
         const fechafin = document.getElementById('fechafin');
 
-        // Set minimum date and time for fechainicio to now
         const now = new Date().toISOString().slice(0, 16);
         fechainicio.min = now;
 
         fechainicio.addEventListener('change', () => {
-            // Set minimum date and time for fechafin to the selected fechainicio
             fechafin.min = fechainicio.value;
 
-            // Clear fechafin value if it's not valid
             if (fechafin.value && fechafin.value <= fechainicio.value) {
                 fechafin.value = '';
             }
@@ -306,6 +303,7 @@
                     totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                     if (dataObtenida.length == 0) {
                         $("#lista-mantenimientos").innerHTML = `<p>No se encontraron mantenimientos</p>`;
+                        document.querySelector('.pagination').style.display = 'none';
                     } else {
                         $("#lista-mantenimientos").innerHTML = ``;
                         renderPage(currentPage);
