@@ -264,7 +264,8 @@ CALL listar_equipos_disponibles(1, '2024-06-17 22:49:31', '2024-06-19 22:55:00')
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_total_resumen()
 BEGIN
-SELECT
-	COUNT(*) 'total'
-		FROM solicitudes;
+	SELECT COUNT(*) AS 'total'
+    FROM solicitudes
+    WHERE DATE(create_at) = CURDATE();
 END $$
+CALL spu_solicitudes_total_resumen();
