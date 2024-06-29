@@ -10,6 +10,12 @@ if (isset($_POST['operacion'])){
     case 'listar':
       echo json_encode($grafico->listar());
     break;
+    case 'total':
+      echo json_encode($grafico->total());
+    break;
+    case 'semanal':
+      echo json_encode($grafico->semanal());
+    break;
   }
 }
 

@@ -23,4 +23,24 @@ class Grafico extends Conexion
       die($e->getMessage());
     }
   }
+  public function total()
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_listar_totales_disp()");
+      $consulta->execute();
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+  public function semanal()
+  {
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_listado_sol_sem()");
+      $consulta->execute();
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 }

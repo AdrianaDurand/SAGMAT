@@ -28,10 +28,9 @@
 
   <style>
     .xd {
-        width: 100%;
+      width: 100%;
     }
-
-</style>
+  </style>
 
 </head>
 
@@ -49,26 +48,25 @@
           <div class="container-fluid">
             <h2 class="text-center my-4">Dashboard</h2>
             <div class="row">
-              <!-- Gráfico de Barras -->
-              <div class="col-md-6 col-lg-4 mb-4">
+              <!-- Columna izquierda: gráficos de barras -->
+              <div class="col-md-6 mb-4">
+                <!-- Primer Gráfico de Barras -->
+                <div class="card mb-4">
+                  <div class="card-header bg-primary opacity-75 text-white">Gráfico de Barras</div>
+                  <div class="card-body">
+                    <canvas id="grafico-barras1"></canvas>
+                  </div>
+                </div>
+                <!-- Segundo Gráfico de Barras -->
                 <div class="card">
                   <div class="card-header bg-primary opacity-75 text-white">Gráfico de Barras</div>
                   <div class="card-body">
-                    <canvas id="barChart"></canvas>
+                    <canvas id="grafico-barras2"></canvas>
                   </div>
                 </div>
               </div>
-              <!-- Gráfico de Líneas -->
-              <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card">
-                  <div class="card-header bg-primary opacity-75 text-white">Gráfico de Líneas</div>
-                  <div class="card-body">
-                    <canvas id="lineChart"></canvas>
-                  </div>
-                </div>
-              </div>
-              <!-- Gráfico de Pastel -->
-              <div class="col-md-6 col-lg-4 mb-4">
+              <!-- Columna derecha: gráfico circular -->
+              <div class="col-md-6 mb-4">
                 <div class="card">
                   <div class="card-header bg-primary opacity-75 text-white">Gráfico de Pastel</div>
                   <div class="card-body">
@@ -78,7 +76,6 @@
               </div>
             </div>
           </div>
-
           <!-- End of Main Content -->
         </div>
       </div>
@@ -91,7 +88,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const colorBorde = [
-      "rgba(13, 138, 193, 1)", 
+      "rgba(13, 138, 193, 1)",
       "rgba(167, 167, 162, 1)",
       "rgba(227, 77, 65, 1)",
       "rgba(231, 241, 75, 1)",
@@ -118,11 +115,16 @@
       "rgba(233, 125, 46 ,0.3)",
       "rgba(203, 201, 61 ,0.3)",
       "rgba(124, 232, 15,0.3 )"
-    ]; 
-    const contexto = document.querySelector("#pieChart");
-    const contexto1  = document.querySelector("#lineChart");
-    let grafico; //Variable, que puede cambiar durante la ejecución
-    // Obtiene los datos que requiere el ChartJS
+    ];
+
+    const pieContext = document.querySelector("#pieChart");
+    const barContext1 = document.querySelector("#grafico-barras1");
+    const barContext2 = document.querySelector("#grafico-barras2");
+
+    let pieChart;
+    let barChart1;
+    let barChart2;
+
     function getData() {
       const parametros = new FormData();
       parametros.append("operacion", "resumen");
@@ -133,62 +135,124 @@
         })
         .then(respuesta => respuesta.json())
         .then(datos => {
-          //console.log(datos.map(valor => valor.categoria))
-          renderChart(datos);
+          renderPieChart(datos);
         })
         .catch(e => {
           console.error(e)
         })
     }
 
-    function renderChart(data) {
-      grafico = new Chart(contexto, {
+    function renderPieChart(data) {
+      pieChart = new Chart(pieContext, {
         type: 'pie',
         data: {
           labels: ['Total Solicitudes'],
           datasets: [{
             label: "Total",
-            data: data.map(valor => valor.total)
+            data: data.map(valor => valor.total),
+            backgroundColor: colorFondo,
+            borderColor: colorBorde,
+            borderWidth: 1
           }]
         }
       });
     }
 
-    function getBarras(){
-      const parametros = new FormData();
-      parametros.append("operacion", "listar");
+    function renderBarChart1(datos) {
+      const labels = datos.map(item => item.estado_descripcion);
+      const dataValues = datos.map(item => item.cantidad);
 
-      fetch(`../../controllers//grafico.controller.php`,{
-        method: "POST",
-        body: parametros
-      })
-      .then(respuesta => respuesta.json())
-      .then(datos => {
-        //console.log(datos.map(valor => valor.categoria))
-        renderBarras(datos);
-      })
-      .catch(e=>{
-        console.error(e)
-      })
-    }
-
-    function renderBarras(data){ 
-      grafico1   = new Chart(contexto1, {
-        type: 'line',
+      barChart1 = new Chart(barContext1, {
+        type: 'pie',
         data: {
-          labels: data.map(valor => valor.descripcion),
+          labels: labels,
           datasets: [{
-            label: "Total",
-            data: data.map(valor => valor.cantidad_total),
-            borderColor: colorBorde,
-            backgroundColor: colorFondo,
+            label: "Estado de recursos tecnológicos",
+            data: dataValues,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)', // Color para 'Disponible'
+              'rgba(54, 162, 235, 0.2)', // Color para 'Prestado'
+              'rgba(255, 206, 86, 0.2)', // Color para 'Mantenimiento'
+              'rgba(75, 192, 192, 0.2)' // Color para 'Baja'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+            ],
             borderWidth: 2
           }]
         }
       });
     }
+
+    function renderBarChart2(datos) {
+      // Configuración de los datos para el segundo gráfico de barras
+      const labels = datos.map(item => convertirADiaSemana(item.fecha_solicitud));
+      const dataValues = datos.map(item => Math.floor(item.cantidad_solicitudes));
+
+
+      barChart2 = new Chart(barContext2, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Solicitudes Semanalmente",
+            data: dataValues,
+            backgroundColor: colorFondo,
+            borderColor: colorBorde,
+            borderWidth: 2
+          }]
+        }
+      });
+    }
+
+    function convertirADiaSemana(fecha) {
+      const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const date = new Date(fecha);
+      return diasSemana[date.getUTCDay()];
+    }
+
+
+    function totales() {
+      const parametros = new FormData();
+      parametros.append("operacion", "total");
+
+      fetch(`../../controllers/grafico.controller.php`, {
+          method: "POST",
+          body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          // Llamamos a las funciones de renderización con los datos recibidos
+          renderBarChart1(datos);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+
+    function semanal() {
+      const parametros = new FormData();
+      parametros.append("operacion", "semanal");
+
+      fetch(`../../controllers/grafico.controller.php`, {
+          method: "POST",
+          body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          renderBarChart2(datos);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+
     getData();
-    getBarras();
+    totales();
+    semanal();
   </script>
 
 </body>
