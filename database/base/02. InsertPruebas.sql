@@ -10,7 +10,7 @@ USE SAGMAT;
 DROP TABLE recursos;
 ALTER TABLE det_recursos AUTO_INCREMENT 1;
 
-SELECT * FROM roles; 
+SELECT * FROM bajas; 
 SELECT * FROM usuarios; 
 SELECT * FROM recursos;
 SELECT * FROM tipos;

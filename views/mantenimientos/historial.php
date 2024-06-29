@@ -17,6 +17,9 @@
     <!-- Custom CSS -->
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
     <style>
         .prueba {
             background-color: #d9e7fa;
@@ -115,9 +118,21 @@
             z-index: 1000;
         }
 
-        .imprimir{border:0px; background:url(../../img/imprimir.svg) no-repeat center center; width:20px; padding:20px 20px; background-size:20px;}
-        .completado{border:0px; background:url(../../img/completado.svg) no-repeat center center; width:25px; padding:25px 25px; background-size:25px;}
+        .imprimir {
+            border: 0px;
+            background: url(../../img/imprimir.svg) no-repeat center center;
+            width: 20px;
+            padding: 20px 20px;
+            background-size: 20px;
+        }
 
+        .completado {
+            border: 0px;
+            background: url(../../img/completado.svg) no-repeat center center;
+            width: 25px;
+            padding: 25px 25px;
+            background-size: 25px;
+        }
     </style>
 </head>
 
@@ -216,6 +231,7 @@
             <!-- End of Content Wrapper -->
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -341,7 +357,12 @@
                             .then(respuesta => respuesta.json())
                             .then(datosRecibidos => {
                                 console.log(datosRecibidos)
-                                alert("Actualizado")
+                                Swal.fire({
+                                    title: 'Mantenimiento realizado',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
                                 todo();
                             })
                             .catch(e => {

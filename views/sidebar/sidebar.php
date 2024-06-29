@@ -46,13 +46,14 @@ $accesos = [
     "DAIP" => [
         "Recepciones" => ["Registrar"],
         "Recursos" => ["Inventario"],
-        "Solicitudes" => ["Registrar"],
         "Prestamos" => ["Registrar", "Historial"],
         "Devoluciones" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
     "CIST" => [
         "Recursos" => ["Inventario"],
+        "Prestamos" => ["Registrar", "Historial"],
+        "Devoluciones" => ["Registrar", "Historial"],
         "Mantenimientos" => ["Registrar", "Historial"],
         "Bajas" => ["Bajas"]
     ],
@@ -119,7 +120,7 @@ function reemplazarCadena($string)
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
             <!-- Nav Item - Dashboard -->
-            <?php if ($rolUsuario === "ADMINISTRADOR") : ?>
+            <?php if ($rolUsuario === "ADMINISTRADOR" || $rolUsuario === "DAIP") : ?>
                 <li class="nav-item">
                     <a class="nav-link" href="../dashboard/dashboard.php">
                         <i class="fa-solid fa-chart-pie"></i>
