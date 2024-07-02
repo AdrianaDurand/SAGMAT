@@ -316,9 +316,9 @@
                       <div class="card-body">
                       <div class="row">
                           <div class="col-md-10">
-                          <h3 class="card-title">${element.equipo}</h3>
+                          <h4 class="card-title">${element.equipo}</h3>
                           <h4 class="card-title">Docente: ${element.docente}</h4>
-                          <p class="card-text"><small class="text-muted">Fecha Solicitud: ${element.fechasolicitud}</small></p>
+                          <p class="card-text"><small class="text-muted"><i class="bi bi-clock me-2"></i>${element.fechasolicitud}</small></p>
                           </div>
                           <div class="col-md-2 d-flex justify-content-end align-items-center">
                           <i class="bi bi-chevron-right show-more-icon" data-idprestamo="${element.idprestamo}"></i>

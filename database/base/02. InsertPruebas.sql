@@ -147,7 +147,7 @@ END;
 INSERT INTO roles (rol) VALUES
 	('DOCENTE'),
     ('ADMINISTRADOR'),
-    ('AIP'),
+    ('DAIP'),
     ('CIST');
 
 -- ----------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ INSERT INTO roles (rol) VALUES
 
 SELECt * FROM personas;
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) VALUES
-    ('Durand', 'Adriana', 'DNI', '74129177', '946989939', 'adrianadurand@gmail.com'),  -- ADMINISTRADOR
+    ('Durand', 'Adriana', 'DNI', '74129177', '946989939', 'adrianadurand@gmail.com');  -- ADMINISTRADOR
 	('Hernandez', 'Yorghet', 'DNI', '72159736', '946989937', 'yorghetyyauri123@gmail.com'),  -- ADMINISTRADOR
     ('Campos Gómez', 'Leticia', 'DNI', '79010923', '900123885', 'leticia@gmail.com'),       -- DAIP
 	('Pachas Martines', 'Carlos', 'DNI', '67232098', '990192837', 'carlos@gmail.com');		-- DOC
@@ -166,7 +166,7 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono, email) V
 -- ----------------------------------------------------------------------------------------
 SELECT * FROM usuarios;
 INSERT INTO usuarios (idpersona, idrol, claveacceso) VALUES
-	(1,1,'NSC');
+	(53,3,'NSC');
 
 -- ----------------------------------------------------------------------------------------
 -- -------------------------------    UBICACIONES    --------------------------------------
@@ -244,7 +244,7 @@ INSERT INTO bajas (idrecurso, idusuario, fechabaja, motivo, comentarios, ficha_b
     (1, 1, '2024-05-16 18:18:26', 'Deterioro', 'No tiene cura:(', NULL);
 
 
-DROP TABLE stock;
+DROP TABLE roles;
 DROP TABLE detrecepciones;
 DELETE FROM personas;
 

@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Préstamos</title>
+    <title>SAGMAT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="../../images/icons" href="../../images/icons/ajustes.png" />
     <link rel="stylesheet" href="../prestamos/estilos.css">
+
+    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+
     <style>
         /* Estilos para la paginación */
         .pagination {
@@ -284,7 +287,7 @@
                                         <div class="col-md-10">
                                             <h3 class="card-title">${element.equipo}</h3>
                                             <h4 class="card-title">Docente: ${element.solicitante_nombres}</h4>
-                                            <p class="card-text"><small class="text-muted">Fecha Devolución: ${element.create_at}</small></p>
+                                            <p class="card-text"><small class="text-muted"><i class="bi bi-clock me-2"></i>${element.create_at}</small></p>
                                         </div>
                                         <div class="col-md-2 d-flex justify-content-end align-items-center">
                                             <i class="bi bi-chevron-right show-more-icon" data-idprestamo="${element.idprestamo}"></i>
@@ -297,7 +300,7 @@
                                     <div class="card-text"></div>
                                     <i class="bi bi-arrow-left return-icon mt-3"></i>
                                 </div>
-                            </div>
+                            </div
                         </div>
                     </div>
                 `;

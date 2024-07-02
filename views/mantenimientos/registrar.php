@@ -226,7 +226,7 @@
         const cerrar = new bootstrap.Modal(document.getElementById("modalEliminar"));
         const modales = document.querySelectorAll('.modal');
 
-        const itemsPerPage = 8; // Número de elementos por página
+        const itemsPerPage = 5; // Número de elementos por página
         let currentPage = 1;
         let totalPages = 1;
 
@@ -510,7 +510,6 @@
                 text: "¿Está seguro de que desea guardar los cambios?",
                 icon: 'question',
                 showCancelButton: true,
-                timer: 1500,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Guardar',
@@ -568,7 +567,6 @@
                 .then(respuesta => respuesta.json())
                 .then(datos => {
                     if (datos.length > 0) {
-                        alert(`Imagenes subidas: ${datos.length}`);
                         $("#form-galeria").reset();
                     }
                     listar();

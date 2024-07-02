@@ -18,7 +18,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
-        <title>Devoluciones</title>
+        <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+
+        <title>SAGMAT</title>
     </head>
     <style>
         .xd {

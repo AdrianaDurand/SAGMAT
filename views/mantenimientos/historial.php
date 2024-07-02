@@ -236,7 +236,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
 
-                const itemsPerPage = 8; // Número de elementos por página
+                const itemsPerPage = 10; // Número de elementos por página
                 let currentPage = 1;
                 let totalPages = 1;
 
