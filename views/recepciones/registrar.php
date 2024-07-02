@@ -88,14 +88,14 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="">
+                                    <div class="mt-3">
                                         <h2 class="fw-bolder d-inline-block">Registrar Recepciones</h2>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Formulario de RECEPCIÓN -->
-                            <div class="card">
+                            <div class="card mt-3">
                                 <div class="card-body">
                                     <form id="form-recepcion" class="needs-validation" novalidate>
                                         <div class="row mb-3">

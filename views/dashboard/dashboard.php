@@ -47,7 +47,7 @@
         <div id="content">
           <div class="container-fluid">
             <div class="row justify-content-center my-3">
-              <div class="col-md-6 ">
+              <div class="col-md-6 mt-3">
                 <strong>
                   <h3 class="text-center ">Solicitudes Semanales</h3>
                 </strong>

@@ -91,7 +91,7 @@
                         <!-- Page Content -->
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
-                                <div class="col-md-12 text-center">
+                                <div class="col-md-12 text-center mt-3">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">Mantenimientos</h2>
                                     </div>
@@ -101,14 +101,14 @@
 
                     </div>
 
-                    <div class="col-md-6 mt-2">
+                    <div class="col-md-6 mb-3">
                         <label for="" class="form-label">Seleccione un tipo:</label>
                         <select name="tipos" id="tipos" class="form-select">
                             <option value="-1">Mostrar todas</option>
                         </select>
                     </div>
 
-                    <div class="col-md-12 mt-3">
+                    <div class="col-md-12 mb-3">
                         <div class="row" id="lista-mantenimientos"></div>
                     </div>
 
@@ -335,7 +335,7 @@
                     estadoClass = 'badge-success'; // clase para el estado 'Disponible'
                 }
                 const nuevoItem = `
-                    <div class="d-flex justify-content-center mt-2">
+                    <div class="d-flex justify-content-center mt-3">
                         <div class="card mb-3 caja" style="max-width: 900px;">
                             <div class="row g-0">
                                 <div class="col-md-4">

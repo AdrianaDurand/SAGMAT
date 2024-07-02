@@ -129,7 +129,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="">
+            <div class="xd">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -146,7 +146,7 @@
                         </div>
                     </div>
 
-                    <div class="xd">
+                    <div class="">
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <!-- Input de rango de fecha -->
