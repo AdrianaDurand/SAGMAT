@@ -123,51 +123,61 @@
 <body>
 
     <div id="wrapper">
+        <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div class="mt-2">
-                <div id="content">
-                    <div class="container-fluid">
-                        <div class="flex-grow-1 p-3 p-md-4 pt-2">
-                            <div class="container">
-                                <div class="col-md-12 text-center header-container ">
-                                    <div class="">
-                                        <h2 class="fw-bolder d-inline-block">Historial de Recepciones</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="xd">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-8">
-                                            <div class="input-group mb-4 caja">
-                                                <span class="input-group-text" style="height: 38px;">Desde</span>
-                                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
-                                                <span class="input-group-text" style="height: 38px;">Hasta</span>
-                                                <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                                <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
+        <!-- End of Sidebar -->
 
-                                                <div style="margin-left: 25px;"></div>
-                                                <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
-                                                    <strong><i class="bi bi-list-ul"></i></strong>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row" id="lista-recepcion"></div>
-                                    </div>
-                                    <!-- Contenedor de paginación -->
-                                    <div class="pagination">
-                                        <div class="pagination-arrow" id="prev">&laquo;</div>
-                                        <div class="pagination-item" id="item-1" data-page="1">1</div>
-                                        <div class="pagination-item" id="item-2" data-page="2">2</div>
-                                        <div class="pagination-item" id="item-3" data-page="3">3</div>
-                                        <div class="pagination-arrow" id="next">&raquo;</div>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div class="xd">
+                <!-- Main Content -->
+                <div id="content">
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+                        <!-- Page Content -->
+                        <div class="flex-grow-1 p-3 p-md-4 pt-4">
+                            <div class="container">
+                                <div class="col-md-12 text-center">
+                                    <div class="">
+                                        <h2 class="fw-bolder d-inline-block">Historial de recepciones</h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <!-- Input de rango de fecha -->
+                                <div class="input-group mb-3 caja">
+                                    <span class="input-group-text" style="height: 38px;">Desde</span>
+                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
+                                    <span class="input-group-text" style="height: 38px;">Hasta</span>
+                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
+                                    <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
+
+                                    <div style="margin-left: 25px;"></div>
+                                    <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
+                                        <strong><i class="bi bi-list-ul"></i></strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row" id="lista-recepcion"></div>
+                        </div>
+
+                        <!-- Contenedor de paginación -->
+                        <div class="pagination">
+                            <div class="pagination-arrow" id="prev">&laquo;</div>
+                            <div class="pagination-item" id="item-1" data-page="1">1</div>
+                            <div class="pagination-item" id="item-2" data-page="2">2</div>
+                            <div class="pagination-item" id="item-3" data-page="3">3</div>
+                            <div class="pagination-arrow" id="next">&raquo;</div>
+                        </div>
+
                     </div>
                 </div>
             </div>

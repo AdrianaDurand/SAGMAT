@@ -79,7 +79,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="xd">
+            <div class="xd mt-2">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -88,7 +88,7 @@
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
                                 <div class="col-md-12 text-center">
-                                    <div class="mt-3">
+                                    <div class="">
                                         <h2 class="fw-bolder d-inline-block">Registrar Recepciones</h2>
                                     </div>
                                 </div>

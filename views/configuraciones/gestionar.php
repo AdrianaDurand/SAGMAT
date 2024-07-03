@@ -54,7 +54,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="mt-3">
+            <div class="mt-2">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->

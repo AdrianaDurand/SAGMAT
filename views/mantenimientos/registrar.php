@@ -82,7 +82,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="">
+            <div class="xd mt-2">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -91,7 +91,7 @@
                         <!-- Page Content -->
                         <div class="flex-grow-1 p-3 p-md-4 pt-4">
                             <div class="container">
-                                <div class="col-md-12 text-center mt-3">
+                                <div class="col-md-12 text-center">
                                     <div class="">
                                         <h2 class="fw-bolder d-inline-block">Mantenimientos</h2>
                                     </div>

@@ -130,8 +130,8 @@
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <section>
-                <div class="xd">
+         
+                <div class="xd mt-2">
                     <div class="container">
                         <div class="col-md-12 text-center">
                             <div class="m-4">
@@ -156,7 +156,6 @@
                         </div>
                     </div>
                 </div>
-            </section>
         </div>
         <!-- End of Content Wrapper -->
     </div>

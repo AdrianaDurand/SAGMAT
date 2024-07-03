@@ -142,7 +142,7 @@
                                     <div class="row justify-content-center">
                                         <div class="col-md-8">
                                             <div class="date-picker-container">
-                                                <div class="input-group mb-1 mt-1 caja">
+                                                <div class="input-group mb-1 mb-4 caja">
                                                     <span class="input-group-text" id="basic-addon1">Desde</span>
                                                     <input type="date" class="form-control" id="startDate">
                                                     <span class="input-group-text" id="basic-addon2">Hasta</span>
@@ -156,7 +156,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <br>
                                     <div class="col-md-12">
                                         <div class="row" id="lista-devoluciones"></div>
                                     </div>

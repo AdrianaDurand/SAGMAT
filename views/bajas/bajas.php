@@ -118,7 +118,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="">
+            <div class="xd mt-2">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
