@@ -351,8 +351,8 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-10">
-                                            <h4 class="card-title">${element.equipo}</h4>
-                                            <h4 class="card-title">Docente: ${element.solicitante_nombres}</h4>
+                                            <h5 class="card-title">${element.equipo}</h5>
+                                            <h6 class="card-title">Docente: ${element.solicitante_nombres}</h6>
                                             <p class="card-text"><small class="text-muted"><i class="bi bi-clock me-2"></i>${element.create_at}</small></p>
                                         </div>
                                         <div class="col-md-2 d-flex justify-content-end align-items-center">

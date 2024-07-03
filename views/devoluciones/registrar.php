@@ -235,9 +235,12 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <h3 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h3>
-                                                <p class="card-text"><small class="text-muted">${devolucion.horainicio}</small></p>
-                                            </div>
+                                                <h5 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h5>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-clock me-2"></i>
+                                                    <p class="card-text mb-0"><small class="text-muted">${devolucion.horainicio}</small></p>
+                                                    </div>
+                                                </div>
                                             <div class="col-md-6 d-flex justify-content-end align-items-center">
                                                 <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
                                             </div>

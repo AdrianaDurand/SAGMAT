@@ -282,7 +282,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h3 class="card-title">N° Recepción: #${element.idrecepcion}</h3>
+                                            <h5 class="card-title">N° Recepción: #${element.idrecepcion}</h5>
                                             <h6 class="card-title">${element.areas}</h6>
                                             <div class="d-flex align-items-center">
                                                 <i class="bi bi-clock me-2"></i>

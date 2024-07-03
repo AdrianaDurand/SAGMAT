@@ -456,13 +456,12 @@
 
             // Mostrar SweetAlert para confirmar la acción
             Swal.fire({
-                title: '¿Guardar cambios?',
-                text: "¿Está seguro de que desea guardar los cambios?",
+                title: '¿Está seguro de que desea guardar los cambios?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Guardar',
+                confirmButtonText: 'Si',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -506,13 +505,12 @@
                 return;
             }
             Swal.fire({
-                title: '¿Guardar cambios?',
-                text: "¿Está seguro de que desea guardar los cambios?",
+                title: '¿Está seguro de que desea guardar los cambios?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Guardar',
+                confirmButtonText: 'Si',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {

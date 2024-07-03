@@ -2,26 +2,26 @@
 <html lang="es">
 
 <head>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SAGMAT</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>SAGMAT</title>
 
-    <!-- Bootstrap CSS v5.2.1 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap ICONS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Bootstrap ICONS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Font Awesome icons (free version) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Font Awesome icons (free version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
-    <!-- ICON -->
-    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+  <!-- ICON -->
+  <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
   <style>
     .xd {
       width: 100%;
@@ -54,7 +54,7 @@
       padding: 0;
     }
 
-    .return-icon{
+    .return-icon {
       background-color: transparent;
       border: none;
       color: #3483fa;
@@ -121,7 +121,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-top: 10px;
     }
-    
+
 
     .none {
       border: none;
@@ -137,61 +137,54 @@
 <body>
 
   <div id="wrapper">
-    <!-- Sidebar -->
     <?php require_once '../../views/sidebar/sidebar.php'; ?>
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
       <div class="mt-1">
-        <!-- Main Content -->
         <div id="content">
-          <!-- Begin Page Content -->
           <div class="container-fluid">
-            <!-- Page Content -->
             <div class="flex-grow-1 p-3 p-md-4 pt-2">
               <div class="container">
                 <div class="col-md-12 text-center header-container mb-2">
                   <div class="m-2">
-                    <h2 class="fw-bolder d-inline-block">Historial de préstamos</h2>
+                    <h2 class="fw-bolder d-inline-block">Historial de Préstamos</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="xd">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-8">
+                      <div class="date-picker-container">
+                        <div class="input-group caja">
+                          <span class="input-group-text" style="height: 38px;">Desde</span>
+                          <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="startDate">
+                          <span class="input-group-text" style="height: 38px;">Hasta</span>
+                          <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="endDate">
+                          <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
+
+                          <div style="margin-left: 25px;"></div>
+                          <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
+                            <strong><i class="bi bi-list-ul"></i></strong>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="col-md-12">
+                    <div class="row" id="lista-devolucion"></div>
+                  </div>
+                  <!-- Contenedor de paginación -->
+                  <div class="pagination">
+                    <div class="pagination-arrow" id="prev">&laquo;</div>
+                    <div class="pagination-item" id="item-1" data-page="1">1</div>
+                    <div class="pagination-item" id="item-2" data-page="2">2</div>
+                    <div class="pagination-item" id="item-3" data-page="3">3</div>
+                    <div class="pagination-arrow" id="next">&raquo;</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="xd">
-            <div class="row justify-content-center">
-              <div class="col-md-8">
-                <!-- Input de rango de fecha -->
-                <div class="input-group mb-3 caja">
-                  <span class="input-group-text" style="height: 38px;">Desde</span>
-                  <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="startDate">
-                  <span class="input-group-text" style="height: 38px;">Hasta</span>
-                  <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="endDate">
-                  <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
-
-                  <div style="margin-left: 25px;"></div>
-                  <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
-                    <strong><i class="bi bi-list-ul"></i></strong>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <div class="row" id="lista-devolucion"></div>
-            </div>
-
-            <div class="pagination">
-              <div class="pagination-arrow" id="prev">&laquo;</div>
-              <div class="pagination-item" id="item-1" data-page="1">1</div>
-              <div class="pagination-item" id="item-2" data-page="2">2</div>
-              <div class="pagination-item" id="item-3" data-page="3">3</div>
-              <div class="pagination-arrow" id="next">&raquo;</div>
-            </div>
-
-
-
           </div>
         </div>
       </div>
@@ -272,7 +265,7 @@
           .catch(e => {
             console.error(e);
           });
-        }
+      }
 
       function listarFecha() {
         const startDate = document.getElementById("startDate").value;
@@ -320,8 +313,8 @@
                       <div class="card-body">
                       <div class="row">
                           <div class="col-md-10">
-                          <h4 class="card-title">${element.equipo}</h3>
-                          <h4 class="card-title">Docente: ${element.docente}</h4>
+                          <h5 class="card-title">${element.equipo}</h5>
+                          <h6 class="card-title">Docente: ${element.docente}</h6>
                           <p class="card-text"><small class="text-muted"><i class="bi bi-clock me-2"></i>${element.fechasolicitud}</small></p>
                           </div>
                           <div class="col-md-2 d-flex justify-content-end align-items-center">
