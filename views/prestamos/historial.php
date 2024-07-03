@@ -2,22 +2,26 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAGMAT</title>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SAGMAT</title>
 
-  <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Bootstrap ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Font Awesome icons (free version) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome icons (free version) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- Custom CSS -->
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
-  <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
-
+    <!-- ICON -->
+    <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
   <style>
     .xd {
       width: 100%;
@@ -117,6 +121,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-top: 10px;
     }
+    
 
     .none {
       border: none;
@@ -138,23 +143,22 @@
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-      <div class="">
+      <div class="mt-1">
         <!-- Main Content -->
         <div id="content">
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Content -->
-            <div class="flex-grow-1 p-3 p-md-4 pt-4">
+            <div class="flex-grow-1 p-3 p-md-4 pt-2">
               <div class="container">
-                <div class="col-md-12 text-center">
-                  <div class="">
+                <div class="col-md-12 text-center header-container mb-2">
+                  <div class="m-2">
                     <h2 class="fw-bolder d-inline-block">Historial de préstamos</h2>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="xd">
             <div class="row justify-content-center">
               <div class="col-md-8">

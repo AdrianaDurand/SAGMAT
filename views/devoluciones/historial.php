@@ -12,114 +12,114 @@
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
     <style>
-    .xd {
-      width: 100%;
-    }
+        .xd {
+            width: 100%;
+        }
 
-    .prueba {
-      background-color: #d9e7fa;
-    }
+        .prueba {
+            background-color: #d9e7fa;
+        }
 
-    table {
-      text-align: center;
-    }
+        table {
+            text-align: center;
+        }
 
-    .dropdown-toggle::after {
-      display: none !important;
-    }
+        .dropdown-toggle::after {
+            display: none !important;
+        }
 
-    .card {
-      border: 2px solid rgba(0, 0, 0, 0.125);
-      box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
-      transition: box-shadow 0.3s ease;
-    }
+        .card {
+            border: 2px solid rgba(0, 0, 0, 0.125);
+            box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+        }
 
-    .show-more-icon {
-      background-color: transparent;
-      border: none;
-      color: #3483fa;
-      cursor: pointer;
-      margin: 6px 0 20px;
-      padding: 0;
-    }
+        .show-more-icon {
+            background-color: transparent;
+            border: none;
+            color: #3483fa;
+            cursor: pointer;
+            margin: 6px 0 20px;
+            padding: 0;
+        }
 
-    .return-icon{
-      background-color: transparent;
-      border: none;
-      color: #3483fa;
-      cursor: pointer;
-      margin: 6px 0 20px;
-      padding: 0;
-    }
+        .return-icon {
+            background-color: transparent;
+            border: none;
+            color: #3483fa;
+            cursor: pointer;
+            margin: 6px 0 20px;
+            padding: 0;
+        }
 
 
 
-    .detalles-container {
-      margin-top: 10px;
-    }
+        .detalles-container {
+            margin-top: 10px;
+        }
 
-    /* Estilos para la paginación */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin: 20px;
-    }
+        /* Estilos para la paginación */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
 
-    .pagination-item {
-      width: 40px;
-      height: 40px;
-      background-color: #fff;
-      border: 1px solid #cecece;
-      border-radius: 20%;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      margin: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-    }
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
 
-    .pagination-item.active {
-      color: #2c7be5;
-      font-weight: bold;
-    }
+        .pagination-item.active {
+            color: #2c7be5;
+            font-weight: bold;
+        }
 
-    .pagination-arrow {
-      font-size: 24px;
-      margin: 10px;
-      cursor: pointer;
-      border: 1px solid #cecece;
-      border-radius: 20%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .pagination-arrow {
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: 1px solid #cecece;
+            border-radius: 20%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .pagination-arrow.disabled {
-      color: #808080;
-      cursor: not-allowed;
-    }
+        .pagination-arrow.disabled {
+            color: #808080;
+            cursor: not-allowed;
+        }
 
-    .caja {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 10px;
-    }
+        .caja {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
 
-    .none {
-      border: none;
-      outline: none;
-      cursor: pointer;
-      background-color: transparent;
-      padding: 0;
-      margin: 0;
-    }
-  </style>
+        .none {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -138,37 +138,37 @@
                                 </div>
                             </div>
                             <div class="xd">
-                            <div class="container">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-8">
-                                        <div class="date-picker-container">
-                                            <div class="input-group mb-1 mt-1 caja">
-                                                <span class="input-group-text" id="basic-addon1">Desde</span>
-                                                <input type="date" class="form-control" id="startDate">
-                                                <span class="input-group-text" id="basic-addon2">Hasta</span>
-                                                <input type="date" class="form-control" id="endDate">
-                                                <button class="btn btn-primary" style="height: 38px;" type="button" id="searchButton"><i class="bi bi-search"></i></button>
-                                                <div style="margin-left: 25px;"></div>
-                                                <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
-                                                    <strong><i class="bi bi-list-ul"></i></strong>
-                                                </button>
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-8">
+                                            <div class="date-picker-container">
+                                                <div class="input-group mb-1 mt-1 caja">
+                                                    <span class="input-group-text" id="basic-addon1">Desde</span>
+                                                    <input type="date" class="form-control" id="startDate">
+                                                    <span class="input-group-text" id="basic-addon2">Hasta</span>
+                                                    <input type="date" class="form-control" id="endDate">
+                                                    <button class="btn btn-primary" style="height: 38px;" type="button" id="searchButton"><i class="bi bi-search"></i></button>
+                                                    <div style="margin-left: 25px;"></div>
+                                                    <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
+                                                        <strong><i class="bi bi-list-ul"></i></strong>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <br>
+                                    <div class="col-md-12">
+                                        <div class="row" id="lista-devoluciones"></div>
+                                    </div>
+                                    <!-- Contenedor de paginación -->
+                                    <div class="pagination">
+                                        <div class="pagination-arrow" id="prev">&laquo;</div>
+                                        <div class="pagination-item" id="item-1" data-page="1">1</div>
+                                        <div class="pagination-item" id="item-2" data-page="2">2</div>
+                                        <div class="pagination-item" id="item-3" data-page="3">3</div>
+                                        <div class="pagination-arrow" id="next">&raquo;</div>
+                                    </div>
                                 </div>
-                                <br>
-                                <div class="col-md-12">
-                                    <div class="row" id="lista-devoluciones"></div>
-                                </div>
-                                <!-- Contenedor de paginación -->
-                                <div class="pagination">
-                                    <div class="pagination-arrow" id="prev">&laquo;</div>
-                                    <div class="pagination-item" id="item-1" data-page="1">1</div>
-                                    <div class="pagination-item" id="item-2" data-page="2">2</div>
-                                    <div class="pagination-item" id="item-3" data-page="3">3</div>
-                                    <div class="pagination-arrow" id="next">&raquo;</div>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -182,7 +182,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const itemsPerPage = 2; // Número de elementos por página
             let currentPage = 1;
             let totalPages = 1;
@@ -196,8 +196,8 @@
                 var showMoreIcons = document.querySelectorAll(".show-more-icon");
                 var returnIcons = document.querySelectorAll(".return-icon");
 
-                showMoreIcons.forEach(function (icon) {
-                    icon.addEventListener("click", function () {
+                showMoreIcons.forEach(function(icon) {
+                    icon.addEventListener("click", function() {
                         var originalCard = this.closest('.card');
                         var detailedCard = originalCard.nextElementSibling;
                         var idprestamo = this.getAttribute('data-idprestamo');
@@ -205,7 +205,7 @@
                         fetchDetails(idprestamo, detailedCard);
 
                         originalCard.classList.add('card-expand');
-                        setTimeout(function () {
+                        setTimeout(function() {
                             originalCard.style.display = "none";
                             detailedCard.style.display = "block";
                             detailedCard.classList.add('card-expand');
@@ -213,13 +213,13 @@
                     });
                 });
 
-                returnIcons.forEach(function (icon) {
-                    icon.addEventListener("click", function () {
+                returnIcons.forEach(function(icon) {
+                    icon.addEventListener("click", function() {
                         var detailedCard = this.closest('.card');
                         var originalCard = detailedCard.previousElementSibling;
 
                         detailedCard.classList.remove('card-expand');
-                        setTimeout(function () {
+                        setTimeout(function() {
                             detailedCard.style.display = "none";
                             originalCard.style.display = "block";
                             originalCard.classList.remove('card-expand');
@@ -312,22 +312,22 @@
                 parametros.append("fechafin", endDate);
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
+                        method: "POST",
+                        body: parametros
+                    })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         console.log(`Datos obtenidos:`, datos);
                         dataObtenida = datos;
                         totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                        
+
                         if (datos.length === 0) {
-                        document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
-                        // Ocultar la paginación cuando no hay resultados
-                        document.querySelector(".pagination").style.display = "none";
+                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                            // Ocultar la paginación cuando no hay resultados
+                            document.querySelector(".pagination").style.display = "none";
                         } else {
-                        $("#lista-devoluciones").innerHTML = ``;
-                        renderPage(currentPage);;
+                            $("#lista-devoluciones").innerHTML = ``;
+                            renderPage(currentPage);;
                         }
                         updatePagination();
                     })
@@ -351,7 +351,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-10">
-                                            <h3 class="card-title">${element.equipo}</h3>
+                                            <h4 class="card-title">${element.equipo}</h4>
                                             <h4 class="card-title">Docente: ${element.solicitante_nombres}</h4>
                                             <p class="card-text"><small class="text-muted"><i class="bi bi-clock me-2"></i>${element.create_at}</small></p>
                                         </div>
@@ -382,9 +382,9 @@
                 parametros.append('iddevolucion', iddevolucion);
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
+                        method: "POST",
+                        body: parametros
+                    })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         console.log(datos);
@@ -433,21 +433,21 @@
                 parametros.append("operacion", "listarHistorial");
 
                 fetch(`../../controllers/devolucion.controller.php`, {
-                    method: "POST",
-                    body: parametros
-                })
+                        method: "POST",
+                        body: parametros
+                    })
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         dataObtenida = datos;
                         totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                        
+
                         if (datos.length === 0) {
-                        document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
-                        // Ocultar la paginación cuando no hay resultados
-                        document.querySelector(".pagination").style.display = "none";
+                            document.getElementById("lista-devoluciones").innerHTML = `<p>No se encontraron devoluciones</p>`;
+                            // Ocultar la paginación cuando no hay resultados
+                            document.querySelector(".pagination").style.display = "none";
                         } else {
-                        $("#lista-devoluciones").innerHTML = ``;
-                        renderPage(currentPage);;
+                            $("#lista-devoluciones").innerHTML = ``;
+                            renderPage(currentPage);;
                         }
                         updatePagination();
                     })
@@ -457,7 +457,7 @@
             }
 
             completo();
-            document.addEventListener("click", function (event) {
+            document.addEventListener("click", function(event) {
                 const target = event.target;
                 if (target.classList.contains('imprimir')) {
                     const iddevolucion = target.getAttribute('data-iddevolucion');
