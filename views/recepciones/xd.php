@@ -1,127 +1,77 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>SAGMAT</title>
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Bootstrap ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Custom CSS -->
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
+    <!-- ICON -->
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+
 
     <style>
         .xd {
             width: 100%;
         }
 
-        .prueba {
-            background-color: #d9e7fa;
+        .input-error {
+            border: 1px solid red !important;
         }
 
-        table {
-            text-align: center;
+        .input-filled {
+            border: 1px solid green !important;
         }
 
-        .dropdown-toggle::after {
-            display: none !important;
-        }
-
-        .card {
-            border: 2px solid rgba(0, 0, 0, 0.125);
-            box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
-            transition: box-shadow 0.3s ease;
-        }
-
-
-
-        .detalles-container {
-            margin-top: 10px;
-        }
-
-        /* Estilos para la paginación */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin: 20px;
-        }
-
-        .pagination-item {
-            width: 40px;
-            height: 40px;
-            background-color: #fff;
-            border: 1px solid #cecece;
-            border-radius: 20%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            margin: 10px;
+        .list-group-item-action {
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
         }
 
-        .pagination-item.active {
-            color: #2c7be5;
-            font-weight: bold;
+        .alonso {
+            animation: glow 1s infinite alternate;
         }
 
-        .pagination-arrow {
-            font-size: 24px;
-            margin: 10px;
-            cursor: pointer;
-            border: 1px solid #cecece;
-            border-radius: 20%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px #1cc88a;
+            }
+
+            to {
+                box-shadow: 0 0 20px #1cc88a;
+            }
         }
 
-        .pagination-arrow.disabled {
-            color: #808080;
-            cursor: not-allowed;
+        @keyframes error {
+            from {
+                box-shadow: 0 0 5px red;
+            }
+
+            to {
+                box-shadow: 0 0 10px red;
+            }
         }
 
-        .caja {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
-        }
-
-        .show-more-click {
-            background-color: transparent;
-            border: none;
-            color: #3483fa;
-            cursor: pointer;
-            margin: 6px 0 20px;
-            padding: 0;
-        }
-
-        .none {
-            border: none;
-            outline: none;
-            cursor: pointer;
-            background-color: transparent;
-            padding: 0;
-            margin: 0;
+        .brillar-rojo {
+            animation: error 1s infinite alternate;
         }
     </style>
 </head>
 
 <body>
-
     <div id="wrapper">
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
@@ -129,7 +79,7 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-            <div class="xd">
+            <div class="xd mt-2">
                 <!-- Main Content -->
                 <div id="content">
                     <!-- Begin Page Content -->
@@ -139,348 +89,498 @@
                             <div class="container">
                                 <div class="col-md-12 text-center">
                                     <div class="">
-                                        <h2 class="fw-bolder d-inline-block">Historial de recepciones</h2>
+                                        <h2 class="fw-bolder d-inline-block">Registrar Recepciones</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formulario de RECEPCIÓN -->
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <form id="form-recepcion" class="needs-validation" novalidate>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="idpersonal"><strong>Buscar personal:</strong></label>
+                                                <div class="input-group has-validation">
+                                                    <input type="text" id="idpersonal" class="form-control border" placeholder="Ingrese el nombre del personal" aria-describedby="basic-addon2">
+                                                </div>
+                                                <ul class="list-group" id="resultados">
+                                                    <!-- Sugerencias de búsqueda -->
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="fechayhorarecepcion"><strong>Fecha y hora de recepción:</strong></label>
+                                                <input type="datetime-local" class="form-control border" id="fechayhorarecepcion" required max="<?php echo date('Y-m-d\TH:i'); ?>">
+                                                <div class="invalid-feedback">Por favor, ingrese una fecha y hora válida.</div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="idalmacen" class="form-label">Ubicación:</label>
+                                                <select id="idalmacen" class="form-select" required>
+                                                    <option value="">Seleccione:</option>
+                                                </select>
+                                                <div class="invalid-feedback">Por favor, seleccione una ubicación.</div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="tipodocumento"><strong>Tipo documento:</strong></label>
+                                                <select id="tipodocumento" class="form-select" required>
+                                                    <option value="">Seleccione:</option>
+                                                    <option value="Boleta">Boleta</option>
+                                                    <option value="Factura">Factura</option>
+                                                    <option value="Guía R.">Guía R.</option>
+                                                    <option value="Pecosa">Pecosa</option>
+                                                </select>
+                                                <div class="invalid-feedback">Por favor, seleccione un tipo de documento.</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="nrodocumento" class="form-label"><strong>N° documento</strong></label>
+                                                <input type="text" class="form-control border" id="nrodocumento" required oninput="this.value = this.value.replace(/\D/g, '')">
+                                                <div class="invalid-feedback">Por favor, ingrese el número de documento.</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="serie_doc" class="form-label"><strong>Serie documento</strong></label>
+                                                <input type="text" class="form-control border" id="serie_doc" required>
+                                                <div class="invalid-feedback">Por favor, ingrese la serie del documento.</div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <form id="form-detrecepcion" class="needs-validation" novalidate>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="buscar"><strong>Buscar tipo de recurso:</strong></label>
+                                                <div class="input-group mb-3 has-validation">
+                                                    <input type="text" id="buscar" class="form-control border" placeholder="¿Qué quieres buscar?" aria-label="Buscar tipo de recurso" aria-describedby="basic-addon2" required>
+                                                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass icon"></i></span>
+                                                    <div class="invalid-feedback">Por favor, ingrese un recurso.</div>
+                                                </div>
+                                                <ul class="container" id="resultados2">
+                                                    <!-- Sugerencias de búsqueda -->
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="detalles"><strong>Seleccionar detalles:</strong></label>
+                                                <select id="detalles" class="form-select" required disabled>
+                                                    <option>Primero busque el tipo de recurso</option>
+                                                </select>
+                                                <div class="invalid-feedback">Por favor, seleccione un detalle.</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="cantidadEnviada"><strong>Cantidad Enviada:</strong></label>
+                                                <input type="number" class="form-control border" id="cantidadEnviada" required min="1">
+                                                <div class="invalid-feedback">Por favor, ingrese una cantidad válida.</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="cantidadRecibida"><strong>Cantidad Recibida:</strong></label>
+                                                <input type="number" class="form-control border" id="cantidadRecibida" required min="1">
+                                                <div class="invalid-feedback">Por favor, ingrese una cantidad válida.</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="observaciones"><strong>Observaciones</strong></label>
+                                                <input type="text" class="form-control border" id="observaciones">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 mt-3">
+                                                <div class="d-flex justify-content-center gap-3">
+                                                    <button type="button" id="btnAgregar" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i> Añadir</button>
+                                                    <button type="button" id="btnNuevo" class="btn btn-outline-warning" data-bs-target="#modalAgregar" data-bs-toggle="modal"><i class="bi bi-floppy-fill"></i> Nuevo recurso</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Tabla para mostrar los recursos agregados -->
+                            <div class="card mt-4" id="tablaRecursosContainer" style="display: none;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recursos Agregados</h5>
+                                    <table class="table table-bordered" id="tablaRecursos">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Tipo de Recurso</th>
+                                                <th>Detalle</th>
+                                                <th>N° Serie</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Filas agregadas dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <div class="d-flex">
+                                <button type="button" id="btnGuardar" class="btn btn-outline-primary mx-2 flex-grow-1"><i class="bi bi-check-square-fill"></i> Guardar y continuar ...</button>
+                                <button type="button" id="btnFinalizar" class="btn btn-outline-success mx-2 flex-grow-1"><i class="bi bi-floppy-fill"></i> Finalizar</button>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!--Formulario de RECEPCIÓN > BODY > MODAL AGREGAR-->
+                        <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: #CCD1D1; color: #000;">
+                                        <img src="../../images/icons/ingresar.png" alt="Imagen de Sectores" style="height: 3em; width: 3em; margin-right: 0.5em;">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel"><strong>Nuevo Recurso</strong></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="form-recurso">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="idtipo"><strong>Tipo Recurso:</strong></label>
+                                                    <select name="idtipo" id="idtipo" class="form-select">
+                                                        <option value="-1">Mostrar todas</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="idmarca"><strong>Marca:</strong></label>
+                                                    <select class="form-select" id="idmarca" name="idmarca" class="form-select">
+                                                        <option value="-1">Mostrar todas</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="mb-3">
+                                                <label for="descripcion" class="form-label"><strong>Descripcion básica:</strong></label>
+                                                <input type="text" class="form-control border" id="descripcion" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="modelo" class="form-label"><strong>Modelo:</strong></label>
+                                                <input type="text" class="form-control border" id="modelo" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="datasheets" class="form-label"><strong>Características específicas del equipo:</strong></label>
+                                                <div class="row" id="datasheets">
+                                                    <div class="col-md-5 mb-3">
+                                                        <input type="text" class="form-control border car" placeholder="Característica" required>
+                                                    </div>
+                                                    <div class="col-md-5 mb-3">
+                                                        <input type="text" class="form-control border det" placeholder="Detalle" required>
+                                                    </div>
+                                                    <div class="col-md-2 d-flex align-items-end mb-3">
+                                                        <button type="button" class="btn btn-white border" id="btnAgregarCaracteristica"><i class="bi bi-plus-lg"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="fotografia" class="form-label"><strong>Fotografía:</strong></label>
+                                                <input class="form-control" type="file" id="fotografia">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="btnEnviar" class="btn btn-success">Enviar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="">
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <!-- Input de rango de fecha -->
-                                <div class="input-group mb-3 caja">
-                                    <span class="input-group-text" style="height: 38px;">Desde</span>
-                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_inicio">
-                                    <span class="input-group-text" style="height: 38px;">Hasta</span>
-                                    <input type="datetime-local" class="form-control" aria-describedby="fechainicio" id="fecha_fin">
-                                    <button id="btnBuscar" class="btn btn-primary" style="height: 38px;"><i class="bi bi-search"></i></button>
-
-                                    <div style="margin-left: 25px;"></div>
-                                    <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
-                                        <strong><i class="bi bi-list-ul"></i></strong>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="row" id="lista-recepcion"></div>
-                        </div>
-
-                        <!-- Contenedor de paginación -->
-                        <div class="pagination">
-                            <div class="pagination-arrow" id="prev">&laquo;</div>
-                            <div class="pagination-item" id="item-1" data-page="1">1</div>
-                            <div class="pagination-item" id="item-2" data-page="2">2</div>
-                            <div class="pagination-item" id="item-3" data-page="3">3</div>
-                            <div class="pagination-arrow" id="next">&raquo;</div>
-                        </div>
 
                     </div>
+                    <!-- End of Main Content -->
                 </div>
             </div>
         </div>
+        <!-- End of Content Wrapper -->
     </div>
 
+
+
+    <script src="../../js/almacen.js"></script>
+    <script src="../../js/nuevorecurso.js"></script>
+    <script src="../../js/sweetalert.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-
-            const itemsPerPage = 8; // Número de elementos por página
-            let currentPage = 1;
-            let totalPages = 1;
-            const tabla = document.querySelector("#tabla-recepcion tbody");
-
-
-            const fechainicio = document.getElementById('fecha_inicio');
-            const fechafin = document.getElementById('fecha_fin');
-
-            fechainicio.addEventListener('change', () => {
-                fechafin.min = fechainicio.value;
-
-                if (fechafin.value && fechafin.value <= fechainicio.value) {
-                    fechafin.value = '';
-                }
-            });
-
-            fechafin.addEventListener('change', () => {
-                if (fechafin.value <= fechainicio.value) {
-                    fechafin.value = '';
-                }
-            });
+        document.addEventListener("DOMContentLoaded", function() {
+            let idRecepcionGlobal = null;
+            let isFinalizing = false;
 
 
             function $(id) {
                 return document.querySelector(id);
             }
 
-            function completo() {
-                const parametros = new FormData();
-                parametros.append("operacion", "listar");
-
-                fetch(`../../controllers/recepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        dataObtenida = datos
-                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                        if (dataObtenida.length == 0) {
-                            $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
-                            document.querySelector('.pagination').style.display = 'none';
-                        } else {
-                            $("#lista-recepcion").innerHTML = ``;
-                            renderPage(currentPage);
-                        }
-                        updatePagination();
-                    })
-                    .catch(e => {
-                        console.error(e)
-                    });
+            function limpiarTablaRecursos() {
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                document.getElementById("tablaRecursosContainer").style.display = "none";
+                toggleAgregarButtonGlow(false);
             }
 
-            function listar() {
-                const parametros = new FormData();
-                parametros.append("operacion", "historial");
-                parametros.append("fecha_inicio", $("#fecha_inicio").value);
-                parametros.append("fecha_fin", $("#fecha_fin").value);
-
-                fetch(`../../controllers/recepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        dataObtenida = datos
-                        totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
-                        if (dataObtenida.length == 0) {
-                            $("#lista-recepcion").innerHTML = `<p>No se encontraron recepciones</p>`;
-                            document.querySelector('.pagination').style.display = 'none';
-                        } else {
-                            $("#lista-recepcion").innerHTML = ``;
-                            renderPage(currentPage);
-                        }
-                        updatePagination();
-                    })
-                    .catch(e => {
-                        console.error(e)
-                    });
-            }
-
-            function renderPage(page) {
-                $("#lista-recepcion").innerHTML = ``;
-                let start = (page - 1) * itemsPerPage;
-                let end = start + itemsPerPage;
-                let dataToRender = dataObtenida.slice(start, end);
-                dataToRender.forEach(element => {
-                    const nuevoItem = `
-                    <div class="d-flex justify-content-center mb-3">
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h5 class="card-title">N° Recepción: #${element.idrecepcion}</h5>
-                                            <h6 class="card-title">${element.areas}</h6>
-                                            <div class="d-flex align-items-center">
-                                                <i class="bi bi-clock me-2"></i>
-                                                <p class="card-text mb-0"><small class="text-muted">${element.fechayhorarecepcion}</small></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                            <button type="button" class="show-more-click" data-idrecepcion="${element.idrecepcion}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="detalles-container mt-3" style="display: none;">
-                                        <div class="table-responsive">
-                                            <table class="table table-lg text-center" id="tabla-recepcion">
-                                                <colgroup>
-                                                    <col width="5%">
-                                                    <col width="25%">
-                                                    <col width="25%">
-                                                    <col width="25%">
-                                                </colgroup>
-                                                <thead>
-                                                    <tr class="table prueba">
-                                                        <th>N°</th>
-                                                        <th>Recurso</th>
-                                                        <th>Cantidad Recibida</th>
-                                                        <th>Cantidad Enviada</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                        <button type="button" class="btn btn-warning imprimir" data-idrecepcion="${element.idrecepcion}">Generar PDF</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                    $("#lista-recepcion").innerHTML += nuevoItem;
-
-                });
-
-                document.querySelectorAll(".show-more-click").forEach(btn => {
-                    btn.addEventListener("click", () => {
-                        const idrecepcion = btn.getAttribute("data-idrecepcion");
-                        const detallesContainer = btn.parentNode.parentNode.parentNode.querySelector(".detalles-container");
-                        const cardBody = btn.parentNode.parentNode;
-                        if (detallesContainer.style.display === 'none') {
-                            detalles(idrecepcion, detallesContainer);
-                            cardBody.classList.add('expanded');
-                            btn.innerHTML = 'Ocultar <i class="bi bi-arrow-up-short"></i>';
-                        } else {
-                            detallesContainer.style.display = 'none'; // Ocultar el contenedor de características
-                            cardBody.classList.remove('expanded');
-                            btn.innerHTML = 'Ver detalles <i class="bi bi-arrow-down-short"></i>';
-                        }
-                    });
-                });
-            }
-
-            document.addEventListener("click", function(event) {
-                const target = event.target;
-                if (target.classList.contains('imprimir')) {
-                    const idrecepcion = target.getAttribute('data-idrecepcion');
-                    window.open(`../reportes/recepciones/reporte.php?idrecepcion=${idrecepcion}`, '_blank');
+            function toggleAgregarButtonGlow(shouldGlow) {
+                const btnAgregar = document.getElementById("btnAgregar");
+                if (shouldGlow) {
+                    btnAgregar.classList.add("alonso");
+                } else {
+                    btnAgregar.classList.remove("alonso");
                 }
+            }
+
+            async function añadirRecepcion() {
+                console.log("ID del personal seleccionado:", idPersonalSeleccionado);
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                // parametros.append("idusuario", <?php echo $idusuario ?>);
+                parametros.append("idpersonal", idPersonalSeleccionado);
+                parametros.append("idalmacen", $("#idalmacen").value);
+                parametros.append("fechayhorarecepcion", $("#fechayhorarecepcion").value);
+                parametros.append("tipodocumento", $("#tipodocumento").value);
+                parametros.append("nrodocumento", $("#nrodocumento").value);
+                parametros.append("serie_doc", $("#serie_doc").value);
+
+                const response = await fetch(`../../controllers/recepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                });
+
+                const datos = await response.json();
+
+                if (datos.idrecepcion > 0) {
+                    idRecepcionGlobal = datos.idrecepcion;
+                    await Swal.fire('Éxito', `Recepción registrada con el ID: ${datos.idrecepcion}`, 'success');
+                    await añadirDetallesRecepcion(datos.idrecepcion);
+                }
+            }
+
+
+            async function añadirDetallesRecepcion(idrecepcion) {
+                console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
+                const parametros = new FormData();
+                parametros.append("operacion", "registrar");
+                parametros.append("idrecepcion", idrecepcion);
+                parametros.append("idrecurso", idRecursoSeleccionado);
+                parametros.append("cantidadenviada", $("#cantidadEnviada").value);
+                parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
+                parametros.append("observaciones", $("#observaciones").value);
+
+                const response = await fetch(`../../controllers/detrecepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                });
+
+                const datos = await response.json();
+
+                if (datos.iddetallerecepcion > 0) {
+                    await Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success');
+                    await añadirEjemplar(datos.iddetallerecepcion);
+                }
+
+                document.getElementById("form-detrecepcion").reset();
+            }
+
+
+            document.getElementById("btnAgregar").addEventListener("click", function() {
+                var buscar = document.getElementById("buscar").value.trim();
+                var detalles = document.getElementById("detalles").options[document.getElementById("detalles").selectedIndex].textContent.trim();
+                var cantidadEnviada = parseInt(document.getElementById("cantidadEnviada").value);
+                var cantidadRecibida = parseInt(document.getElementById("cantidadRecibida").value);
+
+                if (buscar === "" || detalles === "" || isNaN(cantidadEnviada) || isNaN(cantidadRecibida) || cantidadEnviada < 1 || cantidadRecibida < 1 || cantidadRecibida > cantidadEnviada) {
+                    Swal.fire('Error', 'Por favor, asegúrese de que todos los campos están llenos y que la cantidad recibida sea menor o igual a la cantidad enviada.', 'error');
+                    return;
+                }
+                const numerosSerie = new Set();
+                const inputsNumerosDeSerie = document.querySelectorAll('.nro_serie');
+
+                inputsNumerosDeSerie.forEach(input => {
+                    input.classList.remove('brillar-rojo');
+                });
+
+                for (let input of inputsNumerosDeSerie) {
+                    const numeroSerie = input.value.trim();
+                    if (numeroSerie === '') continue; // Ignorar campos vacíos ya que pueden ser genéricos 
+
+                    if (numerosSerie.has(numeroSerie)) {
+                        Swal.fire('Error', 'Se encontró un número de serie duplicado.', 'error');
+                        return;
+                    }
+                    numerosSerie.add(numeroSerie);
+                }
+
+                document.querySelector("#tablaRecursos tbody").innerHTML = "";
+                for (var i = 1; i <= cantidadRecibida; i++) {
+                    var newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                    <td>${i}</td>
+                    <td>${buscar}</td>
+                    <td>${detalles}</td>
+                    <td><input type="text" class="form-control nro_serie"></td>
+                    <td>
+                        <select class="form-select estado_equipo">
+                            <option value="Bueno">Bueno</option>
+                            <option value="Dañado">Dañado</option>
+                            <option value="Malo">Malo</option>
+                        </select>
+                    </td>
+                `;
+                    document.querySelector("#tablaRecursos tbody").appendChild(newRow);
+                }
+                document.getElementById("tablaRecursosContainer").style.display = "block";
+                toggleAgregarButtonGlow(false);
             });
 
-            function detalles(idrecepcion, detallesContainer) {
-                const parametros = new FormData();
-                parametros.append("operacion", "detalles");
-                parametros.append("idrecepcion", idrecepcion);
+            async function añadirEjemplar(iddetallerecepcion) {
+                const nroSerieInputs = document.querySelectorAll(".nro_serie");
+                const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
-                fetch(`../../controllers/recepcion.controller.php`, {
-                        method: 'POST',
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datosRecibidos => {
-                        detallesContainer.style.display = 'block'; // Mostrar el contenedor de características
+                const promises = Array.from(nroSerieInputs).map((nroSerieInput, index) => {
+                    const nroSerie = nroSerieInput.value;
+                    const estadoEquipo = estadoEquipoInputs[index].value;
 
-                        const tablaRecepcionBody = detallesContainer.querySelector("tbody");
-                        tablaRecepcionBody.innerHTML = ''; // Limpiar el contenido de la tabla antes de agregar los nuevos datos
+                    const parametros = new FormData();
+                    parametros.append("operacion", "registrar");
+                    parametros.append("iddetallerecepcion", iddetallerecepcion);
+                    parametros.append("nro_serie", nroSerie);
+                    parametros.append("estado_equipo", estadoEquipo);
 
-                        // Recorrer cada fila del arreglo
-                        let numFila = 1;
-                        datosRecibidos.forEach(registro => {
-                            let nuevafila = ``;
-                            // Enviar los valores obtenidos en celdas <td></td>
-                            nuevafila = `
-                                <tr>
-                                    <td>${numFila}</td>
-                                    <td>${registro.descripcion}</td>
-                                    <td>${registro.cantidadrecibida}</td>
-                                    <td>${registro.cantidadenviada}</td>
-                                </tr>
-                            `;
-                            tablaRecepcionBody.innerHTML += nuevafila;
-                            numFila++;
+                    return fetch(`../../controllers/ejemplar.controller.php`, {
+                            method: "POST",
+                            body: parametros
+                        })
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
+                            if (datos.idejemplar > 0) {
+                                console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                            } else {
+                                console.error(`Error en la respuesta: ${datos}`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error al enviar la solicitud:", error);
                         });
-                    })
-                    .catch(e => {
-                        console.error(e);
-                    });
-            }
-
-            function updatePagination() {
-                const paginationItems = document.querySelectorAll(".pagination-item");
-                paginationItems.forEach(item => item.style.display = "none");
-
-                for (let i = 1; i <= totalPages; i++) {
-                    if ($(`#item-${i}`)) {
-                        $(`#item-${i}`).style.display = "flex";
-                    } else {
-                        const newItem = document.createElement("div");
-                        newItem.classList.add("pagination-item");
-                        newItem.id = `item-${i}`;
-                        newItem.dataset.page = i;
-                        newItem.innerText = i;
-                        newItem.addEventListener("click", () => changePage(i));
-                        $(".pagination").insertBefore(newItem, $("#next"));
-                    }
-                }
-
-                updateArrows();
-            }
-
-            function changePage(page) {
-                if (page < 1 || page > totalPages) return;
-                currentPage = page;
-                renderPage(page);
-                updateArrows();
-            }
-
-            function updateArrows() {
-                if (currentPage === 1) {
-                    $("#prev").classList.add("disabled");
-                } else {
-                    $("#prev").classList.remove("disabled");
-                }
-
-                if (currentPage === totalPages) {
-                    $("#next").classList.add("disabled");
-                } else {
-                    $("#next").classList.remove("disabled");
-                }
-
-                document.querySelectorAll(".pagination-item").forEach(item => {
-                    item.classList.remove("active");
-                    if (parseInt(item.dataset.page) === currentPage) {
-                        item.classList.add("active");
-                    }
                 });
+
+                await Promise.all(promises);
+                limpiarTablaRecursos();
             }
 
-            function validateDateRange(startDate, endDate) {
-                if (!startDate || !endDate) {
-                    alert("Por favor, seleccione un rango de fechas.");
+
+            function validarFormulario(formulario) {
+                if (formulario.checkValidity() === false) {
+                    formulario.classList.add('was-validated');
                     return false;
                 }
-                if (endDate < startDate) {
-                    alert("Por favor, ingrese un rango de fecha válido.");
+                formulario.classList.remove('was-validated');
+                return true;
+            }
+
+
+
+
+            function validarTablaRecursos() {
+                const filas = document.querySelectorAll("#tablaRecursos tbody tr");
+                if (filas.length === 0) {
+                    toggleAgregarButtonGlow(true); // Habilitar el brillo si la tabla está vacía
+                    Swal.fire('Advertencia', 'Por favor, añada el recurso seleccionado.', 'warning');
                     return false;
                 }
                 return true;
             }
 
-            $("#prev").addEventListener("click", () => {
-                if (currentPage > 1) changePage(currentPage - 1);
-            });
+            function verificarNumerosSerieDuplicados() {
+                const numerosSerie = new Set();
+                const inputsNumerosDeSerie = document.querySelectorAll('.nro_serie');
 
-            $("#next").addEventListener("click", () => {
-                if (currentPage < totalPages) changePage(currentPage + 1);
-            });
-
-            document.querySelectorAll('.pagination-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    changePage(parseInt(item.dataset.page));
+                inputsNumerosDeSerie.forEach(input => {
+                    input.classList.remove('brillar-rojo');
+                    input.addEventListener('input', () => { // Agregar evento de input para eliminar el estilo de brillar-rojo
+                        input.classList.remove('brillar-rojo');
+                    });
                 });
-            });
 
-            $("#btnBuscar").addEventListener("click", () => {
-                const startDate = $("#fecha_inicio").value;
-                const endDate = $("#fecha_fin").value;
+                let numerosSerieDuplicados = false;
 
-                if (validateDateRange(startDate, endDate)) {
-                    currentPage = 1;
-                    listar();
+                for (let input of inputsNumerosDeSerie) {
+                    const numeroSerie = input.value.trim();
+                    if (numeroSerie === '') continue; // Ignorar campos vacíos ya que pueden ser genéricos 
+
+                    if (numerosSerie.has(numeroSerie)) {
+                        input.classList.add('brillar-rojo');
+                        numerosSerieDuplicados = true;
+                    }
+                    numerosSerie.add(numeroSerie);
+                }
+
+                return numerosSerieDuplicados;
+            }
+
+
+            $("#btnGuardar").addEventListener("click", async function() {
+                isFinalizing = false; // No estamos finalizando
+                const formRecepcion = document.getElementById("form-recepcion");
+                const formDetRecepcion = document.getElementById("form-detrecepcion");
+
+                if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
+                    if (idRecepcionGlobal) {
+                        await añadirDetallesRecepcion(idRecepcionGlobal);
+                    } else {
+                        await añadirRecepcion();
+                    }
+                } else {
+                    Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
                 }
             });
 
-            $("#btnListar").addEventListener("click", () => {
+            $("#btnFinalizar").addEventListener("click", async function() {
+                isFinalizing = true;
+                const formRecepcion = document.getElementById("form-recepcion");
+                const formDetRecepcion = document.getElementById("form-detrecepcion");
 
-                currentPage = 1;
-                completo();
+                const hayNumerosSerieDuplicados = verificarNumerosSerieDuplicados();
 
+                if (hayNumerosSerieDuplicados) {
+                    Swal.fire('Error', 'Se encontraron números de serie duplicados. Por favor, revise los campos marcados en rojo.', 'error');
+                    return;
+                }
+
+                if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
+                    const result = await Swal.fire({
+                        title: '¿Quieres guardar los cambios?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, guardar',
+                        cancelButtonText: 'No, cancelar'
+                    });
+
+                    if (result.isConfirmed) {
+                        if (idRecepcionGlobal) {
+                            await añadirDetallesRecepcion(idRecepcionGlobal);
+                            idRecepcionGlobal = null;
+                        } else {
+                            await añadirRecepcion();
+                        }
+                        formRecepcion.reset();
+                        await Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
+                        location.reload(); // Refrescar la página al confirmar el Sweet Alert
+                    }
+                } else {
+                    Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
+                }
             });
 
-            completo();
+
+
 
         });
     </script>
