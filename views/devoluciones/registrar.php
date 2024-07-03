@@ -116,26 +116,28 @@
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
                 <section>
-                    <div class="container">
-                        <div class="col-md-12 text-center">
-                            <div class="m-4">
-                                <h2 class="fw-bolder d-inline-block">Devoluciones</h2>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="date-picker-container">
-                                    <div class="input-group mb-1 mt-1">
-                                        <span class="input-group-text" id="basic-addon1">Desde</span>
-                                        <input type="date" class="form-control" id="startDate">
-                                        <span class="input-group-text" id="basic-addon2">Hasta</span>
-                                        <input type="date" class="form-control" id="endDate">
-                                        <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
-                                    </div>
+                    <div class="xd">
+                        <div class="container">
+                            <div class="col-md-12 text-center">
+                                <div class="m-4">
+                                    <h2 class="fw-bolder d-inline-block">Devoluciones</h2>
                                 </div>
                             </div>
-                            <div class="card-body pt-4 p-3">
-                                <div class="row" id="lista-recepcion"></div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="date-picker-container">
+                                        <div class="input-group mb-1 mt-1 caja">
+                                            <span class="input-group-text" id="basic-addon1">Desde</span>
+                                            <input type="date" class="form-control" id="startDate">
+                                            <span class="input-group-text" id="basic-addon2">Hasta</span>
+                                            <input type="date" class="form-control" id="endDate">
+                                            <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-4 p-3">
+                                    <div class="row" id="lista-recepcion"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

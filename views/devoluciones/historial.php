@@ -8,57 +8,118 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="icon" type="../../images/icons" href="../../images/icons/ajustes.png" />
-    <link rel="stylesheet" href="../prestamos/estilos.css">
 
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
     <style>
-        /* Estilos para la paginación */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin: 20px;
-        }
+    .xd {
+      width: 100%;
+    }
 
-        .pagination-item {
-            width: 40px;
-            height: 40px;
-            background-color: #fff;
-            border: 1px solid #cecece;
-            border-radius: 20%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            margin: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-        }
+    .prueba {
+      background-color: #d9e7fa;
+    }
 
-        .pagination-item.active {
-            color: #2c7be5;
-            font-weight: bold;
-        }
+    table {
+      text-align: center;
+    }
 
-        .pagination-arrow {
-            font-size: 24px;
-            margin: 10px;
-            cursor: pointer;
-            border: 1px solid #cecece;
-            border-radius: 20%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .dropdown-toggle::after {
+      display: none !important;
+    }
 
-        .pagination-arrow.disabled {
-            color: #808080;
-            cursor: not-allowed;
-        }
-    </style>
+    .card {
+      border: 2px solid rgba(0, 0, 0, 0.125);
+      box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.15);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .show-more-icon {
+      background-color: transparent;
+      border: none;
+      color: #3483fa;
+      cursor: pointer;
+      margin: 6px 0 20px;
+      padding: 0;
+    }
+
+    .return-icon{
+      background-color: transparent;
+      border: none;
+      color: #3483fa;
+      cursor: pointer;
+      margin: 6px 0 20px;
+      padding: 0;
+    }
+
+
+
+    .detalles-container {
+      margin-top: 10px;
+    }
+
+    /* Estilos para la paginación */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+    }
+
+    .pagination-item {
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+      border: 1px solid #cecece;
+      border-radius: 20%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+    }
+
+    .pagination-item.active {
+      color: #2c7be5;
+      font-weight: bold;
+    }
+
+    .pagination-arrow {
+      font-size: 24px;
+      margin: 10px;
+      cursor: pointer;
+      border: 1px solid #cecece;
+      border-radius: 20%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pagination-arrow.disabled {
+      color: #808080;
+      cursor: not-allowed;
+    }
+
+    .caja {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+    }
+
+    .none {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -76,17 +137,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="xd">
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-md-8">
                                         <div class="date-picker-container">
-                                            <div class="input-group mb-1 mt-1">
+                                            <div class="input-group mb-1 mt-1 caja">
                                                 <span class="input-group-text" id="basic-addon1">Desde</span>
                                                 <input type="date" class="form-control" id="startDate">
                                                 <span class="input-group-text" id="basic-addon2">Hasta</span>
                                                 <input type="date" class="form-control" id="endDate">
-                                                <button class="btn btn-outline-primary" type="button" id="searchButton">Buscar</button>
-                                                <button id="btnListar" class="btn btn-outline-success">Listar</button>
+                                                <button class="btn btn-primary" style="height: 38px;" type="button" id="searchButton"><i class="bi bi-search"></i></button>
+                                                <div style="margin-left: 25px;"></div>
+                                                <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
+                                                    <strong><i class="bi bi-list-ul"></i></strong>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -103,6 +168,7 @@
                                     <div class="pagination-item" id="item-3" data-page="3">3</div>
                                     <div class="pagination-arrow" id="next">&raquo;</div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
