@@ -63,8 +63,6 @@
             color: #808080;
             cursor: not-allowed;
         }
-       
-        
     </style>
 
 
@@ -72,7 +70,7 @@
 
 <body>
 
-    <div id="wrapper" >
+    <div id="wrapper">
         <!-- Sidebar -->
         <?php require_once '../../views/sidebar/sidebar.php'; ?>
         <!-- End of Sidebar -->
@@ -384,32 +382,41 @@
         }
 
         function updatePagination() {
-            const paginationItems = document.querySelectorAll(".pagination-item");
-            paginationItems.forEach(item => item.style.display = "none");
+    const paginationContainer = document.querySelector('.pagination');
+    const maxVisiblePages = 6; // Número máximo de elementos de paginación visibles
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
 
-            for (let i = 1; i <= totalPages; i++) {
-                if ($(`#item-${i}`)) {
-                    $(`#item-${i}`).style.display = "flex";
-                } else {
-                    const newItem = document.createElement("div");
-                    newItem.classList.add("pagination-item");
-                    newItem.id = `item-${i}`;
-                    newItem.dataset.page = i;
-                    newItem.innerText = i;
-                    newItem.addEventListener("click", () => changePage(i));
-                    $(".pagination").insertBefore(newItem, $("#next"));
-                }
-            }
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
 
-            updateArrows();
-        }
+    // Eliminar todos los elementos de paginación actuales
+    paginationContainer.querySelectorAll('.pagination-item').forEach(item => item.remove());
 
-        function changePage(page) {
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderPage(page);
-            updateArrows();
-        }
+    // Crear y mostrar los nuevos elementos de paginación
+    for (let i = startPage; i <= endPage; i++) {
+        const newItem = document.createElement("div");
+        newItem.classList.add("pagination-item");
+        newItem.id = `item-${i}`;
+        newItem.dataset.page = i;
+        newItem.innerText = i;
+        newItem.addEventListener("click", () => changePage(i));
+        paginationContainer.insertBefore(newItem, $("#next"));
+    }
+
+    updateArrows();
+    updateActivePage();
+}
+
+function changePage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderPage(page);
+    updatePagination(); // Llamar a updatePagination() después de cambiar la página
+    updateArrows();
+}
 
         function updateArrows() {
             if (currentPage === 1) {
