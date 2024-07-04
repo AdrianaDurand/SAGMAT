@@ -536,8 +536,7 @@
             if (validarFormulario(formCronograma, false) && validarFormulario(formDetalle, true)) {
               // Mostrar SweetAlert para confirmar el registro
               Swal.fire({
-                title: '¿Está seguro?',
-                text: "¿Desea registrar la solicitud?",
+                title: "¿Desea registrar la solicitud?",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
