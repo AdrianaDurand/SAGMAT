@@ -34,20 +34,21 @@ END $$
 DELIMITER $$
 CREATE PROCEDURE spu_listas_bajas()
 BEGIN
-	SELECT 
-		CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
+    SELECT 
+        CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
         b.idbaja,
-		b.idusuario,
-		b.fechabaja,
-		r.idrecurso,
-		e.nro_equipo,
-		r.descripcion
-		FROM bajas b
-		JOIN ejemplares e ON b.idejemplar = e.idejemplar
-		JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
-		JOIN usuarios u ON b.idusuario = u.idusuario
-		JOIN personas p ON u.idpersona = p.idpersona
-	WHERE e.estado = '4'
+        b.idusuario,
+        b.fechabaja,
+        r.idrecurso,
+        e.nro_equipo,
+        r.descripcion
+        FROM bajas b
+        JOIN ejemplares e ON b.idejemplar = e.idejemplar
+        JOIN detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+        JOIN recursos r ON dr.idrecurso = r.idrecurso
+        JOIN usuarios u ON b.idusuario = u.idusuario
+        JOIN personas p ON u.idpersona = p.idpersona
+    WHERE e.estado = '4'
     ORDER BY 
         b.fechabaja DESC;
 END $$
@@ -69,7 +70,8 @@ BEGIN
         r.descripcion
     FROM bajas b
     JOIN ejemplares e ON b.idejemplar = e.idejemplar
-    JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
+    JOIN detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+    JOIN recursos r ON dr.idrecurso = r.idrecurso
     JOIN usuarios u ON b.idusuario = u.idusuario
     JOIN personas p ON u.idpersona = p.idpersona
     WHERE e.estado = '4'
@@ -98,20 +100,24 @@ CREATE PROCEDURE listado_reporte_baja(
     IN _idbaja INT
 )
 BEGIN
-    SELECT CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
-           b.idbaja,
-           b.idusuario,
-           b.fechabaja,
-           b.motivo,
-           r.idrecurso AS idrecurso,
-           e.nro_equipo,
-           r.descripcion
+    SELECT 
+        CONCAT(p.nombres, ' ', p.apellidos) AS encargado,
+        b.idbaja,
+        b.idusuario,
+        b.fechabaja,
+        b.motivo,
+        r.idrecurso,
+        e.nro_equipo,
+        r.descripcion
     FROM bajas b
-    INNER JOIN ejemplares e ON b.idejemplar = e.idejemplar
-    INNER JOIN recursos r ON e.iddetallerecepcion = r.idrecurso
-    INNER JOIN usuarios u ON b.idusuario = u.idusuario
-    INNER JOIN personas p ON u.idpersona = p.idpersona
-    WHERE b.idbaja = _idbaja;
+    JOIN ejemplares e ON b.idejemplar = e.idejemplar
+    JOIN detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+    JOIN recursos r ON dr.idrecurso = r.idrecurso
+    JOIN usuarios u ON b.idusuario = u.idusuario
+    JOIN personas p ON u.idpersona = p.idpersona
+    WHERE b.idbaja = _idbaja
+    ORDER BY 
+        b.fechabaja DESC;
 END $$
 CALL listado_reporte_baja(1);
 SELECT * FROM bajas;

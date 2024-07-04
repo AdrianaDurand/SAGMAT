@@ -335,7 +335,7 @@
                 }
             }
 
-            function añadirRecepcion() {
+            async function añadirRecepcion() {
                 console.log("ID del personal seleccionado:", idPersonalSeleccionado);
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
@@ -347,26 +347,22 @@
                 parametros.append("nrodocumento", $("#nrodocumento").value);
                 parametros.append("serie_doc", $("#serie_doc").value);
 
-                fetch(`../../controllers/recepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        if (datos.idrecepcion > 0) {
-                            idRecepcionGlobal = datos.idrecepcion;
-                            Swal.fire('Éxito', `Recepción registrada con el ID: ${datos.idrecepcion}`, 'success').then(() => {
-                                añadirDetallesRecepcion(datos.idrecepcion);
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar la solicitud:", error);
-                        throw error;
-                    });
+                const response = await fetch(`../../controllers/recepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                });
+
+                const datos = await response.json();
+
+                if (datos.idrecepcion > 0) {
+                    idRecepcionGlobal = datos.idrecepcion;
+                    await Swal.fire('Éxito', `Recepción registrada con el ID: ${datos.idrecepcion}`, 'success');
+                    await añadirDetallesRecepcion(datos.idrecepcion);
+                }
             }
 
-            function añadirDetallesRecepcion(idrecepcion) {
+
+            async function añadirDetallesRecepcion(idrecepcion) {
                 console.log("Añadiendo detalles para el ID de recepción:", idrecepcion);
                 const parametros = new FormData();
                 parametros.append("operacion", "registrar");
@@ -376,30 +372,21 @@
                 parametros.append("cantidadrecibida", $("#cantidadRecibida").value);
                 parametros.append("observaciones", $("#observaciones").value);
 
-                fetch(`../../controllers/detrecepcion.controller.php`, {
-                        method: "POST",
-                        body: parametros
-                    })
-                    .then(respuesta => respuesta.json())
-                    .then(datos => {
-                        if (datos.iddetallerecepcion > 0) {
-                            Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success').then((result) => {
-                                if (result.isConfirmed) {
-                                    añadirEjemplar(datos.iddetallerecepcion);
-                                    if (isFinalizing) {
-                                        location.reload(); // Refrescar la página al confirmar el Sweet Alert
-                                    }
-                                }
-                            });
+                const response = await fetch(`../../controllers/detrecepcion.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                });
 
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar la solicitud:", error);
-                    });
+                const datos = await response.json();
+
+                if (datos.iddetallerecepcion > 0) {
+                    await Swal.fire('Éxito', `Detalle registrado con el ID: ${datos.iddetallerecepcion}`, 'success');
+                    await añadirEjemplar(datos.iddetallerecepcion);
+                }
 
                 document.getElementById("form-detrecepcion").reset();
             }
+
 
             document.getElementById("btnAgregar").addEventListener("click", function() {
                 var buscar = document.getElementById("buscar").value.trim();
@@ -451,11 +438,11 @@
                 toggleAgregarButtonGlow(false);
             });
 
-            function añadirEjemplar(iddetallerecepcion) {
+            async function añadirEjemplar(iddetallerecepcion) {
                 const nroSerieInputs = document.querySelectorAll(".nro_serie");
                 const estadoEquipoInputs = document.querySelectorAll(".estado_equipo");
 
-                nroSerieInputs.forEach((nroSerieInput, index) => {
+                const promises = Array.from(nroSerieInputs).map((nroSerieInput, index) => {
                     const nroSerie = nroSerieInput.value;
                     const estadoEquipo = estadoEquipoInputs[index].value;
 
@@ -465,7 +452,7 @@
                     parametros.append("nro_serie", nroSerie);
                     parametros.append("estado_equipo", estadoEquipo);
 
-                    fetch(`../../controllers/ejemplar.controller.php`, {
+                    return fetch(`../../controllers/ejemplar.controller.php`, {
                             method: "POST",
                             body: parametros
                         })
@@ -473,6 +460,8 @@
                         .then(datos => {
                             if (datos.idejemplar > 0) {
                                 console.log(`Ejemplar registrado con ID: ${datos.idejemplar}`);
+                            } else {
+                                console.error(`Error en la respuesta: ${datos}`);
                             }
                         })
                         .catch(error => {
@@ -480,8 +469,10 @@
                         });
                 });
 
+                await Promise.all(promises);
                 limpiarTablaRecursos();
             }
+
 
             function validarFormulario(formulario) {
                 if (formulario.checkValidity() === false) {
@@ -533,23 +524,23 @@
             }
 
 
-            $("#btnGuardar").addEventListener("click", function() {
+            $("#btnGuardar").addEventListener("click", async function() {
                 isFinalizing = false; // No estamos finalizando
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
                     if (idRecepcionGlobal) {
-                        añadirDetallesRecepcion(idRecepcionGlobal);
+                        await añadirDetallesRecepcion(idRecepcionGlobal);
                     } else {
-                        añadirRecepcion();
+                        await añadirRecepcion();
                     }
                 } else {
                     Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
                 }
             });
 
-            $("#btnFinalizar").addEventListener("click", function() {
+            $("#btnFinalizar").addEventListener("click", async function() {
                 isFinalizing = true;
                 const formRecepcion = document.getElementById("form-recepcion");
                 const formDetRecepcion = document.getElementById("form-detrecepcion");
@@ -562,7 +553,7 @@
                 }
 
                 if (validarFormulario(formRecepcion) && validarFormulario(formDetRecepcion) && validarTablaRecursos()) {
-                    Swal.fire({
+                    const result = await Swal.fire({
                         title: '¿Quieres guardar los cambios?',
                         icon: 'warning',
                         showCancelButton: true,
@@ -570,18 +561,19 @@
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Sí, guardar',
                         cancelButtonText: 'No, cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            if (idRecepcionGlobal) {
-                                añadirDetallesRecepcion(idRecepcionGlobal);
-                                idRecepcionGlobal = null;
-                            } else {
-                                añadirRecepcion();
-                            }
-                            formRecepcion.reset();
-                            Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
-                        }
                     });
+
+                    if (result.isConfirmed) {
+                        if (idRecepcionGlobal) {
+                            await añadirDetallesRecepcion(idRecepcionGlobal);
+                            idRecepcionGlobal = null;
+                        } else {
+                            await añadirRecepcion();
+                        }
+                        formRecepcion.reset();
+                        await Swal.fire('Guardado', 'Los cambios han sido guardados.', 'success');
+                        location.reload(); // Refrescar la página al confirmar el Sweet Alert
+                    }
                 } else {
                     Swal.fire('Error', 'Por favor complete todos los campos requeridos correctamente.', 'error');
                 }

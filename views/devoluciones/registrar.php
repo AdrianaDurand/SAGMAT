@@ -17,9 +17,9 @@
     <!-- Font Awesome icons (free version) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    
- <!-- SweetAlert2 -->
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <!-- ICON -->
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
@@ -130,32 +130,32 @@
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-         
-                <div class="xd mt-2">
-                    <div class="container">
-                        <div class="col-md-12 text-center">
-                            <div class="m-4">
-                                <h2 class="fw-bolder d-inline-block">Devoluciones</h2>
-                            </div>
+
+            <div class="xd mt-2">
+                <div class="container">
+                    <div class="col-md-12 text-center">
+                        <div class="m-4">
+                            <h2 class="fw-bolder d-inline-block">Devoluciones</h2>
                         </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="date-picker-container">
-                                    <div class="input-group mb-1 mt-1 caja">
-                                        <span class="input-group-text" id="basic-addon1">Desde</span>
-                                        <input type="date" class="form-control" id="startDate">
-                                        <span class="input-group-text" id="basic-addon2">Hasta</span>
-                                        <input type="date" class="form-control" id="endDate">
-                                        <button class="btn btn-primary" style="height: 38px;" type="button" id="searchButton"><i class="bi bi-search"></i></button>
-                                    </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="date-picker-container">
+                                <div class="input-group mb-1 mt-1 caja">
+                                    <span class="input-group-text" id="basic-addon1">Desde</span>
+                                    <input type="date" class="form-control" id="startDate">
+                                    <span class="input-group-text" id="basic-addon2">Hasta</span>
+                                    <input type="date" class="form-control" id="endDate">
+                                    <button class="btn btn-primary" style="height: 38px;" type="button" id="searchButton"><i class="bi bi-search"></i></button>
                                 </div>
                             </div>
-                            <div class="card-body pt-4 p-3">
-                                <div class="row" id="lista-recepcion"></div>
-                            </div>
+                        </div>
+                        <div class="card-body pt-4 p-3">
+                            <div class="row" id="lista-recepcion"></div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
         <!-- End of Content Wrapper -->
     </div>
@@ -222,55 +222,55 @@
                     const mensaje = document.createElement('div');
                     mensaje.classList.add('col-md-8', 'mb-4', 'mx-auto', 'text-center');
                     mensaje.innerHTML = `
-                            <div class="alert alert-warning" role="alert">
-                                No se encontraron resultados para la búsqueda.
-                            </div>
-                        `;
+                        <div class="alert alert-warning" role="alert">
+                            No se encontraron resultados para la búsqueda.
+                        </div>
+                    `;
                     listaRecepcion.appendChild(mensaje);
                 } else {
                     datosPrestamos.forEach(devolucion => {
                         const card = document.createElement('div');
                         card.classList.add('col-md-8', 'mb-4', 'mx-auto');
                         card.innerHTML = `
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h5 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h5>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-clock me-2"></i>
-                                                    <p class="card-text mb-0"><small class="text-muted">${devolucion.horainicio}</small></p>
-                                                    </div>
+                            <div class="card card-dev-${devolucion.idsolicitud}">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="card-title">Solicitante: ${devolucion.nombre_solicitante}</h5>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-clock me-2"></i>
+                                                <p class="card-text mb-0"><small class="text-muted">${devolucion.horainicio}</small></p>
                                                 </div>
-                                            <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                                <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
                                             </div>
-                                        </div>
-                                        <div class="detalles-container mt-3" style="display: none;">
-                                            <div class="table-responsive">
-                                                <table class="table table-lg text-center">
-                                                    <colgroup>
-                                                        <col width="5%">
-                                                        <col width="25%">
-                                                        <col width="25%">
-                                                        <col width="25%">
-                                                    </colgroup>
-                                                    <thead>
-                                                        <tr class="table prueba">
-                                                            <th>N°</th>
-                                                            <th>Recurso</th>
-                                                            <th>Observación</th>
-                                                            <th>Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
-                                                </table>
-                                            </div>
-                                            <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idprestamo="${devolucion.idsolicitud}"><i class="bi bi-check-lg" aria-hidden="true" data-idprestamo="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
+                                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                            <button type="button" class="show-more-click" data-idprestamo="${devolucion.idsolicitud}">Ver detalles <i class="bi bi-arrow-down-short"></i></button>
                                         </div>
                                     </div>
+                                    <div class="detalles-container mt-3" style="display: none;">
+                                        <div class="table-responsive">
+                                            <table class="table table-lg text-center">
+                                                <colgroup>
+                                                    <col width="5%">
+                                                    <col width="25%">
+                                                    <col width="25%">
+                                                    <col width="25%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr class="table prueba">
+                                                        <th>N°</th>
+                                                        <th>Recurso</th>
+                                                        <th>Observación</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabla-recepcion-${devolucion.idsolicitud}"></tbody>
+                                            </table>
+                                        </div>
+                                        <a class="btn btn-link text-success text-gradient px-3 mb-0 edit-button" href="#" data-idsolicitud="${devolucion.idsolicitud}"><i class="bi bi-check-lg" aria-hidden="true" data-solicitud="${devolucion.idsolicitud}"></i> Aceptar devolución</a>
+                                    </div>
                                 </div>
-                            `;
+                            </div>
+                        `;
                         listaRecepcion.appendChild(card);
                     });
 
@@ -298,26 +298,32 @@
 
                             const coleccion = detallesContainer.querySelectorAll(".registro");
 
-                            coleccion.forEach((element, index) => {
+                            const devoluciones = Array.from(coleccion).map((element) => {
                                 const idprestamo = element.dataset.idprestamo;
                                 const observacion = element.querySelector('.observacion').value;
                                 const estado = element.querySelector('.form-select').value;
-                                const devolucionData = {
+                                return {
                                     idprestamo: idprestamo,
                                     observacion: observacion,
                                     estado: estado
                                 };
-                                Swal.fire({
-                                    title: '¿Está seguro de registrar la devolución?',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Sí, registrar',
-                                    cancelButtonText: 'Cancelar',
-                                    icon: 'question'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
+                            });
+
+                            Swal.fire({
+                                title: '¿Está seguro de registrar la devolución?',
+                                showCancelButton: true,
+                                confirmButtonText: 'Sí, registrar',
+                                cancelButtonText: 'Cancelar',
+                                icon: 'question'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    devoluciones.forEach(devolucionData => {
                                         registrar(devolucionData);
-                                    }
-                                });
+                                    });
+                                    const idborrar = event.target.dataset.idsolicitud;
+                                    const cardborrar = document.querySelector(`.card-dev-${idborrar}`);
+                                    cardborrar.remove();
+                                }
                             });
                         });
                     });
@@ -386,8 +392,7 @@
                         // Eliminar el préstamo registrado de datosPrestamos
                         // datosPrestamos = datosPrestamos.filter(dato => dato.idprestamo !== obj.idprestamo);
                         // Eliminar el card del DOM
-                        const cardEliminar = listaRecepcion.querySelector(`[data-idprestamo="${obj.idprestamo}"]`).closest('.col-md-8');
-                        cardEliminar.remove();
+
                     })
                     .catch(e => {
                         console.error(e);

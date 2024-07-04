@@ -14,6 +14,7 @@ BEGIN
 		CONCAT(pat.nombres, ' ', pat.apellidos) AS atendido_nombres,
 		e.idejemplar,
 		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
+		r.descripcion AS recurso_descripcion, -- Adding resource description
 		e.estado_equipo,
 		d.observacion,
 		d.estadodevolucion,
@@ -37,13 +38,15 @@ BEGIN
 	INNER JOIN 
 		ejemplares e ON ds.idejemplar = e.idejemplar
 	INNER JOIN 
-		recursos r ON e.iddetallerecepcion = r.idrecurso
+		detrecepciones dtr ON e.iddetallerecepcion = dtr.iddetallerecepcion
 	INNER JOIN 
-		tipos t ON r.idtipo = t.idtipo;	
+		recursos r ON dtr.idrecurso = r.idrecurso
+	INNER JOIN 
+		tipos t ON r.idtipo = t.idtipo;		
 END $$
 CALL sp_historial_devoluciones_total();
 
-CALL sp_historial_devolucion_det(1);
+CALL sp_historial_devolucion_det(6);
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devolucion_det(_iddevolucion INT)
 BEGIN
@@ -55,7 +58,8 @@ BEGIN
 		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
 		d.estadodevolucion,
 		d.observacion,
-		d.create_at
+		d.create_at,
+        r.descripcion AS recurso_descripcion -- Adding resource description
 	FROM 
 		devoluciones d
 	INNER JOIN 
@@ -75,14 +79,18 @@ BEGIN
 	INNER JOIN 
 		ejemplares e ON ds.idejemplar = e.idejemplar
 	INNER JOIN 
-		recursos r ON e.iddetallerecepcion = r.idrecurso
+		detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+	INNER JOIN 
+		recursos r ON dr.idrecurso = r.idrecurso
 	INNER JOIN 
 		tipos t ON r.idtipo = t.idtipo
-		AND d.iddevolucion = _iddevolucion;
+	WHERE
+		d.idprestamo = _iddevolucion;
 END $$
 
 
-CALL sp_historial_devoluciones_fecha('2024-06-19', '2024-06-21');
+
+CALL sp_historial_devoluciones_fecha('2024-06-19', '2024-07-21');
 DELIMITER $$
 CREATE PROCEDURE sp_historial_devoluciones_fecha(
 	IN _fechainicio DATE, 
@@ -97,7 +105,8 @@ BEGIN
 		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
 		d.estadodevolucion,
 		d.observacion,
-		d.create_at
+		d.create_at,
+		r.descripcion AS recurso_descripcion
 	FROM 
 		devoluciones d
 	INNER JOIN 
@@ -117,7 +126,9 @@ BEGIN
 	INNER JOIN 
 		ejemplares e ON ds.idejemplar = e.idejemplar
 	INNER JOIN 
-		recursos r ON e.iddetallerecepcion = r.idrecurso
+		detrecepciones dr ON e.iddetallerecepcion = dr.iddetallerecepcion
+	INNER JOIN 
+		recursos r ON dr.idrecurso = r.idrecurso
 	INNER JOIN 
 		tipos t ON r.idtipo = t.idtipo
 	WHERE 
@@ -301,4 +312,7 @@ BEGIN
         AND dev.estado != 5;
 END $$
 
-CALL spu_listar_devoluciones('2024-06-18', '2024-06-21');
+CALL spu_listar_devoluciones('2024-06-18', '2024-07-21');
+
+
+

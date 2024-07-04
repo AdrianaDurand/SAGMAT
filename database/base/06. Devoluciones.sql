@@ -3,7 +3,7 @@ USE sagmat;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_devoluciones(IN _fechainicio DATE, IN _fechafin DATE)
 BEGIN
-		SELECT
+	SELECT
         pr.idprestamo,
 		ds.idsolicitud,
 		sol.horainicio,
@@ -33,9 +33,9 @@ BEGIN
 	GROUP BY
 		ds.idsolicitud, sol.horainicio, pr.create_at, CONCAT(per.nombres, ' ', per.apellidos);
 END$$
-CALL spu_listar_devoluciones('2024-06-21', '2024-06-25');
+CALL spu_listar_devoluciones('2024-06-21', '2024-07-05');
 
-
+CALL RegistrarDevolucion(2, '',0)
 DELIMITER $$
 CREATE PROCEDURE RegistrarDevolucion(
     IN p_idprestamo INT,
@@ -106,13 +106,57 @@ BEGIN
     CLOSE cur;
 END $$
 
+/*CALL spu_listar_devoluciones_pr(1)
+DELIMITER $$
+create PROCEDURE sp_historial_devoluciones_total()
+BEGIN
+	SELECT DISTINCT
+		d.iddevolucion,
+		pr.idprestamo,
+		ds.iddetallesolicitud,
+		s.idsolicitud,
+		usol.idusuario,
+		psol.idpersona,
+		CONCAT(psol.nombres, ' ', psol.apellidos) AS solicitante_nombres,
+		uat.idusuario,
+		pat.idpersona,
+		CONCAT(pat.nombres, ' ', pat.apellidos) AS atendido_nombres,
+		e.idejemplar,
+		CONCAT(t.tipo, ' ', e.nro_equipo) AS equipo,
+		e.estado_equipo,
+		d.observacion,
+		d.estadodevolucion,
+		d.create_at
+	FROM 
+		devoluciones d
+	INNER JOIN 
+		prestamos pr ON d.idprestamo = pr.idprestamo
+	INNER JOIN 
+		detsolicitudes ds ON pr.iddetallesolicitud = ds.iddetallesolicitud
+	INNER JOIN 
+		solicitudes s ON ds.idsolicitud = s.idsolicitud
+	INNER JOIN 
+		usuarios usol ON s.idsolicita = usol.idusuario
+	INNER JOIN 
+		personas psol ON usol.idpersona = psol.idpersona
+	INNER JOIN 
+		usuarios uat ON pr.idatiende = uat.idusuario
+	INNER JOIN 
+		personas pat ON uat.idpersona = pat.idpersona
+	INNER JOIN 
+		ejemplares e ON ds.idejemplar = e.idejemplar
+	INNER JOIN 
+		recursos r ON e.iddetallerecepcion = r.idrecurso
+	INNER JOIN 
+		tipos t ON r.idtipo = t.idtipo;		
+END $$*/
+
 
 DELIMITER $$
-CREATE PROCEDURE spu_listar_devoluciones_pr(IN _idsolicitud INT)
-BEGIN
+CREATE PROCEDURE spu_listar_devoluciones_pr (IN _idsolicitud INT)   BEGIN
 	SELECT
 	pr.idprestamo,
-    -- sol.idsolicitud,
+    sol.idsolicitud,
 	pr.iddetallesolicitud,
 	CONCAT(tp.tipo, ' -  ', ej.nro_equipo) AS tipo_recurso
 	FROM
@@ -133,10 +177,9 @@ BEGIN
 		tipos tp ON rec.idtipo = tp.idtipo
 	WHERE
     
-		sol.idsolicitud = _idsolicitud
+		sol.idsolicitud = 1
 		AND sol.estado = 1
 		AND ds.estado = 1
         GROUP BY
 				pr.idprestamo, pr.iddetallesolicitud, tp.tipo, ej.nro_equipo, pr.create_at, CONCAT(per.nombres, ' ', per.apellidos), ej.estado;
 END$$
-
