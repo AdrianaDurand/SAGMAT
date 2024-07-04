@@ -199,6 +199,22 @@
       let totalPages = 1;
       let dataObtenida = []; // Variable global para almacenar los datos obtenidos
 
+      const startDate = document.getElementById('startDate');
+      const endDate = document.getElementById('endDate');
+
+      startDate.addEventListener('change', () => {
+        endDate.min = startDate.value;
+
+        if (endDate.value && endDate.value <= startDate.value) {
+          endDate.value = '';
+        }
+      });
+
+      endDate.addEventListener('change', () => {
+        if (endDate.value <= startDate.value) {
+          endDate.value = '';
+        }
+      });
 
       function $(id) {
         return document.querySelector(id);
@@ -410,23 +426,33 @@
 
       function updatePagination() {
         const paginationItems = document.querySelectorAll(".pagination-item");
+        const paginationContainer = document.querySelector('.pagination');
+
+        // Ocultar todos los elementos de paginación al principio
         paginationItems.forEach(item => item.style.display = "none");
 
-        for (let i = 1; i <= totalPages; i++) {
-          if ($(`#item-${i}`)) {
-            $(`#item-${i}`).style.display = "flex";
-          } else {
-            const newItem = document.createElement("div");
-            newItem.classList.add("pagination-item");
-            newItem.id = `item-${i}`;
-            newItem.dataset.page = i;
-            newItem.innerText = i;
-            newItem.addEventListener("click", () => changePage(i));
-            $(".pagination").insertBefore(newItem, $("#next"));
+        if (totalPages > 0) {
+          // Mostrar y actualizar los elementos de paginación si hay páginas
+          paginationContainer.style.display = 'flex';
+          for (let i = 1; i <= totalPages; i++) {
+            let paginationItem = $(`#item-${i}`);
+            if (paginationItem) {
+              paginationItem.style.display = "flex";
+            } else {
+              const newItem = document.createElement("div");
+              newItem.classList.add("pagination-item");
+              newItem.id = `item-${i}`;
+              newItem.dataset.page = i;
+              newItem.innerText = i;
+              newItem.addEventListener("click", () => changePage(i));
+              paginationContainer.insertBefore(newItem, $("#next"));
+            }
           }
+          updateArrows();
+        } else {
+          // Ocultar la paginación si no hay páginas
+          paginationContainer.style.display = 'none';
         }
-
-        updateArrows();
       }
 
       function changePage(page) {
@@ -473,12 +499,27 @@
       });
 
 
-
+      function validateDateRange(startDate, endDate) {
+        if (!startDate || !endDate) {
+          alert("Por favor, seleccione un rango de fechas.");
+          return false;
+        }
+        if (endDate < startDate) {
+          alert("Por favor, ingrese un rango de fecha válido.");
+          return false;
+        }
+        return true;
+      }
 
 
       $("#btnBuscar").addEventListener("click", () => {
-        currentPage = 1;
-        listarFecha();
+        const startDate = $("#startDate").value;
+        const endDate = $("#endDate").value;
+
+        if (validateDateRange(startDate, endDate)) {
+          currentPage = 1;
+          listarFecha();
+        }
 
       });
 
