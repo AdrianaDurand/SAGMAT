@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
-
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
 
     <style>
@@ -173,7 +174,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
@@ -438,11 +439,19 @@
 
             function validateDateRange(startDate, endDate) {
                 if (!startDate || !endDate) {
-                    alert("Por favor, seleccione un rango de fechas.");
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Por favor, seleccione un rango de fechas.',
+                        confirmButtonText: 'OK'
+                    });
                     return false;
                 }
                 if (endDate < startDate) {
-                    alert("Por favor, ingrese un rango de fecha válido.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Por favor, ingrese un rango de fecha válido.',
+                        confirmButtonText: 'OK'
+                    });
                     return false;
                 }
                 return true;

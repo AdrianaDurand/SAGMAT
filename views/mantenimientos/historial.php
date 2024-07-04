@@ -436,11 +436,19 @@
 
                 function validateDateRange(startDate, endDate) {
                     if (!startDate || !endDate) {
-                        alert("Por favor, seleccione un rango de fechas.");
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Por favor, seleccione un rango de fechas.',
+                            confirmButtonText: 'OK'
+                        });
                         return false;
                     }
                     if (endDate < startDate) {
-                        alert("Por favor, ingrese un rango de fecha válido.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Por favor, ingrese un rango de fecha válido.',
+                            confirmButtonText: 'OK'
+                        });
                         return false;
                     }
                     return true;
