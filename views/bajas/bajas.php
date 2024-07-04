@@ -104,8 +104,13 @@
             margin: 0;
         }
 
-        .imprimir{border:0px; background:url(../../img/imprimir.svg) no-repeat center center; width:20px; padding:20px 20px; background-size:20px;}
-
+        .imprimir {
+            border: 0px;
+            background: url(../../img/imprimir.svg) no-repeat center center;
+            width: 20px;
+            padding: 20px 20px;
+            background-size: 20px;
+        }
     </style>
 </head>
 
@@ -150,7 +155,7 @@
                                 <button id="btnListar" class="none" style="font-size: 1.4em;" title="Listar todo">
                                     <strong><i class="bi bi-list-ul"></i></strong>
                                 </button>
-                               
+
                             </div>
 
                         </div>
@@ -332,23 +337,33 @@
 
                 function updatePagination() {
                     const paginationItems = document.querySelectorAll(".pagination-item");
+                    const paginationContainer = document.querySelector('.pagination');
+
+                    // Ocultar todos los elementos de paginación al principio
                     paginationItems.forEach(item => item.style.display = "none");
 
-                    for (let i = 1; i <= totalPages; i++) {
-                        if ($(`#item-${i}`)) {
-                            $(`#item-${i}`).style.display = "flex";
-                        } else {
-                            const newItem = document.createElement("div");
-                            newItem.classList.add("pagination-item");
-                            newItem.id = `item-${i}`;
-                            newItem.dataset.page = i;
-                            newItem.innerText = i;
-                            newItem.addEventListener("click", () => changePage(i));
-                            $(".pagination").insertBefore(newItem, $("#next"));
+                    if (totalPages > 0) {
+                        // Mostrar y actualizar los elementos de paginación si hay páginas
+                        paginationContainer.style.display = 'flex';
+                        for (let i = 1; i <= totalPages; i++) {
+                            let paginationItem = $(`#item-${i}`);
+                            if (paginationItem) {
+                                paginationItem.style.display = "flex";
+                            } else {
+                                const newItem = document.createElement("div");
+                                newItem.classList.add("pagination-item");
+                                newItem.id = `item-${i}`;
+                                newItem.dataset.page = i;
+                                newItem.innerText = i;
+                                newItem.addEventListener("click", () => changePage(i));
+                                paginationContainer.insertBefore(newItem, $("#next"));
+                            }
                         }
+                        updateArrows();
+                    } else {
+                        // Ocultar la paginación si no hay páginas
+                        paginationContainer.style.display = 'none';
                     }
-
-                    updateArrows();
                 }
 
                 function changePage(page) {
