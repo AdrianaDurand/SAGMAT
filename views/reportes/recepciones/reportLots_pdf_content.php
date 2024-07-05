@@ -1,6 +1,15 @@
-<h2 class="tc lg">Reporte de Recepción</h2>
+<page backtop="50mm" backbottom="20mm" >
+<page_header>
+    <div class="header">
+      
+      <img src="../../../img/asd.png">
+      <h2>Reporte de Recepción</h2>
+    </div>
+    <img src="../../../img/xdd.png" class="left-image">
+</page_header>
 
-<table class="table mt-5">
+
+<table class="table mt-1">
   <colgroup>
     <col style="width: 5%;"> <!-- # -->
     <col style="width: 25%;"> <!-- Recurso -->
@@ -37,3 +46,4 @@
     ?>
   </tbody>
 </table>
+</page>
