@@ -15,8 +15,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
-
     <link rel="icon" type="../../images/icons" href="../../images/icons/computer.svg" />
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
 
 </head>
@@ -251,6 +253,7 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
@@ -360,50 +363,83 @@
 
                 tabla.addEventListener("click", function(event) {
                     const target = event.target;
+                    const idusuario = target.getAttribute('data-idusuario');
+
                     if (target.classList.contains('desactivar-radio')) {
-                        // Obtener el idusuario del botón clickeado
-                        idusuario = target.getAttribute('data-idusuario');
+                        Swal.fire({
+                            title: "¿Quieres desactivar este usuario?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Sí, desactivar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const parametros = new FormData();
+                                parametros.append("operacion", "inactive");
+                                parametros.append("idusuario", idusuario);
 
-                        // Obtener datos del cliente por su idusuario
-                        const parametros = new FormData();
-                        parametros.append("operacion", "inactive");
-                        parametros.append("idusuario", idusuario);
-
-                        fetch(`../../controllers/usuario.controller.php`, {
-                                method: 'POST',
-                                body: parametros
-                            })
-                            .then(respuesta => respuesta.json())
-                            .then(datosRecibidos => {
-                                console.log(datosRecibidos);
-                                alert("Desactivado");
-                            })
-                            .catch(e => {
-                                console.error(e);
-                            });
+                                fetch(`../../controllers/usuario.controller.php`, {
+                                        method: 'POST',
+                                        body: parametros
+                                    })
+                                    .then(respuesta => respuesta.json())
+                                    .then(datosRecibidos => {
+                                        console.log(datosRecibidos);
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Desactivado',
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    })
+                                    .catch(e => {
+                                        console.error(e);
+                                    });
+                            }
+                        });
                     } else if (target.classList.contains('activar-radio')) {
-                        // Obtener el idusuario del botón clickeado
-                        idusuario = target.getAttribute('data-idusuario');
+                        Swal.fire({
+                            title: "¿Quieres activar este usuario?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Sí, activar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const parametros = new FormData();
+                                parametros.append("operacion", "active");
+                                parametros.append("idusuario", idusuario);
 
-                        // Obtener datos del cliente por su idusuario
-                        const parametros = new FormData();
-                        parametros.append("operacion", "active");
-                        parametros.append("idusuario", idusuario);
-
-                        fetch(`../../controllers/usuario.controller.php`, {
-                                method: 'POST',
-                                body: parametros
-                            })
-                            .then(respuesta => respuesta.json())
-                            .then(datosRecibidos => {
-                                console.log(datosRecibidos);
-                                alert("Activado");
-                            })
-                            .catch(e => {
-                                console.error(e);
-                            });
+                                fetch(`../../controllers/usuario.controller.php`, {
+                                        method: 'POST',
+                                        body: parametros
+                                    })
+                                    .then(respuesta => respuesta.json())
+                                    .then(datosRecibidos => {
+                                        console.log(datosRecibidos);
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Activado',
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    })
+                                    .catch(e => {
+                                        console.error(e);
+                                    });
+                            }
+                        });
                     }
                 });
+
 
 
 
@@ -419,7 +455,12 @@
                         })
                         .then(respuesta => respuesta.json())
                         .then(datos => {
-                            alert("Registrado");
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Tipo registrado',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                             $("#form-tipo").reset();
                             getTipos();
                             myModal.hide();
@@ -441,7 +482,12 @@
                         })
                         .then(respuesta => respuesta.json())
                         .then(datos => {
-                            alert("Registrado");
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Marca registrada',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                             $("#form-marca").reset();
                             getMarcas();
                             cerrarMarca.hide();

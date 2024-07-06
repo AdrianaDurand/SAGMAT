@@ -35,8 +35,11 @@ if (isset($_SESSION["status"]) && $_SESSION["status"]) {
 	<link rel="stylesheet" type="text/css" href="./css/login/vendor/daterangepicker/daterangepicker.css">
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="./css/login/css/util.css">
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="./css/login/css/main.css">
 	<!--===============================================================================================-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
 </head>
 
 <body>
@@ -92,6 +95,9 @@ if (isset($_SESSION["status"]) && $_SESSION["status"]) {
 	<script src="./css/login/vendor/countdowntime/countdowntime.js"></script>
 	<!--===============================================================================================-->
 	<script src="./css/login/js/main.js"></script>
+	<!--===============================================================================================-->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
 
 </body>
 
@@ -129,7 +135,12 @@ if (isset($_SESSION["status"]) && $_SESSION["status"]) {
 						window.location.href = "./views/default.php";
 					}
 				} else {
-					alert(datos.mensaje);
+					Swal.fire({
+						icon: 'error',
+						title: datos.mensaje,
+						timer: 2000,
+						showConfirmButton: false
+					});
 				}
 			})
 			.catch(e => {
