@@ -3,7 +3,7 @@
     <div class="header">
 
       <img src="../../../img/asd.png">
-      <h2>Ficha Devolución</h2>
+      <h2>Ficha de Devolución</h2>
     </div>
     <img src="../../../img/xdd.png" class="left-image">
   </page_header>
@@ -34,6 +34,7 @@
       $index = 1; // Para contar las filas
 
       foreach ($resultado as $registro) {
+        $observacion = !empty($registro['observacion']) ? $registro['observacion'] : '<span class="no-observacion">No se encontraron observaciones</span>';
         echo "
         <tr>
           <td>{$index}</td>
@@ -41,7 +42,7 @@
           <td>{$registro['atendido_nombres']}</td>
           <td>{$registro['equipo']}</td>
           <td>{$registro['fecha']}</td>
-          <td>{$registro['observacion']}</td>
+          <td>{$observacion}</td>
           <td>{$registro['estado_devolucion']}</td>
         </tr>
       ";
