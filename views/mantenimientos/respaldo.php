@@ -301,6 +301,7 @@
                     totalPages = Math.ceil(dataObtenida.length / itemsPerPage);
                     if (dataObtenida.length == 0) {
                         $("#lista-mantenimientos").innerHTML = `<p>No se encontraron mantenimientos</p>`;
+                        document.querySelector('.pagination').style.display = 'none';
                     } else {
                         $("#lista-mantenimientos").innerHTML = ``;
                         renderPage(currentPage);
@@ -333,25 +334,27 @@
                 }
                 const nuevoItem = `
                     <div class="d-flex justify-content-center mt-3">
-                        <div class="card mb-3 caja" style="max-width: 900px; padding: 15px;">
+                        <div class="card mb-3 caja" style="max-width: 900px;">
                             <div class="row g-0">
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <img src="../../imgRecursos/${rutaImagen}" class="img-fluid rounded-start">
                                 </div>
-                                <div class="col-md-7">
-                                    <div class="d-flex justify-content-center align-items-center h-100"> <!-- Centrar vertical y horizontalmente dentro de col-md-7 -->
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center justify-content-between mb-3"> <!-- Alinear horizontalmente el badge y el título -->
-                                                <span class="badge ${estadoClass} me-2">${element.estado}</span>
-                                                <h4 class="card-title mb-0 text-end"><strong>${element.nro_equipo}</strong></h4>
-                                            </div>
-                                            <div class="d-grid gap-2"> <!-- Alinear los botones verticalmente -->
-                                                <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}" style="height: 50px;">Reparar</button>
-                                                <button data-bs-target="#modalEliminar" data-bs-toggle="modal" class="btn btn-outline-danger" data-idejemplar="${element.idejemplar}" style="height: 50px;">Dar de baja</button>
-                                            </div>
+                                <div class="col-md-5">
+                                    <div class="card-body">
+                                        <span class="badge ${estadoClass} card-title">${element.estado}</span>
+                                        <h4 class="card-title"><strong>${element.nro_equipo}</strong></h4>
+                                        <p class="card-text"><small class="text-muted">${element.create_at}</small></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <button data-bs-target="#modalAgregar" data-bs-toggle="modal" class="btn btn-outline-primary" data-idejemplar="${element.idejemplar}">Reparar</button>
+                                            <button data-bs-target="#modalEliminar" data-bs-toggle="modal" class="btn btn-outline-danger" data-idejemplar="${element.idejemplar}">Dar de baja</button>
                                         </div>
                                     </div>
                                 </div>
+                                <br>
                             </div>
                         </div>
                     </div>
@@ -379,47 +382,41 @@
         }
 
         function updatePagination() {
-            const paginationContainer = document.querySelector('.pagination');
-            const maxVisiblePages = 6; // Número máximo de elementos de paginación visibles
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = startPage + maxVisiblePages - 1;
+    const paginationContainer = document.querySelector('.pagination');
+    const maxVisiblePages = 6; // Número máximo de elementos de paginación visibles
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
 
-            if (endPage > totalPages) {
-                endPage = totalPages;
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
-            }
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
 
-            // Eliminar todos los elementos de paginación actuales
-            paginationContainer.querySelectorAll('.pagination-item').forEach(item => item.remove());
+    // Eliminar todos los elementos de paginación actuales
+    paginationContainer.querySelectorAll('.pagination-item').forEach(item => item.remove());
 
-            if (totalPages > 0) {
-                // Mostrar y crear los nuevos elementos de paginación si hay páginas
-                for (let i = startPage; i <= endPage; i++) {
-                    const newItem = document.createElement("div");
-                    newItem.classList.add("pagination-item");
-                    newItem.id = `item-${i}`;
-                    newItem.dataset.page = i;
-                    newItem.innerText = i;
-                    newItem.addEventListener("click", () => changePage(i));
-                    paginationContainer.insertBefore(newItem, document.getElementById("next"));
-                }
-                paginationContainer.style.display = 'flex'; // Mostrar la paginación
-                updateArrows();
-                updateActivePage();
-            } else {
-                // Ocultar la paginación si no hay páginas
-                paginationContainer.style.display = 'none';
-            }
-        }
+    // Crear y mostrar los nuevos elementos de paginación
+    for (let i = startPage; i <= endPage; i++) {
+        const newItem = document.createElement("div");
+        newItem.classList.add("pagination-item");
+        newItem.id = `item-${i}`;
+        newItem.dataset.page = i;
+        newItem.innerText = i;
+        newItem.addEventListener("click", () => changePage(i));
+        paginationContainer.insertBefore(newItem, $("#next"));
+    }
 
+    updateArrows();
+    updateActivePage();
+}
 
-        function changePage(page) {
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderPage(page);
-            updatePagination(); // Llamar a updatePagination() después de cambiar la página
-            updateArrows();
-        }
+function changePage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderPage(page);
+    updatePagination(); // Llamar a updatePagination() después de cambiar la página
+    updateArrows();
+}
 
         function updateArrows() {
             if (currentPage === 1) {
