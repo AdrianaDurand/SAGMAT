@@ -67,7 +67,7 @@
               </div>
               <div class="col-md-4 my-4">
                 <strong>
-                  <h3 class="text-center"> Pendientes</h3>
+                  <h3 class="text-center">Solicitudes Realizadas</h3>
                 </strong>
                 <canvas id="pieChart"></canvas>
               </div>
