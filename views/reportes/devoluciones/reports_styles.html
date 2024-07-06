@@ -1,97 +1,245 @@
 <style>
-    :root {
-      margin: 0;
-      padding: 0;
-    }
-  
-    .d-flex { display: flex; }
-  
-    /* ALINEACIÓN DEL TEXTO */
-    .tc { text-align: center; }
-    .tr { text-align: right; }
-    .tl { text-align: left; }
-    .tj { text-align: justify; }
-  
-    /* TAMAÑO FUENTE */
-    .t-xs { font-size: 10px; }
-    .t-sm { font-size: 15px; }
-    .t-md { font-size: 20px; }
-    .t-lg { font-size: 25px; }
-    .t-xl { font-size: 30px; }
-  
-    /* ESTILOS */
-    .flat { font-style: normal; }
-    .bold { font-weight: bold; }
-    .italic { font-style: italic; }
-    .underline { text-decoration: underline; }
-  
-    /* MÁRGENES */
-    .mt-1 { margin-top: 5px; }
-    .mt-2 { margin-top: 10px; }
-    .mt-3 { margin-top: 15px; }
-    .mt-4 { margin-top: 20px; }
-    .mt-5 { margin-top: 25px; }
-    .ml-4 { margin-left: 20px; }
-  
-    .mb-1 { margin-bottom: 5px; }
-    .mb-2 { margin-bottom: 10px; }
-    .mb-3 { margin-bottom: 15px; }
-    .mb-4 { margin-bottom: 20px; }
-    .mb-5 { margin-bottom: 25px; }
-  
-    .p-4 { padding: 20px; }
-  
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-  
-    .table th, .table td {
-      border: 1px solid gray;
-      padding: 6px;
-      text-align: center; /* Alineación centrada para mejor presentación */
-    }
-  
-    .container { margin: 20px; }
-  
-    .border-collapse { border-collapse: collapse; }
-  
-    /* SOMBREADO */
-    .danger { background-color: rgb(243, 0, 0); }
-    .info { background-color: rgb(3, 230, 173); }
-    .secondary { background-color: rgb(38, 255, 19); }
-    .warning { background-color: rgb(249, 252, 108); }
-  
-    .w-100 { width: 100%; }
-    .w-75 { width: 75%; }
-    .w-50 { width: 50%; }
-    .w-25 { width: 25%; }
-    .w-auto { width: auto; }
-  
-    .h-100 { height: 100%; }
-    .h-75 { height: 75%; }
-    .h-50 { height: 50%; }
-    .h-25 { height: 25%; }
-    .h-auto { height: auto; }
-  
-    .bg-light { background: #eee; }
-  
-    #cabecera {
-      background: #eee;
-      padding: 20px;
-    }
-  
-    h1, h4, h5 {
-      margin: 0;
-      padding: 0;
-    }
-  
-    h2, h3 {
-      float: left;
-    }
-  
-    #cabecera img {
-      width: 140px;
-      float: right;
-    }
-  </style>
+  :root {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  /* ALINEACIÓN DEL TEXTO */
+  .tc {
+    text-align: center;
+  }
+
+  .tr {
+    text-align: right;
+  }
+
+  .tl {
+    text-align: left;
+  }
+
+  .tj {
+    text-align: justify;
+  }
+
+  /* TAMAÑO FUENTE */
+  .t-xs {
+    font-size: 10px;
+  }
+
+  .t-sm {
+    font-size: 15px;
+  }
+
+  .t-md {
+    font-size: 20px;
+  }
+
+  .t-lg {
+    font-size: 25px;
+  }
+
+  .t-xl {
+    font-size: 30px;
+  }
+
+  /* ESTILOS */
+  .flat {
+    font-style: normal;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  /* MÁRGENES */
+  .mt-1 {
+    margin-top: 5px;
+  }
+
+  .mt-2 {
+    margin-top: 10px;
+  }
+
+  .mt-3 {
+    margin-top: 15px;
+  }
+
+  .mt-4 {
+    margin-top: 20px;
+  }
+
+  .mt-5 {
+    margin-top: 25px;
+  }
+
+  .ml-4 {
+    margin-left: 20px;
+  }
+
+  .mb-1 {
+    margin-bottom: 5px;
+  }
+
+  .mb-2 {
+    margin-bottom: 10px;
+  }
+
+  .mb-3 {
+    margin-bottom: 15px;
+  }
+
+  .mb-4 {
+    margin-bottom: 20px;
+  }
+
+  .mb-5 {
+    margin-bottom: 25px;
+  }
+
+  .p-4 {
+    padding: 20px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid gray;
+    padding: 6px;
+    text-align: center;
+  }
+
+
+  .container {
+    margin: 20px;
+  }
+
+  .border-collapse {
+    border-collapse: collapse;
+  }
+
+  /* SOMBREADO */
+  .danger {
+    background-color: rgb(243, 0, 0);
+  }
+
+  .info {
+    background-color: rgb(3, 230, 173);
+  }
+
+  .secondary {
+    background-color: rgb(38, 255, 19);
+  }
+
+  .warning {
+    background-color: rgb(249, 252, 108);
+  }
+
+  .w-100 {
+    width: 100%;
+  }
+
+  .w-75 {
+    width: 75%;
+  }
+
+  .w-50 {
+    width: 50%;
+  }
+
+  .w-25 {
+    width: 25%;
+  }
+
+  .w-auto {
+    width: auto;
+  }
+
+  .h-100 {
+    height: 100%;
+  }
+
+  .h-75 {
+    height: 75%;
+  }
+
+  .h-50 {
+    height: 50%;
+  }
+
+  .h-25 {
+    height: 25%;
+  }
+
+  .h-auto {
+    height: auto;
+  }
+
+  .bg-light {
+    background: #eee;
+  }
+
+  #cabecera {
+    background: #eee;
+    padding: 20px;
+  }
+
+  h1,
+  h4,
+  h5 {
+    margin: 0;
+    padding: 0;
+  }
+
+  h2,
+  h3 {
+    float: left;
+  }
+
+  .header {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .header img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .header h2 {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    text-align: center;
+  }
+
+  .left-image {
+    position: absolute;
+    top: 20px;
+    /* Ajusta la posición vertical de la imagen izquierda */
+    left: 20px;
+    /* Ajusta la posición horizontal de la imagen izquierda */
+    height: 80px;
+  }
+</style>

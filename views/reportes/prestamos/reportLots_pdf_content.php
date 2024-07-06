@@ -3,7 +3,7 @@
     <div class="header">
       
       <img src="../../../img/asd.png">
-      <h2>Reporte de Préstamos</h2>
+      <h2>Ficha Préstamos</h2>
     </div>
     <img src="../../../img/xdd.png" class="left-image">
   </page_header>
