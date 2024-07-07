@@ -262,7 +262,6 @@ CALL listar_equipos_disponibles1(1, '2024-06-20 03:45:00','2024-06-21 03:45:00')
 CALL listar_equipos_disponibles(1, '2024-06-17 22:49:31', '2024-06-19 22:55:00');
 
 
-select * from solicitudes;
 
 DELIMITER $$
 CREATE PROCEDURE spu_solicitudes_total_resumen()
