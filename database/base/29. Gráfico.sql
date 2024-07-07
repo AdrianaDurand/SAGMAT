@@ -1,3 +1,4 @@
+
 CALL spu_listado_sol_sem();
 DELIMITER $$
 CREATE PROCEDURE spu_listado_sol_sem()

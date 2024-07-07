@@ -59,12 +59,12 @@ if (isset($_SESSION["status"]) && $_SESSION["status"]) {
 							<span style="display: block;">N°</span>
 							<span style="display: block;">Documento</span>
 						</span>
-						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su DNI" style="margin: 10px auto; display: block;">
+						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su DNI" value="21812392" style="margin: 10px auto; display: block;">
 						<span class="focus-input100"></span>
 					</div>
 					<div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
 						<span class="label-input100">Contraseña</span>
-						<input id="clave_acceso" class="input100" type="password" name="clave_acceso" placeholder="Ingrese su contraseña">
+						<input id="clave_acceso" class="input100" type="password" value="NSC" name="clave_acceso" placeholder="Ingrese su contraseña">
 						<span class="focus-input100"></span>
 					</div>
 
