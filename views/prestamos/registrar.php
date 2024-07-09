@@ -272,18 +272,21 @@
                 })
                 .then(respuesta => respuesta.json())
                 .then(datos => {
+                    let numFila = 1;
                     $("#tabla-detalles tbody").innerHTML = ''; // Clear the table before adding new details
                     listaIdDetalles = []; // Clear the list before adding new details
                     datos.forEach(registro => {
+                        
                         const nuevoItem = `
                     <tr>
-                        <td>${registro.iddetallesolicitud}</td>
+                        <td>${numFila}</td>
                         <td>${registro.tipo}</td>
                         <td>${registro.nro_equipo}</td>
                     </tr>
                 `;
                         $("#tabla-detalles tbody").innerHTML += nuevoItem;
                         listaIdDetalles.push(registro.iddetallesolicitud);
+                        numFila++;
                     });
                 })
                 .catch(error => {
