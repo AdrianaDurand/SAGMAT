@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-4 my-4">
                   <strong>
-                    <h3 class="text-center">Solicitudes Realizadas</h3>
+                    <h3 class="text-center">Solicitudes</h3>
                   </strong>
                   <canvas id="pieChart"></canvas>
                 </div>
@@ -142,7 +142,7 @@
           pieChart = new Chart(pieContext, {
             type: 'pie',
             data: {
-              labels: ['Realizados', 'Pendientes'], // Etiquetas según tus categorías
+              labels: ['Realizadas', 'Pendientes'], // Etiquetas según tus categorías
               datasets: [{
                 label: 'Estado de Solicitudes',
                 data: [data[0].Realizados, data[0].Pendientes], // Ajusta según las propiedades correctas de tu objeto data

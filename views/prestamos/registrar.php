@@ -196,7 +196,7 @@
                         datos.forEach(element => {
                             let nuevaFila = `
                                     <tr>
-                                        <td>${element.idsolicitud}</td>
+                                        <td>${numFila}</td>
                                         <td>${element.docente}</td>
                                         <td>${element.ubicacion}</td>
                                         <td>${element.fechasolicitud}</td>
