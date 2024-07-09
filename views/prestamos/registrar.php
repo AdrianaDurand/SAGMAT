@@ -42,9 +42,21 @@
         cursor: pointer;
     }
 
-    .eliminarp{border:0px; background:url(../../img/delete.svg) no-repeat center center; width:15px; padding:15px 15px; background-size:15px;}
-    .eyep{border:0px; background:url(../../img/eye.svg) no-repeat center center; width:28px; padding:28px 28px; background-size:28px;}
+    .eliminarp {
+        border: 0px;
+        background: url(../../img/delete.svg) no-repeat center center;
+        width: 15px;
+        padding: 15px 15px;
+        background-size: 15px;
+    }
 
+    .eyep {
+        border: 0px;
+        background: url(../../img/eye.svg) no-repeat center center;
+        width: 28px;
+        padding: 28px 28px;
+        background-size: 28px;
+    }
 </style>
 
 <body>
@@ -80,33 +92,33 @@
 
                     <div class="container mb-3">
 
-                          
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table class="table table-lg  " id="lista-prestamos">
-                                            <colgroup>
-                                                <col width="2%">
-                                                <col width="15%">
-                                                <col width="20%">
-                                                <col width="15%">
-                                                <col width="10%">
-                                                <col width="2%">
-                                            </colgroup>
-                                            <thead class="table prueba text-center">
-                                                <tr>
-                                                    <th>N°</th>
-                                                    <th>Solicitante</th>
-                                                    <th>Área</th>
-                                                    <th>Fecha de Solicitud</th>
-                                                    <th>Horario</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="text-center">
-                                            </tbody>
-                                        </table>
-                                    </div> <!-- FIN DEL COL-MD-12 -->
-                                </div> <!-- FIN DEL ROW -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-lg  " id="lista-prestamos">
+                                    <colgroup>
+                                        <col width="2%">
+                                        <col width="15%">
+                                        <col width="20%">
+                                        <col width="15%">
+                                        <col width="10%">
+                                        <col width="2%">
+                                    </colgroup>
+                                    <thead class="table prueba text-center">
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Solicitante</th>
+                                            <th>Área</th>
+                                            <th>Fecha de Solicitud</th>
+                                            <th>Horario</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                    </tbody>
+                                </table>
+                            </div> <!-- FIN DEL COL-MD-12 -->
+                        </div> <!-- FIN DEL ROW -->
                     </div>
 
                 </div>
@@ -204,7 +216,7 @@
                                         <td>
                                             
                                             <div class="dropdown" style="display: flex;">
-                                                <button data-bs-target="#modalAgregar"  style="height: 30px; background-color: transparent;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#">
+                                                <button data-bs-target="#modalAgregar"  style="height: 30px; background-color: transparent;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' data-idpersona='${element.idpersona}' href="#">
                                                 </button>
                                                 <button  style="width: 30px; background-color: transparent;" class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" type="button">
                                                 </button>  
@@ -220,6 +232,13 @@
                         button.addEventListener('click', function() {
                             const idsolicitud = this.getAttribute('data-idsolicitud');
                             detalle(idsolicitud);
+                        });
+                    });
+
+                    document.querySelectorAll('.dropdown-item.view').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const idpersona = this.getAttribute('data-idpersona');
+                            correo(idpersona);
                         });
                     });
                 })
@@ -276,7 +295,7 @@
                     $("#tabla-detalles tbody").innerHTML = ''; // Clear the table before adding new details
                     listaIdDetalles = []; // Clear the list before adding new details
                     datos.forEach(registro => {
-                        
+
                         const nuevoItem = `
                     <tr>
                         <td>${numFila}</td>
@@ -334,6 +353,23 @@
                         });
                 }
             });
+        }
+
+        function correo(idpersona) {
+            const parametros = new FormData();
+            parametros.append("operacion", "send");
+            parametros.append("idpersona", idpersona);
+
+            fetch(`../../controllers/email.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.text())
+                .then(datos => {
+                })
+                .catch(e => {
+                    console.error(e);
+                });
         }
 
         $("#btnEnviar").addEventListener("click", function() {
