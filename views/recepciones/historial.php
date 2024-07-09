@@ -178,7 +178,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
-            const itemsPerPage = 8; // Número de elementos por página
+            const itemsPerPage = 5; // Número de elementos por página
             let currentPage = 1;
             let totalPages = 1;
             const tabla = document.querySelector("#tabla-recepcion tbody");
