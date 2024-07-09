@@ -20,8 +20,8 @@ if (isset($_POST['operacion'])) {
             $destinatario = $resultado['email'];
             
             // Asunto y mensaje del correo
-            $asunto = 'Resultado de la Operación';
-            $mensaje = 'Aprobado';
+            $asunto = 'Aprobación de Solicitud de Préstamo de Equipo';
+            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido aprobada.';
 
             // Enviar correo
             enviarCorreo($destinatario, $asunto, $mensaje);
