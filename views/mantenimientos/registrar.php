@@ -326,7 +326,7 @@
                 const rutaImagen = (element.fotografia == null) ? "PRUEBA.jpg" : element.fotografia;
 
                 let estadoClass = '';
-                if (element.estado === 'Necesita mantenimiento') {
+                if (element.estado === 'Reparación') {
                     estadoClass = 'badge-warning'; // clase para el estado 'Necesita mantenimiento'
                 } else if (element.estado === 'Disponible') {
                     estadoClass = 'badge-success'; // clase para el estado 'Disponible'

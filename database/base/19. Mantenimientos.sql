@@ -24,7 +24,7 @@ BEGIN
 		e.idejemplar,
 		e.nro_equipo,
 		CASE 
-			WHEN e.estado = '2' THEN 'Necesita mantenimiento'
+			WHEN e.estado = '2' THEN 'Reparación'
 			ELSE e.estado
 		END AS estado,
 		r.fotografia
@@ -181,7 +181,7 @@ SELECT
     t.tipo,
     CASE 
         WHEN e.estado = '0' THEN 'Disponible'
-        WHEN e.estado = '2' THEN 'Necesita mantenimiento'
+        WHEN e.estado = '2' THEN 'Reparación'
         ELSE e.estado
     END AS estado,
     r.fotografia,
