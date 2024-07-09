@@ -264,6 +264,8 @@
                 let start = (page - 1) * itemsPerPage;
                 let end = start + itemsPerPage;
                 let dataToRender = dataObtenida.slice(start, end);
+
+                let counter = start + 1;
                 dataToRender.forEach(element => {
                     const nuevoItem = `
                     <div class="d-flex justify-content-center mb-3">
@@ -272,7 +274,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h5 class="card-title">N° Recepción: #${element.idrecepcion}</h5>
+                                            <h5 class="card-title">N° Recepción: #${counter}</h5>
                                             <h6 class="card-title">${element.areas}</h6>
                                             <div class="d-flex align-items-center">
                                                 <i class="bi bi-clock me-2"></i>
@@ -311,6 +313,8 @@
                     </div>
                     `;
                     $("#lista-recepcion").innerHTML += nuevoItem;
+
+                    counter++;
 
                 });
 

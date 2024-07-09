@@ -33,7 +33,7 @@ $iconos = [
 
 $accesos = [
     "ADMINISTRADOR" => [
-        "Configuraciones" => ["Gestionar", "Usuarios"],
+        "Configuraciones" => ["Adicionar", "Docentes"],
         "Recepciones" => ["Registrar", "Historial"],
         "Recursos" => ["Inventario"],
         "Solicitudes" => ["Registrar"],
