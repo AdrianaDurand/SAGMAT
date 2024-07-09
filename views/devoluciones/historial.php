@@ -183,7 +183,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const itemsPerPage = 2; // Número de elementos por página
+            const itemsPerPage = 5; // Número de elementos por página
             let currentPage = 1;
             let totalPages = 1;
             let dataObtenida = []; // Variable global para almacenar los datos obtenidos
