@@ -325,20 +325,19 @@
                                 <td>${registro.fechainicio}</td>
                                 <td><span class="badge ${registro.estado === 'Completado' ? 'bg-success' : 'bg-warning'}">${registro.estado}</span></td>
                                 <td>  
-                                <div style="display: flex; justify-content: center;  gap: 20px;">
+                                    <div style="display: flex; justify-content: center; gap: 20px;">
                                         ${registro.estado !== 'Completado' ? `
                                         <button class="actualizar-estado completado" data-idmantenimiento="${registro.idmantenimiento}" style="background-color: transparent; border: none;"></button>` : ''}
-                                        <button class="imprimir" data-idmantenimiento="${registro.idmantenimiento}" style="background-color: transparent; border: none;"></button>
+                                        ${registro.estado === 'Completado' ? `
+                                        <button class="imprimir" data-idmantenimiento="${registro.idmantenimiento}" style="background-color: transparent; border: none;"></button>` : ''}
                                     </div>
                                 </td>
                             </tr>
-                            `;
+                        `;
                         $("#tabla-mantenimiento tbody").innerHTML += nuevoItem;
                         numFila++;
                     });
                 }
-
-
 
                 tabla.addEventListener("click", function(event) {
                     const target = event.target;
