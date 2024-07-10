@@ -18,10 +18,29 @@ if (isset($_POST['operacion'])) {
 
             // Suponiendo que la respuesta contiene el correo del destinatario
             $destinatario = $resultado['email'];
-            
+
             // Asunto y mensaje del correo
             $asunto = 'Aprobación de Solicitud de Préstamo de Equipo';
-            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido aprobada.';
+            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido APROBADA.';
+
+            // Enviar correo
+            enviarCorreo($destinatario, $asunto, $mensaje);
+
+            echo json_encode($resultado);
+            break;
+
+        case 'sendelete':
+            $datosEnviar = [
+                "idpersona"     => $_POST['idpersona']
+            ];
+            $resultado = $correo->send($datosEnviar);
+
+            // Suponiendo que la respuesta contiene el correo del destinatario
+            $destinatario = $resultado['email'];
+
+            // Asunto y mensaje del correo
+            $asunto = 'Solicitud denegada';
+            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido DENEGADA.';
 
             // Enviar correo
             enviarCorreo($destinatario, $asunto, $mensaje);
