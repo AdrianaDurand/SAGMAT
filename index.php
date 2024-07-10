@@ -59,7 +59,7 @@ if (isset($_SESSION["status"]) && $_SESSION["status"]) {
 							<span style="display: block;">N°</span>
 							<span style="display: block;">Documento</span>
 						</span>
-						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su DNI" value="21812392" style="margin: 10px auto; display: block;">
+						<input id="usuario" class="input100" type="text" name="usuario" placeholder="Ingrese su DNI" value="72159736" style="margin: 10px auto; display: block;">
 						<span class="focus-input100"></span>
 					</div>
 					<div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
