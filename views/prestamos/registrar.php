@@ -108,7 +108,7 @@
                                         <tr>
                                             <th>N°</th>
                                             <th>Solicitante</th>
-                                            <th>Área</th>
+                                            <th>Salón</th>
                                             <th>Fecha de Solicitud</th>
                                             <th>Horario</th>
                                             <th>Acciones</th>
