@@ -18,11 +18,16 @@ if (isset($_POST['operacion'])) {
 
             // Suponiendo que la respuesta contiene el correo del destinatario
             $destinatario = $resultado['email'];
-            $horario = $resultado['horario'];
+            // Formatear horario para mostrar solo las horas
+            $horarioCompleto = $resultado['horario'];
+            $horarioPartes = explode(" - ", $horarioCompleto);
+            $horaInicio = date("H:i", strtotime($horarioPartes[0]));
+            $horaFin = date("H:i", strtotime($horarioPartes[1]));
+            $horario = "<strong>" . $horaInicio . " - " . $horaFin . "</strong>";
 
             // Asunto y mensaje del correo
             $asunto = 'Aprobación de Solicitud de Préstamo de Equipo';
-            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido APROBADA.' . $horario;
+            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido APROBADA. En el horario de: ' . $horario;
 
             // Enviar correo
             enviarCorreo($destinatario, $asunto, $mensaje);
@@ -38,11 +43,15 @@ if (isset($_POST['operacion'])) {
 
             // Suponiendo que la respuesta contiene el correo del destinatario
             $destinatario = $resultado['email'];
-            $horario = $resultado['horario'];
-
+            // Formatear horario para mostrar solo las horas
+            $horarioCompleto = $resultado['horario'];
+            $horarioPartes = explode(" - ", $horarioCompleto);
+            $horaInicio = date("H:i", strtotime($horarioPartes[0]));
+            $horaFin = date("H:i", strtotime($horarioPartes[1]));
+            $horario = "<strong>" . $horaInicio . " - " . $horaFin . "</strong>";
             // Asunto y mensaje del correo
             $asunto = 'Solicitud denegada';
-            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido DENEGADA.' . $horario;
+            $mensaje = 'Nos complace informarle que su solicitud de préstamo de equipo ha sido DENEGADA. En el horario de: ' . $horario;
 
             // Enviar correo
             enviarCorreo($destinatario, $asunto, $mensaje);
