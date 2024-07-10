@@ -19,7 +19,7 @@ class Correo extends Conexion
             $consulta = $this->conexion->prepare("CALL spu_obtener_correo(?)");
             $consulta->execute(
                 array(
-                    $datos['idpersona']
+                    $datos['idsolicitud']
                 )
             );
             return $consulta->fetch(PDO::FETCH_ASSOC);

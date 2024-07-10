@@ -216,9 +216,9 @@
                                         <td>
                                             
                                             <div class="dropdown" style="display: flex;">
-                                                <button data-bs-target="#modalAgregar"  style="height: 30px; background-color: transparent;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' data-idpersona='${element.idpersona}' href="#">
+                                                <button data-bs-target="#modalAgregar"  style="height: 30px; background-color: transparent;" data-bs-toggle="modal" class="eyep dropdown-item view" data-idsolicitud='${element.idsolicitud}' href="#">
                                                 </button>
-                                                <button  style="width: 30px; background-color: transparent;" class="dropdown-item eliminar eliminarp" data-idprestamo="${element.idsolicitud}" type="button">
+                                                <button  style="width: 30px; background-color: transparent;" class="dropdown-item eliminarp" data-idprestamo="${element.idsolicitud}" type="button">
                                                 </button>  
                                             </div>
                                         </td>
@@ -237,45 +237,77 @@
 
                     document.querySelectorAll('.dropdown-item.view').forEach(button => {
                         button.addEventListener('click', function() {
-                            const idpersona = this.getAttribute('data-idpersona');
-                            correo(idpersona);
+                            const idsolicitud = this.getAttribute('data-idsolicitud');
+                            correo(idsolicitud);
                         });
                     });
+
+                    document.querySelectorAll('.dropdown-item.eliminarp').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const idsolicitud = this.getAttribute('data-idprestamo');
+                            send(idsolicitud);
+                        });
+                    });
+
+
                 })
                 .catch(e => {
                     console.error(e)
                 });
         }
 
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('eliminar')) {
-                event.preventDefault();
-                const fila = event.target.closest('tr'); // Obtener la fila más cercana
-                if (fila) {
-                    const idsolicitud = fila.querySelector('td:first-child').textContent; // Obtener el texto de la primera celda (suponiendo que contiene el ID de la solicitud)
-                    if (confirm("¿Está seguro de eliminar la solicitud?")) {
-                        let parametros = new FormData();
-                        parametros.append("operacion", "eliminar");
-                        parametros.append("idsolicitud", idsolicitud);
 
-                        fetch(`../../controllers/prestamo.controller.php`, {
-                                method: "POST",
-                                body: parametros
-                            })
-                            .then(respuesta => respuesta.text())
-                            .then(datos => {
-                                if (datos.trim() == "") {
+
+        tabla.addEventListener("click", function(event) {
+            // Obtener el elemento clickeado
+            const target = event.target;
+
+            if (event.target.classList.contains("eliminarp")) {
+                const idsolicitud = event.target.dataset.idprestamo;
+                Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "No podrás revertir esta acción.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            // Lógica para eliminar el registro
+                            const parametros = new FormData();
+                            parametros.append("operacion", "eliminar");
+                            parametros.append("idsolicitud", idsolicitud);
+
+                            fetch(`../../controllers/prestamo.controller.php`, {
+                                    method: "POST",
+                                    body: parametros
+                                })
+                                .then(respuesta => respuesta.text())
+                                .then(datos => {
+                                    console.log(datos);
                                     listar();
-                                }
-                            })
-                            .catch(e => {
-                                console.error(e)
-                            })
-                    }
-                } else {
-                    console.error("No se encontró la fila de la tabla.");
-                }
+                                    Swal.fire(
+                                        '¡Eliminado!',
+                                        'El prèstamo ha sido eliminado exitosamente.',
+                                        'success'
+                                    );
+                                })
+                                .catch(e => {
+                                    console.error(e);
+                                    Swal.fire(
+                                        'Error',
+                                        'Hubo un error al intentar eliminar el negocio.',
+                                        'error'
+                                    );
+                                });
+                        }
+                    });
             }
+
+
         });
 
         let listaIdDetalles = [];
@@ -355,22 +387,39 @@
             });
         }
 
-        function correo(idpersona) {
+        function correo(idsolicitud) {
             const parametros = new FormData();
             parametros.append("operacion", "send");
-            parametros.append("idpersona", idpersona);
+            parametros.append("idsolicitud", idsolicitud);
 
             fetch(`../../controllers/email.controller.php`, {
                     method: "POST",
                     body: parametros
                 })
                 .then(respuesta => respuesta.text())
-                .then(datos => {
-                })
+                .then(datos => {})
                 .catch(e => {
                     console.error(e);
                 });
         }
+
+        function send(idsolicitud) {
+            const parametros = new FormData();
+            parametros.append("operacion", "sendelete");
+            parametros.append("idsolicitud", idsolicitud);
+
+            fetch(`../../controllers/email.controller.php`, {
+                    method: "POST",
+                    body: parametros
+                })
+                .then(respuesta => respuesta.text())
+                .then(datos => {})
+                .catch(e => {
+                    console.error(e);
+                });
+        }
+
+
 
         $("#btnEnviar").addEventListener("click", function() {
             registrar(listaIdDetalles);
